@@ -16,8 +16,20 @@
 		<docker.image.name>ms-template</docker.image.name>
 		<published.container.port.test>xxx</published.container.port.test>
 		<published.container.port.production>xxx</published.container.port.production>
+		<!--- Service properties -->
+		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
+		<generated-sources-java-path>src/main/java</generated-sources-java-path>
+		<jaxb2-maven-plugin.version>3.1.0</jaxb2-maven-plugin.version>
+		<jaxb2-fluent-api.version>3.0</jaxb2-fluent-api.version>
+
 	</properties>
 	<dependencies>
+		<!-- Dept44 Framework-->
+		<dependency>
+			<groupId>se.sundsvall.dept44</groupId>
+			<artifactId>dept44-starter-feign</artifactId>
+		</dependency>
+		<!--- Other -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -31,4 +43,64 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<!-- Generate java from wsdl -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>${jaxb2-maven-plugin.version}</version>
+				<!-- Enables fluent builder for generated classes -->
+				<dependencies>
+					<dependency>
+						<groupId>org.jvnet.jaxb2_commons</groupId>
+						<artifactId>jaxb2-fluent-api</artifactId>
+						<version>${jaxb2-fluent-api.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>callback</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>
+								${generated-sources-path}/${generated-sources-java-path}
+							</outputDirectory>
+							<clearOutputDir>false</clearOutputDir>
+							<packageName>callback</packageName>
+							<encoding>UTF-8</encoding>
+							<addGeneratedAnnotation>true</addGeneratedAnnotation>
+							<noGeneratedHeaderComments>true</noGeneratedHeaderComments>
+							<sourceType>wsdl</sourceType>
+							<arguments>
+								<argument>-Xfluent-api</argument>
+								<argument>-XautoNameResolution</argument>
+							</arguments>
+							<sources>
+								<source>
+									${project.basedir}/src/main/resources/integrations/soap/callback/oep.wsdl
+								</source>
+							</sources>
+							<xjbSources>
+								<xjbSource>
+									${project.basedir}/src/main/resources/integrations/soap/bindings.xjb
+								</xjbSource>
+							</xjbSources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/callback/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

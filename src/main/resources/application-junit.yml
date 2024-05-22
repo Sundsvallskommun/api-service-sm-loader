@@ -1,6 +1,17 @@
-#========================================
-# Test profile settings (junit tests)
-#========================================
-logging:
-  level:
-    root: DEBUG
+integration:
+  open-e-external:
+    url: http://oep-external.url
+    family-ids: [ "123" ]
+  open-e-internal:
+    url: http://oep-internal.url
+    family-ids: [ "456" ]
+  open-e-external-soap:
+    username: username
+    password: password
+    url: http://oep-external-soap.url
+    family-ids: [ "123" ]
+  open-e-internal-soap:
+    username: username
+    password: password
+    url: http://oep-internal-soap.url
+    family-ids: [ "456" ]
