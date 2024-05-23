@@ -17,6 +17,8 @@ class OpenEExternalPropertiesTest {
 
 	@Test
 	void testProperties() {
+		assertThat(properties.username()).isEqualTo("username");
+		assertThat(properties.password()).isEqualTo("password");
 		assertThat(properties.connectTimeout()).isEqualTo(5);
 		assertThat(properties.readTimeout()).isEqualTo(30);
 	}

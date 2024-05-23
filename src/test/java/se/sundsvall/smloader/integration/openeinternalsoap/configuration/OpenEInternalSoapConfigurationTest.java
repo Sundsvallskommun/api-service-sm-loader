@@ -1,5 +1,6 @@
 package se.sundsvall.smloader.integration.openeinternalsoap.configuration;
 
+import feign.auth.BasicAuthRequestInterceptor;
 import feign.soap.SOAPDecoder;
 import feign.soap.SOAPEncoder;
 import org.junit.jupiter.api.Test;
@@ -11,23 +12,16 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cloud.openfeign.FeignBuilderCustomizer;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import se.sundsvall.dept44.configuration.feign.FeignMultiCustomizer;
 import se.sundsvall.smloader.integration.util.OpenESoapErrorDecoder;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OpenEInternalSoapConfigurationTest {
-
-	@Mock
-	private ClientRegistrationRepository clientRegistrationRepositoryMock;
-
-	@Mock
-	private ClientRegistration clientRegistrationMock;
 
 	@Spy
 	private FeignMultiCustomizer feignMultiCustomizerSpy;
@@ -60,6 +54,7 @@ class OpenEInternalSoapConfigurationTest {
 			verify(feignMultiCustomizerSpy).withErrorDecoder(errorDecoderCaptor.capture());
 			verify(feignMultiCustomizerSpy).withEncoder(soapEncoderCaptor.capture());
 			verify(feignMultiCustomizerSpy).withDecoder(soapDecoderCaptor.capture());
+			verify(feignMultiCustomizerSpy).withRequestInterceptor(any(BasicAuthRequestInterceptor.class));
 			verify(propertiesMock).connectTimeout();
 			verify(propertiesMock).readTimeout();
 			verify(propertiesMock).username();

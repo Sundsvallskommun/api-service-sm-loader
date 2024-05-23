@@ -1,8 +1,12 @@
 integration:
   open-e-external:
+    username: username
+    password: password
     url: http://oep-external.url
     family-ids: [ "123" ]
   open-e-internal:
+    username: username
+    password: password
     url: http://oep-internal.url
     family-ids: [ "456" ]
   open-e-external-soap:

@@ -9,7 +9,7 @@ import se.sundsvall.smloader.integration.openeexternal.configuration.OpenEExtern
 
 import static se.sundsvall.smloader.integration.openeexternal.configuration.OpenEExternalConfiguration.CLIENT_ID;
 
-@FeignClient(name = CLIENT_ID, url = "${integration.open-e-internal.url}", configuration = OpenEExternalConfiguration.class)
+@FeignClient(name = CLIENT_ID, url = "${integration.open-e-external.url}", configuration = OpenEExternalConfiguration.class)
 @CircuitBreaker(name = CLIENT_ID)
 public interface OpenEExternalClient {
 
