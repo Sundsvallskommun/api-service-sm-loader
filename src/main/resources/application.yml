@@ -11,3 +11,20 @@ openapi:
 spring:
   application:
     name: api-sm-loader
+
+#========================================
+# Integration settings
+#========================================
+integration:
+  open-e-external:
+    connectTimeout: 5
+    readTimeout: 30
+  open-e-internal:
+    connectTimeout: 5
+    readTimeout: 30
+  open-e-external-soap:
+    connectTimeout: 5
+    readTimeout: 30
+  open-e-internal-soap:
+    connectTimeout: 5
+    readTimeout: 30
