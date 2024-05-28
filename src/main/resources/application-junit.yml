@@ -19,3 +19,17 @@ integration:
     password: password
     url: http://oep-internal-soap.url
     family-ids: [ "456" ]
+  support-management:
+    url: http://support-management.url
+
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          support-management:
+            token-uri: http://token.url
+        registration:
+          support-management:
+            client-id: the-client-id
+            client-secret: the-client-secret
