@@ -10,8 +10,10 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -40,7 +42,8 @@ public class CaseMapping {
 
 	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	@Column(name = "timestamp")
-	private LocalDateTime timestamp;
+	@TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
+	private OffsetDateTime timestamp;
 
 	public static CaseMapping create() {
 		return new CaseMapping();
@@ -49,7 +52,7 @@ public class CaseMapping {
 	@PrePersist
 	@PreUpdate
 	protected void onPersistAndUpdate() {
-		timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.MICROS);
+		timestamp = OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS);
 	}
 
 	public String getExternalCaseId() {
@@ -104,15 +107,15 @@ public class CaseMapping {
 		return this;
 	}
 
-	public LocalDateTime getTimestamp() {
+	public OffsetDateTime getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(LocalDateTime timestamp) {
+	public void setTimestamp(OffsetDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 
-	public CaseMapping withTimestamp(LocalDateTime timestamp) {
+	public CaseMapping withTimestamp(OffsetDateTime timestamp) {
 		this.timestamp = timestamp;
 		return this;
 	}
