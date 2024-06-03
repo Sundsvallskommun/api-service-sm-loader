@@ -26,14 +26,14 @@ class CaseMappingIdTest {
 	@Test
 	void hasValidBuilderMethods() {
 
-		final var caseId = "caseId";
+		final var errandId = "errandId";
 		final var externalCaseId = "externalCaseId";
 		final var entity = CaseMappingId.create()
-			.withCaseId(caseId)
+			.withErrandId(errandId)
 			.withExternalCaseId(externalCaseId);
 
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
-		Assertions.assertThat(entity.getCaseId()).isEqualTo(caseId);
+		Assertions.assertThat(entity.getErrandId()).isEqualTo(errandId);
 		Assertions.assertThat(entity.getExternalCaseId()).isEqualTo(externalCaseId);
 	}
 

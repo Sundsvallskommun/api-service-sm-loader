@@ -21,6 +21,10 @@ integration:
     family-ids: [ "456" ]
   support-management:
     url: http://support-management.url
+# OpenE Services
+lamna-synpunkt:
+  family-id: 123
+  namespace: CONTACTCENTER
 
 spring:
   datasource:

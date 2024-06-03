@@ -3,9 +3,6 @@ package se.sundsvall.smloader.integration.db.model;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.sql.rowset.serial.SerialClob;
-import java.sql.SQLException;
-
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
@@ -27,19 +24,22 @@ class CaseEntityTest {
 	}
 
 	@Test
-	void hasValidBuilderMethods() throws SQLException {
+	void hasValidBuilderMethods() {
 
 		final var id = "id";
-		final var openECase = new SerialClob("openECase".toCharArray());
+		final var familyId = "familyId";
+		final var openECase = "openECase";
 		final var deliveryStatus = DeliveryStatus.CREATED;
 
 		final var entity = CaseEntity.create()
 			.withId(id)
+			.withFamilyId(familyId)
 			.withOpenECase(openECase)
 			.withDeliveryStatus(deliveryStatus);
 
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
 		Assertions.assertThat(entity.getId()).isEqualTo(id);
+		Assertions.assertThat(entity.getFamilyId()).isEqualTo(familyId);
 		Assertions.assertThat(entity.getDeliveryStatus()).isEqualTo(deliveryStatus);
 		Assertions.assertThat(entity.getOpenECase()).isEqualTo(openECase);
 	}

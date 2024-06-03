@@ -30,15 +30,12 @@ public class CaseMapping {
 	private String externalCaseId;
 
 	@Id
-	@Column(name = "caseId")
-	private String caseId;
+	@Column(name = "errandId")
+	private String errandId;
 
 	@NotNull
 	@Column(name = "caseType", columnDefinition = "varchar(255)")
 	private String caseType;
-
-	@Column(name = "serviceName")
-	private String serviceName;
 
 	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	@Column(name = "timestamp")
@@ -68,16 +65,16 @@ public class CaseMapping {
 		return this;
 	}
 
-	public String getCaseId() {
-		return caseId;
+	public String getErrandId() {
+		return errandId;
 	}
 
-	public void setCaseId(String caseId) {
-		this.caseId = caseId;
+	public void setErrandId(String errandId) {
+		this.errandId = errandId;
 	}
 
-	public CaseMapping withCaseId(String caseId) {
-		this.caseId = caseId;
+	public CaseMapping withErrandId(String errandId) {
+		this.errandId = errandId;
 		return this;
 	}
 
@@ -91,19 +88,6 @@ public class CaseMapping {
 
 	public CaseMapping withCaseType(@NotNull String caseType) {
 		this.caseType = caseType;
-		return this;
-	}
-
-	public String getServiceName() {
-		return serviceName;
-	}
-
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-
-	public CaseMapping withServiceName(String serviceName) {
-		this.serviceName = serviceName;
 		return this;
 	}
 
@@ -122,7 +106,7 @@ public class CaseMapping {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getExternalCaseId(), getCaseId(), getCaseType(), getServiceName(), getTimestamp());
+		return Objects.hash(getExternalCaseId(), getErrandId(), getCaseType(), getTimestamp());
 	}
 
 	@Override
@@ -130,13 +114,13 @@ public class CaseMapping {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CaseMapping that = (CaseMapping) o;
-		return Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getCaseId(), that.getCaseId()) && Objects.equals(getCaseType(), that.getCaseType()) && Objects.equals(getServiceName(), that.getServiceName()) && Objects.equals(getTimestamp(), that.getTimestamp());
+		return Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getErrandId(), that.getErrandId()) && Objects.equals(getCaseType(), that.getCaseType()) && Objects.equals(getTimestamp(), that.getTimestamp());
 	}
 
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		return builder.append("CaseMapping [externalCaseId=").append(externalCaseId).append(", caseId=" + caseId)
-			.append(", caseType=").append(caseType).append(", serviceName=").append(serviceName).append(", timestamp=").append(timestamp).append("]").toString();
+		return builder.append("CaseMapping [externalCaseId=").append(externalCaseId).append(", errandId=" + errandId)
+			.append(", caseType=").append(caseType).append(", timestamp=").append(timestamp).append("]").toString();
 	}
 }

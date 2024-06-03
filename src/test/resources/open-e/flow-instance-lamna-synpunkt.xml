@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-529.xsd">
+    <Header>
+        <Flow>
+            <FamilyID>161</FamilyID>
+            <Version>2</Version>
+            <FlowID>529</FlowID>
+            <Name><![CDATA[Lämna synpunkt-TEST]]></Name>
+        </Flow>
+        <FlowInstanceID>4164</FlowInstanceID>
+        <Status>
+            <ID>2357</ID>
+            <Name><![CDATA[Mottagen]]></Name>
+        </Status>
+        <Posted>2024-05-14T14:43:07</Posted>
+        <FirstSubmitted>2024-05-14T14:43:07</FirstSubmitted>
+        <LastSubmitted>2024-05-14T14:43:07</LastSubmitted>
+    </Header>
+    <Values>
+        <title>
+            <QueryID>10548</QueryID>
+            <Name><![CDATA[Rubrik]]></Name>
+            <Rubrik><![CDATA[testar]]></Rubrik>
+        </title>
+        <description>
+            <QueryID>10549</QueryID>
+            <Name><![CDATA[Beskriv din synpunkt]]></Name>
+            <Value><![CDATA[beskriver synpunkten här]]></Value>
+        </description>
+        <document>
+            <QueryID>10550</QueryID>
+            <Name><![CDATA[Ladda upp fil]]></Name>
+            <File>
+                <ID>5579</ID>
+                <Name><![CDATA[Ritning1.docx]]></Name>
+                <Size>298462</Size>
+                <!--<EncodedData>****</EncodedData>--><!-- Är antagligen bortfiltrerad då vi inte vill ha filinnehåll i XML:en -->
+            </File>
+        </document>
+        <reportType>
+            <QueryID>10551</QueryID>
+            <Name><![CDATA[Typ av återkoppling]]></Name>
+            <Value>Jag vill få återkoppling via e-post/sms</Value>
+        </reportType>
+        <contact>
+            <QueryID>10552</QueryID>
+            <Name><![CDATA[Kontaktuppgifter]]></Name>
+            <Firstname><![CDATA[Kalle]]></Firstname>
+            <Lastname><![CDATA[Anka]]></Lastname>
+            <Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+            <MobilePhone><![CDATA[070111222]]></MobilePhone>
+        </contact>
+    </Values>
+</FlowInstance>

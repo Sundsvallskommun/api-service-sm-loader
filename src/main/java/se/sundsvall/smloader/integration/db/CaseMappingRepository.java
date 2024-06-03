@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CaseMappingRepository extends JpaRepository<CaseMapping, CaseMappingId> {
 
-	List<CaseMapping> findAllByExternalCaseIdOrCaseId(String externalCaseId, String caseId);
+	List<CaseMapping> findAllByExternalCaseIdOrErrandId(String externalCaseId, String errandId);
 
 	List<CaseMapping> findAllByExternalCaseId(String externalCaseId);
 

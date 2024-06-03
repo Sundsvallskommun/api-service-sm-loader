@@ -36,22 +36,19 @@ class CaseMappingTest {
 	@Test
 	void hasValidBuilderMethods() {
 
-		final var caseId = "caseId";
+		final var errandId = "errandId";
 		final var externalCaseId = "externalCaseId";
 		final var caseType = "caseType";
-		final var serviceName = "serviceName";
 		final var timestamp = OffsetDateTime.now();
 		final var entity = CaseMapping.create()
-			.withCaseId(caseId)
+			.withErrandId(errandId)
 			.withExternalCaseId(externalCaseId)
 			.withCaseType(caseType)
-			.withServiceName(serviceName)
 			.withTimestamp(timestamp);
 
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
-		Assertions.assertThat(entity.getCaseId()).isEqualTo(caseId);
+		Assertions.assertThat(entity.getErrandId()).isEqualTo(errandId);
 		Assertions.assertThat(entity.getExternalCaseId()).isEqualTo(externalCaseId);
-		Assertions.assertThat(entity.getServiceName()).isEqualTo(serviceName);
 		Assertions.assertThat(entity.getTimestamp()).isEqualTo(timestamp);
 	}
 
