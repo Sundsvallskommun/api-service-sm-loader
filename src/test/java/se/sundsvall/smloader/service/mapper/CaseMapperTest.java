@@ -11,17 +11,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.db.model.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.integration.db.model.Instance.EXTERNAL;
 
 class CaseMapperTest {
 
 	@Test
-	void toCaseEntity() {
+	void toCaseEntity() throws Exception {
 		final var xml = readOpenEFile("flow-instance-lamna-synpunkt.xml");
 
-		final var caseEntity = CaseMapper.toCaseEntity("456", xml);
 
-		assertThat(caseEntity.getId()).isEqualTo("456");
+
+		final var caseEntity = CaseMapper.toCaseEntity("456", EXTERNAL, xml);
+
 		assertThat(caseEntity.getFamilyId()).isEqualTo("161");
+		assertThat(caseEntity.getOpenECaseId()).isEqualTo("456");
+		assertThat(caseEntity.getInstance()).isEqualTo(EXTERNAL);
 		assertThat(caseEntity.getOpenECase()).isEqualTo(new String(xml));
 		assertThat(caseEntity.getDeliveryStatus()).isEqualTo(PENDING);
 	}
@@ -39,6 +43,6 @@ class CaseMapperTest {
 
 		assertThat(caseMapping.getErrandId()).isEqualTo(errandId);
 		assertThat(caseMapping.getExternalCaseId()).isEqualTo("caseId");
-		assertThat(caseMapping.getTimestamp()).isCloseTo(OffsetDateTime.now(), within(1, SECONDS));
+		assertThat(caseMapping.getModified()).isCloseTo(OffsetDateTime.now(), within(1, SECONDS));
 	}
 }

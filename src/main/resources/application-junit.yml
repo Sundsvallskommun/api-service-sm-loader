@@ -24,7 +24,12 @@ integration:
 # OpenE Services
 lamna-synpunkt:
   family-id: 123
-  namespace: CONTACTCENTER
+
+namespace:
+  CONTACTCENTER:
+    - 123
+    - 456
+    - 161
 
 spring:
   datasource:

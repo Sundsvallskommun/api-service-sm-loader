@@ -1,8 +1,8 @@
-package se.sundsvall.smloader.integration.openemapper.lamnasynpunkt;
+package se.sundsvall.smloader.integration.openemapper.providefeedback;
 
 import se.sundsvall.smloader.integration.util.annotation.XPath;
 
-record LamnaSynpunkt(
+record ProvideFeedback(
 
 	@XPath("/FlowInstance/Header/Flow/FamilyID")
 	String familyId,
@@ -14,22 +14,22 @@ record LamnaSynpunkt(
 	String status,
 
 	@XPath("/FlowInstance/Values/contact/Firstname")
-	String fornamn,
+	String firstName,
 
 	@XPath("/FlowInstance/Values/contact/Lastname")
-	String efternamn,
+	String lastName,
 
 	@XPath("/FlowInstance/Values/contact/Email")
-	String epost,
+	String email,
 
 	@XPath("/FlowInstance/Values/contact/MobilePhone")
-	String mobilnummer,
+	String mobilePhone,
 
 	@XPath("/FlowInstance/Values/reportType/Value")
 	String reportType,
 
 	@XPath("/FlowInstance/Values/title/Rubrik")
-	String rubrik,
+	String title,
 
 	@XPath("/FlowInstance/Values/description/Value")
-	String beskrivning) { }
+	String description) { }

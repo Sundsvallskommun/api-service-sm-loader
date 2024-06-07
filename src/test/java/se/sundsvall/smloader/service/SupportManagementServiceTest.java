@@ -18,6 +18,7 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -42,6 +43,9 @@ class SupportManagementServiceTest {
 	@Mock
 	private OpenEMapper mockMapper;
 
+	@Mock
+	private NamespaceProperties namespaceProperties;
+
 
 
 	private SupportManagementService supportManagementService;
@@ -50,7 +54,7 @@ class SupportManagementServiceTest {
 	void setUp() {
 		when(mockMapper.getSupportedFamilyId()).thenReturn("161");
 
-		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper));
+		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), namespaceProperties);
 	}
 	@Test
 	void exportCases() {
@@ -62,6 +66,7 @@ class SupportManagementServiceTest {
 		final var municipalityId = "2281";
 		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, flowInstanceXml));
 		when(mockCaseRepository.findAllByDeliveryStatus(PENDING)).thenReturn(casesToExport);
+		when(namespaceProperties.getNamespace()).thenReturn(Map.of(namespace, List.of(familyId)));
 
 		final var errand = new Errand()
 			.classification(new Classification()
@@ -100,6 +105,7 @@ class SupportManagementServiceTest {
 		final var caseEntity = createCaseEntity(flowInstanceId, familyId, flowInstanceXml);
 		final var casesToExport = List.of(caseEntity);
 		when(mockCaseRepository.findAllByDeliveryStatus(PENDING)).thenReturn(casesToExport);
+
 		// Act
 		supportManagementService.exportCases();
 
@@ -135,6 +141,7 @@ class SupportManagementServiceTest {
 					.value("a.b@c")))));
 
 		when(mockMapper.mapToErrand(flowInstanceXml)).thenReturn(errand);
+		when(namespaceProperties.getNamespace()).thenReturn(Map.of(namespace, List.of(familyId)));
 		when(mockSupportManagementClient.createErrand(namespace, municipalityId, errand)).thenThrow(new RuntimeException("Failed to send errand"));
 
 		// Act

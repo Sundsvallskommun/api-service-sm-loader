@@ -1,4 +1,4 @@
-package se.sundsvall.smloader.integration.openemapper.lamnasynpunkt;
+package se.sundsvall.smloader.integration.openemapper.providefeedback;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,10 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TYPE_LAMNA_
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")
-class LamnaSynpunktMapperTest {
+class ProvideFeedbackMapperTest {
 
 	@Autowired
-	private LamnaSynpunktMapper mapper;
+	private ProvideFeedbackMapper mapper;
 
 	@Test
 	void getSupportedFamilyId() {
@@ -25,7 +25,7 @@ class LamnaSynpunktMapperTest {
 	}
 
 	@Test
-	void mapToErrand() {
+	void mapToErrand() throws Exception {
 		var stringBytes = readOpenEFile("flow-instance-lamna-synpunkt.xml");
 		var errand = mapper.mapToErrand(stringBytes);
 

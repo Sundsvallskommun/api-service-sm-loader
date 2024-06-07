@@ -1,16 +1,13 @@
 package se.sundsvall.smloader.integration.db;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.data.jpa.repository.JpaRepository;
-import se.sundsvall.smloader.integration.db.model.CaseMapping;
+import org.springframework.transaction.annotation.Transactional;
+import se.sundsvall.smloader.integration.db.model.CaseMappingEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMappingId;
 
-import java.util.List;
+@Transactional
+@CircuitBreaker(name = "CaseMappingRepository")
+public interface CaseMappingRepository extends JpaRepository<CaseMappingEntity, CaseMappingId> {
 
-public interface CaseMappingRepository extends JpaRepository<CaseMapping, CaseMappingId> {
-
-	List<CaseMapping> findAllByExternalCaseIdOrErrandId(String externalCaseId, String errandId);
-
-	List<CaseMapping> findAllByExternalCaseId(String externalCaseId);
-
-	boolean existsByExternalCaseId(String externalCaseId);
 }

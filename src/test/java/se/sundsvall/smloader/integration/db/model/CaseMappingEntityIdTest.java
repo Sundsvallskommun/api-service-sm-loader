@@ -11,7 +11,7 @@ import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetter
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
 
-class CaseMappingIdTest {
+class CaseMappingEntityIdTest {
 
 	@Test
 	void testBean() {

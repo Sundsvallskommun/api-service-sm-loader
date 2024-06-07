@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
+import se.sundsvall.smloader.integration.db.model.Instance;
 import se.sundsvall.smloader.integration.openeexternal.OpenEExternalClient;
 import se.sundsvall.smloader.integration.openeinternal.OpenEInternalClient;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -24,6 +26,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.db.model.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.integration.db.model.Instance.EXTERNAL;
+import static se.sundsvall.smloader.integration.db.model.Instance.INTERNAL;
 
 @ExtendWith(MockitoExtension.class)
 class OpenEServiceTest {
@@ -44,7 +48,7 @@ class OpenEServiceTest {
 	private ArgumentCaptor<CaseEntity> caseEntityCaptor;
 
 	@Test
-	void fetchAndSaveNewOpenECases() {
+	void fetchAndSaveNewOpenECases() throws Exception {
 		// Arrange
 		final var flowInstancesXml = readOpenEFile("flow-instances.xml");
 
@@ -64,9 +68,13 @@ class OpenEServiceTest {
 		when(mockOpenEInternalClient.getErrandIds("101", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 		when(mockOpenEInternalClient.getErrandIds("112", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 		when(mockOpenEInternalClient.getErrand(anyString())).thenReturn(flowInstanceXml);
-		when(mockCaseRepository.existsById("123456")).thenReturn(false);
-		when(mockCaseRepository.existsById("234567")).thenReturn(false);
-		when(mockCaseRepository.existsById("345678")).thenReturn(false);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("123456", EXTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("234567", EXTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("345678", EXTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("123456", INTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("234567", INTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("345678", INTERNAL)).thenReturn(false);
+
 
 
 		// Act
@@ -75,7 +83,7 @@ class OpenEServiceTest {
 		// Assert and verify
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
-		verify(mockCaseRepository, times(6)).existsById(anyString());
+		verify(mockCaseRepository, times(6)).existsByOpenECaseIdAndInstance(anyString(), any(Instance.class));
 
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
@@ -83,19 +91,20 @@ class OpenEServiceTest {
 		verify(mockCaseRepository, times(6)).save(caseEntityCaptor.capture());
 
 		assertThat( caseEntityCaptor.getAllValues()).hasSize(6)
-			.extracting(CaseEntity::getId,
+			.extracting(CaseEntity::getOpenECaseId,
+				CaseEntity::getInstance,
 				CaseEntity::getFamilyId,
 				CaseEntity::getDeliveryStatus,
-				CaseEntity::getOpenECase).containsExactly(tuple("123456", "161", PENDING, new String(flowInstanceXml)),
-					tuple("234567", "161", PENDING, new String(flowInstanceXml)),
-					tuple("345678", "161", PENDING, new String(flowInstanceXml)),
-					tuple("123456", "161", PENDING, new String(flowInstanceXml)),
-					tuple("234567", "161", PENDING, new String(flowInstanceXml)),
-					tuple("345678", "161", PENDING, new String(flowInstanceXml)));
+				CaseEntity::getOpenECase).containsExactly(tuple("123456", EXTERNAL, "161", PENDING, new String(flowInstanceXml)),
+					tuple("234567", EXTERNAL, "161", PENDING, new String(flowInstanceXml)),
+					tuple("345678", EXTERNAL, "161", PENDING, new String(flowInstanceXml)),
+					tuple("123456", INTERNAL, "161", PENDING, new String(flowInstanceXml)),
+					tuple("234567", INTERNAL, "161", PENDING, new String(flowInstanceXml)),
+					tuple("345678", INTERNAL, "161", PENDING, new String(flowInstanceXml)));
 	}
 
 	@Test
-	void fetchAndSaveNewOpenECasesWhenExists() {
+	void fetchAndSaveNewOpenECasesWhenExists() throws Exception {
 		// Arrange
 		final var flowInstancesXml = readOpenEFile("flow-instances.xml");
 		final var fromDate = LocalDateTime.now().minusDays(1);
@@ -112,9 +121,13 @@ class OpenEServiceTest {
 		when(mockOpenEInternalClient.getErrandIds("101", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 		when(mockOpenEInternalClient.getErrandIds("112", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 
-		when(mockCaseRepository.existsById("123456")).thenReturn(true);
-		when(mockCaseRepository.existsById("234567")).thenReturn(true);
-		when(mockCaseRepository.existsById("345678")).thenReturn(true);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("123456", EXTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("234567", EXTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("345678", EXTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("123456", INTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("234567", INTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByOpenECaseIdAndInstance("345678", INTERNAL)).thenReturn(true);
+
 
 
 		// Act
@@ -122,7 +135,12 @@ class OpenEServiceTest {
 
 		// Assert and verify
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockCaseRepository, times(2)).existsById(("123456"));
+		verify(mockCaseRepository).existsByOpenECaseIdAndInstance("123456", EXTERNAL);
+		verify(mockCaseRepository).existsByOpenECaseIdAndInstance("123456", INTERNAL);
+		verify(mockCaseRepository).existsByOpenECaseIdAndInstance("234567", EXTERNAL);
+		verify(mockCaseRepository).existsByOpenECaseIdAndInstance("234567", INTERNAL);
+		verify(mockCaseRepository).existsByOpenECaseIdAndInstance("345678", EXTERNAL);
+		verify(mockCaseRepository).existsByOpenECaseIdAndInstance("345678", INTERNAL);
 
 		verify(mockOpenEInternalClient, times(2)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 

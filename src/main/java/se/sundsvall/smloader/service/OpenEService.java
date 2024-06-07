@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
+import static se.sundsvall.smloader.integration.db.model.Instance.EXTERNAL;
+import static se.sundsvall.smloader.integration.db.model.Instance.INTERNAL;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseEntity;
 
@@ -60,13 +62,13 @@ public class OpenEService {
 			.toList();
 
 		externalFlowInstanceIds.forEach(flowInstanceId -> {
-			if (caseRepository.existsById(flowInstanceId)) {
+			if (caseRepository.existsByOpenECaseIdAndInstance(flowInstanceId, EXTERNAL)) {
 				LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
 				return;
 			}
 			final var openECase = openEExternalClient.getErrand(flowInstanceId);
 			if (nonNull(openECase)) {
-				caseRepository.save(toCaseEntity(flowInstanceId, openECase));
+				caseRepository.save(toCaseEntity(flowInstanceId, EXTERNAL, openECase));
 			}
 		});
 	}
@@ -80,13 +82,13 @@ public class OpenEService {
 			.toList();
 
 		internalFlowInstanceIds.forEach(flowInstanceId -> {
-			if (caseRepository.existsById(flowInstanceId)) {
+			if (caseRepository.existsByOpenECaseIdAndInstance(flowInstanceId, INTERNAL)) {
 				LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
 				return;
 			}
 			final var openECase = openEInternalClient.getErrand(flowInstanceId);
 			if (nonNull(openECase)) {
-				caseRepository.save(toCaseEntity(flowInstanceId, openECase));
+				caseRepository.save(toCaseEntity(flowInstanceId, INTERNAL, openECase));
 			}
 		});
 	}

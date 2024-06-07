@@ -20,7 +20,6 @@ import static org.springframework.http.HttpHeaders.LOCATION;
 import static se.sundsvall.smloader.integration.db.model.DeliveryStatus.CREATED;
 import static se.sundsvall.smloader.integration.db.model.DeliveryStatus.FAILED;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.NAMESPACE_BY_FAMILY_ID;
 import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseMapping;
 
 @Service
@@ -31,12 +30,15 @@ public class SupportManagementService {
 	private final CaseRepository caseRepository;
 	private final CaseMappingRepository caseMappingRepository;
 	private final Map<String, OpenEMapper> openEMapperMap;
+	private final NamespaceProperties namespaceProperties;
 
-	public SupportManagementService(SupportManagementClient supportManagementClient, CaseRepository caseRepository, CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers) {
+	public SupportManagementService(SupportManagementClient supportManagementClient, CaseRepository caseRepository, CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers,
+		final NamespaceProperties namespaceProperties) {
 		this.supportManagementClient = supportManagementClient;
 		this.caseRepository = caseRepository;
 		this.caseMappingRepository = caseMappingRepository;
 		this.openEMapperMap = openEMappers.stream().collect(toMap(OpenEMapper::getSupportedFamilyId, Function.identity()));
+		this.namespaceProperties = namespaceProperties;
 	}
 
 	public void exportCases() {
@@ -59,18 +61,26 @@ public class SupportManagementService {
 			final var caseMapping = toCaseMapping(errandId, caseEntity);
 			caseMappingRepository.save(caseMapping);
 			caseRepository.save(caseEntity.withDeliveryStatus(CREATED));
-			//TODO: Remove case from caseRepository?
 		});
 	}
 
 	private String sendToSupportManagement(Errand errand, String familyId) {
 		try {
-			final var result = supportManagementClient.createErrand(NAMESPACE_BY_FAMILY_ID.get(familyId), MUNICIPALITY_ID, errand);
+			final var namespace = getNamespace(familyId);
+			if (namespace == null) {
+				LOGGER.error("No namespace found for familyId: {}", familyId);
+				return null;
+			}
+			final var result = supportManagementClient.createErrand(namespace, MUNICIPALITY_ID, errand);
 			final var location = String.valueOf(result.getHeaders().getFirst(LOCATION));
 			return location.substring(location.lastIndexOf("/") + 1);
 		} catch (Exception e) {
 			LOGGER.error("Failed to send errand to SupportManagement", e);
 			return null;
 		}
+	}
+
+	private String getNamespace(String familyId) {
+		return namespaceProperties.getNamespace().keySet().stream().filter(key -> namespaceProperties.getNamespace().get(key).contains(familyId)).findFirst().orElse(null);
 	}
 }

@@ -17,5 +17,5 @@
         primary key (errand_id, external_case_id)
     ) engine=InnoDB;
 
-    alter table if exists `'case'` 
+    alter table if exists `'case'`
        add constraint `uq_open-e_case_id_instance` unique (`open-e-case-id`, instance);

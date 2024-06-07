@@ -6,24 +6,39 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import org.hibernate.Length;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "'case'")
+@Table(name = "'case'",
+	uniqueConstraints = {
+		@UniqueConstraint(name = "uq_open-e_case_id_instance", columnNames = {"open-e-case-id", "instance"})
+	})
 public class CaseEntity {
 
 	@Id
+	@UuidGenerator
+	@Column(name = "id")
 	private String id;
 
-	@Column(columnDefinition = "varchar(255)")
+	@Column(name = "family_id")
 	private String familyId;
 
-	@Column(length = Length.LONG32)
+	@Column(name = "open-e-case-id")
+	private String openECaseId;
+
+	@Column(name = "instance")
+	@Enumerated(EnumType.STRING)
+	private Instance instance;
+
+
+	@Column(name = "open-e-case", length = Length.LONG32)
 	private String openECase;
 
-	@Column(columnDefinition = "varchar(255)")
+	@Column(name = "delivery_status")
 	@Enumerated(EnumType.STRING)
 	private DeliveryStatus deliveryStatus;
 
@@ -57,6 +72,32 @@ public class CaseEntity {
 		return this;
 	}
 
+	public String getOpenECaseId() {
+		return openECaseId;
+	}
+
+	public void setOpenECaseId(String openECaseId) {
+		this.openECaseId = openECaseId;
+	}
+
+	public CaseEntity withOpenECaseId(String openECaseId) {
+		this.openECaseId = openECaseId;
+		return this;
+	}
+
+	public Instance getInstance() {
+		return instance;
+	}
+
+	public void setInstance(Instance instance) {
+		this.instance = instance;
+	}
+
+	public CaseEntity withInstance(Instance instance) {
+		this.instance = instance;
+		return this;
+	}
+
 	public DeliveryStatus getDeliveryStatus() {
 		return deliveryStatus;
 	}
@@ -85,7 +126,7 @@ public class CaseEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getFamilyId(), getOpenECase(), getDeliveryStatus());
+		return Objects.hash(getId(), getFamilyId(), getOpenECaseId(), getInstance(), getOpenECase(), getDeliveryStatus());
 	}
 
 	@Override
@@ -93,12 +134,13 @@ public class CaseEntity {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CaseEntity that = (CaseEntity) o;
-		return Objects.equals(getId(), that.getId()) && Objects.equals(getFamilyId(), that.getFamilyId()) && Objects.equals(getOpenECase(), that.getOpenECase()) && getDeliveryStatus() == that.getDeliveryStatus();
+		return Objects.equals(getId(), that.getId()) && Objects.equals(getFamilyId(), that.getFamilyId()) && Objects.equals(getOpenECaseId(), that.getOpenECaseId()) && Objects.equals(getInstance(), that.getInstance()) && Objects.equals(getOpenECase(), that.getOpenECase()) && getDeliveryStatus() == that.getDeliveryStatus();
 	}
 
 	@Override
 	public String toString() {
-		return new StringBuilder("CaseEntity [id=").append(id).append(", familyId=").append(familyId)
-			.append(", openECase=").append(openECase).append(", deliveryStatus=").append(deliveryStatus).append("]").toString();
+		return new StringBuilder("CaseEntity [id=").append(id).append(", familyId=").append(familyId).append(", openECaseId=").append(openECaseId)
+			.append(", instance=").append(instance).append(", openECase=").append(openECase).append(", deliveryStatus=")
+			.append(deliveryStatus).append("]").toString();
 	}
 }

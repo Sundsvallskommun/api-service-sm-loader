@@ -28,18 +28,24 @@ class CaseEntityTest {
 
 		final var id = "id";
 		final var familyId = "familyId";
+		final var openECaseId = "openECaseId";
+		final var instance = Instance.EXTERNAL;
 		final var openECase = "openECase";
 		final var deliveryStatus = DeliveryStatus.CREATED;
 
 		final var entity = CaseEntity.create()
 			.withId(id)
 			.withFamilyId(familyId)
+			.withOpenECaseId(openECaseId)
+			.withInstance(instance)
 			.withOpenECase(openECase)
 			.withDeliveryStatus(deliveryStatus);
 
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
 		Assertions.assertThat(entity.getId()).isEqualTo(id);
 		Assertions.assertThat(entity.getFamilyId()).isEqualTo(familyId);
+		Assertions.assertThat(entity.getOpenECaseId()).isEqualTo(openECaseId);
+		Assertions.assertThat(entity.getInstance()).isEqualTo(instance);
 		Assertions.assertThat(entity.getDeliveryStatus()).isEqualTo(deliveryStatus);
 		Assertions.assertThat(entity.getOpenECase()).isEqualTo(openECase);
 	}
