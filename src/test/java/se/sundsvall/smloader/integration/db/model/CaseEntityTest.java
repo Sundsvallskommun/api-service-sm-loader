@@ -2,9 +2,8 @@ package se.sundsvall.smloader.integration.db.model;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import javax.sql.rowset.serial.SerialClob;
-import java.sql.SQLException;
+import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
+import se.sundsvall.smloader.integration.db.model.enums.Instance;
 
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
@@ -27,19 +26,28 @@ class CaseEntityTest {
 	}
 
 	@Test
-	void hasValidBuilderMethods() throws SQLException {
+	void hasValidBuilderMethods() {
 
 		final var id = "id";
-		final var openECase = new SerialClob("openECase".toCharArray());
+		final var familyId = "familyId";
+		final var externalCaseId = "externalCaseId";
+		final var instance = Instance.EXTERNAL;
+		final var openECase = "openECase";
 		final var deliveryStatus = DeliveryStatus.CREATED;
 
 		final var entity = CaseEntity.create()
 			.withId(id)
+			.withFamilyId(familyId)
+			.withExternalCaseId(externalCaseId)
+			.withInstance(instance)
 			.withOpenECase(openECase)
 			.withDeliveryStatus(deliveryStatus);
 
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
 		Assertions.assertThat(entity.getId()).isEqualTo(id);
+		Assertions.assertThat(entity.getFamilyId()).isEqualTo(familyId);
+		Assertions.assertThat(entity.getExternalCaseId()).isEqualTo(externalCaseId);
+		Assertions.assertThat(entity.getInstance()).isEqualTo(instance);
 		Assertions.assertThat(entity.getDeliveryStatus()).isEqualTo(deliveryStatus);
 		Assertions.assertThat(entity.getOpenECase()).isEqualTo(openECase);
 	}

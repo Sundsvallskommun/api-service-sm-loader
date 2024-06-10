@@ -1,4 +1,4 @@
-package se.sundsvall.smloader.integration.db.model;
+package se.sundsvall.smloader.integration.db.model.enums;
 
 public enum DeliveryStatus {
     PENDING,

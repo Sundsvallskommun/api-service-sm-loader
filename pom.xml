@@ -17,6 +17,7 @@
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 		<jaxb2-maven-plugin.version>3.2.0</jaxb2-maven-plugin.version>
 		<jaxb2-fluent-api.version>3.0</jaxb2-fluent-api.version>
+		<xsoup.version>0.3.7</xsoup.version>
 
 	</properties>
 	<dependencies>
@@ -48,6 +49,11 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>us.codecraft</groupId>
+			<artifactId>xsoup</artifactId>
+			<version>${xsoup.version}</version>
+		</dependency>
 		<!-- Test -->
 		<dependency>
 			<groupId>org.testcontainers</groupId>
@@ -62,6 +68,15 @@
 	</dependencies>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>xml</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>

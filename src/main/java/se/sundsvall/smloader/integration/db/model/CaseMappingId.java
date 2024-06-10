@@ -11,7 +11,7 @@ public class CaseMappingId implements Serializable {
 
 	private String externalCaseId;
 
-	private String caseId;
+	private String errandId;
 
 	public static CaseMappingId create() {
 		return new CaseMappingId();
@@ -30,16 +30,16 @@ public class CaseMappingId implements Serializable {
 		return this;
 	}
 
-	public String getCaseId() {
-		return caseId;
+	public String getErrandId() {
+		return errandId;
 	}
 
-	public void setCaseId(String caseId) {
-		this.caseId = caseId;
+	public void setErrandId(String errandId) {
+		this.errandId = errandId;
 	}
 
-	public CaseMappingId withCaseId(String caseId) {
-		this.caseId = caseId;
+	public CaseMappingId withErrandId(String errandId) {
+		this.errandId = errandId;
 		return this;
 	}
 
@@ -52,17 +52,17 @@ public class CaseMappingId implements Serializable {
 			return false;
 		}
 		final CaseMappingId caseMappingId = (CaseMappingId) o;
-		return Objects.equals(externalCaseId, caseMappingId.externalCaseId) && Objects.equals(caseId, caseMappingId.caseId);
+		return Objects.equals(externalCaseId, caseMappingId.externalCaseId) && Objects.equals(errandId, caseMappingId.errandId);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(externalCaseId, caseId);
+		return Objects.hash(externalCaseId, errandId);
 	}
 
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		return builder.append("CaseMappingId [externalCaseId=").append(externalCaseId).append(", caseId=").append(caseId).append("]").toString();
+		return builder.append("CaseMappingId [externalCaseId=").append(externalCaseId).append(", errandId=").append(errandId).append("]").toString();
 	}
 }

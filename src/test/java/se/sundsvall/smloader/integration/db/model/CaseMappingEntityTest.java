@@ -17,7 +17,7 @@ import static java.time.OffsetDateTime.now;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
 
-class CaseMappingTest {
+class CaseMappingEntityTest {
 
 	@BeforeAll
 	static void setup() {
@@ -25,7 +25,7 @@ class CaseMappingTest {
 	}
 	@Test
 	void testBean() {
-		assertThat(CaseMapping.class, allOf(
+		assertThat(CaseMappingEntity.class, allOf(
 			hasValidBeanConstructor(),
 			hasValidGettersAndSetters(),
 			hasValidBeanHashCode(),
@@ -36,28 +36,25 @@ class CaseMappingTest {
 	@Test
 	void hasValidBuilderMethods() {
 
-		final var caseId = "caseId";
+		final var errandId = "errandId";
 		final var externalCaseId = "externalCaseId";
 		final var caseType = "caseType";
-		final var serviceName = "serviceName";
-		final var timestamp = OffsetDateTime.now();
-		final var entity = CaseMapping.create()
-			.withCaseId(caseId)
+		final var modified = OffsetDateTime.now();
+		final var entity = CaseMappingEntity.create()
+			.withErrandId(errandId)
 			.withExternalCaseId(externalCaseId)
 			.withCaseType(caseType)
-			.withServiceName(serviceName)
-			.withTimestamp(timestamp);
+			.withModified(modified);
 
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
-		Assertions.assertThat(entity.getCaseId()).isEqualTo(caseId);
+		Assertions.assertThat(entity.getErrandId()).isEqualTo(errandId);
 		Assertions.assertThat(entity.getExternalCaseId()).isEqualTo(externalCaseId);
-		Assertions.assertThat(entity.getServiceName()).isEqualTo(serviceName);
-		Assertions.assertThat(entity.getTimestamp()).isEqualTo(timestamp);
+		Assertions.assertThat(entity.getModified()).isEqualTo(modified);
 	}
 
 	@Test
 	void testNoDirtOnCreatedBean() {
-		Assertions.assertThat(CaseMapping.create()).hasAllNullFieldsOrProperties();
-		Assertions.assertThat(new CaseMapping()).hasAllNullFieldsOrProperties();
+		Assertions.assertThat(CaseMappingEntity.create()).hasAllNullFieldsOrProperties();
+		Assertions.assertThat(new CaseMappingEntity()).hasAllNullFieldsOrProperties();
 	}
 }

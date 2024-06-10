@@ -11,7 +11,7 @@ import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetter
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
 
-class CaseMappingIdTest {
+class CaseMappingEntityIdTest {
 
 	@Test
 	void testBean() {
@@ -26,14 +26,14 @@ class CaseMappingIdTest {
 	@Test
 	void hasValidBuilderMethods() {
 
-		final var caseId = "caseId";
+		final var errandId = "errandId";
 		final var externalCaseId = "externalCaseId";
 		final var entity = CaseMappingId.create()
-			.withCaseId(caseId)
+			.withErrandId(errandId)
 			.withExternalCaseId(externalCaseId);
 
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
-		Assertions.assertThat(entity.getCaseId()).isEqualTo(caseId);
+		Assertions.assertThat(entity.getErrandId()).isEqualTo(errandId);
 		Assertions.assertThat(entity.getExternalCaseId()).isEqualTo(externalCaseId);
 	}
 
