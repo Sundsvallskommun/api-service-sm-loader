@@ -2,8 +2,8 @@ package se.sundsvall.smloader.service.mapper;
 
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMappingEntity;
-import se.sundsvall.smloader.integration.db.model.DeliveryStatus;
-import se.sundsvall.smloader.integration.db.model.Instance;
+import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
+import se.sundsvall.smloader.integration.db.model.enums.Instance;
 
 import java.time.OffsetDateTime;
 
@@ -21,7 +21,7 @@ public final class CaseMapper {
 
 		return CaseEntity.create()
 			.withFamilyId(familyId)
-			.withOpenECaseId(openECaseId)
+			.withExternalCaseId(openECaseId)
 			.withInstance(instance)
 			.withOpenECase(xmlContent)
 			.withDeliveryStatus(DeliveryStatus.PENDING);

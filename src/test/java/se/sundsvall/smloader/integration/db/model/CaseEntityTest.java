@@ -2,6 +2,8 @@ package se.sundsvall.smloader.integration.db.model;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
+import se.sundsvall.smloader.integration.db.model.enums.Instance;
 
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
@@ -28,7 +30,7 @@ class CaseEntityTest {
 
 		final var id = "id";
 		final var familyId = "familyId";
-		final var openECaseId = "openECaseId";
+		final var externalCaseId = "externalCaseId";
 		final var instance = Instance.EXTERNAL;
 		final var openECase = "openECase";
 		final var deliveryStatus = DeliveryStatus.CREATED;
@@ -36,7 +38,7 @@ class CaseEntityTest {
 		final var entity = CaseEntity.create()
 			.withId(id)
 			.withFamilyId(familyId)
-			.withOpenECaseId(openECaseId)
+			.withExternalCaseId(externalCaseId)
 			.withInstance(instance)
 			.withOpenECase(openECase)
 			.withDeliveryStatus(deliveryStatus);
@@ -44,7 +46,7 @@ class CaseEntityTest {
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
 		Assertions.assertThat(entity.getId()).isEqualTo(id);
 		Assertions.assertThat(entity.getFamilyId()).isEqualTo(familyId);
-		Assertions.assertThat(entity.getOpenECaseId()).isEqualTo(openECaseId);
+		Assertions.assertThat(entity.getExternalCaseId()).isEqualTo(externalCaseId);
 		Assertions.assertThat(entity.getInstance()).isEqualTo(instance);
 		Assertions.assertThat(entity.getDeliveryStatus()).isEqualTo(deliveryStatus);
 		Assertions.assertThat(entity.getOpenECase()).isEqualTo(openECase);

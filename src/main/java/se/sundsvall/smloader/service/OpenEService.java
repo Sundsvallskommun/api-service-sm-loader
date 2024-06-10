@@ -11,12 +11,11 @@ import se.sundsvall.smloader.integration.openeinternal.OpenEInternalClient;
 import se.sundsvall.smloader.integration.openeinternalsoap.OpenEInternalSoapClient;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
-import static se.sundsvall.smloader.integration.db.model.Instance.EXTERNAL;
-import static se.sundsvall.smloader.integration.db.model.Instance.INTERNAL;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.INTERNAL;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseEntity;
 
@@ -26,10 +25,10 @@ public class OpenEService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpenEService.class);
 
 	@Value("${integration.open-e-external.family-ids:}")
-	private String externalFamilyIds;
+	private List<String> externalFamilyIds;
 
 	@Value("${integration.open-e-internal.family-ids:}")
-	private String internalFamilyIds;
+	private List<String> internalFamilyIds;
 
 	private final OpenEExternalClient openEExternalClient;
 	private final OpenEInternalClient openEInternalClient;
@@ -54,7 +53,7 @@ public class OpenEService {
 
 	private void handleExternalCases(String status, LocalDateTime fromDate, LocalDateTime toDate) {
 
-		final var externalFlowInstanceIds = Arrays.stream(this.externalFamilyIds.split(","))
+		final var externalFlowInstanceIds = externalFamilyIds.stream()
 			.map(familyId -> openEExternalClient.getErrandIds(familyId, status, fromDate.toString(), toDate.toString()))
 			.map(this::getErrandIds)
 			.flatMap(List::stream)
@@ -62,7 +61,7 @@ public class OpenEService {
 			.toList();
 
 		externalFlowInstanceIds.forEach(flowInstanceId -> {
-			if (caseRepository.existsByOpenECaseIdAndInstance(flowInstanceId, EXTERNAL)) {
+			if (caseRepository.existsByExternalCaseIdAndInstance(flowInstanceId, EXTERNAL)) {
 				LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
 				return;
 			}
@@ -74,7 +73,7 @@ public class OpenEService {
 	}
 
 	private void handleInternalCases(String status, LocalDateTime fromDate, LocalDateTime toDate) {
-		final var internalFlowInstanceIds = Arrays.stream(this.internalFamilyIds.split(","))
+		final var internalFlowInstanceIds = internalFamilyIds.stream()
 			.map(familyId -> openEInternalClient.getErrandIds(familyId, status, fromDate.toString(), toDate.toString()))
 			.map(this::getErrandIds)
 			.flatMap(List::stream)
@@ -82,7 +81,7 @@ public class OpenEService {
 			.toList();
 
 		internalFlowInstanceIds.forEach(flowInstanceId -> {
-			if (caseRepository.existsByOpenECaseIdAndInstance(flowInstanceId, INTERNAL)) {
+			if (caseRepository.existsByExternalCaseIdAndInstance(flowInstanceId, INTERNAL)) {
 				LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
 				return;
 			}

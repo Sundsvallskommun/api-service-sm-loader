@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
-import se.sundsvall.smloader.integration.db.model.DeliveryStatus;
+import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
@@ -17,8 +17,8 @@ import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
 import static org.springframework.http.HttpHeaders.LOCATION;
-import static se.sundsvall.smloader.integration.db.model.DeliveryStatus.CREATED;
-import static se.sundsvall.smloader.integration.db.model.DeliveryStatus.FAILED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseMapping;
 

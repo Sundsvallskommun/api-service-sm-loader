@@ -25,8 +25,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static se.sundsvall.smloader.integration.db.model.DeliveryStatus.FAILED;
-import static se.sundsvall.smloader.integration.db.model.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
 
 @ExtendWith(MockitoExtension.class)
 class SupportManagementServiceTest {

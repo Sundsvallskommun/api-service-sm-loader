@@ -2,20 +2,20 @@ package se.sundsvall.smloader.integration.db.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import org.hibernate.Length;
 import org.hibernate.annotations.UuidGenerator;
+import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
+import se.sundsvall.smloader.integration.db.model.enums.Instance;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "'case'",
 	uniqueConstraints = {
-		@UniqueConstraint(name = "uq_open-e_case_id_instance", columnNames = {"open-e-case-id", "instance"})
+		@UniqueConstraint(name = "uq_external_case_id_instance", columnNames = {"external_case_id", "instance"})
 	})
 public class CaseEntity {
 
@@ -27,19 +27,17 @@ public class CaseEntity {
 	@Column(name = "family_id")
 	private String familyId;
 
-	@Column(name = "open-e-case-id")
-	private String openECaseId;
+	@Column(name = "external_case_id")
+	private String externalCaseId;
 
 	@Column(name = "instance")
-	@Enumerated(EnumType.STRING)
 	private Instance instance;
 
 
-	@Column(name = "open-e-case", length = Length.LONG32)
+	@Column(name = "open_e_case", length = Length.LONG32)
 	private String openECase;
 
 	@Column(name = "delivery_status")
-	@Enumerated(EnumType.STRING)
 	private DeliveryStatus deliveryStatus;
 
 	public static CaseEntity create() {
@@ -72,16 +70,16 @@ public class CaseEntity {
 		return this;
 	}
 
-	public String getOpenECaseId() {
-		return openECaseId;
+	public String getExternalCaseId() {
+		return externalCaseId;
 	}
 
-	public void setOpenECaseId(String openECaseId) {
-		this.openECaseId = openECaseId;
+	public void setexternalCaseId(String externalCaseId) {
+		this.externalCaseId = externalCaseId;
 	}
 
-	public CaseEntity withOpenECaseId(String openECaseId) {
-		this.openECaseId = openECaseId;
+	public CaseEntity withExternalCaseId(String externalCaseId) {
+		this.externalCaseId = externalCaseId;
 		return this;
 	}
 
@@ -126,7 +124,7 @@ public class CaseEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getFamilyId(), getOpenECaseId(), getInstance(), getOpenECase(), getDeliveryStatus());
+		return Objects.hash(getId(), getFamilyId(), getExternalCaseId(), getInstance(), getOpenECase(), getDeliveryStatus());
 	}
 
 	@Override
@@ -134,12 +132,12 @@ public class CaseEntity {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CaseEntity that = (CaseEntity) o;
-		return Objects.equals(getId(), that.getId()) && Objects.equals(getFamilyId(), that.getFamilyId()) && Objects.equals(getOpenECaseId(), that.getOpenECaseId()) && Objects.equals(getInstance(), that.getInstance()) && Objects.equals(getOpenECase(), that.getOpenECase()) && getDeliveryStatus() == that.getDeliveryStatus();
+		return Objects.equals(getId(), that.getId()) && Objects.equals(getFamilyId(), that.getFamilyId()) && Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getInstance(), that.getInstance()) && Objects.equals(getOpenECase(), that.getOpenECase()) && getDeliveryStatus() == that.getDeliveryStatus();
 	}
 
 	@Override
 	public String toString() {
-		return new StringBuilder("CaseEntity [id=").append(id).append(", familyId=").append(familyId).append(", openECaseId=").append(openECaseId)
+		return new StringBuilder("CaseEntity [id=").append(id).append(", familyId=").append(familyId).append(", externalCaseId=").append(externalCaseId)
 			.append(", instance=").append(instance).append(", openECase=").append(openECase).append(", deliveryStatus=")
 			.append(deliveryStatus).append("]").toString();
 	}

@@ -1,11 +1,11 @@
 
     create table `'case'` (
         id varchar(255) not null,
-        delivery_status enum ('PENDING','CREATED','FAILED'),
+        delivery_status varchar(255),
+        external_case_id varchar(255),
         family_id varchar(255),
-        instance enum ('INTERNAL','EXTERNAL'),
-        `open-e-case` longtext,
-        `open-e-case-id` varchar(255),
+        instance varchar(255),
+        open_e_case longtext,
         primary key (id)
     ) engine=InnoDB;
 
@@ -17,5 +17,5 @@
         primary key (errand_id, external_case_id)
     ) engine=InnoDB;
 
-    alter table if exists `'case'` 
-       add constraint `uq_open-e_case_id_instance` unique (`open-e-case-id`, instance);
+    alter table if exists `'case'`
+       add constraint uq_external_case_id_instance unique (external_case_id, instance);

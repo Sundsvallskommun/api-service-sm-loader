@@ -28,7 +28,7 @@ public class CaseMappingEntity {
 	@Column(name = "errand_id")
 	private String errandId;
 
-	@Column(name = "caseType")
+	@Column(name = "case_type")
 	private String caseType;
 
 	@Column(name = "modified")
