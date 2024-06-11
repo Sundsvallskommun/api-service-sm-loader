@@ -11,7 +11,7 @@ import se.sundsvall.dept44.configuration.feign.decoder.ProblemErrorDecoder;
 @Import(FeignConfiguration.class)
 public class OpenEInternalConfiguration {
 
-	public static final String CLIENT_ID = "open-e-internal";
+	public static final String CLIENT_ID = "open-e.internal";
 
 	@Bean
 	FeignBuilderCustomizer feignBuilderCustomizer(final OpenEInternalProperties properties) {

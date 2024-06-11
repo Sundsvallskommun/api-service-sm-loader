@@ -11,14 +11,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
+import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 import java.net.URI;
+import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -27,6 +29,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 
 @ExtendWith(MockitoExtension.class)
 class SupportManagementServiceTest {
@@ -44,7 +47,7 @@ class SupportManagementServiceTest {
 	private OpenEMapper mockMapper;
 
 	@Mock
-	private NamespaceProperties namespaceProperties;
+	private CaseMetaDataRepository mockCaseMetaDataRepository;
 
 
 
@@ -54,19 +57,19 @@ class SupportManagementServiceTest {
 	void setUp() {
 		when(mockMapper.getSupportedFamilyId()).thenReturn("161");
 
-		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), namespaceProperties);
+		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockCaseMetaDataRepository);
 	}
 	@Test
 	void exportCases() {
 		// Arrange
-		final var flowInstanceXml ="flowInstanceXml".getBytes(); // "flow-instance-lamna-synpunkt.xml
+		final var flowInstanceXml = "flowInstanceXml"; // "flow-instance-lamna-synpunkt.xml
 		final var familyId = "161";
 		final var flowInstanceId = "123456";
-		final var namespace = "CONTACTCENTER";
-		final var municipalityId = "2281";
-		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, flowInstanceXml));
+		final var namespace = "namespace";
+		final var municipalityId = "municipalityId";
+		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml.getBytes())));
 		when(mockCaseRepository.findAllByDeliveryStatus(PENDING)).thenReturn(casesToExport);
-		when(namespaceProperties.getNamespace()).thenReturn(Map.of(namespace, List.of(familyId)));
+
 
 		final var errand = new Errand()
 			.classification(new Classification()
@@ -81,7 +84,7 @@ class SupportManagementServiceTest {
 					.type("email")
 					.value("a.b@c")))));
 
-		when(mockMapper.mapToErrand(flowInstanceXml)).thenReturn(errand);
+		when(mockMapper.mapToErrand(flowInstanceXml.getBytes())).thenReturn(errand);
 		when(mockSupportManagementClient.createErrand(namespace, municipalityId, errand)).thenReturn(ResponseEntity.created(URI.create("http://localhost:8080/errands/errandId")).build());
 
 		// Act
@@ -90,7 +93,7 @@ class SupportManagementServiceTest {
 		// Assert and verify
 		verify(mockCaseRepository).findAllByDeliveryStatus(PENDING);
 		verify(mockMapper).getSupportedFamilyId();
-		verify(mockMapper).mapToErrand(flowInstanceXml);
+		verify(mockMapper).mapToErrand(flowInstanceXml.getBytes());
 		verify(mockSupportManagementClient).createErrand(namespace, municipalityId, errand);
 		verify(mockCaseMappingRepository).save(any());
 		verify(mockCaseRepository).save(any());
@@ -123,9 +126,9 @@ class SupportManagementServiceTest {
 		final var flowInstanceXml ="flowInstanceXml".getBytes(); // "flow-instance-lamna-synpunkt.xml
 		final var familyId = "161";
 		final var flowInstanceId = "123456";
-		final var namespace = "CONTACTCENTER";
-		final var municipalityId = "2281";
-		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, flowInstanceXml));
+		final var namespace = "namespace";
+		final var municipalityId = "municipalityId";
+		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId,  Base64.getEncoder().encode(flowInstanceXml)));
 		when(mockCaseRepository.findAllByDeliveryStatus(PENDING)).thenReturn(casesToExport);
 		final var errand = new Errand()
 			.classification(new Classification()
@@ -141,7 +144,6 @@ class SupportManagementServiceTest {
 					.value("a.b@c")))));
 
 		when(mockMapper.mapToErrand(flowInstanceXml)).thenReturn(errand);
-		when(namespaceProperties.getNamespace()).thenReturn(Map.of(namespace, List.of(familyId)));
 		when(mockSupportManagementClient.createErrand(namespace, municipalityId, errand)).thenThrow(new RuntimeException("Failed to send errand"));
 
 		// Act
@@ -159,7 +161,7 @@ class SupportManagementServiceTest {
 	private CaseEntity createCaseEntity(String flowInstanceId, String familyId, byte[] flowInstanceXml) {
 		return CaseEntity.create()
 			.withId(flowInstanceId)
-			.withFamilyId(familyId)
+			.withCaseMetaData(CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace("namespace").withMunicipalityId("municipalityId"))
 			.withOpenECase(new String(flowInstanceXml))
 			.withDeliveryStatus(PENDING);
 	}

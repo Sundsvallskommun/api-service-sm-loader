@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
+import java.util.List;
+
+import static generated.se.sundsvall.supportmanagement.Priority.LOW;
+import static java.util.Collections.emptyList;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CATEGORY_LAMNA_SYNPUNKT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
@@ -30,26 +34,34 @@ class ProvideFeedbackMapper implements OpenEMapper {
 	public Errand mapToErrand(final byte[] xml) {
 		final var result = extractValue(xml, ProvideFeedback.class);
 
-		final var email = new ContactChannel()
-			.type(CONTACT_CHANNEL_TYPE_EMAIL)
-			.value(result.email());
-
-		final var phone = new ContactChannel()
-			.type(CONTACT_CHANNEL_TYPE_PHONE)
-			.value(result.mobilePhone());
-
-		final var stakeholder = new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(result.firstName())
-			.lastName(result.lastName())
-			.addContactChannelsItem(email)
-			.addContactChannelsItem(phone);
-
 		return new Errand()
+			.status("NEW")
 			.description(result.description())
+			.stakeholders(getStakeholder(result))
+			.reporterUserId(getReporterUserId(result))
+			.priority(LOW)
 			.title(result.title())
-			.addStakeholdersItem(stakeholder)
 			.classification(new Classification().category(CATEGORY_LAMNA_SYNPUNKT).type(TYPE_LAMNA_SYNPUNKT))
 			.businessRelated(false);
+	}
+
+	private String getReporterUserId(final ProvideFeedback provideFeedback) {
+		return provideFeedback.firstName() != null ? provideFeedback.firstName() + " " + provideFeedback.lastName() + "-" + provideFeedback.email() :
+			provideFeedback.posterFirstName() + " " +  provideFeedback.posterLastName() + "-" + provideFeedback.posterEmail();
+	}
+
+	private List<Stakeholder> getStakeholder(final ProvideFeedback provideFeedback) {
+		return provideFeedback.firstName() != null ? List.of(new Stakeholder().role(ROLE_CONTACT_PERSON)
+			.firstName(provideFeedback.firstName())
+			.lastName(provideFeedback.lastName())
+			.contactChannels(getContactChannels(provideFeedback))) : emptyList();
+	}
+
+	private List<ContactChannel> getContactChannels(final ProvideFeedback provideFeedback) {
+		return List.of(new ContactChannel()
+			.type(CONTACT_CHANNEL_TYPE_EMAIL)
+			.value(provideFeedback.email()), new ContactChannel()
+			.type(CONTACT_CHANNEL_TYPE_PHONE)
+			.value(provideFeedback.mobilePhone()));
 	}
 }

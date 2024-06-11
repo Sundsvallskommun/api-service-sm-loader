@@ -2,20 +2,21 @@ package se.sundsvall.smloader.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
+import se.sundsvall.smloader.integration.db.model.enums.Instance;
 import se.sundsvall.smloader.integration.openeexternal.OpenEExternalClient;
 import se.sundsvall.smloader.integration.openeexternalsoap.OpenEExternalSoapClient;
 import se.sundsvall.smloader.integration.openeinternal.OpenEInternalClient;
 import se.sundsvall.smloader.integration.openeinternalsoap.OpenEInternalSoapClient;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
-import static se.sundsvall.smloader.integration.db.model.enums.Instance.INTERNAL;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseEntity;
 
@@ -24,70 +25,62 @@ public class OpenEService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpenEService.class);
 
-	@Value("${integration.open-e-external.family-ids:}")
-	private List<String> externalFamilyIds;
-
-	@Value("${integration.open-e-internal.family-ids:}")
-	private List<String> internalFamilyIds;
-
 	private final OpenEExternalClient openEExternalClient;
 	private final OpenEInternalClient openEInternalClient;
 	private final OpenEExternalSoapClient openEExternalSoapClient;
 	private final OpenEInternalSoapClient openEInternalSoapClient;
 	private final CaseRepository caseRepository;
+	private final CaseMetaDataRepository caseMetaDataRepository;
 
 	public OpenEService(OpenEExternalClient openEExternalClient, OpenEInternalClient openEInternalClient, OpenEExternalSoapClient openEExternalSoapClient, OpenEInternalSoapClient openEInternalSoapClient,
-			CaseRepository caseRepository) {
+			CaseRepository caseRepository, CaseMetaDataRepository caseMetaDataRepository) {
 		this.openEExternalClient = openEExternalClient;
 		this.openEInternalClient = openEInternalClient;
 		this.openEExternalSoapClient = openEExternalSoapClient;
 		this.openEInternalSoapClient = openEInternalSoapClient;
 		this.caseRepository = caseRepository;
+		this.caseMetaDataRepository = caseMetaDataRepository;
 	}
 
-	public void fetchAndSaveNewOpenECases(String status, LocalDateTime fromDate, LocalDateTime toDate) {
-		handleExternalCases(status, fromDate, toDate);
+	public void fetchAndSaveNewOpenECases(final LocalDateTime fromDate, LocalDateTime toDate) {
+		final var effectiveToDate = nonNull(toDate) ? toDate : LocalDateTime.now();
 
-		handleInternalCases(status, fromDate, toDate);
+		if (fromDate.isAfter(effectiveToDate)) {
+			LOGGER.error("From-date: '{}' is after to-date: '{}'. No cases will be fetched.", fromDate, effectiveToDate);
+			return;
+		}
+
+		Arrays.stream(Instance.values()).forEach(instance -> handleCasesByInstance(instance, fromDate, effectiveToDate));
 	}
 
-	private void handleExternalCases(String status, LocalDateTime fromDate, LocalDateTime toDate) {
+	private void handleCasesByInstance(final Instance instance, final LocalDateTime fromDate, final LocalDateTime toDate) {
 
-		final var externalFlowInstanceIds = externalFamilyIds.stream()
-			.map(familyId -> openEExternalClient.getErrandIds(familyId, status, fromDate.toString(), toDate.toString()))
+		final var metaDataEntities = caseMetaDataRepository.findByInstance(instance);
+
+		final var flowInstanceIds = metaDataEntities.stream()
+			.map(metaData -> {
+				if (instance == EXTERNAL) {
+					return openEExternalClient.getErrandIds(metaData.getFamilyId(), metaData.getOpenEImportStatus(), fromDate.toString(), toDate.toString());
+				} else {
+					return openEInternalClient.getErrandIds(metaData.getFamilyId(), metaData.getOpenEImportStatus(), fromDate.toString(), toDate.toString());
+				}
+			})
 			.map(this::getErrandIds)
 			.flatMap(List::stream)
 			.distinct()
 			.toList();
 
-		externalFlowInstanceIds.forEach(flowInstanceId -> {
-			if (caseRepository.existsByExternalCaseIdAndInstance(flowInstanceId, EXTERNAL)) {
+		flowInstanceIds.forEach(flowInstanceId -> {
+			if (caseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance(flowInstanceId, instance)) {
 				LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
 				return;
 			}
-			final var openECase = openEExternalClient.getErrand(flowInstanceId);
-			if (nonNull(openECase)) {
-				caseRepository.save(toCaseEntity(flowInstanceId, EXTERNAL, openECase));
-			}
-		});
-	}
+			final var openECase = getOpenECase(instance, flowInstanceId);
+			final var familyId = getFamilyId(openECase);
+			final var caseMetaData = caseMetaDataRepository.findById(familyId);
 
-	private void handleInternalCases(String status, LocalDateTime fromDate, LocalDateTime toDate) {
-		final var internalFlowInstanceIds = internalFamilyIds.stream()
-			.map(familyId -> openEInternalClient.getErrandIds(familyId, status, fromDate.toString(), toDate.toString()))
-			.map(this::getErrandIds)
-			.flatMap(List::stream)
-			.distinct()
-			.toList();
-
-		internalFlowInstanceIds.forEach(flowInstanceId -> {
-			if (caseRepository.existsByExternalCaseIdAndInstance(flowInstanceId, INTERNAL)) {
-				LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
-				return;
-			}
-			final var openECase = openEInternalClient.getErrand(flowInstanceId);
-			if (nonNull(openECase)) {
-				caseRepository.save(toCaseEntity(flowInstanceId, INTERNAL, openECase));
+			if (nonNull(openECase) && caseMetaData.isPresent()) {
+				caseRepository.save(toCaseEntity(flowInstanceId, caseMetaData.get(), openECase));
 			}
 		});
 	}
@@ -98,5 +91,18 @@ public class OpenEService {
 		return result.eachText().stream()
 			.map(String::trim)
 			.toList();
+	}
+
+	private String getFamilyId(final byte[] xml) {
+		var result = evaluateXPath(xml, "/FlowInstance/Header/Flow/FamilyID");
+
+		return result.eachText().stream()
+			.map(String::trim)
+			.findFirst()
+			.orElse(null);
+	}
+
+	private byte[] getOpenECase(Instance instance, String flowInstanceId) {
+		return instance == EXTERNAL ? openEExternalClient.getErrand(flowInstanceId) : openEInternalClient.getErrand(flowInstanceId);
 	}
 }

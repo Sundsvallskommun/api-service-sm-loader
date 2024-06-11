@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
+              xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1736.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>161</FamilyID>
+			<Version>3</Version>s
+			<FlowID>1736</FlowID>
+			<Name><![CDATA[Lämna synpunkt-TEST]]></Name>
+		</Flow>
+		<FlowInstanceID>4179</FlowInstanceID>
+		<Status>
+			<ID>10863</ID>
+			<Name><![CDATA[Mottagen]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>23799</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>23799</ID>
+		</Owner>
+		<Posted>2024-05-22T11:05:29</Posted>
+		<FirstSubmitted>2024-05-22T11:05:29</FirstSubmitted>
+		<LastSubmitted>2024-05-22T11:05:29</LastSubmitted>
+	</Header>
+	<Values>
+		<title>
+			<QueryID>62481</QueryID>
+			<Name><![CDATA[Rubrik]]></Name>
+			<Rubrik><![CDATA[testsyn]]></Rubrik>
+		</title>
+		<description>
+			<QueryID>62482</QueryID>
+			<Name><![CDATA[Beskriv din synpunkt]]></Name>
+			<Value><![CDATA[testar synen]]></Value>
+		</description>
+		<document>
+			<QueryID>62483</QueryID>
+			<Name><![CDATA[Ladda upp fil]]></Name>
+			<File>
+				<ID>5589</ID>
+				<Name><![CDATA[Fasad norr.docx]]></Name>
+				<Size>298300</Size>
+			</File>
+		</document>
+		<reportType>
+			<QueryID>62484</QueryID>
+			<Name><![CDATA[Typ av återkoppling]]></Name>
+			<Value>Jag vill vara anonym och läsa mitt svar via en länk</Value>
+		</reportType>
+	</Values>
+	<ExtraParameters>
+		<Parameters>
+			<Parameter>
+				<Name>municipal_sundsvall</Name>
+				<Value><![CDATA[81]]></Value>
+			</Parameter>
+			<Parameter>
+				<Name>region_municipal_sundsvall</Name>
+				<Value><![CDATA[2281]]></Value>
+			</Parameter>
+		</Parameters>
+	</ExtraParameters>
+</FlowInstance>

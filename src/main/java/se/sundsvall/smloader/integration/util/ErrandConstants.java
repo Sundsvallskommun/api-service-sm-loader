@@ -5,7 +5,6 @@ public final class ErrandConstants {
 	private ErrandConstants() {
 	}
 
-	public static final String MUNICIPALITY_ID = "2281";
 	public static final String ROLE_CONTACT_PERSON = "CONTACT_PERSON";
 	public static final String CONTACT_CHANNEL_TYPE_EMAIL = "Email";
 	public static final String CONTACT_CHANNEL_TYPE_PHONE = "Phone";

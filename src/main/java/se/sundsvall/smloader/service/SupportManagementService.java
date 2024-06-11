@@ -5,11 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
-import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,7 +20,7 @@ import static java.util.stream.Collectors.toMap;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
 import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseMapping;
 
 @Service
@@ -29,31 +30,32 @@ public class SupportManagementService {
 	private final SupportManagementClient supportManagementClient;
 	private final CaseRepository caseRepository;
 	private final CaseMappingRepository caseMappingRepository;
+	private final CaseMetaDataRepository caseMetaDataRepository;
 	private final Map<String, OpenEMapper> openEMapperMap;
-	private final NamespaceProperties namespaceProperties;
 
 	public SupportManagementService(SupportManagementClient supportManagementClient, CaseRepository caseRepository, CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers,
-		final NamespaceProperties namespaceProperties) {
+		final CaseMetaDataRepository caseMetaDataRepository) {
 		this.supportManagementClient = supportManagementClient;
 		this.caseRepository = caseRepository;
 		this.caseMappingRepository = caseMappingRepository;
 		this.openEMapperMap = openEMappers.stream().collect(toMap(OpenEMapper::getSupportedFamilyId, Function.identity()));
-		this.namespaceProperties = namespaceProperties;
+		this.caseMetaDataRepository = caseMetaDataRepository;
 	}
 
 	public void exportCases() {
-		final var casesToExport = caseRepository.findAllByDeliveryStatus(DeliveryStatus.PENDING);
+		final var casesToExport = caseRepository.findAllByDeliveryStatus(PENDING);
 
 		casesToExport.forEach(caseEntity -> {
-			final var mapper = openEMapperMap.get(caseEntity.getFamilyId());
+			final var mapper = openEMapperMap.get(caseEntity.getCaseMetaData().getFamilyId());
 			if (mapper == null) {
 				caseRepository.save(caseEntity.withDeliveryStatus(FAILED));
-				LOGGER.error("No mapper found for familyId: {}", caseEntity.getFamilyId());
+				LOGGER.error("No mapper found for familyId: {}", caseEntity.getCaseMetaData().getFamilyId());
 				return;
 			}
 
-			final var errand = mapper.mapToErrand(Optional.ofNullable(caseEntity.getOpenECase()).orElse("").getBytes());
-			final var errandId = sendToSupportManagement(errand, caseEntity.getFamilyId());
+			final var decodedOpenECase = Base64.getDecoder().decode(Optional.ofNullable(caseEntity.getOpenECase()).orElse(""));
+			final var errand = mapper.mapToErrand(decodedOpenECase);
+			final var errandId = sendToSupportManagement(errand, caseEntity.getCaseMetaData().getNamespace(), caseEntity.getCaseMetaData().getMunicipalityId());
 			if (errandId == null) {
 				caseRepository.save(caseEntity.withDeliveryStatus(FAILED));
 				return;
@@ -64,23 +66,14 @@ public class SupportManagementService {
 		});
 	}
 
-	private String sendToSupportManagement(Errand errand, String familyId) {
+	private String sendToSupportManagement(Errand errand, String namespace, String municipalityId) {
 		try {
-			final var namespace = getNamespace(familyId);
-			if (namespace == null) {
-				LOGGER.error("No namespace found for familyId: {}", familyId);
-				return null;
-			}
-			final var result = supportManagementClient.createErrand(namespace, MUNICIPALITY_ID, errand);
+			final var result = supportManagementClient.createErrand(namespace, municipalityId, errand);
 			final var location = String.valueOf(result.getHeaders().getFirst(LOCATION));
 			return location.substring(location.lastIndexOf("/") + 1);
 		} catch (Exception e) {
 			LOGGER.error("Failed to send errand to SupportManagement", e);
 			return null;
 		}
-	}
-
-	private String getNamespace(String familyId) {
-		return namespaceProperties.getNamespace().keySet().stream().filter(key -> namespaceProperties.getNamespace().get(key).contains(familyId)).findFirst().orElse(null);
 	}
 }

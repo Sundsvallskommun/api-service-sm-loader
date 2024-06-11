@@ -2,21 +2,19 @@ package se.sundsvall.smloader.integration.db.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import org.hibernate.Length;
 import org.hibernate.annotations.UuidGenerator;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
-import se.sundsvall.smloader.integration.db.model.enums.Instance;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "'case'",
-	uniqueConstraints = {
-		@UniqueConstraint(name = "uq_external_case_id_instance", columnNames = {"external_case_id", "instance"})
-	})
+@Table(name = "'case'")
 public class CaseEntity {
 
 	@Id
@@ -24,15 +22,12 @@ public class CaseEntity {
 	@Column(name = "id")
 	private String id;
 
-	@Column(name = "family_id")
-	private String familyId;
+	@ManyToOne()
+	@JoinColumn(name = "family_id", nullable = false, foreignKey = @ForeignKey(name = "fk_case_case_meta_data_family_id"))
+	private CaseMetaDataEntity caseMetaDataEntity;
 
 	@Column(name = "external_case_id")
 	private String externalCaseId;
-
-	@Column(name = "instance")
-	private Instance instance;
-
 
 	@Column(name = "open_e_case", length = Length.LONG32)
 	private String openECase;
@@ -57,16 +52,16 @@ public class CaseEntity {
 		return this;
 	}
 
-	public String getFamilyId() {
-		return familyId;
+	public CaseMetaDataEntity getCaseMetaData() {
+		return caseMetaDataEntity;
 	}
 
-	public void setFamilyId(String familyId) {
-		this.familyId = familyId;
+	public void setCaseMetaData(CaseMetaDataEntity caseMetaDataEntity) {
+		this.caseMetaDataEntity = caseMetaDataEntity;
 	}
 
-	public CaseEntity withFamilyId(String familyId) {
-		this.familyId = familyId;
+	public CaseEntity withCaseMetaData(CaseMetaDataEntity caseMetaDataEntity) {
+		this.caseMetaDataEntity = caseMetaDataEntity;
 		return this;
 	}
 
@@ -80,19 +75,6 @@ public class CaseEntity {
 
 	public CaseEntity withExternalCaseId(String externalCaseId) {
 		this.externalCaseId = externalCaseId;
-		return this;
-	}
-
-	public Instance getInstance() {
-		return instance;
-	}
-
-	public void setInstance(Instance instance) {
-		this.instance = instance;
-	}
-
-	public CaseEntity withInstance(Instance instance) {
-		this.instance = instance;
 		return this;
 	}
 
@@ -124,7 +106,7 @@ public class CaseEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getFamilyId(), getExternalCaseId(), getInstance(), getOpenECase(), getDeliveryStatus());
+		return Objects.hash(getId(), getCaseMetaData(), getExternalCaseId(), getOpenECase(), getDeliveryStatus());
 	}
 
 	@Override
@@ -132,13 +114,12 @@ public class CaseEntity {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CaseEntity that = (CaseEntity) o;
-		return Objects.equals(getId(), that.getId()) && Objects.equals(getFamilyId(), that.getFamilyId()) && Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getInstance(), that.getInstance()) && Objects.equals(getOpenECase(), that.getOpenECase()) && getDeliveryStatus() == that.getDeliveryStatus();
+		return Objects.equals(getId(), that.getId()) && Objects.equals(getCaseMetaData(), that.caseMetaDataEntity) && Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getOpenECase(), that.getOpenECase()) && getDeliveryStatus() == that.getDeliveryStatus();
 	}
 
 	@Override
 	public String toString() {
-		return new StringBuilder("CaseEntity [id=").append(id).append(", familyId=").append(familyId).append(", externalCaseId=").append(externalCaseId)
-			.append(", instance=").append(instance).append(", openECase=").append(openECase).append(", deliveryStatus=")
-			.append(deliveryStatus).append("]").toString();
+		return new StringBuilder("CaseEntity [id=").append(id).append(", caseMetaData=").append(caseMetaDataEntity).append(", externalCaseId=").append(externalCaseId)
+			.append(", openECase=").append(openECase).append(", deliveryStatus=").append(deliveryStatus).append("]").toString();
 	}
 }

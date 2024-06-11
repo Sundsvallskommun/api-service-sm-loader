@@ -22,6 +22,15 @@ record ProvideFeedback(
 	@XPath("/FlowInstance/Values/contact/Email")
 	String email,
 
+	@XPath("/FlowInstance/Header/Poster/Firstname")
+	String posterFirstName,
+
+	@XPath("/FlowInstance/Header/Poster/Lastname")
+	String posterLastName,
+
+	@XPath("/FlowInstance/Header/Poster/Email")
+	String posterEmail,
+
 	@XPath("/FlowInstance/Values/contact/MobilePhone")
 	String mobilePhone,
 
