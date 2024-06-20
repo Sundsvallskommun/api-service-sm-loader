@@ -15,5 +15,5 @@ import static org.springframework.transaction.annotation.Isolation.READ_COMMITTE
 @CircuitBreaker(name = "CaseRepository")
 public interface CaseRepository extends JpaRepository<CaseEntity, String> {
 	List<CaseEntity> findAllByDeliveryStatus(DeliveryStatus deliveryStatus);
-	boolean existsByExternalCaseIdAndInstance(String externalCaseId, Instance instance);
+	boolean existsByExternalCaseIdAndCaseMetaDataEntityInstance(String externalCaseId, Instance instance);
 }

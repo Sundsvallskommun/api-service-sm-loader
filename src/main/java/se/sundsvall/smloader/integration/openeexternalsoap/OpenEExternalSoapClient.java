@@ -10,7 +10,7 @@ import se.sundsvall.smloader.integration.openeexternalsoap.configuration.OpenEEx
 
 import static se.sundsvall.smloader.integration.openeexternalsoap.configuration.OpenEExternalSoapConfiguration.CLIENT_ID;
 
-@FeignClient(name = CLIENT_ID, url = "${integration.open-e-external-soap.url}", configuration = OpenEExternalSoapConfiguration.class)
+@FeignClient(name = CLIENT_ID, url = "${integration.open-e.external-soap.url}", configuration = OpenEExternalSoapConfiguration.class)
 @CircuitBreaker(name = CLIENT_ID)
 public interface OpenEExternalSoapClient {
 

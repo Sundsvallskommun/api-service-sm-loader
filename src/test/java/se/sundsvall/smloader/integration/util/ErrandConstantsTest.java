@@ -9,7 +9,6 @@ class ErrandConstantsTest {
 
 	@Test
 	void errandConstants() {
-		assertThat(ErrandConstants.MUNICIPALITY_ID).isEqualTo("2281");
 		assertThat(ErrandConstants.ROLE_CONTACT_PERSON).isEqualTo("CONTACT_PERSON");
 		assertThat(ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL).isEqualTo("Email");
 		assertThat(ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE).isEqualTo("Phone");

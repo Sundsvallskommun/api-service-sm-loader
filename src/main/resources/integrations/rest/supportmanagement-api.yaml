@@ -1,130 +1,96 @@
 openapi: 3.0.1
 info:
-  title: api-support-management
-  contact: { }
+  title: support-management
+  contact: {}
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
-  version: "5.7"
-servers:
-  - url: http://localhost:59684
-    description: Generated server url
+  version: "6.1"
 tags:
-  - name: Errand Parameters
+  -
+    name: Errand Parameters
     description: Errand parameter operations
-  - name: Errand attachments
+  -
+    name: Errand attachments
     description: Errand attachments operations
-  - name: Metadata for categories
+  -
+    name: Metadata for categories
     description: Category metadata operations
-  - name: Revisions
+  -
+    name: Revisions
     description: Errand and errand note revision operations
-  - name: Metadata for labels
+  -
+    name: Metadata for labels
     description: Label metadata operations
-  - name: Errand notes
+  -
+    name: Configuration for namespace
+    description: Settings per namespace/municipalityId
+  -
+    name: Errand notes
     description: Errand notes operations
-  - name: Metadata for contact reasons
+  -
+    name: Metadata for contact reasons
     description: Contact reason metadata operations
-  - name: Errand events
+  -
+    name: Errand events
     description: Errand event operations
-  - name: User notifications
+  -
+    name: User notifications
     description: User notifications operations
-  - name: Metadata for externalid types
+  -
+    name: Metadata for externalid types
     description: Externaid type metadata operations
-  - name: Metadata
+  -
+    name: Metadata
     description: Metadata operations
-  - name: Metadata for roles
+  -
+    name: Metadata for roles
     description: Role metadata operations
-  - name: Metadata for statuses
+  -
+    name: Time measures
+    description: Time measure operations
+  -
+    name: Metadata for statuses
     description: Status metadata operations
-  - name: Errand communication
+  -
+    name: Errand communication
     description: Errand communication operations
-  - name: MessageAttachments
+  -
+    name: MessageAttachments
     description: CommunicationAttachment operations
-  - name: Configuration for email integration
+  -
+    name: Configuration for email integration
     description: Settings for email integration per namespace/municipality
-  - name: Errands
+  -
+    name: Errands
     description: Errand operations
 paths:
-  /{namespace}/{municipalityId}/errands/{id}/communication/{communicationID}/viewed/{isViewed}:
-    put:
-      tags:
-        - Errand communication
-      description: Set viewed status for communication.
-      operationId: updateViewedStatus
-      parameters:
-        - name: namespace
-          in: path
-          description: Namespace
-          required: true
-          schema:
-            pattern: "[\\w|\\.]+"
-            type: string
-          example: my.namespace
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: id
-          in: path
-          description: Errand id
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: communicationID
-          in: path
-          description: communication id
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: isViewed
-          in: path
-          description: If a message is viewed
-          required: true
-          schema:
-            type: boolean
-          example: true
-      responses:
-        "204":
-          description: No content - Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-  /{namespace}/{municipalityId}/emailIntegrationConfig:
+  /{namespace}/{municipalityId}/namespaceConfig:
     get:
       tags:
-        - Configuration for email integration
-      summary: Read email integration config
-      description: Fetches email integration config for a namespace/municipality
-      operationId: readEmailIntegrationConfig
+        - Configuration for namespace
+      summary: Read namespace config
+      description: Fetches namespace config for a namespace/municipality
+      operationId: readNamespaceConfig
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -141,8 +107,353 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NamespaceConfig'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NamespaceConfig'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+    put:
+      tags:
+        - Configuration for namespace
+      summary: Update namespace config
+      description: Update config that is used within the namespace
+      operationId: updateNamespaceConfig
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NamespaceConfig'
+        required: true
+      responses:
+        "204":
+          description: Successful operation
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+    post:
+      tags:
+        - Configuration for namespace
+      summary: Create namespace config
+      description: Create config that is used within the namespace
+      operationId: createNamespaceConfig
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NamespaceConfig'
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+    delete:
+      tags:
+        - Configuration for namespace
+      summary: Delete namespace config
+      description: Deletes the config for a namespace/municipality
+      operationId: deleteNamespaceConfig
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+      responses:
+        "204":
+          description: Successful operation
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /{namespace}/{municipalityId}/errands/{id}/communication/{communicationID}/viewed/{isViewed}:
+    put:
+      tags:
+        - Errand communication
+      description: Set viewed status for communication.
+      operationId: updateViewedStatus
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+        -
+          name: id
+          in: path
+          description: Errand id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+        -
+          name: communicationID
+          in: path
+          description: communication id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+        -
+          name: isViewed
+          in: path
+          description: If a message is viewed
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: boolean
+          example: true
+      responses:
+        "204":
+          description: No content - Successful operation
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /{namespace}/{municipalityId}/emailIntegrationConfig:
+    get:
+      tags:
+        - Configuration for email integration
+      summary: Read email integration config
+      description: Fetches email integration config for a namespace/municipality
+      operationId: readEmailIntegrationConfig
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not Found
           content:
@@ -158,26 +469,39 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/EmailIntegration'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     put:
       tags:
         - Configuration for email integration
       summary: Update email integration config
-      description: Update email integration config that fetches emails from email-reader
-        service
+      description: Update email integration config that fetches emails from email-reader service
       operationId: updateEmailIntegrationConfig
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -188,47 +512,57 @@ paths:
               $ref: '#/components/schemas/EmailIntegration'
         required: true
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "204":
           description: Successful operation
-          headers:
-            Location:
-              style: simple
-              schema:
-                type: string
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Configuration for email integration
       summary: Create email integration config
-      description: Create email integration config that fetches emails from email-reader
-        service
+      description: Create email integration config that fetches emails from email-reader service
       operationId: createEmailIntegrationConfig
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -244,22 +578,33 @@ paths:
           headers:
             Location:
               style: simple
+              explode: false
               schema:
                 type: string
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Configuration for email integration
@@ -267,84 +612,106 @@ paths:
       description: Deletes the email integration config for a namespace/municipality
       operationId: deleteEmailIntegrationConfig
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
-  /{namespace}/{municipalityId}/notifications:
-    get:
-      tags:
-        - User notifications
-      summary: Get notifications
-      description: Get notifications for the namespace and municipality with the specified
-        ownerId
-      operationId: getNotifications
-      parameters:
-        - name: namespace
-          in: path
-          description: Namespace
-          required: true
-          schema:
-            pattern: "[\\w|\\.]+"
-            type: string
-          example: my.namespace
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: ownerId
-          in: query
-          description: ownerId
-          required: true
-          schema:
-            type: string
-          example: 12
-      responses:
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /{namespace}/{municipalityId}/notifications:
+    get:
+      tags:
+        - User notifications
+      summary: Get notifications
+      description: Get notifications for the namespace and municipality with the specified ownerId
+      operationId: getNotifications
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+        -
+          name: ownerId
+          in: query
+          description: ownerId
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: 12
+      responses:
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "200":
           description: Successful operation
           content:
@@ -353,18 +720,30 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Notification'
-        "404":
-          description: Not found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - User notifications
@@ -372,18 +751,24 @@ paths:
       description: Create new notification for the namespace and municipality
       operationId: createNotification
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -399,10 +784,17 @@ paths:
           headers:
             Location:
               style: simple
+              explode: false
               schema:
                 type: string
         "409":
           description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
           content:
             application/problem+json:
               schema:
@@ -413,14 +805,18 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     patch:
       tags:
         - User notifications
@@ -428,18 +824,24 @@ paths:
       description: Update notifications for the namespace and municipality
       operationId: updateNotifications
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -454,14 +856,6 @@ paths:
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not found
           content:
@@ -474,6 +868,24 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/statuses:
     get:
       tags:
@@ -482,22 +894,38 @@ paths:
       description: Get all statuses for the namespace and municipality
       operationId: getStatuses
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
       responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "200":
           description: Successful operation
           content:
@@ -512,14 +940,14 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
-        "400":
-          description: Bad Request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Metadata for statuses
@@ -527,18 +955,24 @@ paths:
       description: Create new status for the namespace and municipality
       operationId: createStatus
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -554,24 +988,35 @@ paths:
           headers:
             Location:
               style: simple
+              explode: false
               schema:
                 type: string
           content:
-            '*/*': { }
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+            '*/*': {}
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/roles:
     get:
       tags:
@@ -580,18 +1025,24 @@ paths:
       description: Get all roles for the namespace and municipality
       operationId: getRoles
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -604,20 +1055,30 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Role'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Metadata for roles
@@ -625,18 +1086,24 @@ paths:
       description: Create new role for the namespace and municipality
       operationId: createRole
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -652,24 +1119,35 @@ paths:
           headers:
             Location:
               style: simple
+              explode: false
               schema:
                 type: string
           content:
-            '*/*': { }
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+            '*/*': {}
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/labels:
     get:
       tags:
@@ -678,18 +1156,24 @@ paths:
       description: Get label structure for provided namespace and municipality
       operationId: getLabels
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -703,20 +1187,30 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Labels'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Metadata for labels
@@ -724,18 +1218,24 @@ paths:
       description: Create label structure for provided namespace and municipality
       operationId: createLabels
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -750,20 +1250,30 @@ paths:
       responses:
         "202":
           description: Successful operation
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Metadata for labels
@@ -771,44 +1281,60 @@ paths:
       description: Delete label structure for provided namespace and municipality
       operationId: deleteLabels
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/externalIdTypes:
     get:
       tags:
@@ -817,22 +1343,44 @@ paths:
       description: Get all externalid types for the namespace and municipality
       operationId: getExternalIdTypes
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
       responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "200":
           description: Successful operation
           content:
@@ -841,20 +1389,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ExternalIdType'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "400":
-          description: Bad Request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Metadata for externalid types
@@ -862,18 +1404,24 @@ paths:
       description: Create new externalid type for the namespace and municipality
       operationId: createExternalIdType
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -889,24 +1437,35 @@ paths:
           headers:
             Location:
               style: simple
+              explode: false
               schema:
                 type: string
           content:
-            '*/*': { }
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+            '*/*': {}
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/contactreasons:
     get:
       tags:
@@ -915,30 +1474,28 @@ paths:
       description: Get all contact reasons for the namespace and municipality
       operationId: getContactReasons
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "500":
           description: Internal Server error
           content:
@@ -948,7 +1505,25 @@ paths:
         "200":
           description: Successful operation
           content:
-            application/json: { }
+            application/json: {}
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Metadata for contact reasons
@@ -956,18 +1531,24 @@ paths:
       description: Create new contact reason for the namespace and municipality
       operationId: createContactReason
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -978,60 +1559,80 @@ paths:
               $ref: '#/components/schemas/ContactReason'
         required: true
       responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              style: simple
+              explode: false
+              schema:
+                type: string
+          content:
+            '*/*': {}
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "201":
-          description: Successful operation
-          headers:
-            Location:
-              style: simple
-              schema:
-                type: string
-          content:
-            '*/*': { }
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/categories:
     get:
       tags:
         - Metadata for categories
       summary: Get categories and types
-      description: Get all categories and their connected types for the namespace
-        and municipality
+      description: Get all categories and their connected types for the namespace and municipality
       operationId: getCategories
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
       responses:
-        "500":
-          description: Internal Server error
+        "400":
+          description: Bad Request
           content:
             application/problem+json:
               schema:
-                $ref: '#/components/schemas/Problem'
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "200":
           description: Successful operation
           content:
@@ -1040,14 +1641,20 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Category'
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server error
           content:
             application/problem+json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Metadata for categories
@@ -1055,18 +1662,24 @@ paths:
       description: Create new category for the namespace and municipality
       operationId: createCategory
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -1082,77 +1695,103 @@ paths:
           headers:
             Location:
               style: simple
+              explode: false
               schema:
                 type: string
           content:
-            '*/*': { }
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+            '*/*': {}
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/errands:
     get:
       tags:
         - Errands
       summary: Read matching errands
-      description: Query for errands with or without filters. The resource allows
-        the client a wide range of variations on how to filter the result.
+      description: Query for errands with or without filters. The resource allows the client a wide range of variations on how to filter the result.
       operationId: findErrands
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: filter
+        -
+          name: filter
           in: query
           description: "Syntax description: [spring-filter](https://github.com/turkraft/spring-filter/blob/85730f950a5f8623159cc0eb4d737555f9382bb7/README.md#syntax)"
           required: true
+          style: form
+          explode: true
           schema:
             type: string
-          example: categoryTag:'SUPPORT-CASE' and stakeholder.externalId:'81471222-5798-11e9-ae24-57fa13b361e1'
-            and externalTags.key:'caseid' and externalTags.value:'111' and created>'2022-09-08T12:00:00.000+02:00'
-        - name: page
+          example: categoryTag:'SUPPORT-CASE' and stakeholder.externalId:'81471222-5798-11e9-ae24-57fa13b361e1' and externalTags.key:'caseid' and externalTags.value:'111' and created>'2022-09-08T12:00:00.000+02:00'
+        -
+          name: page
           in: query
           description: Zero-based page index (0..N)
           required: false
+          style: form
+          explode: true
           schema:
             minimum: 0
             type: integer
             default: 0
-        - name: size
+        -
+          name: size
           in: query
           description: The size of the page to be returned
           required: false
+          style: form
+          explode: true
           schema:
             minimum: 1
             type: integer
             default: 20
-        - name: sort
+        -
+          name: sort
           in: query
-          description: "Sorting criteria in the format: property,(asc|desc). Default\
-          \ sort order is ascending. Multiple sort criteria are supported."
+          description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
           required: false
+          style: form
+          explode: true
           schema:
             type: array
             items:
@@ -1170,8 +1809,10 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "200":
           description: Successful Operation
           content:
@@ -1181,6 +1822,14 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/PageErrand'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Errands
@@ -1188,18 +1837,24 @@ paths:
       description: Creates a new errand based on the supplied attributes
       operationId: createErrand
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
@@ -1210,29 +1865,40 @@ paths:
               $ref: '#/components/schemas/Errand'
         required: true
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "201":
           description: Successful operation
           headers:
             Location:
               style: simple
+              explode: false
               schema:
                 type: string
           content:
-            '*/*': { }
+            '*/*': {}
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/errands/{id}/notes:
     get:
       tags:
@@ -1241,31 +1907,43 @@ paths:
       description: Find the errand notes that matches the provided attributes
       operationId: findErrandNotes
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: findErrandNotesRequest
+        -
+          name: findErrandNotesRequest
           in: query
           required: true
+          style: form
+          explode: true
           schema:
             $ref: '#/components/schemas/FindErrandNotesRequest'
       responses:
@@ -1275,20 +1953,30 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FindErrandNotesResponse'
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindErrandNotesResponse'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Errand notes
@@ -1296,25 +1984,34 @@ paths:
       description: Creates a new errand note based on the supplied attributes
       operationId: createErrandNote
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
@@ -1325,29 +2022,40 @@ paths:
               $ref: '#/components/schemas/CreateErrandNoteRequest'
         required: true
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "201":
           description: Successful operation
           headers:
             Location:
               style: simple
+              explode: false
               schema:
                 type: string
           content:
-            '*/*': { }
+            '*/*': {}
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/errands/{id}/communication/sms:
     post:
       tags:
@@ -1356,25 +2064,34 @@ paths:
       description: Sends a sms message to the recipient specified in the request
       operationId: sendSms
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
@@ -1385,14 +2102,6 @@ paths:
               $ref: '#/components/schemas/SmsRequest'
         required: true
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "204":
           description: Successful operation
         "500":
@@ -1401,6 +2110,24 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/errands/{id}/communication/email:
     post:
       tags:
@@ -1409,25 +2136,34 @@ paths:
       description: Sends an email message to the recipient specified in the request
       operationId: sendEmail
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
@@ -1438,14 +2174,6 @@ paths:
               $ref: '#/components/schemas/EmailRequest'
         required: true
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "204":
           description: Successful operation
         "500":
@@ -1454,34 +2182,60 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/errands/{id}/attachments:
     get:
       tags:
         - Errand attachments
       summary: Read errand attachments
-      description: Fetches the errand attachments that matches the provided errand
-        id
+      description: Fetches the errand attachments that matches the provided errand id
       operationId: readErrandAttachments
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
@@ -1498,8 +2252,10 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not Found
           content:
@@ -1519,6 +2275,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ErrandAttachmentHeader'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     post:
       tags:
         - Errand attachments
@@ -1526,25 +2290,34 @@ paths:
       description: Creates a new errand attachment based on the supplied attributes
       operationId: createErrandAttachment
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
@@ -1566,130 +2339,33 @@ paths:
           headers:
             Location:
               style: simple
+              explode: false
               schema:
                 type: string
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
-  /{namespace}/{municipalityId}/errands/{errandId}/parameters:
-    get:
-      tags:
-        - Errand Parameters
-      summary: Find errand parameters
-      description: Find the errand parameters that matches the provided attributes
-      operationId: findErrandParameters
-      parameters:
-        - name: namespace
-          in: path
-          description: Namespace
-          required: true
-          schema:
-            pattern: "[\\w|\\.]+"
-            type: string
-          example: my.namespace
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: errandId
-          in: path
-          description: Errand id
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-      responses:
         "400":
           description: Bad request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "200":
-          description: Successful Operation
-          content:
-            application/json: { }
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-    post:
-      tags:
-        - Errand Parameters
-      summary: Create errand parameter
-      description: Creates a new errand parameter based on the supplied attributes
-      operationId: createErrandParameter
-      parameters:
-        - name: namespace
-          in: path
-          description: Namespace
-          required: true
-          schema:
-            pattern: "[\\w|\\.]+"
-            type: string
-          example: my.namespace
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: errandId
-          in: path
-          description: Errand id
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ErrandParameter'
-        required: true
-      responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "201":
-          description: Successful operation
-          headers:
-            Location:
-              style: simple
-              schema:
-                type: string
-          content:
-            '*/*': { }
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/contactreasons/{reason}:
     get:
       tags:
@@ -1698,37 +2374,38 @@ paths:
       description: "Get contact reason by reason, namespace and municipality"
       operationId: getContactReason
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: reason
+        -
+          name: reason
           in: path
           description: Reason
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: INVOICE
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "500":
           description: Internal Server error
           content:
@@ -1738,7 +2415,25 @@ paths:
         "200":
           description: Successful operation
           content:
-            application/json: { }
+            application/json: {}
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Metadata for contact reasons
@@ -1746,51 +2441,70 @@ paths:
       description: "Delete contact reason matching namespace, municipality and reason"
       operationId: deleteContactReason
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: reason
+        -
+          name: reason
           in: path
           description: Reason
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: INVOICE
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     patch:
       tags:
         - Metadata for contact reasons
@@ -1798,25 +2512,34 @@ paths:
       description: "Update contact reason matching namespace, municipality and reason"
       operationId: updateContactReason
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: reason
+        -
+          name: reason
           in: path
           description: Reason
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: INVOICE
@@ -1827,20 +2550,6 @@ paths:
               $ref: '#/components/schemas/ContactReason'
         required: true
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
@@ -1850,7 +2559,31 @@ paths:
         "200":
           description: Successful operation
           content:
-            application/json: { }
+            application/json: {}
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/categories/{category}:
     get:
       tags:
@@ -1859,35 +2592,48 @@ paths:
       description: Get category and connected types for the namespace and municipality
       operationId: getCategory
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: category
+        -
+          name: category
           in: path
           description: Name of category
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: KSK_SERVICE_CENTER_SALARY_AND_PENSION
       responses:
-        "500":
-          description: Internal Server error
+        "400":
+          description: Bad Request
           content:
             application/problem+json:
               schema:
-                $ref: '#/components/schemas/Problem'
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "200":
           description: Successful operation
           content:
@@ -1896,14 +2642,20 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Category'
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server error
           content:
             application/problem+json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Metadata for categories
@@ -1911,51 +2663,70 @@ paths:
       description: "Delete category matching namespace, municipality and id"
       operationId: deleteCategory
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: category
+        -
+          name: category
           in: path
           description: Name of category
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: KSK_SERVICE_CENTER_SALARY_AND_PENSION
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     patch:
       tags:
         - Metadata for categories
@@ -1963,25 +2734,34 @@ paths:
       description: "Update category matching namespace, municipality and id"
       operationId: updateCategory
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: category
+        -
+          name: category
           in: path
           description: Name of category
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: KSK_SERVICE_CENTER_SALARY_AND_PENSION
@@ -1992,22 +2772,24 @@ paths:
               $ref: '#/components/schemas/Category'
         required: true
       responses:
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
           content:
             application/problem+json:
               schema:
@@ -2018,6 +2800,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Category'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/errands/{id}:
     get:
       tags:
@@ -2026,25 +2816,34 @@ paths:
       description: Fetches the errand that matches the provided id
       operationId: readErrand
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
@@ -2055,26 +2854,36 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Errand'
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errand'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Errands
@@ -2082,51 +2891,70 @@ paths:
       description: Deletes the errand that matches the provided id
       operationId: deleteErrand
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     patch:
       tags:
         - Errands
@@ -2134,25 +2962,34 @@ paths:
       description: Updates the errand matching provided id with the supplied attributes
       operationId: updateErrand
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
@@ -2163,77 +3000,92 @@ paths:
               $ref: '#/components/schemas/Errand'
         required: true
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Errand'
         "404":
           description: Not found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errand'
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/errands/{id}/notes/{noteId}:
     get:
       tags:
         - Errand notes
       summary: Read errand note
-      description: Fetches the errand note that matches the provided errand id and
-        note id
+      description: Fetches the errand note that matches the provided errand id and note id
       operationId: readErrandNote
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: noteId
+        -
+          name: noteId
           in: path
           description: Errand note id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 5f79a808-0ef3-4985-99b9-b12f23e202a7
       responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrandNote'
         "500":
           description: Internal Server Error
           content:
@@ -2246,108 +3098,156 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrandNote'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Errand notes
       summary: Delete errand note
-      description: Deletes the errand note that matches the provided errand id and
-        note id
+      description: Deletes the errand note that matches the provided errand id and note id
       operationId: deleteErrandNote
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: noteId
+        -
+          name: noteId
           in: path
           description: Errand note id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 5f79a808-0ef3-4985-99b9-b12f23e202a7
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     patch:
       tags:
         - Errand notes
       summary: Update errand note
-      description: Updates the errand note matching provided errand id and note id
-        with the supplied attributes
+      description: Updates the errand note matching provided errand id and note id with the supplied attributes
       operationId: updateErrandNote
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: noteId
+        -
+          name: noteId
           in: path
           description: Errand note id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 5f79a808-0ef3-4985-99b9-b12f23e202a7
@@ -2358,207 +3258,172 @@ paths:
               $ref: '#/components/schemas/UpdateErrandNoteRequest'
         required: true
       responses:
-        "400":
-          description: Bad request
+        "404":
+          description: Not found
           content:
             application/problem+json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                $ref: '#/components/schemas/Problem'
         "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrandNote'
-        "404":
-          description: Not found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
-  /{namespace}/{municipalityId}/errands/{errandId}/parameters/{parameterId}:
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /{namespace}/{municipalityId}/errands/{errandId}/parameters:
     get:
       tags:
         - Errand Parameters
-      summary: Read errand parameter
-      description: Fetches the errand parameter that matches the provided errand id
-        and parameter id
-      operationId: readErrandParameter
+      summary: Find errand parameters
+      description: Find the errand parameters that matches the provided attributes
+      operationId: findErrandParameters
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: errandId
+        -
+          name: errandId
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: parameterId
-          in: path
-          description: Errand parameter id
-          required: true
-          schema:
-            type: string
-          example: 5f79a808-0ef3-4985-99b9-b12f23e202a7
       responses:
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "200":
           description: Successful Operation
           content:
-            application/json: { }
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+            application/problem+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
         "400":
           description: Bad request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "404":
-          description: Not Found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-    delete:
-      tags:
-        - Errand Parameters
-      summary: Delete errand parameter
-      description: Deletes the errand parameter that matches the provided errand id
-        and parameter id
-      operationId: deleteErrandParameter
-      parameters:
-        - name: namespace
-          in: path
-          description: Namespace
-          required: true
-          schema:
-            pattern: "[\\w|\\.]+"
-            type: string
-          example: my.namespace
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: errandId
-          in: path
-          description: Errand id
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: parameterId
-          in: path
-          description: Errand parameter id
-          required: true
-          schema:
-            type: string
-          example: 5f79a808-0ef3-4985-99b9-b12f23e202a7
-      responses:
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "404":
-          description: Not Found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     patch:
       tags:
         - Errand Parameters
-      summary: Update errand parameter
-      description: Updates the errand parameter matching provided errand id and parameter
-        id with the supplied attributes
-      operationId: updateErrandParameter
+      summary: Update errand parameters
+      description: Creates a new errand parameter based on the supplied attributes
+      operationId: updateErrandParameters
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: errandId
+        -
+          name: errandId
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: parameterId
-          in: path
-          description: Errand parameter id
-          required: true
-          schema:
-            type: string
-          example: 5f79a808-0ef3-4985-99b9-b12f23e202a7
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ErrandParameter'
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: string
         required: true
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not found
           content:
@@ -2572,9 +3437,314 @@ paths:
               schema:
                 $ref: '#/components/schemas/Problem'
         "200":
-          description: Successful operation
+          description: Successful Operation
           content:
-            application/json: { }
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+            application/problem+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /{namespace}/{municipalityId}/errands/{errandId}/parameters/{parameterKey}:
+    get:
+      tags:
+        - Errand Parameters
+      summary: Read errand parameter
+      description: Fetches the errand parameter that matches the provided errand id and parameter id
+      operationId: readErrandParameter
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+        -
+          name: errandId
+          in: path
+          description: Errand id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+        -
+          name: parameterKey
+          in: path
+          description: Errand parameter key
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: propertyInfo
+      responses:
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+    delete:
+      tags:
+        - Errand Parameters
+      summary: Delete errand parameter
+      description: Deletes the errand parameter that matches the provided errand id and parameter id
+      operationId: deleteErrandParameter
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+        -
+          name: errandId
+          in: path
+          description: Errand id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+        -
+          name: parameterKey
+          in: path
+          description: Errand parameter key
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: propertyInfo
+      responses:
+        "204":
+          description: Successful operation
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+    patch:
+      tags:
+        - Errand Parameters
+      summary: Update errand parameter
+      description: Updates the errand parameter matching provided errand id and parameter id with the supplied attributes
+      operationId: updateErrandParameter
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+        -
+          name: errandId
+          in: path
+          description: Errand id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+        -
+          name: parameterKey
+          in: path
+          description: Errand parameter key
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: propertyInfo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/notifications/{notificationId}:
     get:
       tags:
@@ -2583,55 +3753,74 @@ paths:
       description: Get a specific notification for the namespace and municipality
       operationId: getNotification
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: notificationId
+        -
+          name: notificationId
           in: path
           description: notificationId
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 12
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "200":
-          description: Successful operation
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Notification'
         "404":
           description: Not found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "200":
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Notification'
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - User notifications
@@ -2639,38 +3828,39 @@ paths:
       description: Delete notification for the namespace and municipality
       operationId: deleteNotification
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: notificationId
+        -
+          name: notificationId
           in: path
           description: Notification id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not found
           content:
@@ -2683,6 +3873,24 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata:
     get:
       tags:
@@ -2691,42 +3899,58 @@ paths:
       description: Get all metadata for provided namespace and municipality
       operationId: getAll
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
       responses:
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "400":
-          description: Bad Request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MetadataResponse'
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/statuses/{status}:
     get:
       tags:
@@ -2735,55 +3959,74 @@ paths:
       description: "Get status matching sent in namespace, municipality and status"
       operationId: getStatus
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: status
+        -
+          name: status
           in: path
           description: Name of status
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: NEW
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Metadata for statuses
@@ -2791,51 +4034,70 @@ paths:
       description: "Delete status matching namespace, municipality and status"
       operationId: deleteStatus
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: status
+        -
+          name: status
           in: path
           description: Name of status
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: PRIVATE
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/roles/{role}:
     get:
       tags:
@@ -2844,55 +4106,74 @@ paths:
       description: "Get role matching sent in namespace, municipality and role"
       operationId: getRole
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: role
+        -
+          name: role
           in: path
           description: Name of role
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: ROLE-1
       responses:
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Role'
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Metadata for roles
@@ -2900,109 +4181,146 @@ paths:
       description: "Delete role matching namespace, municipality and role"
       operationId: deleteRole
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: role
+        -
+          name: role
           in: path
           description: Name of role
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: ROLE-1
       responses:
         "204":
           description: Successful operation
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "404":
-          description: Not Found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/externalIdTypes/{externalIdType}:
     get:
       tags:
         - Metadata for externalid types
       summary: Get externalid type
-      description: "Get externalid type matching sent in namespace, municipality and\
-        \ externalid type"
+      description: "Get externalid type matching sent in namespace, municipality and externalid type"
       operationId: getExternalIdType
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: externalIdType
+        -
+          name: externalIdType
           in: path
           description: Name of externalid type
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: PRIVATE
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExternalIdType'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalIdType'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Metadata for externalid types
@@ -3010,51 +4328,70 @@ paths:
       description: "Delete externalid type matching namespace, municipality and externalIdType"
       operationId: deleteExternalIdType
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: externalIdType
+        -
+          name: externalIdType
           in: path
           description: Name of externalid type
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: PRIVATE
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/metadata/categories/{category}/types:
     get:
       tags:
@@ -3063,35 +4400,38 @@ paths:
       description: "Get all types for the namespace, municipality and category"
       operationId: getCategoryTypes
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: category
+        -
+          name: category
           in: path
           description: Name of category
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: KSK_SERVICE_CENTER_SALARY_AND_PENSION
       responses:
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "200":
           description: Successful operation
           content:
@@ -3100,6 +4440,20 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Type'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/errands/{id}/communication:
     get:
       tags:
@@ -3107,43 +4461,54 @@ paths:
       description: Get all communications for an errand.
       operationId: getCommunications
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "200":
           description: OK - Successful operation
           content:
@@ -3157,41 +4522,60 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Communication'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /{namespace}/{municipalityId}/errands/{id}/attachments/{attachmentId}:
     get:
       tags:
         - Errand attachments
       summary: Read errand attachment
-      description: Fetches the errand attachment that matches the provided errand
-        id and attachment id
+      description: Fetches the errand attachment that matches the provided errand id and attachment id
       operationId: readErrandAttachment
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: attachmentId
+        -
+          name: attachmentId
           in: path
           description: Errand attachment id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 5f79a808-0ef3-4985-99b9-b12f23e202a7
@@ -3208,8 +4592,10 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not Found
           content:
@@ -3218,99 +4604,184 @@ paths:
                 $ref: '#/components/schemas/Problem'
         "200":
           description: Successful Operation
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
     delete:
       tags:
         - Errand attachments
       summary: Delete errand attachment
-      description: Deletes the errand attachment that matches the provided errand
-        id and attachment id
+      description: Deletes the errand attachment that matches the provided errand id and attachment id
       operationId: deleteErrandAttachment
       parameters:
-        - name: namespace
+        -
+          name: namespace
           in: path
           description: Namespace
           required: true
+          style: simple
+          explode: false
           schema:
-            pattern: "[\\w|\\.]+"
+            pattern: "[\\w|\\.|\\-]+"
             type: string
           example: my.namespace
-        - name: municipalityId
+        -
+          name: municipalityId
           in: path
           description: Municipality id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 2281
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: attachmentId
+        -
+          name: attachmentId
           in: path
           description: Errand attachment id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: 5f79a808-0ef3-4985-99b9-b12f23e202a7
       responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "404":
           description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /{namespace}/{municipalityId}/errands/{errandId}/timeMeasure:
+    get:
+      tags:
+        - Time measures
+      operationId: getErrandTimeMeasure
+      parameters:
+        -
+          name: namespace
+          in: path
+          description: Namespace
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "[\\w|\\.|\\-]+"
+            type: string
+          example: my.namespace
+        -
+          name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 2281
+        -
+          name: errandId
+          in: path
+          description: Errand id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /errands/{id}/revisions:
     get:
       tags:
         - Revisions
       summary: Read errand revisions
-      description: Returns all existing revisions for the errand that matches the
-        provided id
+      description: Returns all existing revisions for the errand that matches the provided id
       operationId: getErrandRevisions
       parameters:
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "500":
-          description: Internal Server error
           content:
             application/problem+json:
               schema:
@@ -3323,55 +4794,73 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Revision'
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /errands/{id}/revisions/difference:
     get:
       tags:
         - Revisions
       summary: Compare differences between two revision versions of an errand
-      description: Returns the differences between the source and target revision
-        for the provided errand id
+      description: Returns the differences between the source and target revision for the provided errand id
       operationId: getErrandDiffByVersions
       parameters:
-        - name: id
+        -
+          name: id
           in: path
           description: Errand id
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
           example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: source
+        -
+          name: source
           in: query
           description: Source version to compare
           required: true
+          style: form
+          explode: true
           schema:
             type: integer
             format: int32
           example: 0
-        - name: target
+        -
+          name: target
           in: query
           description: Target version to compare
           required: true
+          style: form
+          explode: true
           schema:
             type: integer
             format: int32
           example: 1
       responses:
-        "400":
-          description: Bad request
-          content:
-            application/problem+json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
         "404":
           description: Not found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "500":
-          description: Internal Server error
           content:
             application/problem+json:
               schema:
@@ -3382,46 +4871,61 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DifferenceResponse'
-  /errands/{id}/notes/{noteId}/revisions:
-    get:
-      tags:
-        - Revisions
-      summary: Read note revisions
-      description: Returns all existing revisions for the errand note that matches
-        the provided errand id and note id
-      operationId: getErrandNoteRevisions
-      parameters:
-        - name: id
-          in: path
-          description: Errand id
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: noteId
-          in: path
-          description: Errand note id
-          required: true
-          schema:
-            type: string
-          example: 22a57c09-47ca-45bf-ab02-819011c6fd8d
-      responses:
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /errands/{id}/notes/{noteId}/revisions:
+    get:
+      tags:
+        - Revisions
+      summary: Read note revisions
+      description: Returns all existing revisions for the errand note that matches the provided errand id and note id
+      operationId: getErrandNoteRevisions
+      parameters:
+        -
+          name: id
+          in: path
+          description: Errand id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+        -
+          name: noteId
+          in: path
+          description: Errand note id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 22a57c09-47ca-45bf-ab02-819011c6fd8d
+      responses:
         "404":
           description: Not found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "500":
-          description: Internal Server error
           content:
             application/problem+json:
               schema:
@@ -3434,62 +4938,83 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Revision'
-  /errands/{id}/notes/{noteId}/revisions/difference:
-    get:
-      tags:
-        - Revisions
-      summary: Compare differences between two revision versions of an errand note
-      description: Returns the differences between the source and target revision
-        for the provided errand id and note id
-      operationId: getErrandNoteDiffByVersions
-      parameters:
-        - name: id
-          in: path
-          description: Errand id
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: noteId
-          in: path
-          description: Errand note id
-          required: true
-          schema:
-            type: string
-          example: 22a57c09-47ca-45bf-ab02-819011c6fd8d
-        - name: source
-          in: query
-          description: Source version to compare
-          required: true
-          schema:
-            type: integer
-            format: int32
-          example: 0
-        - name: target
-          in: query
-          description: Target version to compare
-          required: true
-          schema:
-            type: integer
-            format: int32
-          example: 1
-      responses:
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /errands/{id}/notes/{noteId}/revisions/difference:
+    get:
+      tags:
+        - Revisions
+      summary: Compare differences between two revision versions of an errand note
+      description: Returns the differences between the source and target revision for the provided errand id and note id
+      operationId: getErrandNoteDiffByVersions
+      parameters:
+        -
+          name: id
+          in: path
+          description: Errand id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+        -
+          name: noteId
+          in: path
+          description: Errand note id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: 22a57c09-47ca-45bf-ab02-819011c6fd8d
+        -
+          name: source
+          in: query
+          description: Source version to compare
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+          example: 0
+        -
+          name: target
+          in: query
+          description: Target version to compare
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
         "404":
           description: Not found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        "500":
-          description: Internal Server error
           content:
             application/problem+json:
               schema:
@@ -3500,56 +5025,88 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DifferenceResponse'
-  /errands/{id}/events:
-    get:
-      tags:
-        - Errand events
-      summary: Read errand events
-      description: Returns all existing events for the errand that matches the provided
-        id
-      operationId: getErrandEvents
-      parameters:
-        - name: id
-          in: path
-          description: Errand id
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: page
-          in: query
-          description: Zero-based page index (0..N)
-          required: false
-          schema:
-            minimum: 0
-            type: integer
-            default: 0
-        - name: size
-          in: query
-          description: The size of the page to be returned
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            default: 20
-        - name: sort
-          in: query
-          description: "Sorting criteria in the format: property,(asc|desc). Default\
-          \ sort order is ascending. Multiple sort criteria are supported."
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "400":
           description: Bad request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /errands/{id}/events:
+    get:
+      tags:
+        - Errand events
+      summary: Read errand events
+      description: Returns all existing events for the errand that matches the provided id
+      operationId: getErrandEvents
+      parameters:
+        -
+          name: id
+          in: path
+          description: Errand id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+        -
+          name: page
+          in: query
+          description: Zero-based page index (0..N)
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 0
+            type: integer
+            default: 0
+        -
+          name: size
+          in: query
+          description: The size of the page to be returned
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            default: 20
+        -
+          name: sort
+          in: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         "200":
           description: Successful operation
           content:
@@ -3559,57 +5116,81 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/PageEvent'
-        "404":
-          description: Not found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
         "500":
           description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
-  /communication/attachments/{attachmentID}/streamed:
-    get:
-      tags:
-        - MessageAttachments
-      summary: Get a streamed communication attachment.
-      description: Fetches the communication attachment that matches the provided
-        id in a streamed manner
-      operationId: getMessageAttachmentStreamed
-      parameters:
-        - name: attachmentID
-          in: path
-          description: Message attachment id
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-      responses:
         "400":
           description: Bad request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        "500":
-          description: Internal Server error
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
+  /communication/attachments/{attachmentID}/streamed:
+    get:
+      tags:
+        - MessageAttachments
+      summary: Get a streamed communication attachment.
+      description: Fetches the communication attachment that matches the provided id in a streamed manner
+      operationId: getMessageAttachmentStreamed
+      parameters:
+        -
+          name: attachmentID
+          in: path
+          description: Message attachment id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      responses:
+        "404":
+          description: Not Found
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
-        "404":
-          description: Not Found
+        "500":
+          description: Internal Server error
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
         "200":
           description: Successful Operation
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  -
+                    $ref: '#/components/schemas/Problem'
+                  -
+                    $ref: '#/components/schemas/ConstraintViolationProblem'
+      security:
+        -
+          default: []
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
   /api-docs:
     get:
       tags:
@@ -3623,11 +5204,40 @@ paths:
             application/yaml:
               schema:
                 type: string
+      security:
+        -
+          default: []
       x-auth-type: None
       x-throttling-tier: Unlimited
       x-wso2-mutual-ssl: Optional
+      x-wso2-application-security:
+        security-types:
+          - oauth2
+        optional: false
 components:
   schemas:
+    NamespaceConfig:
+      required:
+        - shortCode
+      type: object
+      properties:
+        shortCode:
+          type: string
+          description: Prefix for errand numbers in this namespace
+          example: KC
+        created:
+          type: string
+          description: Timestamp when the configuration was created
+          format: date-time
+          readOnly: true
+          example: 2000-10-31T01:30:00+02:00
+        modified:
+          type: string
+          description: Timestamp when the configuration was last modified
+          format: date-time
+          readOnly: true
+          example: 2000-10-31T01:30:00+02:00
+      description: Namespace configuration model
     Problem:
       type: object
       properties:
@@ -3650,11 +5260,11 @@ components:
     StatusType:
       type: object
       properties:
-        reasonPhrase:
-          type: string
         statusCode:
           type: integer
           format: int32
+        reasonPhrase:
+          type: string
     ConstraintViolationProblem:
       type: object
       properties:
@@ -3843,9 +5453,7 @@ components:
           example: Errand is closed. Please open a new errand.
         daysOfInactivityBeforeReject:
           type: integer
-          description: Number of days before incoming mail is rejected. Measured from
-            when the errand was last touched. Rejection can only occur if status on
-            errand equals 'inactiveStatus'.
+          description: Number of days before incoming mail is rejected. Measured from when the errand was last touched. Rejection can only occur if status on errand equals 'inactiveStatus'.
           format: int32
           nullable: true
           example: 5
@@ -3855,23 +5463,34 @@ components:
           example: NEW
         triggerStatusChangeOn:
           type: string
-          description: Status on errand that will trigger a status change when email
-            refers to an existing errand
+          description: Status on errand that will trigger a status change when email refers to an existing errand
           nullable: true
           example: SOLVED
         statusChangeTo:
           type: string
-          description: Status that will be set on errand if status change is triggered.
-            Can only be null if 'triggerStatusChangeOn' is null.
+          description: Status that will be set on errand if status change is triggered. Can only be null if 'triggerStatusChangeOn' is null.
           nullable: true
           example: OPEN
         inactiveStatus:
           type: string
-          description: "Status of an inactive errand. This value relates to property\
-            \ 'daysOfInactivityBeforeReject'. If set to null, no rejection mail will\
-            \ be sent"
+          description: "Status of an inactive errand. This value relates to property 'daysOfInactivityBeforeReject'. If set to null, no rejection mail will be sent"
           nullable: true
           example: SOLVED
+        addSenderAsStakeholder:
+          type: boolean
+          description: If true sender is added as stakeholder
+          nullable: true
+          example: false
+        stakeholderRole:
+          type: string
+          description: Role set on stakeholder.
+          nullable: true
+          example: APPLICANT
+        errandChannel:
+          type: string
+          description: Channel set on created errands
+          nullable: true
+          example: EMAIL
         created:
           type: string
           description: Timestamp when the configuration was created
@@ -4188,10 +5807,27 @@ components:
           items:
             $ref: '#/components/schemas/ExternalTag'
         parameters:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/ErrandParameter'
+          type: object
+          additionalProperties:
+            type: array
+            description: Parameters for the errand
+            example:
+              key1:
+                - value1
+                - value2
+              key2:
+                - value3
+            items:
+              type: string
+              description: Parameters for the errand
+              example: "{\"key1\":[\"value1\",\"value2\"],\"key2\":[\"value3\"]}"
+          description: Parameters for the errand
+          example:
+            key1:
+              - value1
+              - value2
+            key2:
+              - value3
         classification:
           $ref: '#/components/schemas/Classification'
         status:
@@ -4206,19 +5842,23 @@ components:
           type: string
           description: Errand description text
           example: Order cake for everyone
+        channel:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: The channel from which the errand originated
+          example: THE_CHANNEL
         reporterUserId:
           type: string
           description: User id for the person which has created the errand
           example: joe01doe
         assignedUserId:
           type: string
-          description: Id for the user which currently is assigned to the errand if
-            a user is assigned
+          description: Id for the user which currently is assigned to the errand if a user is assigned
           example: joe01doe
         assignedGroupId:
           type: string
-          description: Id for the group which is currently assigned to the errand
-            if a group is assigned
+          description: Id for the group which is currently assigned to the errand if a group is assigned
           example: hardware support
         escalationEmail:
           type: string
@@ -4228,6 +5868,12 @@ components:
           type: string
           description: Contact reason for the errand
           example: The printer is not working
+        contactReasonDescription:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: Contact reason description for the errand
+          example: The printer is not working since the power cord is missing
         suspension:
           $ref: '#/components/schemas/Suspension'
         businessRelated:
@@ -4253,22 +5899,6 @@ components:
           readOnly: true
           example: 2000-10-31T01:30:00+02:00
       description: Errand model
-    ErrandParameter:
-      required:
-        - name
-        - value
-      type: object
-      properties:
-        id:
-          type: string
-          description: Id of the parameter
-          readOnly: true
-          example: "1234567890"
-        name:
-          type: string
-        value:
-          type: string
-      readOnly: true
     ExternalTag:
       required:
         - key
@@ -4426,8 +6056,7 @@ components:
           example: test.txt
         base64EncodedString:
           type: string
-          description: "The attachment (file) content as a BASE64-encoded string,\
-            \ max size 10 MB"
+          description: "The attachment (file) content as a BASE64-encoded string, max size 10 MB"
           format: base64
           example: aGVsbG8gd29ybGQK
       description: EmailAttachment model
@@ -4446,8 +6075,7 @@ components:
           example: sender@sender.se
         senderName:
           type: string
-          description: "Optional displayname of sender on email. If left out, email\
-            \ will be displayed as sender name."
+          description: "Optional displayname of sender on email. If left out, email will be displayed as sender name."
           example: Firstname Lastname
         recipient:
           type: string
@@ -4481,8 +6109,7 @@ components:
             items:
               type: string
               description: Headers for keeping track of email conversations
-              example: "{\"IN_REPLY_TO\":[\"reply-to@example.com\"],\"REFERENCES\"\
-                :[\"reference1\",\"reference2\"],\"MESSAGE_ID\":[\"123456789\"]}"
+              example: "{\"IN_REPLY_TO\":[\"reply-to@example.com\"],\"REFERENCES\":[\"reference1\",\"reference2\"],\"MESSAGE_ID\":[\"123456789\"]}"
           description: Headers for keeping track of email conversations
           example:
             IN_REPLY_TO:
@@ -4631,10 +6258,6 @@ components:
         totalPages:
           type: integer
           format: int32
-        first:
-          type: boolean
-        last:
-          type: boolean
         size:
           type: integer
           format: int32
@@ -4654,6 +6277,10 @@ components:
           format: int32
         pageable:
           $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
         empty:
           type: boolean
     PageableObject:
@@ -4666,16 +6293,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SortObject'
-        unpaged:
-          type: boolean
-        paged:
-          type: boolean
-        pageSize:
-          type: integer
-          format: int32
         pageNumber:
           type: integer
           format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
     SortObject:
       type: object
       properties:
@@ -4782,8 +6409,7 @@ components:
           example: PRH-2022-000001
         direction:
           type: string
-          description: If the communication is inbound or outbound from the perspective
-            of case-data/e-service.
+          description: If the communication is inbound or outbound from the perspective of case-data/e-service.
           example: INBOUND
           enum:
             - INBOUND
@@ -4809,8 +6435,7 @@ components:
             - EMAIL
         target:
           type: string
-          description: The mobile number or email adress the communication was sent
-            to
+          description: The mobile number or email adress the communication was sent to
           example: "+46701234567"
         viewed:
           type: boolean
@@ -4832,8 +6457,7 @@ components:
             items:
               type: string
               description: Headers for keeping track of email conversations
-              example: "{\"IN_REPLY_TO\":[\"reply-to@example.com\"],\"REFERENCES\"\
-                :[\"reference1\",\"reference2\"],\"MESSAGE_ID\":[\"123456789\"]}"
+              example: "{\"IN_REPLY_TO\":[\"reply-to@example.com\"],\"REFERENCES\":[\"reference1\",\"reference2\"],\"MESSAGE_ID\":[\"123456789\"]}"
           description: Headers for keeping track of email conversations
           example:
             IN_REPLY_TO:
@@ -4960,8 +6584,7 @@ components:
           example: 2000-10-31T01:30:00+02:00
         historyReference:
           type: string
-          description: Reference to the snapshot of data at the time when the event
-            was created
+          description: Reference to the snapshot of data at the time when the event was created
           example: fbe2fb67-005c-4f26-990f-1c95b5f6933e
         sourceType:
           type: string
@@ -5002,10 +6625,6 @@ components:
         totalPages:
           type: integer
           format: int32
-        first:
-          type: boolean
-        last:
-          type: boolean
         size:
           type: integer
           format: int32
@@ -5025,6 +6644,45 @@ components:
           format: int32
         pageable:
           $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
         empty:
           type: boolean
-  securitySchemes: { }
+  securitySchemes:
+    default:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://test.com
+          scopes: {}
+x-wso2-cors:
+  corsConfigurationEnabled: false
+  accessControlAllowOrigins:
+    - '*'
+  accessControlAllowCredentials: false
+  accessControlAllowHeaders:
+    - authorization
+    - Access-Control-Allow-Origin
+    - Content-Type
+    - SOAPAction
+    - apikey
+    - testKey
+  accessControlAllowMethods:
+    - GET
+    - PUT
+    - POST
+    - DELETE
+    - PATCH
+    - OPTIONS
+x-wso2-production-endpoints:
+  urls:
+    - https://support-management-af-supportmanagement.apps.ocp201.sundsvall.se/
+  type: http
+x-wso2-basePath: /supportmanagement/6.1
+x-wso2-transports:
+  - https
+x-wso2-response-cache:
+  enabled: false
+  cacheTimeoutInSeconds: 300

@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 @Import(FeignConfiguration.class)
 public class OpenEInternalSoapConfiguration {
 
-	public static final String CLIENT_ID = "open-e-internal-soap";
+	public static final String CLIENT_ID = "open-e.internal-soap";
 
 	private static final JAXBContextFactory JAXB_FACTORY = new JAXBContextFactory.Builder()
 		.withMarshallerJAXBEncoding(StandardCharsets.UTF_8.toString())

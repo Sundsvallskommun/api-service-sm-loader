@@ -7,15 +7,18 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
+import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.Instance;
 import se.sundsvall.smloader.integration.openeexternal.OpenEExternalClient;
 import se.sundsvall.smloader.integration.openeinternal.OpenEInternalClient;
 
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -42,6 +45,9 @@ class OpenEServiceTest {
 	@Mock
 	private CaseRepository mockCaseRepository;
 
+	@Mock
+	private CaseMetaDataRepository mockCaseMetaDataRepository;
+
 	@InjectMocks
 	private OpenEService openEService;
 
@@ -55,12 +61,21 @@ class OpenEServiceTest {
 
 		final var flowInstanceXml = readOpenEFile("flow-instance-lamna-synpunkt.xml");
 
+		final var expectedFlowInstance = Base64.getEncoder().encodeToString(flowInstanceXml);
+
 		final var fromDate = LocalDateTime.now().minusDays(1);
 		final var toDate = LocalDateTime.now();
 		final var status = "status";
+		final var caseMetaDataEntity_123 = CaseMetaDataEntity.create().withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity_456 = CaseMetaDataEntity.create().withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity_789 = CaseMetaDataEntity.create().withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity_101 = CaseMetaDataEntity.create().withFamilyId("101").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity_112 = CaseMetaDataEntity.create().withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity_115 = CaseMetaDataEntity.create().withFamilyId("115").withInstance(INTERNAL).withOpenEImportStatus(status);
 
-		ReflectionTestUtils.setField(openEService, "externalFamilyIds", List.of("123", "456", "789"));
-		ReflectionTestUtils.setField(openEService, "internalFamilyIds", List.of("101", "112"));
+		when(mockCaseMetaDataRepository.findByInstance(EXTERNAL)).thenReturn(List.of(caseMetaDataEntity_123, caseMetaDataEntity_456, caseMetaDataEntity_789));
+
+		when(mockCaseMetaDataRepository.findByInstance(INTERNAL)).thenReturn(List.of(caseMetaDataEntity_101, caseMetaDataEntity_112, caseMetaDataEntity_115));
 
 		when(mockOpenEExternalClient.getErrandIds("123", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 		when(mockOpenEExternalClient.getErrandIds("456", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
@@ -68,23 +83,30 @@ class OpenEServiceTest {
 		when(mockOpenEExternalClient.getErrand(anyString())).thenReturn(flowInstanceXml);
 		when(mockOpenEInternalClient.getErrandIds("101", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 		when(mockOpenEInternalClient.getErrandIds("112", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
+		when(mockOpenEInternalClient.getErrandIds("115", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 		when(mockOpenEInternalClient.getErrand(anyString())).thenReturn(flowInstanceXml);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("123456", EXTERNAL)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("234567", EXTERNAL)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("345678", EXTERNAL)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("123456", INTERNAL)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("234567", INTERNAL)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("345678", INTERNAL)).thenReturn(false);
 
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("123456", EXTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("234567", EXTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("345678", EXTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("123456", INTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("234567", INTERNAL)).thenReturn(false);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("345678", INTERNAL)).thenReturn(false);
 
+		when(mockCaseMetaDataRepository.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity_101))
+			.thenReturn(Optional.of(caseMetaDataEntity_112))
+			.thenReturn(Optional.of(caseMetaDataEntity_115))
+			.thenReturn(Optional.of(caseMetaDataEntity_123))
+			.thenReturn(Optional.of(caseMetaDataEntity_456))
+			.thenReturn(Optional.of(caseMetaDataEntity_789));
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(status, fromDate, toDate);
+		openEService.fetchAndSaveNewOpenECases(fromDate, toDate);
 
 		// Assert and verify
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
-		verify(mockCaseRepository, times(6)).existsByExternalCaseIdAndInstance(anyString(), any(Instance.class));
+		verify(mockCaseRepository, times(6)).existsByExternalCaseIdAndCaseMetaDataEntityInstance(anyString(), any(Instance.class));
 
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
@@ -93,15 +115,14 @@ class OpenEServiceTest {
 
 		assertThat( caseEntityCaptor.getAllValues()).hasSize(6)
 			.extracting(CaseEntity::getExternalCaseId,
-				CaseEntity::getInstance,
-				CaseEntity::getFamilyId,
+				CaseEntity::getCaseMetaData,
 				CaseEntity::getDeliveryStatus,
-				CaseEntity::getOpenECase).containsExactly(tuple("123456", EXTERNAL, "161", PENDING, new String(flowInstanceXml)),
-					tuple("234567", EXTERNAL, "161", PENDING, new String(flowInstanceXml)),
-					tuple("345678", EXTERNAL, "161", PENDING, new String(flowInstanceXml)),
-					tuple("123456", INTERNAL, "161", PENDING, new String(flowInstanceXml)),
-					tuple("234567", INTERNAL, "161", PENDING, new String(flowInstanceXml)),
-					tuple("345678", INTERNAL, "161", PENDING, new String(flowInstanceXml)));
+				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity_101, PENDING, expectedFlowInstance),
+					tuple("234567", caseMetaDataEntity_112, PENDING, expectedFlowInstance),
+					tuple("345678", caseMetaDataEntity_115, PENDING, expectedFlowInstance),
+					tuple("123456", caseMetaDataEntity_123, PENDING, expectedFlowInstance),
+					tuple("234567", caseMetaDataEntity_456, PENDING, expectedFlowInstance),
+					tuple("345678", caseMetaDataEntity_789, PENDING, expectedFlowInstance));
 	}
 
 	@Test
@@ -112,8 +133,11 @@ class OpenEServiceTest {
 		final var toDate = LocalDateTime.now();
 		final var status = "status";
 
-		ReflectionTestUtils.setField(openEService, "externalFamilyIds", List.of("123", "456","789"));
-		ReflectionTestUtils.setField(openEService, "internalFamilyIds", List.of("101", "112"));
+		when(mockCaseMetaDataRepository.findByInstance(EXTERNAL)).thenReturn(List.of(CaseMetaDataEntity.create().withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status),
+			CaseMetaDataEntity.create().withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status),
+			CaseMetaDataEntity.create().withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status)));
+		when(mockCaseMetaDataRepository.findByInstance(INTERNAL)).thenReturn(List.of(CaseMetaDataEntity.create().withFamilyId("101").withInstance(INTERNAL).withOpenEImportStatus(status),
+			CaseMetaDataEntity.create().withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status)));
 
 		when(mockOpenEExternalClient.getErrandIds("123", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 		when(mockOpenEExternalClient.getErrandIds("456", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
@@ -122,26 +146,26 @@ class OpenEServiceTest {
 		when(mockOpenEInternalClient.getErrandIds("101", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 		when(mockOpenEInternalClient.getErrandIds("112", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("123456", EXTERNAL)).thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("234567", EXTERNAL)).thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("345678", EXTERNAL)).thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("123456", INTERNAL)).thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("234567", INTERNAL)).thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndInstance("345678", INTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("123456", EXTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("234567", EXTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("345678", EXTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("123456", INTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("234567", INTERNAL)).thenReturn(true);
+		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance("345678", INTERNAL)).thenReturn(true);
 
 
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(status, fromDate, toDate);
+		openEService.fetchAndSaveNewOpenECases(fromDate, toDate);
 
 		// Assert and verify
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockCaseRepository).existsByExternalCaseIdAndInstance("123456", EXTERNAL);
-		verify(mockCaseRepository).existsByExternalCaseIdAndInstance("123456", INTERNAL);
-		verify(mockCaseRepository).existsByExternalCaseIdAndInstance("234567", EXTERNAL);
-		verify(mockCaseRepository).existsByExternalCaseIdAndInstance("234567", INTERNAL);
-		verify(mockCaseRepository).existsByExternalCaseIdAndInstance("345678", EXTERNAL);
-		verify(mockCaseRepository).existsByExternalCaseIdAndInstance("345678", INTERNAL);
+		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstance("123456", EXTERNAL);
+		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstance("123456", INTERNAL);
+		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstance("234567", EXTERNAL);
+		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstance("234567", INTERNAL);
+		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstance("345678", EXTERNAL);
+		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstance("345678", INTERNAL);
 
 		verify(mockOpenEInternalClient, times(2)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 

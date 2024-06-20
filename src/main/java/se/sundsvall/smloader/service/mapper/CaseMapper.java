@@ -2,27 +2,22 @@ package se.sundsvall.smloader.service.mapper;
 
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMappingEntity;
+import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
-import se.sundsvall.smloader.integration.db.model.enums.Instance;
 
 import java.time.OffsetDateTime;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
+import java.util.Base64;
 
 public final class CaseMapper {
 
 	private CaseMapper() {}
 
-	public static CaseEntity toCaseEntity(final String openECaseId, final Instance instance, final byte[] xml) {
-		final var xmlContent = new String(xml, UTF_8);
-		final var result = evaluateXPath(xml, "/FlowInstance/Header/Flow/FamilyID");
-		final var familyId = result.eachText().stream().map(String::trim).findFirst().orElse(null);
+	public static CaseEntity toCaseEntity(final String openECaseId, final CaseMetaDataEntity caseMetaDataEntity, final byte[] xml) {
+		final var xmlContent = Base64.getEncoder().encodeToString(xml);
 
 		return CaseEntity.create()
-			.withFamilyId(familyId)
+			.withCaseMetaData(caseMetaDataEntity)
 			.withExternalCaseId(openECaseId)
-			.withInstance(instance)
 			.withOpenECase(xmlContent)
 			.withDeliveryStatus(DeliveryStatus.PENDING);
 	}
@@ -30,7 +25,8 @@ public final class CaseMapper {
 	public static CaseMappingEntity toCaseMapping(final String errandId, final CaseEntity caseEntity) {
 		return CaseMappingEntity.create()
 			.withErrandId(errandId)
-			.withExternalCaseId(caseEntity.getId())
+			.withCaseType(caseEntity.getCaseMetaData().getFamilyId())
+			.withExternalCaseId(caseEntity.getExternalCaseId())
 			.withModified(OffsetDateTime.now());
 	}
 }
