@@ -1,7 +1,10 @@
 package se.sundsvall.smloader.service;
 
+import generated.se.sundsvall.callback.SetStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -13,7 +16,9 @@ import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.Instance;
 import se.sundsvall.smloader.integration.openeexternal.OpenEExternalClient;
+import se.sundsvall.smloader.integration.openeexternalsoap.OpenEExternalSoapClient;
 import se.sundsvall.smloader.integration.openeinternal.OpenEInternalClient;
+import se.sundsvall.smloader.integration.openeinternalsoap.OpenEInternalSoapClient;
 
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -41,6 +46,12 @@ class OpenEServiceTest {
 
 	@Mock
 	private OpenEInternalClient mockOpenEInternalClient;
+
+	@Mock
+	private OpenEExternalSoapClient mockOpenEExternalSoapClient;
+
+	@Mock
+	private OpenEInternalSoapClient mockOpenEInternalSoapClient;
 
 	@Mock
 	private CaseRepository mockCaseRepository;
@@ -170,5 +181,24 @@ class OpenEServiceTest {
 		verify(mockOpenEInternalClient, times(2)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 
 		verifyNoMoreInteractions(mockOpenEExternalClient, mockOpenEInternalClient, mockCaseRepository);
+	}
+
+	@ParameterizedTest
+	@EnumSource(Instance.class)
+	void updateOpenECaseStatus(Instance instance) {
+		// Arrange
+		final var flowInstanceId = "123";
+		final var caseMetaDataEntity = CaseMetaDataEntity.create().withOpenEUpdateStatus("status").withInstance(instance);
+
+		// Act
+		openEService.updateOpenECaseStatus(flowInstanceId, caseMetaDataEntity);
+
+		// Assert and verify
+		if (EXTERNAL.equals(instance)) {
+			verify(mockOpenEExternalSoapClient).setStatus(any(SetStatus.class));
+		} else {
+			verify(mockOpenEInternalSoapClient).setStatus(any(SetStatus.class));
+		}
+		verifyNoMoreInteractions(mockOpenEExternalSoapClient, mockOpenEInternalSoapClient);
 	}
 }

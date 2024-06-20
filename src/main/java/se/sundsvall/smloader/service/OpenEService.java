@@ -1,10 +1,12 @@
 package se.sundsvall.smloader.service;
 
+import generated.se.sundsvall.callback.SetStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
+import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.Instance;
 import se.sundsvall.smloader.integration.openeexternal.OpenEExternalClient;
 import se.sundsvall.smloader.integration.openeexternalsoap.OpenEExternalSoapClient;
@@ -51,6 +53,21 @@ public class OpenEService {
 		}
 
 		Arrays.stream(Instance.values()).forEach(instance -> handleCasesByInstance(instance, fromDate, effectiveToDate));
+	}
+
+	public void updateOpenECaseStatus(String flowInstanceId, CaseMetaDataEntity caseMetaDataEntity) {
+
+		final var setStatus = new SetStatus().withFlowInstanceID(Integer.parseInt(flowInstanceId)).withStatusAlias(caseMetaDataEntity.getOpenEUpdateStatus());
+
+		try {
+			if (EXTERNAL.equals(caseMetaDataEntity.getInstance())) {
+				openEExternalSoapClient.setStatus(setStatus);
+			} else {
+				openEInternalSoapClient.setStatus(setStatus);
+			}
+		} catch (final Exception e) {
+			LOGGER.error("Error while setting status for flowInstanceId: '{}'", flowInstanceId, e);
+		}
 	}
 
 	private void handleCasesByInstance(final Instance instance, final LocalDateTime fromDate, final LocalDateTime toDate) {

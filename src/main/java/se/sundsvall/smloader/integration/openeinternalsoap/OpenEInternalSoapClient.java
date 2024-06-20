@@ -1,7 +1,7 @@
 package se.sundsvall.smloader.integration.openeinternalsoap;
 
-import generated.se.sundsvall.callback.ConfirmDelivery;
-import generated.se.sundsvall.callback.ConfirmDeliveryResponse;
+import generated.se.sundsvall.callback.SetStatus;
+import generated.se.sundsvall.callback.SetStatusResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +17,6 @@ public interface OpenEInternalSoapClient {
 	String TEXT_XML_UTF_8 = "text/xml; charset=UTF-8";
 
 	@PostMapping(consumes = TEXT_XML_UTF_8, produces = TEXT_XML_UTF_8)
-	ConfirmDeliveryResponse confirmDelivery(@RequestBody ConfirmDelivery confirmDelivery);
+	SetStatusResponse setStatus(@RequestBody SetStatus setStatus);
 
 }
