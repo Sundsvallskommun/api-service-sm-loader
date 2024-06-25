@@ -24,7 +24,6 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
@@ -49,7 +48,8 @@ class SupportManagementServiceTest {
 	@Mock
 	private CaseMetaDataRepository mockCaseMetaDataRepository;
 
-
+	@Mock
+	private OpenEService mockOpenEService;
 
 	private SupportManagementService supportManagementService;
 
@@ -57,7 +57,7 @@ class SupportManagementServiceTest {
 	void setUp() {
 		when(mockMapper.getSupportedFamilyId()).thenReturn("161");
 
-		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockCaseMetaDataRepository);
+		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockCaseMetaDataRepository, mockOpenEService);
 	}
 	@Test
 	void exportCases() {
@@ -97,6 +97,8 @@ class SupportManagementServiceTest {
 		verify(mockSupportManagementClient).createErrand(namespace, municipalityId, errand);
 		verify(mockCaseMappingRepository).save(any());
 		verify(mockCaseRepository).save(any());
+		verify(mockOpenEService).updateOpenECaseStatus(flowInstanceId, CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace(namespace).withMunicipalityId(municipalityId));
+		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService);
 	}
 
 	@Test
@@ -116,8 +118,7 @@ class SupportManagementServiceTest {
 		verify(mockCaseRepository).findAllByDeliveryStatus(PENDING);
 		verify(mockCaseRepository).save(caseEntity.withDeliveryStatus(FAILED));
 		verify(mockMapper).getSupportedFamilyId();
-		verifyNoMoreInteractions(mockMapper);
-		verifyNoInteractions(mockSupportManagementClient, mockCaseMappingRepository);
+		verifyNoMoreInteractions(mockMapper, mockCaseRepository, mockCaseMappingRepository, mockSupportManagementClient, mockOpenEService);
 	}
 
 	@Test
@@ -155,12 +156,13 @@ class SupportManagementServiceTest {
 		verify(mockMapper).mapToErrand(flowInstanceXml);
 		verify(mockSupportManagementClient).createErrand(namespace, municipalityId, errand);
 		verify(mockCaseRepository).save(casesToExport.getFirst().withDeliveryStatus(FAILED));
-		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper);
+		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService);
 	}
 
 	private CaseEntity createCaseEntity(String flowInstanceId, String familyId, byte[] flowInstanceXml) {
 		return CaseEntity.create()
-			.withId(flowInstanceId)
+			.withId("id")
+			.withExternalCaseId(flowInstanceId)
 			.withCaseMetaData(CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace("namespace").withMunicipalityId("municipalityId"))
 			.withOpenECase(new String(flowInstanceXml))
 			.withDeliveryStatus(PENDING);

@@ -32,14 +32,16 @@ public class SupportManagementService {
 	private final CaseMappingRepository caseMappingRepository;
 	private final CaseMetaDataRepository caseMetaDataRepository;
 	private final Map<String, OpenEMapper> openEMapperMap;
+	private final OpenEService openEService;
 
-	public SupportManagementService(SupportManagementClient supportManagementClient, CaseRepository caseRepository, CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers,
-		final CaseMetaDataRepository caseMetaDataRepository) {
+	public SupportManagementService(final SupportManagementClient supportManagementClient, final CaseRepository caseRepository, final CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers,
+		final CaseMetaDataRepository caseMetaDataRepository, final OpenEService openEService) {
 		this.supportManagementClient = supportManagementClient;
 		this.caseRepository = caseRepository;
 		this.caseMappingRepository = caseMappingRepository;
 		this.openEMapperMap = openEMappers.stream().collect(toMap(OpenEMapper::getSupportedFamilyId, Function.identity()));
 		this.caseMetaDataRepository = caseMetaDataRepository;
+		this.openEService = openEService;
 	}
 
 	public void exportCases() {
@@ -63,6 +65,7 @@ public class SupportManagementService {
 			final var caseMapping = toCaseMapping(errandId, caseEntity);
 			caseMappingRepository.save(caseMapping);
 			caseRepository.save(caseEntity.withDeliveryStatus(CREATED));
+			openEService.updateOpenECaseStatus(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData());
 		});
 	}
 
