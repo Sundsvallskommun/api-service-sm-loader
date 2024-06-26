@@ -15,6 +15,7 @@ import static java.util.Collections.emptyList;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CATEGORY_LAMNA_SYNPUNKT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TYPE_LAMNA_SYNPUNKT;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
@@ -42,6 +43,7 @@ class ProvideFeedbackMapper implements OpenEMapper {
 			.priority(LOW)
 			.title(result.title())
 			.classification(new Classification().category(CATEGORY_LAMNA_SYNPUNKT).type(TYPE_LAMNA_SYNPUNKT))
+			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false);
 	}
 

@@ -65,7 +65,10 @@ public class SupportManagementService {
 			final var caseMapping = toCaseMapping(errandId, caseEntity);
 			caseMappingRepository.save(caseMapping);
 			caseRepository.save(caseEntity.withDeliveryStatus(CREATED));
+
 			openEService.updateOpenECaseStatus(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData());
+
+			openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData().getInstance(), errandId);
 		});
 	}
 

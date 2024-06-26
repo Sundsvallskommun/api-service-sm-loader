@@ -1,5 +1,7 @@
 package se.sundsvall.smloader.integration.openeexternalsoap;
 
+import generated.se.sundsvall.callback.ConfirmDelivery;
+import generated.se.sundsvall.callback.ConfirmDeliveryResponse;
 import generated.se.sundsvall.callback.SetStatus;
 import generated.se.sundsvall.callback.SetStatusResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -18,5 +20,8 @@ public interface OpenEExternalSoapClient {
 
 	@PostMapping(consumes = TEXT_XML_UTF_8, produces = TEXT_XML_UTF_8)
 	SetStatusResponse setStatus(@RequestBody SetStatus setStatus);
+
+	@PostMapping(consumes = TEXT_XML_UTF_8, produces = TEXT_XML_UTF_8)
+	ConfirmDeliveryResponse confirmDelivery(@RequestBody ConfirmDelivery confirmDelivery);
 
 }

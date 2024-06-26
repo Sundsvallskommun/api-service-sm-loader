@@ -40,5 +40,11 @@ record ProvideFeedback(
 	@XPath("/FlowInstance/Values/title/Rubrik")
 	String title,
 
+	@XPath("/FlowInstance/document/QueryID")
+	String documentQueryId,
+
+	@XPath("/FlowInstance/document/File/ID")
+	String documentFileId,
+
 	@XPath("/FlowInstance/Values/description/Value")
 	String description) { }
