@@ -62,3 +62,14 @@ integration:
   support-management:
     connectTimeout: 5
     readTimeout: 30
+
+scheduler:
+  caseprocessing:
+    cron:
+      expression: '${config.scheduler.cron.caseprocessing}'
+  shedlock-lock-at-most-for: PT2M
+
+config:
+  scheduler:
+    cron:
+      caseprocessing: '-'
