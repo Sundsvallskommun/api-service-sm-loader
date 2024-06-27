@@ -1,5 +1,7 @@
 package se.sundsvall.smloader.service;
 
+import generated.se.sundsvall.callback.ConfirmDelivery;
+import generated.se.sundsvall.callback.ExternalID;
 import generated.se.sundsvall.callback.SetStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import static java.util.Objects.nonNull;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseEntity;
 
@@ -55,7 +58,7 @@ public class OpenEService {
 		Arrays.stream(Instance.values()).forEach(instance -> handleCasesByInstance(instance, fromDate, effectiveToDate));
 	}
 
-	public void updateOpenECaseStatus(String flowInstanceId, CaseMetaDataEntity caseMetaDataEntity) {
+	public void updateOpenECaseStatus(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity) {
 
 		final var setStatus = new SetStatus().withFlowInstanceID(Integer.parseInt(flowInstanceId)).withStatusAlias(caseMetaDataEntity.getOpenEUpdateStatus());
 
@@ -67,6 +70,25 @@ public class OpenEService {
 			}
 		} catch (final Exception e) {
 			LOGGER.error("Error while setting status for flowInstanceId: '{}'", flowInstanceId, e);
+		}
+	}
+
+	public void confirmDelivery(final String flowInstanceId, final Instance instance, final String errandId) {
+
+		final var confirmDelivery = new ConfirmDelivery().withFlowInstanceID(Integer.parseInt(flowInstanceId))
+			.withDelivered(true)
+			.withExternalID(new ExternalID()
+				.withSystem(SYSTEM_SUPPORT_MANAGEMENT)
+				.withID(errandId));
+
+		try {
+			if (EXTERNAL.equals(instance)) {
+				openEExternalSoapClient.confirmDelivery(confirmDelivery);
+			} else {
+				openEInternalSoapClient.confirmDelivery(confirmDelivery);
+			}
+		} catch (final Exception e) {
+			LOGGER.error("Error while confirming delivery for flowInstanceId: '{}'", flowInstanceId, e);
 		}
 	}
 

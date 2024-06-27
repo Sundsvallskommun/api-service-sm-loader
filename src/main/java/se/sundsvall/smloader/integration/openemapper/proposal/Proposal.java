@@ -1,8 +1,8 @@
-package se.sundsvall.smloader.integration.openemapper.providefeedback;
+package se.sundsvall.smloader.integration.openemapper.proposal;
 
 import se.sundsvall.smloader.integration.util.annotation.XPath;
 
-record ProvideFeedback(
+record Proposal(
 
 	@XPath("/FlowInstance/Header/Flow/FamilyID")
 	String familyId,
@@ -13,15 +13,6 @@ record ProvideFeedback(
 	@XPath("/FlowInstance/Header/Status/Name")
 	String status,
 
-	@XPath("/FlowInstance/Values/contact/Firstname")
-	String firstName,
-
-	@XPath("/FlowInstance/Values/contact/Lastname")
-	String lastName,
-
-	@XPath("/FlowInstance/Values/contact/Email")
-	String email,
-
 	@XPath("/FlowInstance/Header/Poster/Firstname")
 	String posterFirstName,
 
@@ -31,13 +22,31 @@ record ProvideFeedback(
 	@XPath("/FlowInstance/Header/Poster/Email")
 	String posterEmail,
 
+	@XPath("/FlowInstance/Values/contact/Firstname")
+	String firstName,
+
+	@XPath("/FlowInstance/Values/contact/Lastname")
+	String lastName,
+
+	@XPath("/FlowInstance/Values/contact/Address")
+	String address,
+
+	@XPath("/FlowInstance/Values/contact/ZipCode")
+	String zipCode,
+
+	@XPath("/FlowInstance/Values/contact/PostalAddress")
+	String postalAddress,
+
+	@XPath("/FlowInstance/Values/contact/ContactBySMS")
+	Boolean contactBySMS,
+
+	@XPath("/FlowInstance/Values/contact/Email")
+	String email,
+
 	@XPath("/FlowInstance/Values/contact/MobilePhone")
 	String mobilePhone,
 
-	@XPath("/FlowInstance/Values/reportType/Value")
-	String reportType,
-
-	@XPath("/FlowInstance/Values/title/Rubrik")
+	@XPath("/FlowInstance/Values/title/Value")
 	String title,
 
 	@XPath("/FlowInstance/document/QueryID")

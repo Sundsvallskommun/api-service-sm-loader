@@ -1,4 +1,4 @@
-package se.sundsvall.smloader.integration.openemapper.providefeedback;
+package se.sundsvall.smloader.integration.openemapper.proposal;
 
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import static generated.se.sundsvall.supportmanagement.Priority.LOW;
 import static java.util.Collections.emptyList;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CATEGORY_LAMNA_SYNPUNKT;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.CATEGORY_SUNDSVALLS_FORSLAGET;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
@@ -21,9 +21,9 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TYPE_OTHER;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
-class ProvideFeedbackMapper implements OpenEMapper {
+class ProposalMapper implements OpenEMapper {
 
-	@Value("${lamna-synpunkt.family-id}")
+	@Value("${sundsvallsforslaget.family-id}")
 	private String familyId;
 
 	@Override
@@ -33,37 +33,39 @@ class ProvideFeedbackMapper implements OpenEMapper {
 
 	@Override
 	public Errand mapToErrand(final byte[] xml) {
-		final var result = extractValue(xml, ProvideFeedback.class);
+		final var result = extractValue(xml, Proposal.class);
 
 		return new Errand()
 			.title(result.title())
 			.description(result.description())
 			.status("NEW")
-			.stakeholders(getStakeholder(result))
 			.reporterUserId(getReporterUserId(result))
 			.priority(LOW)
-			.classification(new Classification().category(CATEGORY_LAMNA_SYNPUNKT).type(TYPE_OTHER))
+			.stakeholders(getStakeholder(result))
+			.classification(new Classification().category(CATEGORY_SUNDSVALLS_FORSLAGET).type(TYPE_OTHER))
 			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false);
 	}
 
-	private String getReporterUserId(final ProvideFeedback provideFeedback) {
-		return provideFeedback.firstName() != null ? provideFeedback.firstName() + " " + provideFeedback.lastName() + "-" + provideFeedback.email() :
-			provideFeedback.posterFirstName() + " " +  provideFeedback.posterLastName() + "-" + provideFeedback.posterEmail();
+	private String getReporterUserId(final Proposal proposal) {
+		return proposal.firstName() != null ? proposal.firstName() + " " + proposal.lastName() + "-" + proposal.email() :
+			proposal.posterFirstName() + " " + proposal.posterLastName() + "-" + proposal.posterEmail();
 	}
 
-	private List<Stakeholder> getStakeholder(final ProvideFeedback provideFeedback) {
-		return provideFeedback.firstName() != null ? List.of(new Stakeholder().role(ROLE_CONTACT_PERSON)
-			.firstName(provideFeedback.firstName())
-			.lastName(provideFeedback.lastName())
-			.contactChannels(getContactChannels(provideFeedback))) : emptyList();
+	private List<Stakeholder> getStakeholder(final Proposal proposal) {
+		return proposal.firstName() != null ? List.of(new Stakeholder().role(ROLE_CONTACT_PERSON)
+			.firstName(proposal.firstName())
+			.lastName(proposal.lastName())
+			.address(proposal.address())
+			.zipCode(proposal.zipCode())
+			.contactChannels(getContactChannels(proposal))) : emptyList();
 	}
 
-	private List<ContactChannel> getContactChannels(final ProvideFeedback provideFeedback) {
+	private List<ContactChannel> getContactChannels(final Proposal proposal) {
 		return List.of(new ContactChannel()
 			.type(CONTACT_CHANNEL_TYPE_EMAIL)
-			.value(provideFeedback.email()), new ContactChannel()
+			.value(proposal.email()), new ContactChannel()
 			.type(CONTACT_CHANNEL_TYPE_PHONE)
-			.value(provideFeedback.mobilePhone()));
+			.value(proposal.mobilePhone()));
 	}
 }

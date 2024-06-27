@@ -1,5 +1,6 @@
 package se.sundsvall.smloader.service;
 
+import generated.se.sundsvall.callback.ConfirmDelivery;
 import generated.se.sundsvall.callback.SetStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +38,7 @@ import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.INTERNAL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
 
 @ExtendWith(MockitoExtension.class)
 class OpenEServiceTest {
@@ -64,6 +66,12 @@ class OpenEServiceTest {
 
 	@Captor
 	private ArgumentCaptor<CaseEntity> caseEntityCaptor;
+
+	@Captor
+	private ArgumentCaptor<SetStatus> setStatusCaptor;
+
+	@Captor
+	private ArgumentCaptor<ConfirmDelivery> confirmDeliveryCaptor;
 
 	@Test
 	void fetchAndSaveNewOpenECases() throws Exception {
@@ -195,10 +203,38 @@ class OpenEServiceTest {
 
 		// Assert and verify
 		if (EXTERNAL.equals(instance)) {
-			verify(mockOpenEExternalSoapClient).setStatus(any(SetStatus.class));
+			verify(mockOpenEExternalSoapClient).setStatus(setStatusCaptor.capture());
 		} else {
-			verify(mockOpenEInternalSoapClient).setStatus(any(SetStatus.class));
+			verify(mockOpenEInternalSoapClient).setStatus(setStatusCaptor.capture());
 		}
+
+		assertThat(setStatusCaptor.getValue()).extracting(SetStatus::getFlowInstanceID, SetStatus::getStatusAlias).containsExactly(Integer.parseInt(flowInstanceId), "status");
 		verifyNoMoreInteractions(mockOpenEExternalSoapClient, mockOpenEInternalSoapClient);
 	}
+
+	@ParameterizedTest
+	@EnumSource(Instance.class)
+	void confirmDelivery(Instance instance) {
+		// Arrange
+		final var flowInstanceId = "123";
+		final var errandId = "errandId";
+
+		// Act
+		openEService.confirmDelivery(flowInstanceId, instance, errandId);
+
+		// Assert and verify
+		if (EXTERNAL.equals(instance)) {
+			verify(mockOpenEExternalSoapClient).confirmDelivery(confirmDeliveryCaptor.capture());
+		} else {
+			verify(mockOpenEInternalSoapClient).confirmDelivery(confirmDeliveryCaptor.capture());
+		}
+
+		assertThat(confirmDeliveryCaptor.getValue().getFlowInstanceID()).isEqualTo(Integer.parseInt(flowInstanceId));
+		assertThat(confirmDeliveryCaptor.getValue().isDelivered()).isTrue();
+		assertThat(confirmDeliveryCaptor.getValue().getExternalID().getSystem()).isEqualTo(SYSTEM_SUPPORT_MANAGEMENT);
+		assertThat(confirmDeliveryCaptor.getValue().getExternalID().getID()).isEqualTo(errandId);
+
+		verifyNoMoreInteractions(mockOpenEExternalSoapClient, mockOpenEInternalSoapClient);
+	}
+
 }

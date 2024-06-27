@@ -21,6 +21,8 @@ integration:
 # OpenE Services
 lamna-synpunkt:
   family-id: 123
+sundsvallsforslaget:
+  family-id: 456
 
 spring:
   datasource:

@@ -62,7 +62,7 @@ class SupportManagementServiceTest {
 	@Test
 	void exportCases() {
 		// Arrange
-		final var flowInstanceXml = "flowInstanceXml"; // "flow-instance-lamna-synpunkt.xml
+		final var flowInstanceXml = "flowInstanceXml";
 		final var familyId = "161";
 		final var flowInstanceId = "123456";
 		final var namespace = "namespace";
@@ -98,6 +98,7 @@ class SupportManagementServiceTest {
 		verify(mockCaseMappingRepository).save(any());
 		verify(mockCaseRepository).save(any());
 		verify(mockOpenEService).updateOpenECaseStatus(flowInstanceId, CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace(namespace).withMunicipalityId(municipalityId));
+		verify(mockOpenEService).confirmDelivery(flowInstanceId, EXTERNAL, "errandId");
 		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService);
 	}
 
