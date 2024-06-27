@@ -10,18 +10,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import se.sundsvall.smloader.integration.openeinternalsoap.configuration.OpenEInternalSoapConfiguration;
 
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 import static se.sundsvall.smloader.integration.openeinternalsoap.configuration.OpenEInternalSoapConfiguration.CLIENT_ID;
 
 @FeignClient(name = CLIENT_ID, url = "${integration.open-e.internal-soap.url}", configuration = OpenEInternalSoapConfiguration.class)
 @CircuitBreaker(name = CLIENT_ID)
 public interface OpenEInternalSoapClient {
 
-	String TEXT_XML_UTF_8 = "text/xml; charset=UTF-8";
-
-	@PostMapping(consumes = TEXT_XML_UTF_8, produces = TEXT_XML_UTF_8)
+	@PostMapping(consumes = APPLICATION_XML_VALUE, produces = APPLICATION_XML_VALUE)
 	SetStatusResponse setStatus(@RequestBody SetStatus setStatus);
 
-	@PostMapping(consumes = TEXT_XML_UTF_8, produces = TEXT_XML_UTF_8)
+	@PostMapping(consumes = APPLICATION_XML_VALUE, produces = APPLICATION_XML_VALUE)
 	ConfirmDeliveryResponse confirmDelivery(@RequestBody ConfirmDelivery confirmDelivery);
 
 }
