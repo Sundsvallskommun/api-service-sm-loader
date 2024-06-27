@@ -1,22 +1,59 @@
 package se.sundsvall.smloader.integration.openemapper.proposal;
 
-import se.sundsvall.dept44.util.jacoco.ExcludeFromJacocoGeneratedCoverageReport;
 import se.sundsvall.smloader.integration.util.annotation.XPath;
 
-@ExcludeFromJacocoGeneratedCoverageReport
 record Proposal(
 
-	@XPath("/Events/FlowInstanceEvent/flowInstanceID")
+	@XPath("/FlowInstance/Header/Flow/FamilyID")
+	String familyId,
+
+	@XPath("/FlowInstance/Header/FlowInstanceID")
 	String flowInstanceId,
 
-	@XPath("/Events/FlowInstanceEvent/poster/user/firstname")
+	@XPath("/FlowInstance/Header/Status/Name")
+	String status,
+
+	@XPath("/FlowInstance/Header/Poster/Firstname")
 	String posterFirstName,
 
-	@XPath("/Events/FlowInstanceEvent/poster/user/lastname")
+	@XPath("/FlowInstance/Header/Poster/Lastname")
 	String posterLastName,
 
-	@XPath("/Events/FlowInstanceEvent/poster/user/username")
-	String posterUserName,
+	@XPath("/FlowInstance/Header/Poster/Email")
+	String posterEmail,
 
-	@XPath("/Events/FlowInstanceEvent/poster/user/email")
-	String posterEmail) { }
+	@XPath("/FlowInstance/Values/contact/Firstname")
+	String firstName,
+
+	@XPath("/FlowInstance/Values/contact/Lastname")
+	String lastName,
+
+	@XPath("/FlowInstance/Values/contact/Address")
+	String address,
+
+	@XPath("/FlowInstance/Values/contact/ZipCode")
+	String zipCode,
+
+	@XPath("/FlowInstance/Values/contact/PostalAddress")
+	String postalAddress,
+
+	@XPath("/FlowInstance/Values/contact/ContactBySMS")
+	Boolean contactBySMS,
+
+	@XPath("/FlowInstance/Values/contact/Email")
+	String email,
+
+	@XPath("/FlowInstance/Values/contact/MobilePhone")
+	String mobilePhone,
+
+	@XPath("/FlowInstance/Values/title/Value")
+	String title,
+
+	@XPath("/FlowInstance/document/QueryID")
+	String documentQueryId,
+
+	@XPath("/FlowInstance/document/File/ID")
+	String documentFileId,
+
+	@XPath("/FlowInstance/Values/description/Value")
+	String description) { }

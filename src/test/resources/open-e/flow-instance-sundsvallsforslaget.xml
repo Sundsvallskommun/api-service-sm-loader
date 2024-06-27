@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1735.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>370</FamilyID>
+			<Version>4</Version>
+			<FlowID>1735</FlowID>
+			<Name><![CDATA[Sundsvallsförslaget-TEST]]></Name>
+		</Flow>
+		<FlowInstanceID>4234</FlowInstanceID>
+		<Status>
+			<ID>10992</ID>
+			<Name><![CDATA[Preliminär]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>33320</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>33320</ID>
+		</Owner>
+		<Posted>2024-06-25T16:44:15</Posted>
+		<FirstSubmitted>2024-06-25T16:44:15</FirstSubmitted>
+		<LastSubmitted>2024-06-25T16:44:15</LastSubmitted>
+	</Header>
+	<Values>
+		<contact>
+			<QueryID>62475</QueryID>
+			<Name><![CDATA[Kontaktuppgifter privatperson]]></Name>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Address><![CDATA[STORGATAN 1]]></Address>
+			<ZipCode><![CDATA[123 45]]></ZipCode>
+			<PostalAddress><![CDATA[ANKEBORG]]></PostalAddress>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<MobilePhone><![CDATA[0701112223]]></MobilePhone>
+			<SocialSecurityNumber><![CDATA[191010101010]]></SocialSecurityNumber>
+			<ContactBySMS><![CDATA[false]]></ContactBySMS>
+		</contact>
+		<title>
+			<QueryID>62477</QueryID>
+			<Name><![CDATA[Rubrik]]></Name>
+			<Value><![CDATA[Testing]]></Value>
+		</title>
+		<description>
+			<QueryID>62478</QueryID>
+			<Name><![CDATA[Beskrivning av förslaget]]></Name>
+			<Value><![CDATA[Testar att lämna förslag]]></Value>
+		</description>
+		<document>
+			<QueryID>62479</QueryID>
+			<Name><![CDATA[Bifoga fil]]></Name>
+			<File>
+				<ID>5636</ID>
+				<Name><![CDATA[dummy.pdf]]></Name>
+				<Size>13264</Size>
+			</File>
+		</document>
+	</Values>
+</FlowInstance>

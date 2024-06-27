@@ -17,7 +17,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHA
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.TYPE_LAMNA_SYNPUNKT;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TYPE_OTHER;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -36,13 +36,13 @@ class ProvideFeedbackMapper implements OpenEMapper {
 		final var result = extractValue(xml, ProvideFeedback.class);
 
 		return new Errand()
-			.status("NEW")
+			.title(result.title())
 			.description(result.description())
+			.status("NEW")
 			.stakeholders(getStakeholder(result))
 			.reporterUserId(getReporterUserId(result))
 			.priority(LOW)
-			.title(result.title())
-			.classification(new Classification().category(CATEGORY_LAMNA_SYNPUNKT).type(TYPE_LAMNA_SYNPUNKT))
+			.classification(new Classification().category(CATEGORY_LAMNA_SYNPUNKT).type(TYPE_OTHER))
 			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false);
 	}
