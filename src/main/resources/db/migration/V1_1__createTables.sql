@@ -25,7 +25,15 @@
         primary key (family_id)
     ) engine=InnoDB;
 
+    create table shedlock(
+        name varchar(64) not null,
+        lock_until timestamp(3) not null,
+        locked_at timestamp(3) not null default current_timestamp(3),
+        locked_by varchar(255) not null,
+        primary key (name)
+    ) engine=InnoDB;
+
     alter table if exists `'case'`
-       add constraint fk_case_case_meta_data_family_id
+      add constraint fk_case_case_meta_data_family_id
        foreign key (family_id)
        references case_meta_data (family_id);

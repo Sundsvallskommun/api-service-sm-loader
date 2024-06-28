@@ -68,8 +68,3 @@ scheduler:
     cron:
       expression: '${config.scheduler.cron.caseprocessing}'
   shedlock-lock-at-most-for: PT2M
-
-config:
-  scheduler:
-    cron:
-      caseprocessing: '-'

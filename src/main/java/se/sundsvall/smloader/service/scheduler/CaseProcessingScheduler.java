@@ -33,13 +33,12 @@ public class CaseProcessingScheduler {
 	}
 
 	@Scheduled(cron = "${scheduler.caseprocessing.cron.expression}")
-	@SchedulerLock(name = "processCases", lockAtMostFor = "${scheduler.shedlock-lock-at-most-for}")
-	public void processCases() {
+	@SchedulerLock(name = "processcases", lockAtMostFor = "${scheduler.shedlock-lock-at-most-for}")
+	public void execute() {
 		RequestId.init();
 
 		LOGGER.info(LOG_IMPORT_STARTED);
-		//TODO Figure out which times
-		openEService.fetchAndSaveNewOpenECases(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now());
+		openEService.fetchAndSaveNewOpenECases(LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now());
 		LOGGER.info(LOG_IMPORT_ENDED);
 
 		LOGGER.info(LOG_EXPORT_STARTED);

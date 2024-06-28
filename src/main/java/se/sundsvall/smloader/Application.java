@@ -1,5 +1,6 @@
 package se.sundsvall.smloader;
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -12,6 +13,7 @@ import static org.springframework.boot.SpringApplication.run;
 @EnableFeignClients
 @EnableScheduling
 @EnableAsync
+@EnableSchedulerLock(defaultLockAtMostFor = "PT2M")
 @ExcludeFromJacocoGeneratedCoverageReport
 public class Application {
 	public static void main(final String... args) {
