@@ -21,7 +21,7 @@ public class CaseProcessingScheduler {
 	private static final String LOG_EXPORT_STARTED = "Beginning of exporting cases";
 	private static final String LOG_EXPORT_ENDED = "Export of cases has ended";
 
-	@Value("${config.scheduler.fetch-days}")
+	@Value("${config.scheduler.fetch-days:1}")
 	private int daysToFetch;
 
 
