@@ -3,6 +3,7 @@ package se.sundsvall.smloader.service.scheduler;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.requestid.RequestId;
@@ -20,6 +21,10 @@ public class CaseProcessingScheduler {
 	private static final String LOG_EXPORT_STARTED = "Beginning of exporting cases";
 	private static final String LOG_EXPORT_ENDED = "Export of cases has ended";
 
+	@Value("${config.scheduler.fetch-days}")
+	private int daysToFetch;
+
+
 	private final OpenEService openEService;
 	private final SupportManagementService supportManagementService;
 
@@ -34,7 +39,7 @@ public class CaseProcessingScheduler {
 		RequestId.init();
 
 		LOGGER.info(LOG_IMPORT_STARTED);
-		openEService.fetchAndSaveNewOpenECases(LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now());
+		openEService.fetchAndSaveNewOpenECases(LocalDateTime.now().minusDays(daysToFetch).withHour(0).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now());
 		LOGGER.info(LOG_IMPORT_ENDED);
 
 		LOGGER.info(LOG_EXPORT_STARTED);

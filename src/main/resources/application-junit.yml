@@ -59,5 +59,6 @@ spring:
     enabled: true
 config:
   scheduler:
+    fetch-days: 1
     cron:
       caseprocessing: '0 0 */1 * * *'
