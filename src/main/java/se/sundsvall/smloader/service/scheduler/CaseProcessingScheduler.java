@@ -3,19 +3,15 @@ package se.sundsvall.smloader.service.scheduler;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.requestid.RequestId;
-import se.sundsvall.dept44.util.jacoco.ExcludeFromJacocoGeneratedCoverageReport;
 import se.sundsvall.smloader.service.OpenEService;
 import se.sundsvall.smloader.service.SupportManagementService;
 
 import java.time.LocalDateTime;
 
 @Service
-@ConfigurationProperties("scheduler.caseprocessing.cron")
-@ExcludeFromJacocoGeneratedCoverageReport
 public class CaseProcessingScheduler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CaseProcessingScheduler.class);

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>se.sundsvall.dept44</groupId>
 		<artifactId>dept44-service-parent</artifactId>
-		<version>5.0.1</version>
+		<version>5.0.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>se.sundsvall</groupId>
@@ -17,7 +17,6 @@
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 		<jaxb2-maven-plugin.version>3.2.0</jaxb2-maven-plugin.version>
 		<jaxb2-fluent-api.version>3.0</jaxb2-fluent-api.version>
-		<cron-expression-descriptor.version>1.2.10</cron-expression-descriptor.version>
 		<xsoup.version>0.3.7</xsoup.version>
 		<shedlock.version>5.13.0</shedlock.version>
 
@@ -45,12 +44,6 @@
 			<artifactId>flyway-mysql</artifactId>
 		</dependency>
 		<!--- Other -->
-		<dependency>
-			<!-- Used by scheduler to display cron expressions in human readable format -->
-			<groupId>it.burning</groupId>
-			<artifactId>cron-expression-descriptor</artifactId>
-			<version>${cron-expression-descriptor.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
