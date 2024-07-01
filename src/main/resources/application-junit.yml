@@ -55,3 +55,10 @@ spring:
           support-management:
             client-id: the-client-id
             client-secret: the-client-secret
+  flyway:
+    enabled: true
+config:
+  scheduler:
+    fetch-days: 1
+    cron:
+      caseprocessing: '0 0 */1 * * *'
