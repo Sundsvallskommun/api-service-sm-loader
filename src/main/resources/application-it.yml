@@ -1,9 +1,40 @@
+integration:
+  open-e:
+    external:
+      username: username
+      password: password
+      url: http://localhost:${wiremock.server.port:}/open-e-external
+    internal:
+      username: username
+      password: password
+      url: http://localhost:${wiremock.server.port:}/open-e-internal
+    external-soap:
+      username: username
+      password: password
+      url: http://localhost:${wiremock.server.port:}/open-e-external-soap
+    internal-soap:
+      username: username
+      password: password
+      url: http://localhost:${wiremock.server.port:}/open-e-internal-soap
+  support-management:
+    url: http://localhost:${wiremock.server.port:}/support-management
+    token-uri: http://localhost:${wiremock.server.port:}/api-gateway/token
+    client-id: the-client-id
+    client-secret: the-client-secret
+    connectTimeout: 10
+    readTimeout: 20
+# OpenE Services
+lamna-synpunkt:
+  family-id: 161
+sundsvallsforslaget:
+  family-id: 370
+
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:mariadb:10.6.4:///
   flyway:
-    enabled: false
+    enabled: true
   jpa:
     properties:
       jakarta:
@@ -11,3 +42,8 @@ spring:
           schema-generation:
             database:
               action: validate
+config:
+  scheduler:
+    fetch-days: 1
+    cron:
+      caseprocessing: '0 0 */1 * * *'

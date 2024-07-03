@@ -6,6 +6,7 @@ import generated.se.sundsvall.callback.SetStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import se.sundsvall.dept44.requestid.RequestId;
 import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
@@ -48,6 +49,7 @@ public class OpenEService {
 	}
 
 	public void fetchAndSaveNewOpenECases(final LocalDateTime fromDate, LocalDateTime toDate) {
+		RequestId.init();
 		final var effectiveToDate = nonNull(toDate) ? toDate : LocalDateTime.now();
 
 		if (fromDate.isAfter(effectiveToDate)) {
