@@ -4,6 +4,7 @@ import generated.se.sundsvall.supportmanagement.Errand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import se.sundsvall.dept44.requestid.RequestId;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
 import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
@@ -45,6 +46,7 @@ public class SupportManagementService {
 	}
 
 	public void exportCases() {
+		RequestId.init();
 		final var casesToExport = caseRepository.findAllByDeliveryStatus(PENDING);
 
 		casesToExport.forEach(caseEntity -> {

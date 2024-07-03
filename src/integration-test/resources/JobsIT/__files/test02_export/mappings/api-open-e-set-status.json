@@ -1,0 +1,24 @@
+{
+	"name": "api-open-e-set-status",
+	"request": {
+		"urlPath": "/open-e-external-soap",
+		"method": "POST",
+		"headers": {
+			"x-request-id": {
+				"matches": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+			}
+		},
+		"bodyPatterns": [
+			{
+				"equalToXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><setStatus xmlns=\"http://www.oeplatform.org/version/1.0/schemas/integration/callback\"><flowInstanceID>4238</flowInstanceID><statusAlias>Mottagen</statusAlias></setStatus></SOAP-ENV:Body></SOAP-ENV:Envelope>"
+			}
+		]
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "text/xml;charset=ISO-8859-1"
+		},
+		"status": 200,
+		"body": "<?xml version='1.0' encoding='ISO-8859-1'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><setStatusResponse xmlns=\"http://www.oeplatform.org/version/1.0/schemas/integration/callback\"><eventID>16287</eventID></setStatusResponse></S:Body></S:Envelope>"
+	}
+}
