@@ -3,6 +3,7 @@ package se.sundsvall.smloader.integration.supportmanagement;
 import generated.se.sundsvall.supportmanagement.Errand;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,4 +24,14 @@ public interface SupportManagementClient {
 	@PostMapping(path = "/{namespace}/{municipalityId}/errands", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
 	ResponseEntity<Void> createErrand(@PathVariable(name = "namespace") String namespace,  @PathVariable(name = "municipalityId") String municipalityId,
 		@RequestBody Errand errand);
+
+	/**
+	 * Get errand from support management.
+	 *
+	 * @param errandId with att.
+	 */
+	@GetMapping(path = "/{namespace}/{municipalityId}/errands/{errandId}", produces = APPLICATION_PROBLEM_JSON_VALUE)
+	Errand getErrand(@PathVariable(name = "namespace") String namespace,  @PathVariable(name = "municipalityId") String municipalityId,
+		@PathVariable(name = "errandId") String errandId);
+
 }

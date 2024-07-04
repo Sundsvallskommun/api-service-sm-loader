@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
-import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
@@ -46,9 +45,6 @@ class SupportManagementServiceTest {
 	private OpenEMapper mockMapper;
 
 	@Mock
-	private CaseMetaDataRepository mockCaseMetaDataRepository;
-
-	@Mock
 	private OpenEService mockOpenEService;
 
 	private SupportManagementService supportManagementService;
@@ -57,7 +53,7 @@ class SupportManagementServiceTest {
 	void setUp() {
 		when(mockMapper.getSupportedFamilyId()).thenReturn("161");
 
-		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockCaseMetaDataRepository, mockOpenEService);
+		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockOpenEService);
 	}
 	@Test
 	void exportCases() {
@@ -65,6 +61,7 @@ class SupportManagementServiceTest {
 		final var flowInstanceXml = "flowInstanceXml";
 		final var familyId = "161";
 		final var flowInstanceId = "123456";
+		final var errandNumber = "errandNumber";
 		final var namespace = "namespace";
 		final var municipalityId = "municipalityId";
 		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml.getBytes())));
@@ -86,6 +83,7 @@ class SupportManagementServiceTest {
 
 		when(mockMapper.mapToErrand(flowInstanceXml.getBytes())).thenReturn(errand);
 		when(mockSupportManagementClient.createErrand(namespace, municipalityId, errand)).thenReturn(ResponseEntity.created(URI.create("http://localhost:8080/errands/errandId")).build());
+		when(mockSupportManagementClient.getErrand(namespace, municipalityId, "errandId")).thenReturn(errand.errandNumber(errandNumber));
 
 		// Act
 		supportManagementService.exportCases();
@@ -95,10 +93,11 @@ class SupportManagementServiceTest {
 		verify(mockMapper).getSupportedFamilyId();
 		verify(mockMapper).mapToErrand(flowInstanceXml.getBytes());
 		verify(mockSupportManagementClient).createErrand(namespace, municipalityId, errand);
+		verify(mockSupportManagementClient).getErrand(namespace, municipalityId, "errandId");
 		verify(mockCaseMappingRepository).save(any());
 		verify(mockCaseRepository).save(any());
 		verify(mockOpenEService).updateOpenECaseStatus(flowInstanceId, CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace(namespace).withMunicipalityId(municipalityId));
-		verify(mockOpenEService).confirmDelivery(flowInstanceId, EXTERNAL, "errandId");
+		verify(mockOpenEService).confirmDelivery(flowInstanceId, EXTERNAL, errandNumber);
 		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService);
 	}
 
