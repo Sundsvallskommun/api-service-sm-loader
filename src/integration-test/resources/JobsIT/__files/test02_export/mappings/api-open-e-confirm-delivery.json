@@ -10,7 +10,7 @@
 		},
 		"bodyPatterns": [
 			{
-				"equalToXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><confirmDelivery xmlns=\"http://www.oeplatform.org/version/1.0/schemas/integration/callback\"><flowInstanceID>4238</flowInstanceID><externalID><ID>null</ID><System>SUPPORTMANAGEMENT</System></externalID><delivered>true</delivered></confirmDelivery></SOAP-ENV:Body></SOAP-ENV:Envelope>"
+				"equalToXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><confirmDelivery xmlns=\"http://www.oeplatform.org/version/1.0/schemas/integration/callback\"><flowInstanceID>4238</flowInstanceID><externalID><ID>KS-24070019</ID><System>SUPPORTMANAGEMENT</System></externalID><delivered>true</delivered></confirmDelivery></SOAP-ENV:Body></SOAP-ENV:Envelope>"
 			}
 		]
 	},

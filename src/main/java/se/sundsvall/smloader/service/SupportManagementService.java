@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.requestid.RequestId;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
-import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
@@ -31,17 +30,15 @@ public class SupportManagementService {
 	private final SupportManagementClient supportManagementClient;
 	private final CaseRepository caseRepository;
 	private final CaseMappingRepository caseMappingRepository;
-	private final CaseMetaDataRepository caseMetaDataRepository;
 	private final Map<String, OpenEMapper> openEMapperMap;
 	private final OpenEService openEService;
 
 	public SupportManagementService(final SupportManagementClient supportManagementClient, final CaseRepository caseRepository, final CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers,
-		final CaseMetaDataRepository caseMetaDataRepository, final OpenEService openEService) {
+		final OpenEService openEService) {
 		this.supportManagementClient = supportManagementClient;
 		this.caseRepository = caseRepository;
 		this.caseMappingRepository = caseMappingRepository;
 		this.openEMapperMap = openEMappers.stream().collect(toMap(OpenEMapper::getSupportedFamilyId, Function.identity()));
-		this.caseMetaDataRepository = caseMetaDataRepository;
 		this.openEService = openEService;
 	}
 
@@ -70,7 +67,9 @@ public class SupportManagementService {
 
 			openEService.updateOpenECaseStatus(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData());
 
-			openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData().getInstance(), errandId);
+			final var createdErrand = getErrandFromSupportManagement(errandId, caseEntity.getCaseMetaData().getNamespace(), caseEntity.getCaseMetaData().getMunicipalityId());
+
+			openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData().getInstance(), Optional.ofNullable(createdErrand).map(Errand::getErrandNumber).orElse(null));
 		});
 	}
 
@@ -81,6 +80,15 @@ public class SupportManagementService {
 			return location.substring(location.lastIndexOf("/") + 1);
 		} catch (Exception e) {
 			LOGGER.error("Failed to send errand to SupportManagement", e);
+			return null;
+		}
+	}
+
+	private Errand getErrandFromSupportManagement(String errandId, String namespace, String municipalityId) {
+		try {
+			return supportManagementClient.getErrand(namespace, municipalityId, errandId);
+		} catch (Exception e) {
+			LOGGER.error("Failed to get errand from SupportManagement", e);
 			return null;
 		}
 	}

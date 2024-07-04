@@ -1,5 +1,5 @@
 {
-	"name": "api-support-management",
+	"name": "api-support-management-send",
 	"request": {
 		"urlPath": "/support-management/CONTACTSUNDSVALL/2281/errands",
 		"method": "POST",
@@ -49,6 +49,9 @@
 		]
 	},
 	"response": {
+		"headers": {
+			"Location": "http://localhost:1111/support-management/CONTACTSUNDSVALL/2281/errands/1234"
+		},
 		"status": 201
 	}
 }
