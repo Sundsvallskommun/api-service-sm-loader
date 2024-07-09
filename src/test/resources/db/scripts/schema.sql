@@ -1,6 +1,7 @@
 
     create table `'case'` (
         id varchar(255) not null,
+        created datetime(6),
         delivery_status varchar(255),
         external_case_id varchar(255),
         open_e_case longtext,

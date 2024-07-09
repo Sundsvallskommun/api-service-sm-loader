@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import se.sundsvall.smloader.integration.db.model.CaseMappingEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMappingId;
 
+import java.time.OffsetDateTime;
+
 @Transactional
 @CircuitBreaker(name = "CaseMappingRepository")
 public interface CaseMappingRepository extends JpaRepository<CaseMappingEntity, CaseMappingId> {
-
+	void deleteByModifiedBefore(OffsetDateTime modified);
 }
