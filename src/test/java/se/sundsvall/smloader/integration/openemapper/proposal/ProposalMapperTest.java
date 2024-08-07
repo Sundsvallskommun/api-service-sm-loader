@@ -9,9 +9,7 @@ import se.sundsvall.smloader.Application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CATEGORY_SUNDSVALLS_FORSLAGET;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.TYPE_OTHER;
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")
@@ -43,9 +41,9 @@ class ProposalMapperTest {
 		assertThat(errand.getStakeholders().getFirst().getAddress()).isEqualTo("STORGATAN 1");
 		assertThat(errand.getStakeholders().getFirst().getZipCode()).isEqualTo("123 45");
 
-		assertThat(errand.getClassification().getType()).isEqualTo(TYPE_OTHER);
-		assertThat(errand.getClassification().getCategory()).isEqualTo(CATEGORY_SUNDSVALLS_FORSLAGET);
-		assertThat(errand.getPriority()).isEqualTo(Priority.LOW);
+		assertThat(errand.getClassification().getType()).isEqualTo("PROPOSAL_TYPE");
+		assertThat(errand.getClassification().getCategory()).isEqualTo("PROPOSAL_CATEGORY");
+		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getTitle()).isEqualTo("Testing");
 		assertThat(errand.getStatus()).isEqualTo("NEW");
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");

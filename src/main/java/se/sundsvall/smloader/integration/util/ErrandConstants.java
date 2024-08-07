@@ -8,9 +8,6 @@ public final class ErrandConstants {
 	public static final String ROLE_CONTACT_PERSON = "CONTACT_PERSON";
 	public static final String CONTACT_CHANNEL_TYPE_EMAIL = "Email";
 	public static final String CONTACT_CHANNEL_TYPE_PHONE = "Phone";
-	public static final String CATEGORY_LAMNA_SYNPUNKT = "LAMNA_SYNPUNKT";
-	public static final String CATEGORY_SUNDSVALLS_FORSLAGET = "SUNDSVALLS_FORSLAGET";
-	public static final String TYPE_OTHER = "OTHER";
 	public static final String EXTERNAL_CHANNEL_E_SERVICE = "ESERVICE";
 	public static final String INTERNAL_CHANNEL_E_SERVICE = "ESERVICE_INTERNAL";
 	public static final String SYSTEM_SUPPORT_MANAGEMENT = "SUPPORTMANAGEMENT";

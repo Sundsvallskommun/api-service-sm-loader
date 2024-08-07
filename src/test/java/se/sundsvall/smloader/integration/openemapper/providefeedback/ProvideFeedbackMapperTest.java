@@ -9,9 +9,7 @@ import se.sundsvall.smloader.Application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CATEGORY_LAMNA_SYNPUNKT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.TYPE_OTHER;
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")
@@ -40,9 +38,9 @@ class ProvideFeedbackMapperTest {
 		assertThat(errand.getStakeholders().getFirst().getContactChannels().getFirst().getValue()).isEqualTo("kalle.anka@sundsvall.se");
 		assertThat(errand.getStakeholders().getFirst().getContactChannels().getLast().getType()).isEqualTo("Phone");
 		assertThat(errand.getStakeholders().getFirst().getContactChannels().getLast().getValue()).isEqualTo("070111222");
-		assertThat(errand.getClassification().getType()).isEqualTo(TYPE_OTHER);
-		assertThat(errand.getClassification().getCategory()).isEqualTo(CATEGORY_LAMNA_SYNPUNKT);
-		assertThat(errand.getPriority()).isEqualTo(Priority.LOW);
+		assertThat(errand.getClassification().getType()).isEqualTo("FEEDBACK_TYPE");
+		assertThat(errand.getClassification().getCategory()).isEqualTo("FEEDBACK_CATEGORY");
+		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getTitle()).isEqualTo("testar");
 		assertThat(errand.getStatus()).isEqualTo("NEW");
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
@@ -55,10 +53,10 @@ class ProvideFeedbackMapperTest {
 
 		assertThat(errand.getDescription()).isEqualTo("testar synen");
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getClassification().getCategory()).isEqualTo(CATEGORY_LAMNA_SYNPUNKT);
-		assertThat(errand.getClassification().getType()).isEqualTo(TYPE_OTHER);
+		assertThat(errand.getClassification().getCategory()).isEqualTo("FEEDBACK_CATEGORY");
+		assertThat(errand.getClassification().getType()).isEqualTo("FEEDBACK_TYPE");
 		assertThat(errand.getStakeholders()).isEmpty();
-		assertThat(errand.getPriority()).isEqualTo(Priority.LOW);
+		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getTitle()).isEqualTo("testsyn");
 		assertThat(errand.getStatus()).isEqualTo("NEW");
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");

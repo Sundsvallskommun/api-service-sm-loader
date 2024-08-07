@@ -3,6 +3,7 @@ package se.sundsvall.smloader.integration.openemapper.proposal;
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,14 +11,11 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 import java.util.List;
 
-import static generated.se.sundsvall.supportmanagement.Priority.LOW;
 import static java.util.Collections.emptyList;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CATEGORY_SUNDSVALLS_FORSLAGET;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.TYPE_OTHER;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -25,6 +23,15 @@ class ProposalMapper implements OpenEMapper {
 
 	@Value("${sundsvallsforslaget.family-id}")
 	private String familyId;
+
+	@Value("${sundsvallsforslaget.category}")
+	private String category;
+
+	@Value("${sundsvallsforslaget.type}")
+	private String type;
+
+	@Value("${sundsvallsforslaget.priority}")
+	private String priority;
 
 	@Override
 	public String getSupportedFamilyId() {
@@ -40,9 +47,9 @@ class ProposalMapper implements OpenEMapper {
 			.description(result.description())
 			.status("NEW")
 			.reporterUserId(getReporterUserId(result))
-			.priority(LOW)
+			.priority(Priority.fromValue(priority))
 			.stakeholders(getStakeholder(result))
-			.classification(new Classification().category(CATEGORY_SUNDSVALLS_FORSLAGET).type(TYPE_OTHER))
+			.classification(new Classification().category(category).type(type))
 			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false);
 	}

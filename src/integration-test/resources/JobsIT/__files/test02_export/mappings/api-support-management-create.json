@@ -36,8 +36,8 @@
 					"externalTags": [],
 					"parameters": {},
 					"classification": {
-						"category": "LAMNA_SYNPUNKT",
-						"type": "OTHER"
+						"category": "FEEDBACK_CATEGORY",
+						"type": "FEEDBACK_TYPE"
 					},
 					"status": "NEW",
 					"description": "Testar att lämna synpunkt",
