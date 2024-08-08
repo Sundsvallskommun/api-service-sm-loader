@@ -5,8 +5,9 @@ import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 import java.util.List;
@@ -20,22 +21,15 @@ import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationP
 
 @Component
 class ProvideFeedbackMapper implements OpenEMapper {
+	OpenEMapperProperties properties;
 
-	@Value("${lamna-synpunkt.family-id}")
-	private String familyId;
-
-	@Value("${lamna-synpunkt.category}")
-	private String category;
-
-	@Value("${lamna-synpunkt.type}")
-	private String type;
-
-	@Value("${lamna-synpunkt.priority}")
-	private String priority;
+	public ProvideFeedbackMapper(@Qualifier("feedback") OpenEMapperProperties properties) {
+		this.properties = properties;
+	}
 
 	@Override
 	public String getSupportedFamilyId() {
-		return familyId;
+		return properties.getFamilyId();
 	}
 
 	@Override
@@ -48,8 +42,8 @@ class ProvideFeedbackMapper implements OpenEMapper {
 			.status("NEW")
 			.stakeholders(getStakeholder(result))
 			.reporterUserId(getReporterUserId(result))
-			.priority(Priority.fromValue(priority))
-			.classification(new Classification().category(category).type(type))
+			.priority(Priority.fromValue(properties.getPriority()))
+			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false);
 	}

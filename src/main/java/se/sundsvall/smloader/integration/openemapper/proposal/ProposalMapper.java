@@ -5,8 +5,9 @@ import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 import java.util.List;
@@ -21,21 +22,15 @@ import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationP
 @Component
 class ProposalMapper implements OpenEMapper {
 
-	@Value("${sundsvallsforslaget.family-id}")
-	private String familyId;
+	OpenEMapperProperties properties;
 
-	@Value("${sundsvallsforslaget.category}")
-	private String category;
-
-	@Value("${sundsvallsforslaget.type}")
-	private String type;
-
-	@Value("${sundsvallsforslaget.priority}")
-	private String priority;
+	public ProposalMapper(@Qualifier("proposal") OpenEMapperProperties properties) {
+		this.properties = properties;
+	}
 
 	@Override
 	public String getSupportedFamilyId() {
-		return familyId;
+		return properties.getFamilyId();
 	}
 
 	@Override
@@ -47,9 +42,9 @@ class ProposalMapper implements OpenEMapper {
 			.description(result.description())
 			.status("NEW")
 			.reporterUserId(getReporterUserId(result))
-			.priority(Priority.fromValue(priority))
+			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholder(result))
-			.classification(new Classification().category(category).type(type))
+			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false);
 	}
