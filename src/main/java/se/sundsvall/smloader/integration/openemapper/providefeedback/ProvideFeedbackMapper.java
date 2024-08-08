@@ -3,32 +3,33 @@ package se.sundsvall.smloader.integration.openemapper.providefeedback;
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 import java.util.List;
 
-import static generated.se.sundsvall.supportmanagement.Priority.LOW;
 import static java.util.Collections.emptyList;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CATEGORY_LAMNA_SYNPUNKT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.TYPE_OTHER;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
 class ProvideFeedbackMapper implements OpenEMapper {
+	OpenEMapperProperties properties;
 
-	@Value("${lamna-synpunkt.family-id}")
-	private String familyId;
+	public ProvideFeedbackMapper(@Qualifier("feedback") OpenEMapperProperties properties) {
+		this.properties = properties;
+	}
 
 	@Override
 	public String getSupportedFamilyId() {
-		return familyId;
+		return properties.getFamilyId();
 	}
 
 	@Override
@@ -41,8 +42,8 @@ class ProvideFeedbackMapper implements OpenEMapper {
 			.status("NEW")
 			.stakeholders(getStakeholder(result))
 			.reporterUserId(getReporterUserId(result))
-			.priority(LOW)
-			.classification(new Classification().category(CATEGORY_LAMNA_SYNPUNKT).type(TYPE_OTHER))
+			.priority(Priority.fromValue(properties.getPriority()))
+			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false);
 	}

@@ -26,9 +26,14 @@ integration:
 # OpenE Services
 lamna-synpunkt:
   family-id: 161
+  priority: LOW
+  category: FEEDBACK_CATEGORY
+  type: FEEDBACK_TYPE
 sundsvallsforslaget:
   family-id: 370
-
+  priority: MEDIUM
+  category: PROPOSAL_CATEGORY
+  type: PROPOSAL_TYPE
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
