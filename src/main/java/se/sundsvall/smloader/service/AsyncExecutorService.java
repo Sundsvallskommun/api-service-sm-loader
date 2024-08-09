@@ -16,10 +16,12 @@ public class AsyncExecutorService {
 
 	private final OpenEService openEService;
 	private final SupportManagementService supportManagementService;
+	private final DatabaseCleanerService databaseCleanerService;
 
-	public AsyncExecutorService(OpenEService openEService, SupportManagementService supportManagementService) {
+	public AsyncExecutorService(OpenEService openEService, SupportManagementService supportManagementService, DatabaseCleanerService databaseCleanerService) {
 		this.openEService = openEService;
 		this.supportManagementService = supportManagementService;
+		this.databaseCleanerService = databaseCleanerService;
 	}
 
 	@Async
@@ -34,6 +36,6 @@ public class AsyncExecutorService {
 
 	@Async
 	public void databaseCleanerExecute(LocalDateTime from) {
-		//TODO implement
+		databaseCleanerService.cleanDatabase(from);
 	}
 }

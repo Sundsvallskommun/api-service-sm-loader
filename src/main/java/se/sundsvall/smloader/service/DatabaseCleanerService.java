@@ -8,7 +8,9 @@ import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseId;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -29,20 +31,21 @@ public class DatabaseCleanerService {
 		this.caseMappingRepository = caseMappingRepository;
 	}
 
-	public void cleanDatabase(OffsetDateTime deleteBefore) {
-		final var entitiesToRemove = caseRepository.countByCreatedBeforeAndDeliveryStatusIn(deleteBefore, STATUS_FOR_ENTITIES_TO_REMOVE);
+	public void cleanDatabase(LocalDateTime deleteBefore) {
+		final var deleteBeforeZoned = deleteBefore.atZone(ZoneId.systemDefault()).toOffsetDateTime();
+		final var entitiesToRemove = caseRepository.countByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, STATUS_FOR_ENTITIES_TO_REMOVE);
 		if (entitiesToRemove > 0) {
 			LOGGER.info(LOG_ENTITIES_REMOVAL, entitiesToRemove, STATUS_FOR_ENTITIES_TO_REMOVE);
-			getIdsToRemove(deleteBefore).forEach(caseRepository::deleteById);
+			getIdsToRemove(deleteBeforeZoned).forEach(caseRepository::deleteById);
 
-			caseMappingRepository.deleteByModifiedBefore(deleteBefore);
+			caseMappingRepository.deleteByModifiedBefore(deleteBeforeZoned);
 		} else {
 			LOGGER.info(LOG_NOTHING_TO_REMOVE, (Object) STATUS_FOR_ENTITIES_TO_REMOVE);
 		}
 	}
 
-	private List<String> getIdsToRemove(OffsetDateTime deleteBefore) {
-		return caseRepository.findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBefore, STATUS_FOR_ENTITIES_TO_REMOVE)
+	private List<String> getIdsToRemove(OffsetDateTime deleteBeforeZoned) {
+		return caseRepository.findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, STATUS_FOR_ENTITIES_TO_REMOVE)
 			.stream()
 			.map(CaseId::getId)
 			.toList();

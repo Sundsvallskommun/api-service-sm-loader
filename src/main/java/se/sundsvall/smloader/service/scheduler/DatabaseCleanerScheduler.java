@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.requestid.RequestId;
 import se.sundsvall.smloader.service.DatabaseCleanerService;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Service
 public class DatabaseCleanerScheduler {
@@ -33,7 +33,7 @@ public class DatabaseCleanerScheduler {
 		RequestId.init();
 
 		LOGGER.info(LOG_CLEANING_STARTED);
-		databaseCleanerService.cleanDatabase(OffsetDateTime.now().minusDays(keepDays));
+		databaseCleanerService.cleanDatabase(LocalDateTime.now().minusDays(keepDays));
 		LOGGER.info(LOG_CLEANING_ENDED);
 	}
 }
