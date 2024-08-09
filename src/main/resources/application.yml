@@ -67,4 +67,7 @@ scheduler:
   caseprocessing:
     cron:
       expression: '${config.scheduler.cron.caseprocessing}'
+  dbcleaner:
+    cron:
+      expression: '${config.scheduler.cron.dbcleaner}'
   shedlock-lock-at-most-for: PT2M

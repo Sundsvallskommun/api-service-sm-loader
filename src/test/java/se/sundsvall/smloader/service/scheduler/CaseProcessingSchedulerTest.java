@@ -27,7 +27,7 @@ class CaseProcessingSchedulerTest {
 	private CaseProcessingScheduler service;
 
 	@Test
-	void exportInvoices() {
+	void exportCases() {
 		service.execute();
 		verify(openEServiceMock).fetchAndSaveNewOpenECases(any(LocalDateTime.class), any(LocalDateTime.class));
 		verify(supportManagementServiceMock).exportCases();

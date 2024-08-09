@@ -6,11 +6,16 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import org.hibernate.Length;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
 import org.hibernate.annotations.UuidGenerator;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
 
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Entity
@@ -35,8 +40,17 @@ public class CaseEntity {
 	@Column(name = "delivery_status")
 	private DeliveryStatus deliveryStatus;
 
+	@Column(name = "created")
+	@TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
+	private OffsetDateTime created;
+
 	public static CaseEntity create() {
 		return new CaseEntity();
+	}
+
+	@PrePersist
+	protected void onPersist() {
+		created = OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS);
 	}
 
 	public String getId() {
@@ -104,9 +118,22 @@ public class CaseEntity {
 		return this;
 	}
 
+	public OffsetDateTime getCreated() {
+		return created;
+	}
+
+	public void setCreated(OffsetDateTime created) {
+		this.created = created;
+	}
+
+	public CaseEntity withCreated(OffsetDateTime created) {
+		this.created = created;
+		return this;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getCaseMetaData(), getExternalCaseId(), getOpenECase(), getDeliveryStatus());
+		return Objects.hash(getId(), getCaseMetaData(), getExternalCaseId(), getOpenECase(), getDeliveryStatus(), getCreated());
 	}
 
 	@Override
@@ -114,12 +141,13 @@ public class CaseEntity {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CaseEntity that = (CaseEntity) o;
-		return Objects.equals(getId(), that.getId()) && Objects.equals(getCaseMetaData(), that.caseMetaDataEntity) && Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getOpenECase(), that.getOpenECase()) && getDeliveryStatus() == that.getDeliveryStatus();
+		return Objects.equals(getId(), that.getId()) && Objects.equals(getCaseMetaData(), that.caseMetaDataEntity) && Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getOpenECase(), that.getOpenECase()) && getDeliveryStatus() == that.getDeliveryStatus()
+			&& Objects.equals(getCreated(), that.getCreated());
 	}
 
 	@Override
 	public String toString() {
 		return new StringBuilder("CaseEntity [id=").append(id).append(", caseMetaData=").append(caseMetaDataEntity).append(", externalCaseId=").append(externalCaseId)
-			.append(", openECase=").append(openECase).append(", deliveryStatus=").append(deliveryStatus).append("]").toString();
+			.append(", openECase=").append(openECase).append(", deliveryStatus=").append(deliveryStatus).append(", created=").append(created).append("]").toString();
 	}
 }

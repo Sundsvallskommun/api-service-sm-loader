@@ -65,5 +65,7 @@ spring:
 config:
   scheduler:
     fetch-days: 1
+    keep-days: 14
     cron:
       caseprocessing: '0 0 */1 * * *'
+      dbcleaner: '0 0 0 * * 7'
