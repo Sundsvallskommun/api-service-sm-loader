@@ -14,7 +14,6 @@ import se.sundsvall.smloader.service.DatabaseCleanerService;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -53,7 +52,7 @@ class DatabaseCleanerSchedulerShedlockTest {
 				await().forever()
 					.until(() -> false);
 				return null;
-			}).when(mockBean).cleanDatabase(any(OffsetDateTime.class));
+			}).when(mockBean).cleanDatabase(any(LocalDateTime.class));
 
 			return mockBean;
 		}
@@ -77,7 +76,7 @@ class DatabaseCleanerSchedulerShedlockTest {
 			.untilAsserted(() -> assertThat(getLockedAt("dbcleaner"))
 				.isCloseTo(LocalDateTime.now(systemUTC()), within(10, ChronoUnit.SECONDS)));
 
-		verify(databaseCleanerService).cleanDatabase(any(OffsetDateTime.class));
+		verify(databaseCleanerService).cleanDatabase(any(LocalDateTime.class));
 		verifyNoMoreInteractions(databaseCleanerService);
 	}
 
