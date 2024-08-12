@@ -9,8 +9,7 @@ import se.sundsvall.smloader.integration.db.CaseMappingRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseId;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -38,33 +37,32 @@ class DatabaseCleanerServiceTest {
 	void executeWithEntitiesToRemove() {
 		// Setup
 		final var entityIdsToRemove = createCaseIds(5);
-		final var deleteBefore = LocalDateTime.now().minusDays(1);
-		final var deleteBeforeZoned = deleteBefore.atZone(ZoneId.systemDefault()).toOffsetDateTime();
+		final var deleteBefore = OffsetDateTime.now().minusDays(1);
 
 		// Setup mocking
-		when(caseRepositoryMock.countByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, CREATED, FAILED)).thenReturn(Integer.toUnsignedLong(entityIdsToRemove.size()));
-		when(caseRepositoryMock.findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, CREATED, FAILED)).thenReturn(entityIdsToRemove);
+		when(caseRepositoryMock.countByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED)).thenReturn(Integer.toUnsignedLong(entityIdsToRemove.size()));
+		when(caseRepositoryMock.findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED)).thenReturn(entityIdsToRemove);
 
 		// Call.
 		service.cleanDatabase(deleteBefore);
 
 		// Verification.
-		verify(caseRepositoryMock).countByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, CREATED, FAILED);
-		verify(caseRepositoryMock).findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, CREATED, FAILED);
+		verify(caseRepositoryMock).countByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED);
+		verify(caseRepositoryMock).findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED);
 		verify(caseRepositoryMock, times(5)).deleteById(anyString());
-		verify(caseMappingRepositoryMock).deleteByModifiedBefore(deleteBeforeZoned);
+		verify(caseMappingRepositoryMock).deleteByModifiedBefore(deleteBefore);
 	}
 
 	@Test
 	void executeWithNoEntitiesToRemove() {
 		// Setup
-		final var deleteBefore = LocalDateTime.now().minusDays(1);
-		final var deleteBeforeZoned = deleteBefore.atZone(ZoneId.systemDefault()).toOffsetDateTime();
+		final var deleteBefore = OffsetDateTime.now().minusDays(1);
+
 		// Call.
 		service.cleanDatabase(deleteBefore);
 
 		// Verification
-		verify(caseRepositoryMock).countByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, CREATED, FAILED);
+		verify(caseRepositoryMock).countByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED);
 		verifyNoMoreInteractions(caseRepositoryMock, caseMappingRepositoryMock);
 	}
 

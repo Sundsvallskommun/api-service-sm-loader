@@ -8,9 +8,7 @@ import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseId;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -31,14 +29,13 @@ public class DatabaseCleanerService {
 		this.caseMappingRepository = caseMappingRepository;
 	}
 
-	public void cleanDatabase(LocalDateTime deleteBefore) {
-		final var deleteBeforeZoned = deleteBefore.atZone(ZoneId.systemDefault()).toOffsetDateTime();
-		final var entitiesToRemove = caseRepository.countByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, STATUS_FOR_ENTITIES_TO_REMOVE);
+	public void cleanDatabase(OffsetDateTime deleteBefore) {
+		final var entitiesToRemove = caseRepository.countByCreatedBeforeAndDeliveryStatusIn(deleteBefore, STATUS_FOR_ENTITIES_TO_REMOVE);
 		if (entitiesToRemove > 0) {
 			LOGGER.info(LOG_ENTITIES_REMOVAL, entitiesToRemove, STATUS_FOR_ENTITIES_TO_REMOVE);
-			getIdsToRemove(deleteBeforeZoned).forEach(caseRepository::deleteById);
+			getIdsToRemove(deleteBefore).forEach(caseRepository::deleteById);
 
-			caseMappingRepository.deleteByModifiedBefore(deleteBeforeZoned);
+			caseMappingRepository.deleteByModifiedBefore(deleteBefore);
 		} else {
 			LOGGER.info(LOG_NOTHING_TO_REMOVE, (Object) STATUS_FOR_ENTITIES_TO_REMOVE);
 		}
