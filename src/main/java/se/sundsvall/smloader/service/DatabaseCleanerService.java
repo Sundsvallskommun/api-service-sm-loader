@@ -41,8 +41,8 @@ public class DatabaseCleanerService {
 		}
 	}
 
-	private List<String> getIdsToRemove(OffsetDateTime deleteBefore) {
-		return caseRepository.findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBefore, STATUS_FOR_ENTITIES_TO_REMOVE)
+	private List<String> getIdsToRemove(OffsetDateTime deleteBeforeZoned) {
+		return caseRepository.findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, STATUS_FOR_ENTITIES_TO_REMOVE)
 			.stream()
 			.map(CaseId::getId)
 			.toList();

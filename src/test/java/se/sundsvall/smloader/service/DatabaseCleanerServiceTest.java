@@ -57,6 +57,7 @@ class DatabaseCleanerServiceTest {
 	void executeWithNoEntitiesToRemove() {
 		// Setup
 		final var deleteBefore = OffsetDateTime.now().minusDays(1);
+
 		// Call.
 		service.cleanDatabase(deleteBefore);
 

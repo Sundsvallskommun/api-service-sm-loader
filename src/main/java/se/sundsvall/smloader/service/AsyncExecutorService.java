@@ -4,6 +4,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * Class responsible for async-execution of import/export services.
@@ -16,10 +17,12 @@ public class AsyncExecutorService {
 
 	private final OpenEService openEService;
 	private final SupportManagementService supportManagementService;
+	private final DatabaseCleanerService databaseCleanerService;
 
-	public AsyncExecutorService(OpenEService openEService, SupportManagementService supportManagementService) {
+	public AsyncExecutorService(OpenEService openEService, SupportManagementService supportManagementService, DatabaseCleanerService databaseCleanerService) {
 		this.openEService = openEService;
 		this.supportManagementService = supportManagementService;
+		this.databaseCleanerService = databaseCleanerService;
 	}
 
 	@Async
@@ -34,6 +37,7 @@ public class AsyncExecutorService {
 
 	@Async
 	public void databaseCleanerExecute(LocalDateTime from) {
-		//TODO implement
+		final var fromZoned = from.atZone(ZoneId.systemDefault()).toOffsetDateTime();
+		databaseCleanerService.cleanDatabase(fromZoned);
 	}
 }
