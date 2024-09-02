@@ -18,7 +18,7 @@
 		<jaxb2-maven-plugin.version>3.2.0</jaxb2-maven-plugin.version>
 		<jaxb2-fluent-api.version>3.0</jaxb2-fluent-api.version>
 		<xsoup.version>0.3.7</xsoup.version>
-		<shedlock.version>5.15.0</shedlock.version>
+		<shedlock.version>5.15.1</shedlock.version>
 
 	</properties>
 	<dependencies>
