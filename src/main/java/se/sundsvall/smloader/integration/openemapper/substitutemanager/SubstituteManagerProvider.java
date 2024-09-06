@@ -35,9 +35,9 @@ class SubstituteManagerProvider implements OpenEMapper {
 	private static final String MUNICIPALITY_ID = "2281";
 	private static final String EXTERNAL_ID_TYPE_PRIVATE = "PRIVATE";
 
-	OpenEMapperProperties properties;
+	private OpenEMapperProperties properties;
 
-	PartyClient partyClient;
+	private PartyClient partyClient;
 
 
 	public SubstituteManagerProvider(@Qualifier("substitutemanager") OpenEMapperProperties properties, PartyClient partyClient) {
