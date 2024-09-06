@@ -17,6 +17,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHA
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -40,7 +41,7 @@ class ProposalMapper implements OpenEMapper {
 		return new Errand()
 			.title(result.title())
 			.description(result.description())
-			.status("NEW")
+			.status(STATUS_NEW)
 			.reporterUserId(getReporterUserId(result))
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholder(result))

@@ -39,12 +39,19 @@ spring:
         provider:
           support-management:
             token-uri:  ${integration.support-management.token-uri}
+          party:
+            token-uri: ${integration.party.token-uri}
         registration:
           support-management:
             authorization-grant-type: client_credentials
             provider: support-management
             client-id: ${integration.support-management.client-id}
             client-secret: ${integration.support-management.client-secret}
+          party:
+            authorization-grant-type: client_credentials
+            provider: party
+            client-id: ${integration.party.client-id}
+            client-secret: ${integration.party.client-secret}
 integration:
   open-e:
     external:
@@ -60,6 +67,9 @@ integration:
       connectTimeout: 5
       readTimeout: 30
   support-management:
+    connectTimeout: 5
+    readTimeout: 30
+  party:
     connectTimeout: 5
     readTimeout: 30
 

@@ -43,7 +43,8 @@
 					"description": "Testar att lämna synpunkt",
 					"channel": "ESERVICE",
 					"reporterUserId": "Kalle Anka-kalle.anka@sundsvall.se",
-					"businessRelated": false
+					"businessRelated": false,
+					"labels": []
 				}
 			}
 		]
