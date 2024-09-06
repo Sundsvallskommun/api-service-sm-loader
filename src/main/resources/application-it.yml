@@ -23,6 +23,12 @@ integration:
     client-secret: the-client-secret
     connectTimeout: 10
     readTimeout: 20
+  party:
+    url: http://localhost:${wiremock.server.port:}/party
+    client-id: the-client-id
+    client-secret: the-client-secret
+    connectTimeout: 10
+    readTimeout: 20
 # OpenE Services
 lamna-synpunkt:
   family-id: 161
@@ -34,6 +40,11 @@ sundsvallsforslaget:
   priority: MEDIUM
   category: PROPOSAL_CATEGORY
   type: PROPOSAL_TYPE
+ersattare-chef:
+  family-id: 789
+  priority: MEDIUM
+  category: ORGANIZATION
+  type: EMPLOYMENT
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver

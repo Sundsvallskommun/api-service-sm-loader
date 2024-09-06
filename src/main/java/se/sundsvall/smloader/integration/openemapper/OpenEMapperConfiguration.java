@@ -18,4 +18,16 @@ public class OpenEMapperConfiguration {
 	public OpenEMapperProperties propertiesFeedback() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "permissionorder")
+	@ConfigurationProperties(prefix = "ny-behorighet")
+	public OpenEMapperProperties propertiesPermissionOrder() {
+		return new OpenEMapperProperties();
+	}
+
+	@Bean(name = "substitutemanager")
+	@ConfigurationProperties(prefix = "ersattare-chef")
+	public OpenEMapperProperties propertiesSubstituteManager() {
+		return new OpenEMapperProperties();
+	}
 }

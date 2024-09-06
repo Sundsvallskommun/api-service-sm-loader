@@ -18,6 +18,8 @@ integration:
       url: http://oep-internal-soap.url
   support-management:
     url: http://support-management.url
+  party:
+    url: http://party.url
 # OpenE Services
 lamna-synpunkt:
   family-id: 123
@@ -29,6 +31,12 @@ sundsvallsforslaget:
   priority: MEDIUM
   category: PROPOSAL_CATEGORY
   type: PROPOSAL_TYPE
+ersattare-chef:
+  family-id: 789
+  priority: MEDIUM
+  category: ORGANIZATION
+  type: EMPLOYMENT
+
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
@@ -56,10 +64,15 @@ spring:
         provider:
           support-management:
             token-uri: http://token.url
+          party:
+            token-uri: http://token.url
         registration:
           support-management:
             client-id: the-client-id
             client-secret: the-client-secret
+          party:
+            client-id: client-id
+            client-secret: client-secret
   flyway:
     enabled: true
 config:

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-464.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>182</FamilyID>
+			<Version>3</Version>
+			<FlowID>464</FlowID>
+			<Name><![CDATA[Ersättare för ordinarie chef i Lön och arbetstid - TEST DRAKEN]]></Name>
+		</Flow>
+		<FlowInstanceID>6849</FlowInstanceID>
+		<Status>
+			<ID>3960</ID>
+			<Name><![CDATA[Väntar på godkännande av chef]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Owner>
+		<Posted>2024-08-29T15:12:03</Posted>
+		<FirstSubmitted>2024-08-29T15:12:03</FirstSubmitted>
+		<LastSubmitted>2024-08-29T15:12:03</LastSubmitted>
+	</Header>
+	<Values>
+		<ordinaryManager>
+			<QueryID>16485</QueryID>
+			<Name><![CDATA[Ordinarie chef skickar in]]></Name>
+			<Value>Ja</Value>
+		</ordinaryManager>
+		<manager>
+			<QueryID>16486</QueryID>
+			<Name><![CDATA[Ordinarie chef]]></Name>
+			<firstname><![CDATA[Kalle]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<username><![CDATA[kall22ank]]></username>
+			<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>
+			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
+		</manager>
+		<responsibilityNumber>
+			<QueryID>16489</QueryID>
+			<Name><![CDATA[Sök fram och välj Ansvarsnummer]]></Name>
+			<Value>25610000 - AoF Arenor i samverkan</Value>
+		</responsibilityNumber>
+		<substituteManager>
+			<QueryID>16490</QueryID>
+			<Name><![CDATA[Ersättare]]></Name>
+			<firstname><![CDATA[Tjatte]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<username><![CDATA[tja33ank]]></username>
+			<citizenIdentifier><![CDATA[193010101010]]></citizenIdentifier>
+			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
+		</substituteManager>
+		<date>
+			<QueryID>16491</QueryID>
+			<Name><![CDATA[Attesterar för perioden]]></Name>
+			<StartDate>2024-08-30</StartDate>
+			<EndDate>2024-09-27</EndDate>
+		</date>
+		<approvingManager>
+			<QueryID>16492</QueryID>
+			<Name><![CDATA[Överordnad chef]]></Name>
+			<firstname><![CDATA[Joakim]]></firstname>
+			<lastname><![CDATA[von Anka]]></lastname>
+			<username><![CDATA[joa44ank]]></username>
+			<citizenIdentifier><![CDATA[19001010101010]]></citizenIdentifier>
+			<organization><![CDATA[KSK Avd Kansli och Säkerhet]]></organization>
+		</approvingManager>
+	</Values>
+</FlowInstance>

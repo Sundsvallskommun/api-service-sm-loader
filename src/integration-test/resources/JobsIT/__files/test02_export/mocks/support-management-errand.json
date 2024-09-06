@@ -32,6 +32,7 @@
 	"reporterUserId": "Kalle Anka-kalle.anka@sundsvall.se",
 	"suspension": {},
 	"businessRelated": false,
+	"labels" : [],
 	"created": "2024-07-04T09:55:04.909+02:00",
 	"touched": "2024-07-04T09:55:04.909+02:00"
 }
