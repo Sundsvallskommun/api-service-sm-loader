@@ -17,7 +17,8 @@
 					"type": "Phone",
 					"value": "0701112233"
 				}
-			]
+			],
+			"metadata" : { }
 		}
 	],
 	"externalTags": [],
