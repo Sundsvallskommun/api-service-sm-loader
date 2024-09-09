@@ -14,19 +14,19 @@ record ProvideFeedback(
 	String status,
 
 	@XPath("/FlowInstance/Values/contact/Firstname")
-	String firstName,
+	String firstname,
 
 	@XPath("/FlowInstance/Values/contact/Lastname")
-	String lastName,
+	String lastname,
 
 	@XPath("/FlowInstance/Values/contact/Email")
 	String email,
 
 	@XPath("/FlowInstance/Header/Poster/Firstname")
-	String posterFirstName,
+	String posterFirstname,
 
 	@XPath("/FlowInstance/Header/Poster/Lastname")
-	String posterLastName,
+	String posterLastname,
 
 	@XPath("/FlowInstance/Header/Poster/Email")
 	String posterEmail,

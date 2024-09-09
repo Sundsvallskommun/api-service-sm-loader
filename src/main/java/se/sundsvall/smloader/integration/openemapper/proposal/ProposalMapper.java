@@ -23,9 +23,9 @@ import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationP
 @Component
 class ProposalMapper implements OpenEMapper {
 
-	OpenEMapperProperties properties;
+	private final OpenEMapperProperties properties;
 
-	public ProposalMapper(@Qualifier("proposal") OpenEMapperProperties properties) {
+	public ProposalMapper(final @Qualifier("proposal") OpenEMapperProperties properties) {
 		this.properties = properties;
 	}
 
@@ -51,14 +51,14 @@ class ProposalMapper implements OpenEMapper {
 	}
 
 	private String getReporterUserId(final Proposal proposal) {
-		return proposal.firstName() != null ? proposal.firstName() + " " + proposal.lastName() + "-" + proposal.email() :
-			proposal.posterFirstName() + " " + proposal.posterLastName() + "-" + proposal.posterEmail();
+		return proposal.firstname() != null ? proposal.firstname() + " " + proposal.lastname() + "-" + proposal.email() :
+			proposal.posterFirstname() + " " + proposal.posterLastname() + "-" + proposal.posterEmail();
 	}
 
 	private List<Stakeholder> getStakeholder(final Proposal proposal) {
-		return proposal.firstName() != null ? List.of(new Stakeholder().role(ROLE_CONTACT_PERSON)
-			.firstName(proposal.firstName())
-			.lastName(proposal.lastName())
+		return proposal.firstname() != null ? List.of(new Stakeholder().role(ROLE_CONTACT_PERSON)
+			.firstName(proposal.firstname())
+			.lastName(proposal.lastname())
 			.address(proposal.address())
 			.zipCode(proposal.zipCode())
 			.contactChannels(getContactChannels(proposal))) : emptyList();

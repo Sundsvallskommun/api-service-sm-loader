@@ -22,9 +22,9 @@ import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationP
 
 @Component
 class ProvideFeedbackMapper implements OpenEMapper {
-	OpenEMapperProperties properties;
+	private final OpenEMapperProperties properties;
 
-	public ProvideFeedbackMapper(@Qualifier("feedback") OpenEMapperProperties properties) {
+	public ProvideFeedbackMapper(final @Qualifier("feedback") OpenEMapperProperties properties) {
 		this.properties = properties;
 	}
 
@@ -50,14 +50,14 @@ class ProvideFeedbackMapper implements OpenEMapper {
 	}
 
 	private String getReporterUserId(final ProvideFeedback provideFeedback) {
-		return provideFeedback.firstName() != null ? provideFeedback.firstName() + " " + provideFeedback.lastName() + "-" + provideFeedback.email() :
-			provideFeedback.posterFirstName() + " " +  provideFeedback.posterLastName() + "-" + provideFeedback.posterEmail();
+		return provideFeedback.firstname() != null ? provideFeedback.firstname() + " " + provideFeedback.lastname() + "-" + provideFeedback.email() :
+			provideFeedback.posterFirstname() + " " +  provideFeedback.posterLastname() + "-" + provideFeedback.posterEmail();
 	}
 
 	private List<Stakeholder> getStakeholder(final ProvideFeedback provideFeedback) {
-		return provideFeedback.firstName() != null ? List.of(new Stakeholder().role(ROLE_CONTACT_PERSON)
-			.firstName(provideFeedback.firstName())
-			.lastName(provideFeedback.lastName())
+		return provideFeedback.firstname() != null ? List.of(new Stakeholder().role(ROLE_CONTACT_PERSON)
+			.firstName(provideFeedback.firstname())
+			.lastName(provideFeedback.lastname())
 			.contactChannels(getContactChannels(provideFeedback))) : emptyList();
 	}
 
