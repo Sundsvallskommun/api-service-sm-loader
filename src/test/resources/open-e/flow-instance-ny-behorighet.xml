@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-429.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>185</FamilyID>
+			<Version>2</Version>
+			<FlowID>429</FlowID>
+			<Name><![CDATA[Beställning av ny, ändrad eller avslut av behörighet - TEST DRAKEN]]></Name>
+		</Flow>
+		<FlowInstanceID>6850</FlowInstanceID>
+		<Status>
+			<ID>3584</ID>
+			<Name><![CDATA[Inskickat]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Owner>
+		<Posted>2024-09-02T10:14:07</Posted>
+		<FirstSubmitted>2024-09-02T10:14:07</FirstSubmitted>
+		<LastSubmitted>2024-09-02T10:14:07</LastSubmitted>
+	</Header>
+	<Values>
+		<applicant>
+			<QueryID>13631</QueryID>
+			<Name><![CDATA[Beställarens uppgifter]]></Name>
+			<firstname><![CDATA[Kalle]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<email><![CDATA[kalle.anka@sundsvall.se]]></email>
+			<title><![CDATA[It-konsult]]></title>
+			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
+		</applicant>
+		<isManager>
+			<QueryID>13632</QueryID>
+			<Name><![CDATA[Är du chef för enheten där beställning ligger?]]></Name>
+			<Value>Ja, jag är chef och har rätt att godkänna beställningen</Value>
+		</isManager>
+		<user>
+			<QueryID>13634</QueryID>
+			<Name><![CDATA[Vem ska tilldelas behörighet?]]></Name>
+			<firstname><![CDATA[Knatte]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<username><![CDATA[kna11ank]]></username>
+			<email><![CDATA[knatte.anka@sundsvall.se]]></email>
+			<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>
+			<title><![CDATA[It-konsult]]></title>
+			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
+		</user>
+		<notEmploye>
+			<QueryID>13635</QueryID>
+			<Name><![CDATA[Ej anställning]]></Name>
+			<Value>Personen ska inte ha anställning i kommunen utan har annan typ av förordnande</Value>
+		</notEmploye>
+		<computerId>
+			<QueryID>13636</QueryID>
+			<Name><![CDATA[Datornamn]]></Name>
+			<Ange_datornamnet_som_borjar_med_WB><![CDATA[WB12345]]></Ange_datornamnet_som_borjar_med_WB>
+		</computerId>
+		<administrativeUnit>
+			<QueryID>13637</QueryID>
+			<Name><![CDATA[För vilken/vilka förvaltningar ska behörighet ges?]]></Name>
+			<Value>Överförmyndarkontoret</Value>
+		</administrativeUnit>
+		<administrativeUnitPartOfK>
+			<QueryID>13656</QueryID>
+			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för ÖFK)]]></Name>
+			<Value>Hela förvaltningen</Value>
+		</administrativeUnitPartOfK>
+		<typeOfAccess>
+			<QueryID>13658</QueryID>
+			<Name><![CDATA[Vilken typ av behörighet avser beställningen]]></Name>
+			<Value>Ny</Value>
+		</typeOfAccess>
+		<systemAccess>
+			<QueryID>13659</QueryID>
+			<Name><![CDATA[Vilken behörighet ska tilldelas?]]></Name>
+			<Value>Rapp82</Value>
+		</systemAccess>
+		<fromDate>
+			<QueryID>13666</QueryID>
+			<Name><![CDATA[Startdatum för behörighet]]></Name>
+			<StartDate>2024-09-04</StartDate>
+		</fromDate>
+		<otherInformation>
+			<QueryID>13667</QueryID>
+			<Name><![CDATA[Övriga kommentarer]]></Name>
+			<Value><![CDATA[Testing]]></Value>
+		</otherInformation>
+	</Values>
+</FlowInstance>

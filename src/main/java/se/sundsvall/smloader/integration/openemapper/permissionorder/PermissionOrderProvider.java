@@ -1,4 +1,4 @@
-package se.sundsvall.smloader.integration.openemapper.substitutemanager;
+package se.sundsvall.smloader.integration.openemapper.permissionorder;
 
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
@@ -19,27 +19,28 @@ import java.util.Set;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_END_DATE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_RESPONSIBILITY_NUMBER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_COMPUTER_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_PART_OF_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SYSTEM_ACCESS;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TYPE_OF_ACCESS;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPROVER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_SUBSTITUTE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
-class SubstituteManagerProvider implements OpenEMapper {
+class PermissionOrderProvider implements OpenEMapper {
 
 	private final OpenEMapperProperties properties;
 
 	private final PartyClient partyClient;
 
-
-	public SubstituteManagerProvider(final @Qualifier("substitutemanager") OpenEMapperProperties properties, final PartyClient partyClient) {
+	public PermissionOrderProvider(final @Qualifier("permissionorder") OpenEMapperProperties properties, final PartyClient partyClient) {
 		this.properties = properties;
 		this.partyClient = partyClient;
 	}
@@ -51,7 +52,7 @@ class SubstituteManagerProvider implements OpenEMapper {
 
 	@Override
 	public Errand mapToErrand(final byte[] xml) {
-		final var result = extractValue(xml, SubstituteManager.class);
+		final var result = extractValue(xml, PermissionOrder.class);
 
 		return new Errand()
 			.status(STATUS_NEW)
@@ -60,39 +61,35 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.putParametersItem(KEY_RESPONSIBILITY_NUMBER, List.of(result.responsibilityNumber()))
+			.putParametersItem(KEY_COMPUTER_ID, List.of(result.computerId()))
+			.putParametersItem(KEY_ADMINISTRATIVE_UNIT, List.of(result.administrativeUnit()))
+			.putParametersItem(KEY_PART_OF_ADMINISTRATIVE_UNIT, List.of(result.partOfAdministrativeUnit()))
+			.putParametersItem(KEY_TYPE_OF_ACCESS, List.of(result.typeOfAccess()))
+			.putParametersItem(KEY_SYSTEM_ACCESS, List.of(result.systemAccess()))
 			.putParametersItem(KEY_START_DATE, List.of(result.startDate()))
-			.putParametersItem(KEY_END_DATE, List.of(result.endDate()))
+			.description(result.otherInformation())
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
 	}
 
-	private List<Stakeholder> getStakeholders(final SubstituteManager substituteManager) {
+	private List<Stakeholder> getStakeholders(final PermissionOrder permissionOrder) {
 		return List.of(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(substituteManager.posterFirstname())
-			.lastName(substituteManager.posterLastname())
-			.contactChannels(getContactChannels(substituteManager.posterEmail())),
+				.role(ROLE_CONTACT_PERSON)
+				.firstName(permissionOrder.posterFirstname())
+				.lastName(permissionOrder.posterLastname())
+				.contactChannels(getContactChannels(permissionOrder.posterEmail())),
 			new Stakeholder()
-				.role(ROLE_SUBSTITUTE)
-				.firstName(substituteManager.substituteManagerFirstname())
-				.lastName(substituteManager.substituteManagerLastname())
-				.organizationName(substituteManager.substituteManagerOrganization())
-				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(substituteManager.substituteManagerLegalId())),
+				.role(ROLE_APPLICANT)
+				.firstName(permissionOrder.applicantFirstname())
+				.lastName(permissionOrder.applicantLastname())
+				.organizationName(permissionOrder.applicantOrganization()),
 			new Stakeholder()
-				.role(ROLE_MANAGER)
-				.firstName(substituteManager.managerFirstname())
-				.lastName(substituteManager.managerLastname())
-				.organizationName(substituteManager.managerOrganization())
+				.role(ROLE_USER)
+				.firstName(permissionOrder.userFirstname())
+				.lastName(permissionOrder.userLastname())
+				.contactChannels(getContactChannels(permissionOrder.userEmail()))
+				.organizationName(permissionOrder.userOrganization())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(substituteManager.managerLegalId())),
-			new Stakeholder()
-				.role(ROLE_APPROVER)
-				.firstName(substituteManager.approvingManagerFirstname())
-				.lastName(substituteManager.approvingManagerLastname())
-				.organizationName(substituteManager.approvingManagerOrganization())
-				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(substituteManager.approvingManagerLegalId())));
+				.externalId(getPartyId(permissionOrder.userLegalId())));
 	}
 
 	private List<ContactChannel> getContactChannels(final String email) {
