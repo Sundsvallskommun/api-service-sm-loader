@@ -45,6 +45,16 @@ ersattare-chef:
   priority: MEDIUM
   category: ORGANIZATION
   type: EMPLOYMENT
+ny-behorighet:
+  family-id: 101
+  priority: MEDIUM
+  category: ADMINISTRATION
+  type: PERMISSION
+lonevaxling-pension:
+  family-id: 111
+  priority: MEDIUM
+  category: SALARY
+  type: PENSION
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver

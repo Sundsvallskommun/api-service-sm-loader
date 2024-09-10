@@ -1,0 +1,52 @@
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-470.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>186</FamilyID>
+			<Version>2</Version>
+			<FlowID>470</FlowID>
+			<Name><![CDATA[Löneväxling via pensionsvalet - TEST DRAKEN]]></Name>
+		</Flow>
+		<FlowInstanceID>6851</FlowInstanceID>
+		<Status>
+			<ID>4061</ID>
+			<Name><![CDATA[Inskickat]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Owner>
+		<Posted>2024-09-03T11:07:07</Posted>
+		<FirstSubmitted>2024-09-03T11:07:07</FirstSubmitted>
+		<LastSubmitted>2024-09-03T11:07:07</LastSubmitted>
+	</Header>
+	<Values>
+		<applicant>
+			<QueryID>16897</QueryID>
+			<Name><![CDATA[Dina kontaktuppgifter]]></Name>
+			<firstname><![CDATA[Kalle]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<email><![CDATA[kalle.anka@sundsvall.se]]></email>
+			<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>
+			<title><![CDATA[It-konsult]]></title>
+			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
+		</applicant>
+		<salary>
+			<QueryID>16898</QueryID>
+			<Name><![CDATA[Lön]]></Name>
+			<Ange_det_belopp_du_vill_lonevaxla__minimum_500kr_><![CDATA[1000]]></Ange_det_belopp_du_vill_lonevaxla__minimum_500kr_>
+		</salary>
+		<fromMonth>
+			<QueryID>16900</QueryID>
+			<Name><![CDATA[Från vilken månad]]></Name>
+			<Value>Oktober</Value>
+		</fromMonth>
+	</Values>
+</FlowInstance>

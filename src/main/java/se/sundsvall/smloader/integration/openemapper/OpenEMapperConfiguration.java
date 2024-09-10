@@ -30,4 +30,10 @@ public class OpenEMapperConfiguration {
 	public OpenEMapperProperties propertiesSubstituteManager() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "salarychange")
+	@ConfigurationProperties(prefix = "lonevaxling-pension")
+	public OpenEMapperProperties propertiesSalaryChange() {
+		return new OpenEMapperProperties();
+	}
 }

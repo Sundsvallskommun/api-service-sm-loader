@@ -27,5 +27,7 @@ public final class ErrandConstants {
 	public static final String KEY_PART_OF_ADMINISTRATIVE_UNIT = "partOfAdministrativeUnit";
 	public static final String KEY_TYPE_OF_ACCESS = "typeOfAccess";
 	public static final String KEY_SYSTEM_ACCESS = "systemAccess";
+	public static final String KEY_AMOUNT = "amount";
+	public static final String KEY_FROM_MONTH = "fromMonth";
 	public static final String EXTERNAL_ID_TYPE_PRIVATE = "PRIVATE";
 }

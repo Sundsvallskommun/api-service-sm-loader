@@ -30,7 +30,8 @@
 									"type": "Phone",
 									"value": "070-1112223"
 								}
-							]
+							],
+							"metadata": {}
 						}
 					],
 					"externalTags": [],

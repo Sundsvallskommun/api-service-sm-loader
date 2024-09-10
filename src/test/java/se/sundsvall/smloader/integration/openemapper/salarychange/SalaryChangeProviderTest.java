@@ -1,4 +1,4 @@
-package se.sundsvall.smloader.integration.openemapper.permissionorder;
+package se.sundsvall.smloader.integration.openemapper.salarychange;
 
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,12 +29,11 @@ import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")
-class PermissionOrderProviderTest {
+class SalaryChangeProviderTest {
 
 	@Mock
 	private PartyClient partyClient;
@@ -44,13 +42,13 @@ class PermissionOrderProviderTest {
 	private OpenEMapperProperties properties;
 
 	@InjectMocks
-	private PermissionOrderProvider provider;
+	private SalaryChangeProvider provider;
 
 	@Test
 	void getSupportedFamilyId() {
-		when(properties.getFamilyId()).thenReturn("101");
+		when(properties.getFamilyId()).thenReturn("111");
 
-		assertThat(provider.getSupportedFamilyId()).isEqualTo("101");
+		assertThat(provider.getSupportedFamilyId()).isEqualTo("111");
 	}
 
 	@Test
@@ -66,34 +64,29 @@ class PermissionOrderProviderTest {
 		when(properties.getType()).thenReturn(type);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
-		var stringBytes = readOpenEFile("flow-instance-ny-behorighet.xml");
+		var stringBytes = readOpenEFile("flow-instance-lonevaxling.xml");
 
 		// Act
 		var errand = provider.mapToErrand(stringBytes);
 
-		// Assert and verify
+		// Assert
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(6).containsExactlyInAnyOrderEntriesOf(
-			Map.of("computerId", List.of("WB12345"),
-				"administrativeUnit", List.of("Överförmyndarkontoret"),
-				"partOfAdministrativeUnit", List.of("Hela förvaltningen"),
-				"typeOfAccess", List.of("Ny"),
-				"systemAccess", List.of("Rapp82"),
-				"startDate", List.of("2024-09-04"))
+		assertThat(errand.getParameters()).hasSize(2).containsExactlyInAnyOrderEntriesOf(
+			Map.of("amount", List.of("1000"),
+				"fromMonth", List.of("Oktober"))
 		);
 
-		assertThat(errand.getStakeholders()).hasSize(3).
+		assertThat(errand.getStakeholders()).hasSize(2).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
 				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", null, null),
-				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId));
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 
-		assertThat(errand.getExternalTags()).hasSize(1).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6850")));
+		assertThat(errand.getExternalTags()).hasSize(1).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6851")));
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
