@@ -46,6 +46,11 @@ lonevaxling-pension:
   priority: MEDIUM
   category: SALARY
   type: PENSION
+kontakt-lon-pension:
+  family-id: 121
+  priority: MEDIUM
+  category: SALARY
+  type: PENSION
 
 spring:
   datasource:
