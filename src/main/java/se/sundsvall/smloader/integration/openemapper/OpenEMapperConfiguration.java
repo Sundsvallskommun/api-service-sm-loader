@@ -36,4 +36,10 @@ public class OpenEMapperConfiguration {
 	public OpenEMapperProperties propertiesSalaryChange() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "contactsalaryandpension")
+	@ConfigurationProperties(prefix = "kontakt-lon-pension")
+	public OpenEMapperProperties propertiesContactSalaryAndPension() {
+		return new OpenEMapperProperties();
+	}
 }

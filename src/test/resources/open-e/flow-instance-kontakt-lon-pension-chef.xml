@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-423.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>174</FamilyID>
+			<Version>3</Version>
+			<FlowID>423</FlowID>
+			<Name><![CDATA[Kontakt med SC Lön och Pension - TEST DRAKEN]]></Name>
+		</Flow>
+		<FlowInstanceID>6855</FlowInstanceID>
+		<Status>
+			<ID>3558</ID>
+			<Name><![CDATA[Inskickat]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Owner>
+		<Posted>2024-09-11T14:06:48</Posted>
+		<FirstSubmitted>2024-09-11T14:06:48</FirstSubmitted>
+		<LastSubmitted>2024-09-11T14:06:48</LastSubmitted>
+	</Header>
+	<Values>
+		<currentlyEmployed>
+			<QueryID>13595</QueryID>
+			<Name><![CDATA[Gäller frågan en befintlig medarbetare?]]></Name>
+			<Value>Ja</Value>
+		</currentlyEmployed>
+		<personalIdentityNumbers>
+			<QueryID>13597</QueryID>
+			<Name><![CDATA[Vem/vilka gäller ärendet?]]></Name>
+			<User>
+				<UserID>25953</UserID>
+				<Username><![CDATA[kna11ank]]></Username>
+				<Firstname><![CDATA[Knatte]]></Firstname>
+				<Lastname><![CDATA[Anka]]></Lastname>
+				<CitizenIdentifier>193010101010</CitizenIdentifier>
+				<Email>knatte.anka@sundsvall.se</Email>
+			</User>
+			<User>
+				<UserID>25953</UserID>
+				<Username><![CDATA[tja11ank]]></Username>
+				<Firstname><![CDATA[Tjatte]]></Firstname>
+				<Lastname><![CDATA[Anka]]></Lastname>
+				<CitizenIdentifier>193010101011</CitizenIdentifier>
+				<Email>tjatte.anka@sundsvall.se</Email>
+			</User>
+		</personalIdentityNumbers>
+		<subject>
+			<QueryID>13599</QueryID>
+			<Name><![CDATA[Vad gäller ärendet?]]></Name>
+			<Value>Semester</Value>
+		</subject>
+		<caseDescription>
+			<QueryID>13600</QueryID>
+			<Name><![CDATA[Beskriv ditt ärende]]></Name>
+			<Value><![CDATA[Jag testar som chef eller HR-administratör]]></Value>
+		</caseDescription>
+	</Values>
+</FlowInstance>
