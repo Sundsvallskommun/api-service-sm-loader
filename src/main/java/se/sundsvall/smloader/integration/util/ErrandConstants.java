@@ -12,6 +12,7 @@ public final class ErrandConstants {
 	public static final String ROLE_APPROVER = "APPROVER";
 	public static final String ROLE_APPLICANT = "APPLICANT";
 	public static final String ROLE_USER = "USER";
+	public static final String ROLE_EMPLOYED = "EMPLOYED";
 	public static final String CONTACT_CHANNEL_TYPE_EMAIL = "Email";
 	public static final String CONTACT_CHANNEL_TYPE_PHONE = "Phone";
 	public static final String EXTERNAL_CHANNEL_E_SERVICE = "ESERVICE";
@@ -21,6 +22,7 @@ public final class ErrandConstants {
 	public static final String KEY_RESPONSIBILITY_NUMBER = "responsibilityNumber";
 	public static final String KEY_START_DATE = "startDate";
 	public static final String KEY_END_DATE = "endDate";
+	public static final String KEY_ORIGINAL_START_DATE = "originalStartDate";
 	public static final String KEY_CASE_ID = "caseId";
 	public static final String KEY_COMPUTER_ID = "computerId";
 	public static final String KEY_ADMINISTRATIVE_UNIT = "administrativeUnit";

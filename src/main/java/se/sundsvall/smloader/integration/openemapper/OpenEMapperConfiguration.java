@@ -42,4 +42,10 @@ public class OpenEMapperConfiguration {
 	public OpenEMapperProperties propertiesContactSalaryAndPension() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "twentyfiveatwork")
+	@ConfigurationProperties(prefix = "tjugofem-ar-pa-jobbet")
+	public OpenEMapperProperties propertiesTwentyFiveAtWork() {
+		return new OpenEMapperProperties();
+	}
 }
