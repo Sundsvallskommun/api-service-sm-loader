@@ -50,7 +50,12 @@ kontakt-lon-pension:
   family-id: 121
   priority: MEDIUM
   category: SALARY
-  type: PENSION
+  type: OTHER
+tjugofem-ar-pa-jobbet:
+  family-id: 131
+  priority: MEDIUM
+  category: STATISTICS
+  type: OTHER
 
 spring:
   datasource:

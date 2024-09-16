@@ -61,6 +61,7 @@ class ProposalMapper implements OpenEMapper {
 			.lastName(proposal.lastname())
 			.address(proposal.address())
 			.zipCode(proposal.zipCode())
+			.city(proposal.postalAddress())
 			.contactChannels(getContactChannels(proposal))) : emptyList();
 	}
 

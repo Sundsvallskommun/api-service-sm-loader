@@ -9,37 +9,43 @@ public class OpenEMapperConfiguration {
 
 	@Bean(name = "proposal")
 	@ConfigurationProperties(prefix = "sundsvallsforslaget")
-	public OpenEMapperProperties propertiesProposal() {
+	OpenEMapperProperties propertiesProposal() {
 		return new OpenEMapperProperties();
 	}
 
 	@Bean(name = "feedback")
 	@ConfigurationProperties(prefix = "lamna-synpunkt")
-	public OpenEMapperProperties propertiesFeedback() {
+	OpenEMapperProperties propertiesFeedback() {
 		return new OpenEMapperProperties();
 	}
 
 	@Bean(name = "permissionorder")
 	@ConfigurationProperties(prefix = "ny-behorighet")
-	public OpenEMapperProperties propertiesPermissionOrder() {
+	OpenEMapperProperties propertiesPermissionOrder() {
 		return new OpenEMapperProperties();
 	}
 
 	@Bean(name = "substitutemanager")
 	@ConfigurationProperties(prefix = "ersattare-chef")
-	public OpenEMapperProperties propertiesSubstituteManager() {
+	OpenEMapperProperties propertiesSubstituteManager() {
 		return new OpenEMapperProperties();
 	}
 
 	@Bean(name = "salarychange")
 	@ConfigurationProperties(prefix = "lonevaxling-pension")
-	public OpenEMapperProperties propertiesSalaryChange() {
+	OpenEMapperProperties propertiesSalaryChange() {
 		return new OpenEMapperProperties();
 	}
 
 	@Bean(name = "contactsalaryandpension")
 	@ConfigurationProperties(prefix = "kontakt-lon-pension")
-	public OpenEMapperProperties propertiesContactSalaryAndPension() {
+	OpenEMapperProperties propertiesContactSalaryAndPension() {
+		return new OpenEMapperProperties();
+	}
+
+	@Bean(name = "twentyfiveatwork")
+	@ConfigurationProperties(prefix = "tjugofem-ar-pa-jobbet")
+	OpenEMapperProperties propertiesTwentyFiveAtWork() {
 		return new OpenEMapperProperties();
 	}
 }
