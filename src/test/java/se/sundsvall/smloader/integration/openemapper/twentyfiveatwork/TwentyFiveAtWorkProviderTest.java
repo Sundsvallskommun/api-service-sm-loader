@@ -67,7 +67,7 @@ class TwentyFiveAtWorkProviderTest {
 		when(properties.getType()).thenReturn(type);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
-		var stringBytes = readOpenEFile("flow-instance-25-pa-jobbet-xml");
+		var stringBytes = readOpenEFile("flow-instance-25-pa-jobbet.xml");
 
 		// Act
 		var errand = provider.mapToErrand(stringBytes);
