@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
+              xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-472.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>195</FamilyID>
+			<Version>1</Version>
+			<FlowID>472</FlowID>
+			<Name><![CDATA[Anmälan om sjukfrånvaro - TEST DRAKEN]]></Name>
+		</Flow>
+		<FlowInstanceID>6846</FlowInstanceID>
+		<Status>
+			<ID>4070</ID>
+			<Name><![CDATA[Inskickat]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>30652</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>30652</ID>
+		</Owner>
+		<Posted>2024-07-31T13:54:03</Posted>
+		<FirstSubmitted>2024-07-31T13:54:03</FirstSubmitted>
+		<LastSubmitted>2024-07-31T13:54:03</LastSubmitted>
+	</Header>
+	<Values>
+		<applicant>
+			<QueryID>16915</QueryID>
+			<Name><![CDATA[Anmälare]]></Name>
+			<firstname><![CDATA[Kalle]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<email><![CDATA[kalle.anka@sundsvall.se]]></email>
+			<phone><![CDATA[0701112223]]></phone>
+			<title><![CDATA[Systemutvecklare]]></title>
+			<organization><![CDATA[KSK Avd Digital Utveckling]]></organization>
+		</applicant>
+		<administrativeUnit>
+			<QueryID>16917</QueryID>
+			<Name><![CDATA[I vilken förvaltning/verksamhet arbetar medarbetaren?]]></Name>
+			<Value>bou</Value>
+		</administrativeUnit>
+		<employmentType>
+			<QueryID>16918</QueryID>
+			<Name><![CDATA[Gäller det sjukfrånvaro för en]]></Name>
+			<Value>Månadsavlönad</Value>
+		</employmentType>
+		<employeeData>
+			<QueryID>16919</QueryID>
+			<Name><![CDATA[Vilken anställd gäller det?]]></Name>
+			<firstname><![CDATA[Kalle]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<username><![CDATA[kal11ank]]></username>
+			<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>
+			<title><![CDATA[Systemutvecklare]]></title>
+			<organization><![CDATA[KSK Avd Digital Utveckling]]></organization>
+			<formOfEmployment><![CDATA[Tillsvidare                   ]]></formOfEmployment>
+		</employeeData>
+		<employeeTitle>
+			<QueryID>16930</QueryID>
+			<Name><![CDATA[Medarbetarens befattningar]]></Name>
+			<Value>F040 Förskoleresurs</Value>
+		</employeeTitle>
+		<absentNewOld>
+			<QueryID>16946</QueryID>
+			<Name><![CDATA[Sjukfrånvaro avser]]></Name>
+			<Value>Ny sjukfrånvaro</Value>
+		</absentNewOld>
+		<absentDateFrom>
+			<QueryID>16947</QueryID>
+			<Name><![CDATA[Datum första sjukdag]]></Name>
+			<StartDate>2024-07-31</StartDate>
+		</absentDateFrom>
+		<sickNotePeriod>
+			<QueryID>16948</QueryID>
+			<Name><![CDATA[Antal sjukskrivningsperioder i sjukintyget:]]></Name>
+			<Value>4</Value>
+		</sickNotePeriod>
+		<sickNotePercentRow1>
+			<QueryID>16951</QueryID>
+			<Name><![CDATA[Omfattning på sjukfrånvaro enligt läkarintyg]]></Name>
+			<Value>75</Value>
+		</sickNotePercentRow1>
+		<sickNotePeriodRow1>
+			<QueryID>16952</QueryID>
+			<Name><![CDATA[Sjukskrivningsperioden from tom]]></Name>
+			<Datum_fran><![CDATA[2024-07-01]]></Datum_fran>
+			<Datum_till><![CDATA[2024-07-31]]></Datum_till>
+		</sickNotePeriodRow1>
+		<sickNotePercentRow2>
+			<QueryID>16960</QueryID>
+			<Name><![CDATA[Omfattning på sjukfrånvaro enligt läkarintyg]]></Name>
+			<Value>100</Value>
+		</sickNotePercentRow2>
+		<sickNotePeriodRow2>
+			<QueryID>16961</QueryID>
+			<Name><![CDATA[Sjukskrivningsperioden from tom]]></Name>
+			<Datum_fran><![CDATA[2024-07-01]]></Datum_fran>
+			<Datum_till><![CDATA[2024-07-31]]></Datum_till>
+		</sickNotePeriodRow2>
+		<sickNotePercentRow3>
+			<QueryID>16969</QueryID>
+			<Name><![CDATA[Omfattning på sjukfrånvaro enligt läkarintyg]]></Name>
+			<Value>50</Value>
+		</sickNotePercentRow3>
+		<sickNotePeriodRow3>
+			<QueryID>16970</QueryID>
+			<Name><![CDATA[Sjukskrivningsperioden from tom]]></Name>
+			<Datum_fran><![CDATA[2024-07-01]]></Datum_fran>
+			<Datum_till><![CDATA[2024-07-31]]></Datum_till>
+		</sickNotePeriodRow3>
+		<parttimeScheduleRow3>
+			<QueryID>16972</QueryID>
+			<Name><![CDATA[Bifoga schema för deltidsarbete]]></Name>
+			<File>
+				<ID>44</ID>
+				<Name><![CDATA[Testfil.docx]]></Name>
+				<Size>299842</Size>
+				<EncodedData>ldjkAFLÖFDKHfdH</EncodedData>
+			</File>
+		</parttimeScheduleRow3>
+		<sickNotePercentRow4>
+			<QueryID>16978</QueryID>
+			<Name><![CDATA[Omfattning på sjukfrånvaro enligt läkarintyg]]></Name>
+			<Value>25</Value>
+		</sickNotePercentRow4>
+		<sickNotePeriodRow4>
+			<QueryID>16979</QueryID>
+			<Name><![CDATA[Sjukskrivningsperioden from tom]]></Name>
+			<Datum_fran><![CDATA[2024-07-04]]></Datum_fran>
+			<Datum_till><![CDATA[2024-07-18]]></Datum_till>
+		</sickNotePeriodRow4>
+		<scheduleNextPeriodRow4>
+			<QueryID>16983</QueryID>
+			<Name><![CDATA[Bifoga schema till nästa schemaperiod börjar]]></Name>
+			<File>
+				<ID>45</ID>
+				<Name><![CDATA[Testfil.docx]]></Name>
+				<Size>299842</Size>
+				<EncodedData>alködjdfajdaflhalö</EncodedData>
+			</File>
+		</scheduleNextPeriodRow4>
+	</Values>
+</FlowInstance>

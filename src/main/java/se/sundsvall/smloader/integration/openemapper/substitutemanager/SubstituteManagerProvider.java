@@ -5,6 +5,7 @@ import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -60,9 +61,9 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.putParametersItem(KEY_RESPONSIBILITY_NUMBER, List.of(result.responsibilityNumber()))
-			.putParametersItem(KEY_START_DATE, List.of(result.startDate()))
-			.putParametersItem(KEY_END_DATE, List.of(result.endDate()))
+			.parameters(List.of(new Parameter().key(KEY_RESPONSIBILITY_NUMBER).addValuesItem(result.responsibilityNumber()),
+				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()),
+				new Parameter().key(KEY_END_DATE).addValuesItem(result.endDate())))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
 	}
 

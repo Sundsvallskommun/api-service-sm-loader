@@ -1,4 +1,4 @@
-package se.sundsvall.smloader.integration.openemapper.permissionorder;
+package se.sundsvall.smloader.integration.openemapper.reportsick;
 
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
@@ -14,34 +14,34 @@ import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Objects.isNull;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_COMPUTER_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_PART_OF_ADMINISTRATIVE_UNIT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_DATE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SYSTEM_ACCESS;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TYPE_OF_ACCESS;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYMENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
-class PermissionOrderProvider implements OpenEMapper {
+class ReportSickProvider implements OpenEMapper {
 
 	private final OpenEMapperProperties properties;
 
 	private final PartyClient partyClient;
 
-	public PermissionOrderProvider(final @Qualifier("permissionorder") OpenEMapperProperties properties, final PartyClient partyClient) {
+
+	public ReportSickProvider(final @Qualifier("reportsick") OpenEMapperProperties properties, final PartyClient partyClient) {
 		this.properties = properties;
 		this.partyClient = partyClient;
 	}
@@ -53,7 +53,7 @@ class PermissionOrderProvider implements OpenEMapper {
 
 	@Override
 	public Errand mapToErrand(final byte[] xml) {
-		final var result = extractValue(xml, PermissionOrder.class);
+		final var result = extractValue(xml, ReportSick.class);
 
 		return new Errand()
 			.status(STATUS_NEW)
@@ -62,42 +62,45 @@ class PermissionOrderProvider implements OpenEMapper {
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.parameters(List.of(
-				new Parameter().key(KEY_COMPUTER_ID).addValuesItem(result.computerId()),
-				new Parameter().key(KEY_ADMINISTRATIVE_UNIT).addValuesItem(result.administrativeUnit()),
-				new Parameter().key(KEY_PART_OF_ADMINISTRATIVE_UNIT).addValuesItem(result.partOfAdministrativeUnit()),
-				new Parameter().key(KEY_TYPE_OF_ACCESS).addValuesItem(result.typeOfAccess()),
-				new Parameter().key(KEY_SYSTEM_ACCESS).addValuesItem(result.systemAccess()),
-				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate())))
-			.description(result.otherInformation())
+			.parameters(List.of(new Parameter().key(KEY_ADMINISTRATIVE_UNIT).addValuesItem(result.administrativeUnit()),
+				new Parameter().key(KEY_EMPLOYMENT_TYPE).addValuesItem(result.employmentType())))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
 	}
 
-	private List<Stakeholder> getStakeholders(final PermissionOrder permissionOrder) {
+	private List<Stakeholder> getStakeholders(final ReportSick reportSick) {
 		return List.of(new Stakeholder()
-				.role(ROLE_CONTACT_PERSON)
-				.firstName(permissionOrder.posterFirstname())
-				.lastName(permissionOrder.posterLastname())
-				.contactChannels(getContactChannels(permissionOrder.posterEmail())),
+			.role(ROLE_CONTACT_PERSON)
+			.firstName(reportSick.posterFirstname())
+			.lastName(reportSick.posterLastname())
+			.contactChannels(getContactChannels(reportSick.posterEmail(), null)),
 			new Stakeholder()
 				.role(ROLE_APPLICANT)
-				.firstName(permissionOrder.applicantFirstname())
-				.lastName(permissionOrder.applicantLastname())
-				.organizationName(permissionOrder.applicantOrganization()),
+				.firstName(reportSick.applicantFirstname())
+				.lastName(reportSick.applicantLastname())
+				.contactChannels(getContactChannels(reportSick.applicantEmail(), reportSick.applicantPhone()))
+				.organizationName(reportSick.applicantOrganization()),
 			new Stakeholder()
-				.role(ROLE_USER)
-				.firstName(permissionOrder.userFirstname())
-				.lastName(permissionOrder.userLastname())
-				.contactChannels(getContactChannels(permissionOrder.userEmail()))
-				.organizationName(permissionOrder.userOrganization())
+				.role(ROLE_EMPLOYEE)
+				.firstName(reportSick.employeeFirstname())
+				.lastName(reportSick.employeeLastname())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(permissionOrder.userLegalId())));
+				.externalId(getPartyId(reportSick.employeeLegalId()))
+				.organizationName(reportSick.employeeOrganization()));
 	}
 
-	private List<ContactChannel> getContactChannels(final String email) {
-		return List.of(new ContactChannel()
+	private List<ContactChannel> getContactChannels(final String email, final String phone) {
+		final var contactChannels = new ArrayList<ContactChannel>();
+
+		contactChannels.add(new ContactChannel()
 			.type(CONTACT_CHANNEL_TYPE_EMAIL)
 			.value(email));
+
+		if (!isNull(phone)) {
+			contactChannels.add(new ContactChannel()
+				.type(CONTACT_CHANNEL_TYPE_PHONE)
+				.value(phone));
+		}
+		return contactChannels;
 	}
 
 	private String getPartyId(final String legalId) {

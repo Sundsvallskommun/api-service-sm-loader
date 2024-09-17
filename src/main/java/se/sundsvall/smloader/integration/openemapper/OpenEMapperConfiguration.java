@@ -48,4 +48,10 @@ public class OpenEMapperConfiguration {
 	OpenEMapperProperties propertiesTwentyFiveAtWork() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "reportsick")
+	@ConfigurationProperties(prefix = "anmal-sjukfranvaro")
+	OpenEMapperProperties propertiesReportSick() {
+		return new OpenEMapperProperties();
+	}
 }

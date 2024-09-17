@@ -5,6 +5,7 @@ import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,7 +26,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_D
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYED;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
@@ -58,8 +59,8 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.putParametersItem(KEY_START_DATE, List.of(result.startDate()))
-			.putParametersItem(KEY_ORIGINAL_START_DATE, List.of(result.originalStartDate()))
+			.parameters(List.of(new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()),
+				new Parameter().key(KEY_ORIGINAL_START_DATE).addValuesItem(result.originalStartDate())))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
 	}
 
@@ -78,7 +79,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(twentyFiveAtWork.applicantLegalId())),
 			new Stakeholder()
-				.role(ROLE_EMPLOYED)
+				.role(ROLE_EMPLOYEE)
 				.firstName(twentyFiveAtWork.firstname())
 				.lastName(twentyFiveAtWork.lastname())
 				.address(twentyFiveAtWork.address())

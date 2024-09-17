@@ -5,6 +5,7 @@ import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,8 +56,8 @@ class SalaryChangeProvider implements OpenEMapper {
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.putParametersItem(KEY_AMOUNT, List.of(result.amount()))
-			.putParametersItem(KEY_FROM_MONTH, List.of(result.fromMonth()))
+			.parameters(List.of(new Parameter().key(KEY_AMOUNT).addValuesItem(result.amount()),
+				new Parameter().key(KEY_FROM_MONTH).addValuesItem(result.fromMonth())))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
 	}
 
