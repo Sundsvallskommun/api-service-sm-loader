@@ -35,7 +35,7 @@
 						}
 					],
 					"externalTags": [],
-					"parameters": {},
+					"parameters": [],
 					"classification": {
 						"category": "FEEDBACK_CATEGORY",
 						"type": "FEEDBACK_TYPE"

@@ -59,12 +59,17 @@ kontakt-lon-pension:
   family-id: 121
   priority: MEDIUM
   category: SALARY
-  type: OTHER
+  type: CONTACT_WANTED
 tjugofem-ar-pa-jobbet:
   family-id: 131
   priority: MEDIUM
   category: STATISTICS
   type: OTHER
+anmal-sjukfranvaro:
+  family-id: 141
+  priority: MEDIUM
+  category: SALARY
+  type: ABSENCE
 
 spring:
   datasource:

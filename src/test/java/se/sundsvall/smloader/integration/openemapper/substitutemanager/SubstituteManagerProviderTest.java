@@ -3,6 +3,7 @@ package se.sundsvall.smloader.integration.openemapper.substitutemanager;
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,6 @@ import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
@@ -79,11 +79,10 @@ class SubstituteManagerProviderTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(3).containsExactlyInAnyOrderEntriesOf(
-			Map.of("startDate", List.of("2024-08-30"),
-				"endDate", List.of("2024-09-27"),
-				"responsibilityNumber", List.of("25610000 - AoF Arenor i samverkan"))
-		);
+		assertThat(errand.getParameters()).hasSize(3).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
+			tuple("startDate", List.of("2024-08-30")),
+			tuple("endDate", List.of("2024-09-27")),
+			tuple("responsibilityNumber", List.of("25610000 - AoF Arenor i samverkan")));
 
 		assertThat(errand.getStakeholders()).hasSize(4).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
@@ -92,7 +91,7 @@ class SubstituteManagerProviderTest {
 				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId),
 				tuple(ROLE_SUBSTITUTE, "Tjatte", "Anka", emptyList(), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId),
 				tuple(ROLE_APPROVER, "Joakim", "von Anka", emptyList(), "KSK Avd Kansli och Säkerhet", "PRIVATE", partyId));
-		assertThat(errand.getExternalTags()).hasSize(1).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6849")));
+		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6849")));
 
 		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

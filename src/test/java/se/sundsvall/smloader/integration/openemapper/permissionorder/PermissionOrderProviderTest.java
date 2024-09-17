@@ -3,6 +3,7 @@ package se.sundsvall.smloader.integration.openemapper.permissionorder;
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,6 @@ import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
@@ -77,14 +77,13 @@ class PermissionOrderProviderTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(6).containsExactlyInAnyOrderEntriesOf(
-			Map.of("computerId", List.of("WB12345"),
-				"administrativeUnit", List.of("Överförmyndarkontoret"),
-				"partOfAdministrativeUnit", List.of("Hela förvaltningen"),
-				"typeOfAccess", List.of("Ny"),
-				"systemAccess", List.of("Rapp82"),
-				"startDate", List.of("2024-09-04"))
-		);
+		assertThat(errand.getParameters()).hasSize(6).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
+			tuple("computerId", List.of("WB12345")),
+				tuple("administrativeUnit", List.of("Överförmyndarkontoret")),
+				tuple("partOfAdministrativeUnit", List.of("Hela förvaltningen")),
+				tuple("typeOfAccess", List.of("Ny")),
+				tuple("systemAccess", List.of("Rapp82")),
+				tuple("startDate", List.of("2024-09-04")));
 
 		assertThat(errand.getStakeholders()).hasSize(3).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
