@@ -54,4 +54,10 @@ public class OpenEMapperConfiguration {
 	OpenEMapperProperties propertiesReportSick() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "employerscertificate")
+	@ConfigurationProperties(prefix = "arbetsgivarintyg")
+	OpenEMapperProperties propertiesEmployersCertificate() {
+		return new OpenEMapperProperties();
+	}
 }

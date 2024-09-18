@@ -61,7 +61,11 @@ anmal-sjukfranvaro:
   priority: MEDIUM
   category: SALARY
   type: ABSENCE
-
+arbetsgivarintyg:
+  family-id: 151
+  priority: MEDIUM
+  category: ADMINISTRATION
+  type: EMPLOYMENT
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver

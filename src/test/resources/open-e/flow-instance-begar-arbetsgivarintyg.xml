@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1754.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>526</FamilyID>
+			<Version>1</Version>
+			<FlowID>1754</FlowID>
+			<Name><![CDATA[Beställning arbetsgivarintyg - TEST DRAKEN]]></Name>
+		</Flow>
+		<FlowInstanceID>4376</FlowInstanceID>
+		<Status>
+			<ID>11062</ID>
+			<Name><![CDATA[Inskickat]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>33320</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>33320</ID>
+		</Owner>
+		<Posted>2024-09-17T15:45:58</Posted>
+		<FirstSubmitted>2024-09-17T15:45:58</FirstSubmitted>
+		<LastSubmitted>2024-09-17T15:45:58</LastSubmitted>
+	</Header>
+	<Values>
+		<applicant>
+			<QueryID>63314</QueryID>
+			<Name><![CDATA[Kontaktuppgifter]]></Name>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<SocialSecurityNumber><![CDATA[191010101010]]></SocialSecurityNumber>
+		</applicant>
+		<contactMethod>
+			<QueryID>63315</QueryID>
+			<Name><![CDATA[När ärendet är klart, hur vill du bli aviserad?]]></Name>
+			<Value>E-post</Value>
+		</contactMethod>
+		<email>
+			<QueryID>63316</QueryID>
+			<Name><![CDATA[E-post]]></Name>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+		</email>
+		<timePeriod>
+			<QueryID>63318</QueryID>
+			<Name><![CDATA[Intyg för]]></Name>
+			<Value>Viss period</Value>
+		</timePeriod>
+		<periodDates>
+			<QueryID>63319</QueryID>
+			<Name><![CDATA[Tidsperiod]]></Name>
+			<StartDate>2024-01-01</StartDate>
+			<EndDate>2024-09-17</EndDate>
+		</periodDates>
+		<aKassa>
+			<QueryID>63320</QueryID>
+			<Name><![CDATA[Ska du använda ditt intyg till att söka ersättning från a-kassa?]]></Name>
+			<Value>Ja</Value>
+		</aKassa>
+		<sendDigital>
+			<QueryID>63321</QueryID>
+			<Name><![CDATA[Vill du att arbetsgivarintyget skickas digitalt till arbetsgivarintyg.nu?]]></Name>
+			<Value>Nej</Value>
+		</sendDigital>
+	</Values>
+</FlowInstance>
