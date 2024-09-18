@@ -104,7 +104,7 @@ class EmployersCertificateProvider implements OpenEMapper {
 	private List<Parameter> getParameters(final EmployersCertificate employersCertificate) {
 		var parameters = new ArrayList<Parameter>();
 		parameters.add(new Parameter().key(KEY_UNEMPLOYMENT_FUND).addValuesItem(employersCertificate.unemploymentFund()));
-		parameters.add(new Parameter().key(KEY_SEND_DIGITAL).addValuesItem(employersCertificate.sendDigital()));
+		Optional.ofNullable(employersCertificate.sendDigital()).ifPresent(sendDigital -> parameters.add(new Parameter().key(KEY_SEND_DIGITAL).addValuesItem(sendDigital)));
 		Optional.ofNullable(employersCertificate.startDate()).ifPresent(startDate -> parameters.add(new Parameter().key(KEY_START_DATE).addValuesItem(startDate)));
 		Optional.ofNullable(employersCertificate.endDate()).ifPresent(endDate -> parameters.add(new Parameter().key(KEY_END_DATE).addValuesItem(endDate)));
 

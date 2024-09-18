@@ -6,11 +6,10 @@ import generated.se.sundsvall.supportmanagement.ExternalTag;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import se.sundsvall.smloader.Application;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
 
@@ -32,8 +31,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTAC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 
-@SpringBootTest(classes = Application.class)
-@ActiveProfiles("junit")
+@ExtendWith(MockitoExtension.class)
 class ContactSalaryAndPensionProviderTest {
 
 	@Mock
