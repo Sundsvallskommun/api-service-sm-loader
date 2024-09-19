@@ -60,4 +60,10 @@ public class OpenEMapperConfiguration {
 	OpenEMapperProperties propertiesEmployersCertificate() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "precedenceofreemployment")
+	@ConfigurationProperties(prefix = "foretradesratt-ateranstallning")
+	OpenEMapperProperties propertiesPrcedenceOfEmployment() {
+		return new OpenEMapperProperties();
+	}
 }

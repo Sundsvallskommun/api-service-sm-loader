@@ -34,5 +34,7 @@ public final class ErrandConstants {
 	public static final String KEY_EMPLOYMENT_TYPE = "employmentType";
 	public static final String KEY_UNEMPLOYMENT_FUND = "unemploymentFund";
 	public static final String KEY_SEND_DIGITAL = "sendDigital";
+	public static final String KEY_WORKPLACE = "workplace";
+	public static final String KEY_POSITION = "position";
 	public static final String EXTERNAL_ID_TYPE_PRIVATE = "PRIVATE";
 }

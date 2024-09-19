@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-474.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>197</FamilyID>
+			<Version>1</Version>
+			<FlowID>474</FlowID>
+			<Name><![CDATA[Anspråk på företrädesrätt till återanställning vid Sundsvalls kommun - TEST DRAKEN]]></Name>
+		</Flow>
+		<FlowInstanceID>6842</FlowInstanceID>
+		<Status>
+			<ID>4080</ID>
+			<Name><![CDATA[Inskickat]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>30652</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>30652</ID>
+		</Owner>
+		<Posted>2024-06-13T08:13:29</Posted>
+		<FirstSubmitted>2024-06-13T08:13:29</FirstSubmitted>
+		<LastSubmitted>2024-06-13T08:13:29</LastSubmitted>
+	</Header>
+	<Values>
+		<workPlace>
+			<QueryID>16992</QueryID>
+			<Name><![CDATA[Ange din anställningsinformation]]></Name>
+			<Ange_arbetsplats><![CDATA[Testplats]]></Ange_arbetsplats>
+		</workPlace>
+		<position>
+			<QueryID>16993</QueryID>
+			<Name><![CDATA[Sök din befattning]]></Name>
+			<Value>6 - Arbetsmarknadsåtgärd          </Value>
+		</position>
+		<lastDayOfPosition>
+			<QueryID>16994</QueryID>
+			<Name><![CDATA[Ange datum för anställningens sista dag]]></Name>
+			<StartDate>2024-06-11</StartDate>
+		</lastDayOfPosition>
+		<manager>
+			<QueryID>16995</QueryID>
+			<Name><![CDATA[Ange din chef]]></Name>
+			<firstname><![CDATA[Joakim]]></firstname>
+			<lastname><![CDATA[von Anka]]></lastname>
+			<email><![CDATA[joakim.anka@sundsvall.se]]></email>
+			<title><![CDATA[Sektionschef]]></title>
+			<organization><![CDATA[KSK Avd Digital Utveckling]]></organization>
+		</manager>
+		<contactInformation>
+			<QueryID>16996</QueryID>
+			<Name><![CDATA[E-post]]></Name>
+			<E-post__privat_><![CDATA[privat@test.se]]></E-post__privat_>
+			<Telefonnummer__privat_><![CDATA[0701234567]]></Telefonnummer__privat_>
+		</contactInformation>
+	</Values>
+</FlowInstance>

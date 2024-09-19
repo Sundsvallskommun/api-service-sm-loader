@@ -21,7 +21,12 @@
 			"metadata" : { }
 		}
 	],
-	"externalTags": [],
+	"externalTags": [
+		{
+			"key": "caseId",
+			"value": "4241"
+		}
+	],
 	"parameters": [],
 	"classification": {
 		"category": "LAMNA_SYNPUNKT",
