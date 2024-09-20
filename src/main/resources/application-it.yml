@@ -75,6 +75,11 @@ arbetsgivarintyg:
   priority: MEDIUM
   category: ADMINISTRATION
   type: EMPLOYMENT
+foretradesratt-ateranstallning:
+  family-id: 171
+  priority: MEDIUM
+  category: ADMINISTRATION
+  type: EMPLOYMENT
 
 spring:
   datasource:

@@ -66,6 +66,11 @@ arbetsgivarintyg:
   priority: MEDIUM
   category: ADMINISTRATION
   type: EMPLOYMENT
+foretradesratt-ateranstallning:
+  family-id: 161
+  priority: MEDIUM
+  category: ADMINISTRATION
+  type: EMPLOYMENT
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
