@@ -1,7 +1,7 @@
 {
-	"name": "api-open-e-getinstances",
+	"name": "api-open-e-getinstance-1",
 	"request": {
-		"urlPath": "/open-e-external/api/instanceapi/getinstances/family/161/Prelimin%C3%A4r",
+		"urlPath": "/open-e-internal/api/instanceapi/getinstance/111111/xml",
 		"method": "GET",
 		"headers": {
 			"x-request-id": {
@@ -14,6 +14,6 @@
 			"Content-Type": "text/xml;charset=ISO-8859-1"
 		},
 		"status": 200,
-		"bodyFileName": "test01_import/mocks/api-open-e-instanses.xml"
+		"bodyFileName": "test01_import/mocks/flow-instance-kontakt-lon-pension.xml"
 	}
 }
