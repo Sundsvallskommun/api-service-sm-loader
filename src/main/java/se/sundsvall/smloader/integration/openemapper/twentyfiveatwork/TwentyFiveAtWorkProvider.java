@@ -54,6 +54,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 
 		return new Errand()
 			.status(STATUS_NEW)
+			.title("25 år på jobbet")
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
