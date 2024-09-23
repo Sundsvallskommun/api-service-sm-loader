@@ -1,0 +1,19 @@
+{
+	"name": "api-open-e-getinstances",
+	"request": {
+		"urlPath": "/open-e-internal/api/instanceapi/getinstances/family/174/Inskickat",
+		"method": "GET",
+		"headers": {
+			"x-request-id": {
+				"matches": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+			}
+		}
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "text/xml;charset=ISO-8859-1"
+		},
+		"status": 200,
+		"bodyFileName": "test01_import/mocks/api-open-e-instanses-174.xml"
+	}
+}

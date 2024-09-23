@@ -1,4 +1,4 @@
-package se.sundsvall.seabloader.apptest;
+package se.sundsvall.smloader.apptest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,8 @@ class JobsIT extends AbstractAppTest {
 
 		// Assert that we don't have the records we are going to import.
 		assertThat(repository.findAllByDeliveryStatus(PENDING).stream()
-			.filter(caseEntity -> caseEntity.getExternalCaseId().equals("123456") || caseEntity.getExternalCaseId().equals("234567"))
+			.filter(caseEntity -> caseEntity.getExternalCaseId().equals("123456") || caseEntity.getExternalCaseId().equals("234567") ||
+				caseEntity.getExternalCaseId().equals("111111"))
 			.toList()).isEmpty();
 
 		// Call
@@ -47,8 +48,9 @@ class JobsIT extends AbstractAppTest {
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse()
 			.andVerifyThat(() -> repository.findAllByDeliveryStatus(PENDING).stream()
-				.filter(caseEntity -> caseEntity.getExternalCaseId().equals("123456") || caseEntity.getExternalCaseId().equals("234567"))
-				.toList().size() == 2);
+				.filter(caseEntity -> caseEntity.getExternalCaseId().equals("123456") || caseEntity.getExternalCaseId().equals("234567") ||
+					caseEntity.getExternalCaseId().equals("111111"))
+				.toList().size() == 3);
 	}
 
 	@Test

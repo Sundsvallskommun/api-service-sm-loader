@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-423.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>174</FamilyID>
+			<Version>3</Version>
+			<FlowID>423</FlowID>
+			<Name><![CDATA[Kontakt med SC Lön och Pension - TEST DRAKEN]]></Name>
+		</Flow>
+		<FlowInstanceID>111111</FlowInstanceID>
+		<Status>
+			<ID>3558</ID>
+			<Name><![CDATA[Inskickat]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Owner>
+		<Posted>2024-09-10T16:31:02</Posted>
+		<Editor>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Editor>
+		<Updated>2024-09-11T12:44:14</Updated>
+		<FirstSubmitted>2024-09-11T12:44:14</FirstSubmitted>
+		<LastSubmitted>2024-09-11T12:44:14</LastSubmitted>
+	</Header>
+	<Values>
+		<contact>
+			<QueryID>13596</QueryID>
+			<Name><![CDATA[Mina uppgifter]]></Name>
+			<firstname><![CDATA[Kalle]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>
+			<title><![CDATA[It-konsult]]></title>
+			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
+		</contact>
+		<subject>
+			<QueryID>13599</QueryID>
+			<Name><![CDATA[Vad gäller ärendet?]]></Name>
+			<TextAlternative><![CDATA[Testar]]></TextAlternative>
+		</subject>
+		<caseDescription>
+			<QueryID>13600</QueryID>
+			<Name><![CDATA[Beskriv ditt ärende]]></Name>
+			<Value><![CDATA[Jag testar att skapa ett ärende.]]></Value>
+		</caseDescription>
+	</Values>
+</FlowInstance>
