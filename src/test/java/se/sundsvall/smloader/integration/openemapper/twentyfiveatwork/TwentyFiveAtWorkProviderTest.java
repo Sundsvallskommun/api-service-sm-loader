@@ -88,6 +88,7 @@ class TwentyFiveAtWorkProviderTest {
 				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Storgatan 1", "111 22", "ANKEBORG"));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6857")));
+		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(partyClient, times(2)).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

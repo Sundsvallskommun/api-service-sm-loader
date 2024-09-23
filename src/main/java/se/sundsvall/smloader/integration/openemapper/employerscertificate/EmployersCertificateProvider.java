@@ -65,7 +65,8 @@ class EmployersCertificateProvider implements OpenEMapper {
 			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(result))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final EmployersCertificate employersCertificate) {
@@ -113,5 +114,9 @@ class EmployersCertificateProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final EmployersCertificate employersCertificate) {
+		return employersCertificate.posterFirstname() + " " + employersCertificate.posterLastname() + "-" + employersCertificate.posterEmail();
 	}
 }

@@ -64,7 +64,8 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.parameters(List.of(new Parameter().key(KEY_RESPONSIBILITY_NUMBER).addValuesItem(result.responsibilityNumber()),
 				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()),
 				new Parameter().key(KEY_END_DATE).addValuesItem(result.endDate())))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final SubstituteManager substituteManager) {
@@ -104,5 +105,9 @@ class SubstituteManagerProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final SubstituteManager substituteManager) {
+		return substituteManager.posterFirstname() + " " + substituteManager.posterLastname() + "-" + substituteManager.posterEmail();
 	}
 }

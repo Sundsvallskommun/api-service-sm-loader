@@ -58,7 +58,8 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(result))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final PrecedenceOfReemployment precedenceOfReemployment) {
@@ -93,5 +94,9 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 		Optional.ofNullable(precedenceOfReemployment.position()).ifPresent(position -> parameters.add(new Parameter().key(KEY_POSITION).addValuesItem(position.trim())));
 
 		return parameters;
+	}
+
+	private String getReporterUserId(final PrecedenceOfReemployment precedenceOfReemployment) {
+		return precedenceOfReemployment.posterFirstname() + " " + precedenceOfReemployment.posterLastname() + "-" + precedenceOfReemployment.posterEmail();
 	}
 }

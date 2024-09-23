@@ -90,6 +90,7 @@ class SubstituteManagerProviderTest {
 				tuple(ROLE_SUBSTITUTE, "Tjatte", "Anka", emptyList(), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId),
 				tuple(ROLE_APPROVER, "Joakim", "von Anka", emptyList(), "KSK Avd Kansli och Säkerhet", "PRIVATE", partyId));
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6849")));
+		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

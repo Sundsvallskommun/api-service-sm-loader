@@ -87,6 +87,7 @@ class EmployersCertificateProviderTest {
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")),  "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("4376")));
+		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

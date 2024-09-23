@@ -58,7 +58,8 @@ class SalaryChangeProvider implements OpenEMapper {
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_AMOUNT).addValuesItem(result.amount()),
 				new Parameter().key(KEY_FROM_MONTH).addValuesItem(result.fromMonth())))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final SalaryChange salaryChange) {
@@ -85,5 +86,9 @@ class SalaryChangeProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final SalaryChange salaryChange) {
+		return salaryChange.posterFirstname() + " " + salaryChange.posterLastname() + "-" + salaryChange.posterEmail();
 	}
 }

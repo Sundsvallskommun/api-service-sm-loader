@@ -83,6 +83,7 @@ class ContactSalaryAndPensionProviderTest {
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6854")));
+		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

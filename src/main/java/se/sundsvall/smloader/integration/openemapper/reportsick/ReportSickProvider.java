@@ -16,7 +16,6 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Objects.isNull;
@@ -24,13 +23,14 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHA
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYMENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
-import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -104,6 +104,10 @@ class ReportSickProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final ReportSick reportSick) {
+		return reportSick.posterFirstname() + " " + reportSick.posterLastname() + "-" + reportSick.posterEmail();
 	}
 
 	private List<Parameter> getParameters(final byte[] xml, final ReportSick reportSick) {
