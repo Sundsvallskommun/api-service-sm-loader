@@ -35,6 +35,9 @@ public class CaseMappingEntity {
 	@TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
 	private OffsetDateTime modified;
 
+	@Column(name = "municipality_id")
+	private String municipalityId;
+
 	public static CaseMappingEntity create() {
 		return new CaseMappingEntity();
 	}
@@ -97,9 +100,22 @@ public class CaseMappingEntity {
 		return this;
 	}
 
+	public String getMunicipalityId() {
+		return municipalityId;
+	}
+
+	public void setMunicipalityId(String municipalityId) {
+		this.municipalityId = municipalityId;
+	}
+
+	public CaseMappingEntity withMunicipalityId(String municipalityId) {
+		this.municipalityId = municipalityId;
+		return this;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(getExternalCaseId(), getErrandId(), getCaseType(), getModified());
+		return Objects.hash(getExternalCaseId(), getErrandId(), getCaseType(), getModified(), getMunicipalityId());
 	}
 
 	@Override
@@ -107,12 +123,13 @@ public class CaseMappingEntity {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CaseMappingEntity that = (CaseMappingEntity) o;
-		return Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getErrandId(), that.getErrandId()) && Objects.equals(getCaseType(), that.getCaseType()) && Objects.equals(getModified(), that.getModified());
+		return Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getErrandId(), that.getErrandId()) && Objects.equals(getCaseType(), that.getCaseType()) && Objects.equals(getModified(), that.getModified())
+			&& Objects.equals(getMunicipalityId(), that.getMunicipalityId());
 	}
 
 	@Override
 	public String toString() {
 		return new StringBuilder().append("CaseMappingEntity [externalCaseId=").append(externalCaseId).append(", errandId=" + errandId)
-			.append(", caseType=").append(caseType).append(", modified=").append(modified).append("]").toString();
+			.append(", caseType=").append(caseType).append(", modified=").append(modified).append(", municipalityId=").append(municipalityId).append("]").toString();
 	}
 }

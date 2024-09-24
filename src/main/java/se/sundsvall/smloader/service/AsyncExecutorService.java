@@ -19,25 +19,25 @@ public class AsyncExecutorService {
 	private final SupportManagementService supportManagementService;
 	private final DatabaseCleanerService databaseCleanerService;
 
-	public AsyncExecutorService(OpenEService openEService, SupportManagementService supportManagementService, DatabaseCleanerService databaseCleanerService) {
+	public AsyncExecutorService(final OpenEService openEService, final SupportManagementService supportManagementService, final DatabaseCleanerService databaseCleanerService) {
 		this.openEService = openEService;
 		this.supportManagementService = supportManagementService;
 		this.databaseCleanerService = databaseCleanerService;
 	}
 
 	@Async
-	public void importCases(LocalDateTime from, LocalDateTime to) {
-		openEService.fetchAndSaveNewOpenECases(from, to);
+	public void importCases(final LocalDateTime from, final LocalDateTime to, final String municipalityId) {
+		openEService.fetchAndSaveNewOpenECases(from, to, municipalityId);
 	}
 
 	@Async
-	public void exportCases() {
-		supportManagementService.exportCases();
+	public void exportCases(final String municipalityId) {
+		supportManagementService.exportCases(municipalityId);
 	}
 
 	@Async
-	public void databaseCleanerExecute(LocalDateTime from) {
+	public void databaseCleanerExecute(final LocalDateTime from, final String municipalityId) {
 		final var fromZoned = from.atZone(ZoneId.systemDefault()).toOffsetDateTime();
-		databaseCleanerService.cleanDatabase(fromZoned);
+		databaseCleanerService.cleanDatabase(fromZoned, municipalityId);
 	}
 }

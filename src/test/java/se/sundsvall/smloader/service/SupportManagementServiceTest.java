@@ -65,7 +65,7 @@ class SupportManagementServiceTest {
 		final var namespace = "namespace";
 		final var municipalityId = "municipalityId";
 		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml.getBytes())));
-		when(mockCaseRepository.findAllByDeliveryStatus(PENDING)).thenReturn(casesToExport);
+		when(mockCaseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId)).thenReturn(casesToExport);
 
 
 		final var errand = new Errand()
@@ -86,10 +86,10 @@ class SupportManagementServiceTest {
 		when(mockSupportManagementClient.getErrand(namespace, municipalityId, "errandId")).thenReturn(errand.errandNumber(errandNumber));
 
 		// Act
-		supportManagementService.exportCases();
+		supportManagementService.exportCases(municipalityId);
 
 		// Assert and verify
-		verify(mockCaseRepository).findAllByDeliveryStatus(PENDING);
+		verify(mockCaseRepository).findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 		verify(mockMapper).getSupportedFamilyId();
 		verify(mockMapper).mapToErrand(flowInstanceXml.getBytes());
 		verify(mockSupportManagementClient).createErrand(namespace, municipalityId, errand);
@@ -109,13 +109,15 @@ class SupportManagementServiceTest {
 		final var flowInstanceId = "123456";
 		final var caseEntity = createCaseEntity(flowInstanceId, familyId, flowInstanceXml);
 		final var casesToExport = List.of(caseEntity);
-		when(mockCaseRepository.findAllByDeliveryStatus(PENDING)).thenReturn(casesToExport);
+		final var municipalityId = "municipalityId";
+
+		when(mockCaseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId)).thenReturn(casesToExport);
 
 		// Act
-		supportManagementService.exportCases();
+		supportManagementService.exportCases(municipalityId);
 
 		// Assert and verify
-		verify(mockCaseRepository).findAllByDeliveryStatus(PENDING);
+		verify(mockCaseRepository).findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 		verify(mockCaseRepository).save(caseEntity.withDeliveryStatus(FAILED));
 		verify(mockMapper).getSupportedFamilyId();
 		verifyNoMoreInteractions(mockMapper, mockCaseRepository, mockCaseMappingRepository, mockSupportManagementClient, mockOpenEService);
@@ -130,7 +132,7 @@ class SupportManagementServiceTest {
 		final var namespace = "namespace";
 		final var municipalityId = "municipalityId";
 		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId,  Base64.getEncoder().encode(flowInstanceXml)));
-		when(mockCaseRepository.findAllByDeliveryStatus(PENDING)).thenReturn(casesToExport);
+		when(mockCaseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId)).thenReturn(casesToExport);
 		final var errand = new Errand()
 			.classification(new Classification()
 				.category("category")
@@ -148,10 +150,10 @@ class SupportManagementServiceTest {
 		when(mockSupportManagementClient.createErrand(namespace, municipalityId, errand)).thenThrow(new RuntimeException("Failed to send errand"));
 
 		// Act
-		supportManagementService.exportCases();
+		supportManagementService.exportCases(municipalityId);
 
 		// Assert and verify
-		verify(mockCaseRepository).findAllByDeliveryStatus(PENDING);
+		verify(mockCaseRepository).findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 		verify(mockMapper).getSupportedFamilyId();
 		verify(mockMapper).mapToErrand(flowInstanceXml);
 		verify(mockSupportManagementClient).createErrand(namespace, municipalityId, errand);

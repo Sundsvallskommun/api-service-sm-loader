@@ -10,6 +10,7 @@ import se.sundsvall.smloader.service.DatabaseCleanerService;
 import java.time.OffsetDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -25,7 +26,7 @@ class DatabaseCleanerSchedulerTest {
 	@Test
 	void executeWithEntitiesToRemove() {
 		scheduler.execute();
-		verify(databaseCleanerServiceMock).cleanDatabase(any(OffsetDateTime.class));
+		verify(databaseCleanerServiceMock).cleanDatabase(any(OffsetDateTime.class), anyString());
 		verifyNoMoreInteractions(databaseCleanerServiceMock);
 	}
 

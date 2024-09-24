@@ -11,5 +11,5 @@ import java.time.OffsetDateTime;
 @Transactional
 @CircuitBreaker(name = "CaseMappingRepository")
 public interface CaseMappingRepository extends JpaRepository<CaseMappingEntity, CaseMappingId> {
-	void deleteByModifiedBefore(OffsetDateTime modified);
+	void deleteByModifiedBeforeAndMunicipalityId(OffsetDateTime modified, String municipalityId);
 }

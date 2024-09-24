@@ -12,6 +12,8 @@ import se.sundsvall.smloader.service.SupportManagementService;
 
 import java.time.LocalDateTime;
 
+import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
+
 @Service
 public class CaseProcessingScheduler {
 
@@ -39,11 +41,11 @@ public class CaseProcessingScheduler {
 		RequestId.init();
 
 		LOGGER.info(LOG_IMPORT_STARTED);
-		openEService.fetchAndSaveNewOpenECases(LocalDateTime.now().minusDays(daysToFetch).withHour(0).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now());
+		openEService.fetchAndSaveNewOpenECases(LocalDateTime.now().minusDays(daysToFetch).withHour(0).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now(), MUNICIPALITY_ID);
 		LOGGER.info(LOG_IMPORT_ENDED);
 
 		LOGGER.info(LOG_EXPORT_STARTED);
-		supportManagementService.exportCases();
+		supportManagementService.exportCases(MUNICIPALITY_ID);
 		LOGGER.info(LOG_EXPORT_ENDED);
 	}
 }

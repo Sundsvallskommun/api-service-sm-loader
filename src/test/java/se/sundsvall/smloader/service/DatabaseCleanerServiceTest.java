@@ -38,31 +38,33 @@ class DatabaseCleanerServiceTest {
 		// Setup
 		final var entityIdsToRemove = createCaseIds(5);
 		final var deleteBefore = OffsetDateTime.now().minusDays(1);
+		final var municipalityId = "municipalityId";
 
 		// Setup mocking
-		when(caseRepositoryMock.countByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED)).thenReturn(Integer.toUnsignedLong(entityIdsToRemove.size()));
-		when(caseRepositoryMock.findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED)).thenReturn(entityIdsToRemove);
+		when(caseRepositoryMock.countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED)).thenReturn(Integer.toUnsignedLong(entityIdsToRemove.size()));
+		when(caseRepositoryMock.findIdsByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED)).thenReturn(entityIdsToRemove);
 
 		// Call.
-		service.cleanDatabase(deleteBefore);
+		service.cleanDatabase(deleteBefore, municipalityId);
 
 		// Verification.
-		verify(caseRepositoryMock).countByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED);
-		verify(caseRepositoryMock).findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED);
+		verify(caseRepositoryMock).countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED);
+		verify(caseRepositoryMock).findIdsByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED);
 		verify(caseRepositoryMock, times(5)).deleteById(anyString());
-		verify(caseMappingRepositoryMock).deleteByModifiedBefore(deleteBefore);
+		verify(caseMappingRepositoryMock).deleteByModifiedBeforeAndMunicipalityId(deleteBefore, municipalityId);
 	}
 
 	@Test
 	void executeWithNoEntitiesToRemove() {
 		// Setup
 		final var deleteBefore = OffsetDateTime.now().minusDays(1);
+		final var municipalityId = "municipalityId";
 
 		// Call.
-		service.cleanDatabase(deleteBefore);
+		service.cleanDatabase(deleteBefore, municipalityId);
 
 		// Verification
-		verify(caseRepositoryMock).countByCreatedBeforeAndDeliveryStatusIn(deleteBefore, CREATED, FAILED);
+		verify(caseRepositoryMock).countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED);
 		verifyNoMoreInteractions(caseRepositoryMock, caseMappingRepositoryMock);
 	}
 

@@ -42,9 +42,9 @@ public class SupportManagementService {
 		this.openEService = openEService;
 	}
 
-	public void exportCases() {
+	public void exportCases(final String municipalityId) {
 		RequestId.init();
-		final var casesToExport = caseRepository.findAllByDeliveryStatus(PENDING);
+		final var casesToExport = caseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 
 		casesToExport.forEach(caseEntity -> {
 			final var mapper = openEMapperMap.get(caseEntity.getCaseMetaData().getFamilyId());
@@ -73,7 +73,7 @@ public class SupportManagementService {
 		});
 	}
 
-	private String sendToSupportManagement(Errand errand, String namespace, String municipalityId) {
+	private String sendToSupportManagement(final Errand errand, final String namespace, final String municipalityId) {
 		try {
 			final var result = supportManagementClient.createErrand(namespace, municipalityId, errand);
 			final var location = String.valueOf(result.getHeaders().getFirst(LOCATION));
@@ -84,7 +84,7 @@ public class SupportManagementService {
 		}
 	}
 
-	private Errand getErrandFromSupportManagement(String errandId, String namespace, String municipalityId) {
+	private Errand getErrandFromSupportManagement(final String errandId, final String namespace, final String municipalityId) {
 		try {
 			return supportManagementClient.getErrand(namespace, municipalityId, errandId);
 		} catch (Exception e) {

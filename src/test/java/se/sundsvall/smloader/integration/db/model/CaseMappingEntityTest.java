@@ -40,16 +40,19 @@ class CaseMappingEntityTest {
 		final var externalCaseId = "externalCaseId";
 		final var caseType = "caseType";
 		final var modified = OffsetDateTime.now();
+		final var municipalityId = "municipalityId";
 		final var entity = CaseMappingEntity.create()
 			.withErrandId(errandId)
 			.withExternalCaseId(externalCaseId)
 			.withCaseType(caseType)
-			.withModified(modified);
+			.withModified(modified)
+			.withMunicipalityId(municipalityId);
 
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
 		Assertions.assertThat(entity.getErrandId()).isEqualTo(errandId);
 		Assertions.assertThat(entity.getExternalCaseId()).isEqualTo(externalCaseId);
 		Assertions.assertThat(entity.getModified()).isEqualTo(modified);
+		Assertions.assertThat(entity.getMunicipalityId()).isEqualTo(municipalityId);
 	}
 
 	@Test

@@ -14,6 +14,7 @@
         external_case_id varchar(255) not null,
         case_type varchar(255) not null,
         modified datetime(6),
+        municipality_id varchar(255),
         primary key (errand_id, external_case_id)
     ) engine=InnoDB;
 

@@ -11,6 +11,8 @@ import se.sundsvall.smloader.service.DatabaseCleanerService;
 
 import java.time.OffsetDateTime;
 
+import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
+
 @Service
 public class DatabaseCleanerScheduler {
 
@@ -33,7 +35,7 @@ public class DatabaseCleanerScheduler {
 		RequestId.init();
 
 		LOGGER.info(LOG_CLEANING_STARTED);
-		databaseCleanerService.cleanDatabase(OffsetDateTime.now().minusDays(keepDays));
+		databaseCleanerService.cleanDatabase(OffsetDateTime.now().minusDays(keepDays), MUNICIPALITY_ID);
 		LOGGER.info(LOG_CLEANING_ENDED);
 	}
 }

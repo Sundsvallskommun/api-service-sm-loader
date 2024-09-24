@@ -11,6 +11,7 @@ import se.sundsvall.smloader.service.AsyncExecutorService;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -18,7 +19,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("junit")
 class JobsResourceTest {
-	private static final String PATH = "/jobs";
+	private static final String MUNICIPALITY_ID = "2281";
+	private static final String PATH = "/" + MUNICIPALITY_ID + "/jobs";
 
 	@MockBean
 	private AsyncExecutorService asyncExecutorService;
@@ -35,9 +37,9 @@ class JobsResourceTest {
 			.expectStatus().isNoContent();
 
 		// Verifications
-		verify(asyncExecutorService).exportCases();
-		verify(asyncExecutorService, never()).databaseCleanerExecute(any(LocalDateTime.class));
-		verify(asyncExecutorService, never()).importCases(any(LocalDateTime.class), any(LocalDateTime.class));
+		verify(asyncExecutorService).exportCases(anyString());
+		verify(asyncExecutorService, never()).databaseCleanerExecute(any(LocalDateTime.class), anyString());
+		verify(asyncExecutorService, never()).importCases(any(LocalDateTime.class), any(LocalDateTime.class), anyString());
 	}
 
 	@Test
@@ -54,9 +56,9 @@ class JobsResourceTest {
 			.expectStatus().isNoContent();
 
 		// Verifications
-		verify(asyncExecutorService).importCases(from, to);
-		verify(asyncExecutorService, never()).exportCases();
-		verify(asyncExecutorService, never()).databaseCleanerExecute(any(LocalDateTime.class));
+		verify(asyncExecutorService).importCases(from, to, MUNICIPALITY_ID);
+		verify(asyncExecutorService, never()).exportCases(anyString());
+		verify(asyncExecutorService, never()).databaseCleanerExecute(any(LocalDateTime.class), anyString());
 	}
 
 	@Test
@@ -71,8 +73,8 @@ class JobsResourceTest {
 			.expectStatus().isNoContent();
 
 		// Verifications
-		verify(asyncExecutorService).databaseCleanerExecute(from);
-		verify(asyncExecutorService, never()).importCases(any(LocalDateTime.class), any(LocalDateTime.class));
-		verify(asyncExecutorService, never()).exportCases();
+		verify(asyncExecutorService).databaseCleanerExecute(from, MUNICIPALITY_ID);
+		verify(asyncExecutorService, never()).importCases(any(LocalDateTime.class), any(LocalDateTime.class), anyString());
+		verify(asyncExecutorService, never()).exportCases(anyString());
 	}
 }

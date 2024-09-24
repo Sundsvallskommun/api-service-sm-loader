@@ -29,20 +29,20 @@ public class DatabaseCleanerService {
 		this.caseMappingRepository = caseMappingRepository;
 	}
 
-	public void cleanDatabase(OffsetDateTime deleteBefore) {
-		final var entitiesToRemove = caseRepository.countByCreatedBeforeAndDeliveryStatusIn(deleteBefore, STATUS_FOR_ENTITIES_TO_REMOVE);
+	public void cleanDatabase(final OffsetDateTime deleteBefore, final String municipalityId) {
+		final var entitiesToRemove = caseRepository.countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, STATUS_FOR_ENTITIES_TO_REMOVE);
 		if (entitiesToRemove > 0) {
 			LOGGER.info(LOG_ENTITIES_REMOVAL, entitiesToRemove, STATUS_FOR_ENTITIES_TO_REMOVE);
-			getIdsToRemove(deleteBefore).forEach(caseRepository::deleteById);
+			getIdsToRemove(deleteBefore, municipalityId).forEach(caseRepository::deleteById);
 
-			caseMappingRepository.deleteByModifiedBefore(deleteBefore);
+			caseMappingRepository.deleteByModifiedBeforeAndMunicipalityId(deleteBefore, municipalityId);
 		} else {
 			LOGGER.info(LOG_NOTHING_TO_REMOVE, (Object) STATUS_FOR_ENTITIES_TO_REMOVE);
 		}
 	}
 
-	private List<String> getIdsToRemove(OffsetDateTime deleteBeforeZoned) {
-		return caseRepository.findIdsByCreatedBeforeAndDeliveryStatusIn(deleteBeforeZoned, STATUS_FOR_ENTITIES_TO_REMOVE)
+	private List<String> getIdsToRemove(final OffsetDateTime deleteBeforeZoned, final String municipalityId) {
+		return caseRepository.findIdsByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBeforeZoned, municipalityId, STATUS_FOR_ENTITIES_TO_REMOVE)
 			.stream()
 			.map(CaseId::getId)
 			.toList();

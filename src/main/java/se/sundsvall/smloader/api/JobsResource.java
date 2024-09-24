@@ -10,12 +10,14 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.zalando.problem.Problem;
 import org.zalando.problem.violations.ConstraintViolationProblem;
+import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 import se.sundsvall.smloader.service.AsyncExecutorService;
 
 import java.time.LocalDateTime;
@@ -27,7 +29,7 @@ import static org.springframework.http.ResponseEntity.noContent;
 @RestController
 @Validated
 @Tag(name = "Jobs", description = "Jobs resource")
-@RequestMapping("/jobs")
+@RequestMapping("/{municipalityId}/jobs")
 public class JobsResource {
 
 	private final AsyncExecutorService asyncExecutorService;
@@ -41,8 +43,10 @@ public class JobsResource {
 	@ApiResponse(responseCode = "204", description = "Successful operation", content = @Content(mediaType = ALL_VALUE, schema = @Schema(implementation = Void.class)))
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	public ResponseEntity<Void> caseeexporter() {
-		asyncExecutorService.exportCases();
+	public ResponseEntity<Void> caseeexporter(
+		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281")
+		@PathVariable("municipalityId") @ValidMunicipalityId final String municipalityId) {
+		asyncExecutorService.exportCases(municipalityId);
 		return noContent().build();
 	}
 
@@ -52,9 +56,11 @@ public class JobsResource {
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<Void> caseimporter(
+		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281")
+		@PathVariable("municipalityId") @ValidMunicipalityId final String municipalityId,
 		@Parameter(description = "From date for the cases to import", example = "2024-01-01T12:00:00") @NotNull @RequestParam(name = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime from,
 		@Parameter(description = "To date for the cases to import", example = "2024-01-31T12:00:00") @RequestParam(name = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime to) {
-		asyncExecutorService.importCases(from, to);
+		asyncExecutorService.importCases(from, to, municipalityId);
 		return noContent().build();
 	}
 
@@ -63,8 +69,11 @@ public class JobsResource {
 	@ApiResponse(responseCode = "204", description = "Successful operation", content = @Content(mediaType = ALL_VALUE, schema = @Schema(implementation = Void.class)))
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	public ResponseEntity<Void> dbcleaner(@Parameter(description = "From date for cleaning older cases", example = "2024-01-01T12:00:00") @NotNull @RequestParam(name = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime from) {
-		asyncExecutorService.databaseCleanerExecute(from);
+	public ResponseEntity<Void> dbcleaner(
+		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281")
+		@PathVariable("municipalityId") @ValidMunicipalityId final String municipalityId,
+		@Parameter(description = "From date for cleaning older cases", example = "2024-01-01T12:00:00") @NotNull @RequestParam(name = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime from) {
+		asyncExecutorService.databaseCleanerExecute(from, municipalityId);
 		return noContent().build();
 	}
 }

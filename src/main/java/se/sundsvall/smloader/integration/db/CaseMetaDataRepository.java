@@ -9,8 +9,7 @@ import se.sundsvall.smloader.integration.db.model.enums.Instance;
 import java.util.List;
 
 @Transactional
-@CircuitBreaker(name = "CaseMappingRepository")
+@CircuitBreaker(name = "CaseMetaDataRepository")
 public interface CaseMetaDataRepository extends JpaRepository<CaseMetaDataEntity, String> {
-	boolean existsByFamilyId(String familyId);
-	List<CaseMetaDataEntity> findByInstance(Instance instance);
+	List<CaseMetaDataEntity> findByInstanceAndMunicipalityId(Instance instance, String municipalityId);
 }
