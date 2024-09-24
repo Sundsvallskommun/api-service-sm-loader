@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.Index;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -17,7 +18,10 @@ import java.util.Objects;
 
 @Entity
 @IdClass(CaseMappingId.class)
-@Table(name = "case_mapping")
+@Table(name = "case_mapping",
+	indexes = {
+		@Index(name = "municipality_id_index", columnList = "municipality_id")
+	})
 public class CaseMappingEntity {
 
 	@Id

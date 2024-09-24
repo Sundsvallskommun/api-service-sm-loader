@@ -22,6 +22,7 @@ import se.sundsvall.smloader.service.AsyncExecutorService;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.noContent;
@@ -43,11 +44,13 @@ public class JobsResource {
 	@ApiResponse(responseCode = "204", description = "Successful operation", content = @Content(mediaType = ALL_VALUE, schema = @Schema(implementation = Void.class)))
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	public ResponseEntity<Void> caseeexporter(
+	public ResponseEntity<Void> caseExporter(
 		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281")
 		@PathVariable("municipalityId") @ValidMunicipalityId final String municipalityId) {
 		asyncExecutorService.exportCases(municipalityId);
-		return noContent().build();
+		return noContent()
+			.header(CONTENT_TYPE, ALL_VALUE)
+			.build();
 	}
 
 	@PostMapping(path = "/caseimporter", produces = APPLICATION_PROBLEM_JSON_VALUE)
@@ -55,13 +58,15 @@ public class JobsResource {
 	@ApiResponse(responseCode = "204", description = "Successful operation", content = @Content(mediaType = ALL_VALUE, schema = @Schema(implementation = Void.class)))
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	public ResponseEntity<Void> caseimporter(
+	public ResponseEntity<Void> caseImporter(
 		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281")
 		@PathVariable("municipalityId") @ValidMunicipalityId final String municipalityId,
 		@Parameter(description = "From date for the cases to import", example = "2024-01-01T12:00:00") @NotNull @RequestParam(name = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime from,
 		@Parameter(description = "To date for the cases to import", example = "2024-01-31T12:00:00") @RequestParam(name = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime to) {
 		asyncExecutorService.importCases(from, to, municipalityId);
-		return noContent().build();
+		return noContent()
+			.header(CONTENT_TYPE, ALL_VALUE)
+			.build();
 	}
 
 	@PostMapping(path = "/dbcleaner", produces = APPLICATION_PROBLEM_JSON_VALUE)
@@ -69,11 +74,13 @@ public class JobsResource {
 	@ApiResponse(responseCode = "204", description = "Successful operation", content = @Content(mediaType = ALL_VALUE, schema = @Schema(implementation = Void.class)))
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	public ResponseEntity<Void> dbcleaner(
+	public ResponseEntity<Void> dbCleaner(
 		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281")
 		@PathVariable("municipalityId") @ValidMunicipalityId final String municipalityId,
 		@Parameter(description = "From date for cleaning older cases", example = "2024-01-01T12:00:00") @NotNull @RequestParam(name = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime from) {
 		asyncExecutorService.databaseCleanerExecute(from, municipalityId);
-		return noContent().build();
+		return noContent()
+			.header(CONTENT_TYPE, ALL_VALUE)
+			.build();
 	}
 }

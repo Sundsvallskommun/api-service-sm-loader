@@ -28,7 +28,11 @@
         primary key (family_id)
     ) engine=InnoDB;
 
+    create index municipality_id_index
+       on case_mapping (municipality_id);
+
     alter table if exists `'case'`
        add constraint fk_case_case_meta_data_family_id
        foreign key (family_id)
        references case_meta_data (family_id);
+
