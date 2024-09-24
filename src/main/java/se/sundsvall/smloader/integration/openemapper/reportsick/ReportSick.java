@@ -56,4 +56,7 @@ record ReportSick(
 	String employmentType,
 
 	@XPath("/FlowInstance/Values/absentDateFrom/StartDate")
-	String absentStartDate) { }
+	String absentStartDate,
+
+	@XPath("/FlowInstance/Values/sickNotePeriod/Value")
+	Integer countOfSickLeavePeriods) { }
