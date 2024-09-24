@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
@@ -117,7 +116,7 @@ class ReportSickProvider implements OpenEMapper {
 		final int countOfSickLeavePeriods = Optional.ofNullable(reportSick.countOfSickLeavePeriods()).orElse(0);
 
 		if (countOfSickLeavePeriods == 0) {
-			return emptyList();
+			return parameters;
 		}
 
 		parameters.addAll(getSickLeaveParameters(xml, countOfSickLeavePeriods));
