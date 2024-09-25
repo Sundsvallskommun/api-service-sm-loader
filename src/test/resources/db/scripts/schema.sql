@@ -14,6 +14,7 @@
         external_case_id varchar(255) not null,
         case_type varchar(255) not null,
         modified datetime(6),
+        municipality_id varchar(255),
         primary key (errand_id, external_case_id)
     ) engine=InnoDB;
 
@@ -27,7 +28,11 @@
         primary key (family_id)
     ) engine=InnoDB;
 
+    create index municipality_id_index
+       on case_mapping (municipality_id);
+
     alter table if exists `'case'`
        add constraint fk_case_case_meta_data_family_id
        foreign key (family_id)
        references case_meta_data (family_id);
+

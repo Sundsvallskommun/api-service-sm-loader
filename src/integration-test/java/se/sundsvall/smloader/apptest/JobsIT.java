@@ -26,6 +26,8 @@ import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PE
 })
 class JobsIT extends AbstractAppTest {
 
+	private static final String MUNICIPALITY_ID = "2281";
+	private static final String PATH = "/" + MUNICIPALITY_ID + "/jobs";
 	@Autowired
 	private CaseRepository repository;
 
@@ -36,18 +38,18 @@ class JobsIT extends AbstractAppTest {
 	void test01_import() {
 
 		// Assert that we don't have the records we are going to import.
-		assertThat(repository.findAllByDeliveryStatus(PENDING).stream()
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID).stream()
 			.filter(caseEntity -> caseEntity.getExternalCaseId().equals("123456") || caseEntity.getExternalCaseId().equals("234567") ||
 				caseEntity.getExternalCaseId().equals("111111"))
 			.toList()).isEmpty();
 
 		// Call
 		setupCall()
-			.withServicePath("/jobs/caseimporter?from=2024-06-30T12:00:00&to=2024-07-02T12:00:00")
+			.withServicePath(PATH + "/caseimporter?from=2024-06-30T12:00:00&to=2024-07-02T12:00:00")
 			.withHttpMethod(POST)
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse()
-			.andVerifyThat(() -> repository.findAllByDeliveryStatus(PENDING).stream()
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID).stream()
 				.filter(caseEntity -> caseEntity.getExternalCaseId().equals("123456") || caseEntity.getExternalCaseId().equals("234567") ||
 					caseEntity.getExternalCaseId().equals("111111"))
 				.toList().size() == 3);
@@ -57,33 +59,33 @@ class JobsIT extends AbstractAppTest {
 	void test02_export() {
 
 		// Assert that we have records with status PENDING.
-		assertThat(repository.findAllByDeliveryStatus(PENDING)).isNotEmpty();
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID)).isNotEmpty();
 
 		// Call
 		setupCall()
-			.withServicePath("/jobs/caseexporter")
+			.withServicePath(PATH + "/caseexporter")
 			.withHttpMethod(POST)
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse()
-			.andVerifyThat(() -> repository.findAllByDeliveryStatus(PENDING).isEmpty());
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID).isEmpty());
 	}
 
 	@Test
 	void test03_clean_db() {
 
 		// Assert that we have records with status CREATED and FAILED.
-		assertThat(repository.findAllByDeliveryStatus(CREATED)).isNotEmpty();
-		assertThat(repository.findAllByDeliveryStatus(FAILED)).isNotEmpty();
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(CREATED, MUNICIPALITY_ID)).isNotEmpty();
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(FAILED, MUNICIPALITY_ID)).isNotEmpty();
 		assertThat(caseMappingRepository.findAll()).isNotEmpty();
 
 		// Call
 		setupCall()
-			.withServicePath("/jobs/dbcleaner?from=2024-07-31T12:00:00")
+			.withServicePath(PATH + "/dbcleaner?from=2024-07-31T12:00:00")
 			.withHttpMethod(POST)
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse()
-			.andVerifyThat(() -> repository.findAllByDeliveryStatus(CREATED).isEmpty())
-			.andVerifyThat(() -> repository.findAllByDeliveryStatus(FAILED).isEmpty())
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(CREATED, MUNICIPALITY_ID).isEmpty())
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(FAILED, MUNICIPALITY_ID).isEmpty())
 			.andVerifyThat(() -> caseMappingRepository.findAll().isEmpty());
 	}
 }

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -32,32 +33,35 @@ class AsyncExecutorServiceTest {
 	void importCases() {
 		final var from = LocalDateTime.now().minusDays(7);
 		final var to = LocalDateTime.now();
+		final var municipalityId = "municipalityId";
 
 		// Call
-		asyncExecutorService.importCases(from, to);
+		asyncExecutorService.importCases(from, to, municipalityId);
 
-		verify(openEServiceMock).fetchAndSaveNewOpenECases(from, to);
+		verify(openEServiceMock).fetchAndSaveNewOpenECases(from, to, municipalityId);
 		verifyNoInteractions(supportManagementServiceMock);
 	}
 
 	@Test
 	void exportCases() {
+		final var municipalityId = "municipalityId";
 
 		// Call
-		asyncExecutorService.exportCases();
+		asyncExecutorService.exportCases(municipalityId);
 
-		verify(supportManagementServiceMock).exportCases();
+		verify(supportManagementServiceMock).exportCases(municipalityId);
 		verifyNoInteractions(openEServiceMock);
 	}
 
 	@Test
 	void databaseCleanerExecute() {
 		final var from = LocalDateTime.now().minusDays(7);
+		final var municipalityId = "municipalityId";
 
 		// Call
-		asyncExecutorService.databaseCleanerExecute(from);
+		asyncExecutorService.databaseCleanerExecute(from, municipalityId);
 
-		verify(databaseCleanerServiceMock).cleanDatabase(any(OffsetDateTime.class));
+		verify(databaseCleanerServiceMock).cleanDatabase(any(OffsetDateTime.class), anyString());
 		verifyNoInteractions(openEServiceMock);
 		verifyNoInteractions(supportManagementServiceMock);
 	}

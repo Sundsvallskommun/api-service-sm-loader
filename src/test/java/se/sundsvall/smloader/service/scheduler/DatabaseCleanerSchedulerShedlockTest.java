@@ -25,9 +25,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 
 @SpringBootTest(properties = {
 	"scheduler.dbcleaner.cron.expression=* * * * * *", // Setup to execute every second
@@ -53,7 +56,7 @@ class DatabaseCleanerSchedulerShedlockTest {
 				await().forever()
 					.until(() -> false);
 				return null;
-			}).when(mockBean).cleanDatabase(any(OffsetDateTime.class));
+			}).when(mockBean).cleanDatabase(any(OffsetDateTime.class), anyString());
 
 			return mockBean;
 		}
@@ -77,7 +80,7 @@ class DatabaseCleanerSchedulerShedlockTest {
 			.untilAsserted(() -> assertThat(getLockedAt("dbcleaner"))
 				.isCloseTo(LocalDateTime.now(systemUTC()), within(10, ChronoUnit.SECONDS)));
 
-		verify(databaseCleanerService).cleanDatabase(any(OffsetDateTime.class));
+		verify(databaseCleanerService).cleanDatabase(any(OffsetDateTime.class), eq(MUNICIPALITY_ID));
 		verifyNoMoreInteractions(databaseCleanerService);
 	}
 

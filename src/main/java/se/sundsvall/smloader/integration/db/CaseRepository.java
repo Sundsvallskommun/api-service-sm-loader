@@ -16,11 +16,11 @@ import static org.springframework.transaction.annotation.Isolation.READ_COMMITTE
 @Transactional(isolation = READ_COMMITTED)
 @CircuitBreaker(name = "CaseRepository")
 public interface CaseRepository extends JpaRepository<CaseEntity, String> {
-	List<CaseEntity> findAllByDeliveryStatus(DeliveryStatus deliveryStatus);
+	List<CaseEntity> findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(DeliveryStatus deliveryStatus, String municipalityId);
 
-	List<CaseId> findIdsByCreatedBeforeAndDeliveryStatusIn(OffsetDateTime created, DeliveryStatus... deliveryStatuses);
+	List<CaseId> findIdsByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(OffsetDateTime created, String municipalityId, DeliveryStatus... deliveryStatuses);
 
-	boolean existsByExternalCaseIdAndCaseMetaDataEntityInstance(String externalCaseId, Instance instance);
+	boolean existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(String externalCaseId, Instance instance, String municipalityId);
 
-	long countByCreatedBeforeAndDeliveryStatusIn(OffsetDateTime created, DeliveryStatus... deliveryStatuses);
+	long countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(OffsetDateTime created, String  municipalityId, DeliveryStatus... deliveryStatuses);
 }

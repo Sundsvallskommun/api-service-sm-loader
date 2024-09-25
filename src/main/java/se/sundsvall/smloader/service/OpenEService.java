@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
@@ -38,8 +39,8 @@ public class OpenEService {
 	private final CaseRepository caseRepository;
 	private final CaseMetaDataRepository caseMetaDataRepository;
 
-	public OpenEService(OpenEExternalClient openEExternalClient, OpenEInternalClient openEInternalClient, OpenEExternalSoapClient openEExternalSoapClient, OpenEInternalSoapClient openEInternalSoapClient,
-			CaseRepository caseRepository, CaseMetaDataRepository caseMetaDataRepository) {
+	public OpenEService(final OpenEExternalClient openEExternalClient, final OpenEInternalClient openEInternalClient, final OpenEExternalSoapClient openEExternalSoapClient, final OpenEInternalSoapClient openEInternalSoapClient,
+			final CaseRepository caseRepository, final CaseMetaDataRepository caseMetaDataRepository) {
 		this.openEExternalClient = openEExternalClient;
 		this.openEInternalClient = openEInternalClient;
 		this.openEExternalSoapClient = openEExternalSoapClient;
@@ -48,7 +49,7 @@ public class OpenEService {
 		this.caseMetaDataRepository = caseMetaDataRepository;
 	}
 
-	public void fetchAndSaveNewOpenECases(final LocalDateTime fromDate, LocalDateTime toDate) {
+	public void fetchAndSaveNewOpenECases(final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId) {
 		RequestId.init();
 		final var effectiveToDate = nonNull(toDate) ? toDate : LocalDateTime.now();
 
@@ -57,10 +58,14 @@ public class OpenEService {
 			return;
 		}
 
-		Arrays.stream(Instance.values()).forEach(instance -> handleCasesByInstance(instance, fromDate, effectiveToDate));
+		Arrays.stream(Instance.values()).forEach(instance -> handleCasesByInstance(instance, fromDate, effectiveToDate, municipalityId));
 	}
 
 	public void updateOpenECaseStatus(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity) {
+
+		if (isNull(caseMetaDataEntity.getOpenEUpdateStatus())) {
+			return;
+		}
 
 		final var setStatus = new SetStatus().withFlowInstanceID(Integer.parseInt(flowInstanceId)).withStatusAlias(caseMetaDataEntity.getOpenEUpdateStatus());
 
@@ -94,9 +99,9 @@ public class OpenEService {
 		}
 	}
 
-	private void handleCasesByInstance(final Instance instance, final LocalDateTime fromDate, final LocalDateTime toDate) {
+	private void handleCasesByInstance(final Instance instance, final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId) {
 
-		final var metaDataEntities = caseMetaDataRepository.findByInstance(instance);
+		final var metaDataEntities = caseMetaDataRepository.findByInstanceAndMunicipalityId(instance, municipalityId);
 
 		final var flowInstanceIds = metaDataEntities.stream()
 			.map(metaData -> {
@@ -112,7 +117,7 @@ public class OpenEService {
 			.toList();
 
 		flowInstanceIds.forEach(flowInstanceId -> {
-			if (caseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstance(flowInstanceId, instance)) {
+			if (caseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(flowInstanceId, instance, municipalityId)) {
 				LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
 				return;
 			}

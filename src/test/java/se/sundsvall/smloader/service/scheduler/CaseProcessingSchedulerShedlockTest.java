@@ -26,6 +26,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static org.awaitility.Awaitility.await;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -55,7 +56,7 @@ class CaseProcessingSchedulerShedlockTest {
 				await().forever()
 					.until(() -> false);
 				return null;
-			}).when(mockBean).exportCases();
+			}).when(mockBean).exportCases(anyString());
 
 			return mockBean;
 		}
@@ -85,7 +86,7 @@ class CaseProcessingSchedulerShedlockTest {
 			.untilAsserted(() -> assertThat(getLockedAt("processcases"))
 				.isCloseTo(LocalDateTime.now(systemUTC()), within(10, ChronoUnit.SECONDS)));
 
-		verify(supportManagementService).exportCases();
+		verify(supportManagementService).exportCases(anyString());
 		verifyNoMoreInteractions(supportManagementService);
 	}
 
