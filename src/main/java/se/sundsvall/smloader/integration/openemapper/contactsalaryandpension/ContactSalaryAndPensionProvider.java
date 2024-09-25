@@ -55,6 +55,7 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 		return new Errand()
 			.status(STATUS_NEW)
 			.priority(Priority.fromValue(properties.getPriority()))
+			.title(result.subject())
 			.description(result.description())
 			.stakeholders(getStakeholders(result, users))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
