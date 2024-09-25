@@ -75,9 +75,12 @@ class ReportSickProviderTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
+		assertThat(errand.getParameters()).hasSize(5).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
 			tuple("administrativeUnit", List.of("bou")),
-			tuple("employmentType", List.of("Månadsavlönad")));
+			tuple("employmentType", List.of("Månadsavlönad")),
+			tuple("sickNotePercentages", List.of("75", "100", "50", "25")),
+			tuple("sickNoteStartDates", List.of("2024-07-01", "2024-07-01", "2024-07-01", "2024-07-04")),
+			tuple("sickNoteEndDates", List.of("2024-07-01",	"2024-07-01", "2024-07-01", "2024-07-04")));
 
 		assertThat(errand.getStakeholders()).hasSize(3).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
