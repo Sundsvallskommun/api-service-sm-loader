@@ -70,6 +70,7 @@ class ContactSalaryAndPensionProviderTest {
 
 		// Assert and verify
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
+		assertThat(errand.getTitle()).isEqualTo("Testar");
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
@@ -83,6 +84,7 @@ class ContactSalaryAndPensionProviderTest {
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6854")));
+		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

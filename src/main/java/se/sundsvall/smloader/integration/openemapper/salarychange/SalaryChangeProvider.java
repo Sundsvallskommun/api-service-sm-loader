@@ -27,6 +27,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALIT
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SALARY_CHANGE;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -51,6 +52,7 @@ class SalaryChangeProvider implements OpenEMapper {
 
 		return new Errand()
 			.status(STATUS_NEW)
+			.title(TITLE_SALARY_CHANGE)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
@@ -58,7 +60,8 @@ class SalaryChangeProvider implements OpenEMapper {
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_AMOUNT).addValuesItem(result.amount()),
 				new Parameter().key(KEY_FROM_MONTH).addValuesItem(result.fromMonth())))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final SalaryChange salaryChange) {
@@ -85,5 +88,9 @@ class SalaryChangeProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final SalaryChange salaryChange) {
+		return salaryChange.posterFirstname() + " " + salaryChange.posterLastname() + "-" + salaryChange.posterEmail();
 	}
 }

@@ -29,6 +29,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLIC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PRECEDENCE_OF_REEMPLOYMENT;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -52,13 +53,15 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 
 		return new Errand()
 			.status(STATUS_NEW)
+			.title(TITLE_PRECEDENCE_OF_REEMPLOYMENT)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(result))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final PrecedenceOfReemployment precedenceOfReemployment) {
@@ -93,5 +96,9 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 		Optional.ofNullable(precedenceOfReemployment.position()).ifPresent(position -> parameters.add(new Parameter().key(KEY_POSITION).addValuesItem(position.trim())));
 
 		return parameters;
+	}
+
+	private String getReporterUserId(final PrecedenceOfReemployment precedenceOfReemployment) {
+		return precedenceOfReemployment.posterFirstname() + " " + precedenceOfReemployment.posterLastname() + "-" + precedenceOfReemployment.posterEmail();
 	}
 }

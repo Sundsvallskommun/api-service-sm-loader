@@ -33,6 +33,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTAC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_SUBSTITUTE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SUBSTITUTE_MANAGER;
 
 @ExtendWith(MockitoExtension.class)
 class SubstituteManagerProviderTest {
@@ -73,6 +74,7 @@ class SubstituteManagerProviderTest {
 
 		// Assert and verify
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
+		assertThat(errand.getTitle()).isEqualTo(TITLE_SUBSTITUTE_MANAGER);
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
@@ -90,6 +92,7 @@ class SubstituteManagerProviderTest {
 				tuple(ROLE_SUBSTITUTE, "Tjatte", "Anka", emptyList(), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId),
 				tuple(ROLE_APPROVER, "Joakim", "von Anka", emptyList(), "KSK Avd Kansli och Säkerhet", "PRIVATE", partyId));
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6849")));
+		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

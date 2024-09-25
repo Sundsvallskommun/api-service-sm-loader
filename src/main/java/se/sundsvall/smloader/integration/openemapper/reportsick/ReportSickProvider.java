@@ -30,6 +30,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLIC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_REPORT_SICK;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
@@ -57,13 +58,15 @@ class ReportSickProvider implements OpenEMapper {
 
 		return new Errand()
 			.status(STATUS_NEW)
+			.title(TITLE_REPORT_SICK)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(xml, result))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final ReportSick reportSick) {
@@ -104,6 +107,10 @@ class ReportSickProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final ReportSick reportSick) {
+		return reportSick.posterFirstname() + " " + reportSick.posterLastname() + "-" + reportSick.posterEmail();
 	}
 
 	private List<Parameter> getParameters(final byte[] xml, final ReportSick reportSick) {

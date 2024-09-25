@@ -31,6 +31,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLIC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PERMISSION_ORDER;
 
 @ExtendWith(MockitoExtension.class)
 class PermissionOrderProviderTest {
@@ -71,6 +72,7 @@ class PermissionOrderProviderTest {
 
 		// Assert and verify
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
+		assertThat(errand.getTitle()).isEqualTo(TITLE_PERMISSION_ORDER);
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
@@ -91,6 +93,7 @@ class PermissionOrderProviderTest {
 				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).hasSize(1).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6850")));
+		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

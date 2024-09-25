@@ -55,12 +55,14 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 		return new Errand()
 			.status(STATUS_NEW)
 			.priority(Priority.fromValue(properties.getPriority()))
+			.title(result.subject())
 			.description(result.description())
 			.stakeholders(getStakeholders(result, users))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final ContactSalaryAndPension contactSalaryAndPension, final List<User> users) {
@@ -120,5 +122,9 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 		);
 
 		return users;
+	}
+
+	private String getReporterUserId(final ContactSalaryAndPension contactSalaryAndPension) {
+		return contactSalaryAndPension.posterFirstname() + " " + contactSalaryAndPension.posterLastname() + "-" + contactSalaryAndPension.posterEmail();
 	}
 }

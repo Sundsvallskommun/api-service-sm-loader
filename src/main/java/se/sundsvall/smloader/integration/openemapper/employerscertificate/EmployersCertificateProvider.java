@@ -34,6 +34,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALIT
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_EMPLOYERS_CERTIFICATE;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -59,13 +60,15 @@ class EmployersCertificateProvider implements OpenEMapper {
 
 		return new Errand()
 			.status(STATUS_NEW)
+			.title(TITLE_EMPLOYERS_CERTIFICATE)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(result))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final EmployersCertificate employersCertificate) {
@@ -113,5 +116,9 @@ class EmployersCertificateProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final EmployersCertificate employersCertificate) {
+		return employersCertificate.posterFirstname() + " " + employersCertificate.posterLastname() + "-" + employersCertificate.posterEmail();
 	}
 }

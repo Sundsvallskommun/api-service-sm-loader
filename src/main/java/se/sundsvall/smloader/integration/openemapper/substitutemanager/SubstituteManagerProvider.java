@@ -30,6 +30,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTAC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_SUBSTITUTE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SUBSTITUTE_MANAGER;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -56,6 +57,7 @@ class SubstituteManagerProvider implements OpenEMapper {
 
 		return new Errand()
 			.status(STATUS_NEW)
+			.title(TITLE_SUBSTITUTE_MANAGER)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
@@ -64,7 +66,8 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.parameters(List.of(new Parameter().key(KEY_RESPONSIBILITY_NUMBER).addValuesItem(result.responsibilityNumber()),
 				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()),
 				new Parameter().key(KEY_END_DATE).addValuesItem(result.endDate())))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final SubstituteManager substituteManager) {
@@ -104,5 +107,9 @@ class SubstituteManagerProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final SubstituteManager substituteManager) {
+		return substituteManager.posterFirstname() + " " + substituteManager.posterLastname() + "-" + substituteManager.posterEmail();
 	}
 }

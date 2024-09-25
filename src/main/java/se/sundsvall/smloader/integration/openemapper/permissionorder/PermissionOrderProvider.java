@@ -32,6 +32,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLIC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PERMISSION_ORDER;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -57,6 +58,7 @@ class PermissionOrderProvider implements OpenEMapper {
 
 		return new Errand()
 			.status(STATUS_NEW)
+			.title(TITLE_PERMISSION_ORDER)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
@@ -70,7 +72,8 @@ class PermissionOrderProvider implements OpenEMapper {
 				new Parameter().key(KEY_SYSTEM_ACCESS).addValuesItem(result.systemAccess()),
 				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate())))
 			.description(result.otherInformation())
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final PermissionOrder permissionOrder) {
@@ -102,5 +105,9 @@ class PermissionOrderProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final PermissionOrder permissionOrder) {
+		return permissionOrder.posterFirstname() + " " + permissionOrder.posterLastname() + "-" + permissionOrder.posterEmail();
 	}
 }

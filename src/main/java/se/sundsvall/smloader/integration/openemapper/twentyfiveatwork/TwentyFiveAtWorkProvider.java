@@ -28,6 +28,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLIC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_TWENTY_FIVE_AT_WORK;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
@@ -54,6 +55,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 
 		return new Errand()
 			.status(STATUS_NEW)
+			.title(TITLE_TWENTY_FIVE_AT_WORK)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
@@ -61,7 +63,8 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()),
 				new Parameter().key(KEY_ORIGINAL_START_DATE).addValuesItem(result.originalStartDate())))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())));
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final TwentyFiveAtWork twentyFiveAtWork) {
@@ -97,5 +100,9 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+	}
+
+	private String getReporterUserId(final TwentyFiveAtWork twentyFiveAtWork) {
+		return twentyFiveAtWork.posterFirstname() + " " + twentyFiveAtWork.posterLastname() + "-" + twentyFiveAtWork.posterEmail();
 	}
 }
