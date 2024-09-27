@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
@@ -63,7 +63,7 @@ public class OpenEService {
 
 	public void updateOpenECaseStatus(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity) {
 
-		if (isNull(caseMetaDataEntity.getOpenEUpdateStatus())) {
+		if (isEmpty(caseMetaDataEntity.getOpenEUpdateStatus())) {
 			return;
 		}
 

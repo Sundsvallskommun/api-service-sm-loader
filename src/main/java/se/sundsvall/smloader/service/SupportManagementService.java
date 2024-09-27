@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.requestid.RequestId;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
+import se.sundsvall.smloader.integration.messaging.MessagingClient;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
+import se.sundsvall.smloader.service.mapper.MessagingMapper;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -32,18 +35,24 @@ public class SupportManagementService {
 	private final CaseMappingRepository caseMappingRepository;
 	private final Map<String, OpenEMapper> openEMapperMap;
 	private final OpenEService openEService;
+	private final MessagingClient messagingClient;
+	private final MessagingMapper messagingMapper;
 
 	public SupportManagementService(final SupportManagementClient supportManagementClient, final CaseRepository caseRepository, final CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers,
-		final OpenEService openEService) {
+		final OpenEService openEService, final MessagingClient messagingClient, final MessagingMapper messagingMapper) {
 		this.supportManagementClient = supportManagementClient;
 		this.caseRepository = caseRepository;
 		this.caseMappingRepository = caseMappingRepository;
 		this.openEMapperMap = openEMappers.stream().collect(toMap(OpenEMapper::getSupportedFamilyId, Function.identity()));
 		this.openEService = openEService;
+		this.messagingClient = messagingClient;
+		this.messagingMapper = messagingMapper;
 	}
 
 	public void exportCases(final String municipalityId) {
 		RequestId.init();
+		final var failedCases = new ArrayList<String>();
+
 		final var casesToExport = caseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 
 		casesToExport.forEach(caseEntity -> {
@@ -59,6 +68,7 @@ public class SupportManagementService {
 			final var errandId = sendToSupportManagement(errand, caseEntity.getCaseMetaData().getNamespace(), caseEntity.getCaseMetaData().getMunicipalityId());
 			if (errandId == null) {
 				caseRepository.save(caseEntity.withDeliveryStatus(FAILED));
+				failedCases.add(caseEntity.getExternalCaseId());
 				return;
 			}
 			final var caseMapping = toCaseMapping(errandId, caseEntity);
@@ -71,6 +81,8 @@ public class SupportManagementService {
 
 			openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData().getInstance(), Optional.ofNullable(createdErrand).map(Errand::getErrandNumber).orElse(null));
 		});
+
+		handleFailedCases(municipalityId, failedCases);
 	}
 
 	private String sendToSupportManagement(final Errand errand, final String namespace, final String municipalityId) {
@@ -90,6 +102,14 @@ public class SupportManagementService {
 		} catch (Exception e) {
 			LOGGER.error("Failed to get errand from SupportManagement", e);
 			return null;
+		}
+	}
+
+	private void handleFailedCases(final String municipalityId, final List<String> failedCases) {
+		if (!failedCases.isEmpty()) {
+			LOGGER.error("Failed to export cases: {}", failedCases);
+			messagingClient.sendSlack(municipalityId, messagingMapper.toRequest("SmLoader failed to export cases: " + failedCases));
+			messagingClient.sendEmail(municipalityId, messagingMapper.toEmailRequest("SmLoader", "Failed to export cases: " + failedCases));
 		}
 	}
 }

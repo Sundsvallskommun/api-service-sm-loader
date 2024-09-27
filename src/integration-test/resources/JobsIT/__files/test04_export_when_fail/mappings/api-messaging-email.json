@@ -1,0 +1,37 @@
+{
+	"name": "api-messaging",
+	"request": {
+		"urlPath": "/messaging/2281/email",
+		"method": "POST",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"emailAddress": "mailRecipient",
+					"subject": "SmLoader",
+					"message": "Failed to export cases: [4238]",
+					"sender": {
+						"name": "SmLoader",
+						"address": "noreply@sundsvall.se"
+					},
+					"attachments": [],
+					"headers": {}
+				}
+			}
+		]
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": {
+			"messageId": "887004bd-423d-487d-812b-4babce9998fe",
+			"deliveries": [
+				{
+					"deliveryId": "2a2299ee-5698-4342-a11c-1fd090a675c0",
+					"messageType": "EMAIL"
+				}
+			]
+		},
+		"status": 200
+	}
+}

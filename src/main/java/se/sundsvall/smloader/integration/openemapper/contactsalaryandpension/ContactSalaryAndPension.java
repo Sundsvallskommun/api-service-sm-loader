@@ -34,7 +34,7 @@ record ContactSalaryAndPension(
 	@XPath("/FlowInstance/Values/contact/organization")
 	String contactOrganization,
 
-	@XPath("/FlowInstance/Values/subject/TextAlternative")
+	@XPath("/FlowInstance/Values/subject/Value")
 	String subject,
 
 	@XPath("/FlowInstance/Values/caseDescription/Value")

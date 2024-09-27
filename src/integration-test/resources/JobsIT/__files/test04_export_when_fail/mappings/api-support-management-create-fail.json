@@ -1,0 +1,61 @@
+{
+	"name": "api-support-management-send",
+	"request": {
+		"urlPath": "/support-management/CONTACTSUNDSVALL/2281/errands",
+		"method": "POST",
+		"headers": {
+			"Authorization": {
+				"equalTo": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"
+			},
+			"x-request-id": {
+				"matches": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+			}
+		},
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"title": "Testar",
+					"priority": "LOW",
+					"stakeholders": [
+						{
+							"role": "CONTACT_PERSON",
+							"firstName": "Kalle",
+							"lastName": "Anka",
+							"contactChannels": [
+								{
+									"type": "Email",
+									"value": "kalle.anka@sundsvall.se"
+								},
+								{
+									"type": "Phone",
+									"value": "070-1112223"
+								}
+							],
+							"metadata": {}
+						}
+					],
+					"externalTags": [
+						{
+							"key": "caseId",
+							"value": "4241"
+						}
+					],
+					"parameters": [],
+					"classification": {
+						"category": "FEEDBACK_CATEGORY",
+						"type": "FEEDBACK_TYPE"
+					},
+					"status": "NEW",
+					"description": "Testar att lämna synpunkt",
+					"channel": "ESERVICE",
+					"reporterUserId": "Kalle Anka-kalle.anka@sundsvall.se",
+					"businessRelated": false,
+					"labels": []
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 400
+	}
+}
