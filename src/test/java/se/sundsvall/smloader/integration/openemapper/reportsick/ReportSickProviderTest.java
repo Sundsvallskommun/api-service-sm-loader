@@ -93,7 +93,7 @@ class ReportSickProviderTest {
 				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), "KSK Avd Digital Utveckling",  "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6846")));
-		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
+		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

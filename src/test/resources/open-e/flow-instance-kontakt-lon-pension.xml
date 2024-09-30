@@ -7,7 +7,7 @@
 			<FlowID>423</FlowID>
 			<Name><![CDATA[Kontakt med SC Lön och Pension - TEST DRAKEN]]></Name>
 		</Flow>
-		<FlowInstanceID>6862</FlowInstanceID>
+		<FlowInstanceID>6854</FlowInstanceID>
 		<Status>
 			<ID>3558</ID>
 			<Name><![CDATA[Inskickat]]></Name>
@@ -16,17 +16,24 @@
 			<Firstname><![CDATA[Kalle]]></Firstname>
 			<Lastname><![CDATA[Anka]]></Lastname>
 			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
-			<ID>25331</ID>
+			<ID>25953</ID>
 		</Poster>
 		<Owner>
 			<Firstname><![CDATA[Kalle]]></Firstname>
 			<Lastname><![CDATA[Anka]]></Lastname>
 			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
-			<ID>25331</ID>
+			<ID>25953</ID>
 		</Owner>
-		<Posted>2024-09-25T16:53:11</Posted>
-		<FirstSubmitted>2024-09-25T16:53:11</FirstSubmitted>
-		<LastSubmitted>2024-09-25T16:53:11</LastSubmitted>
+		<Posted>2024-09-10T16:31:02</Posted>
+		<Editor>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Editor>
+		<Updated>2024-09-11T12:44:14</Updated>
+		<FirstSubmitted>2024-09-11T12:44:14</FirstSubmitted>
+		<LastSubmitted>2024-09-11T12:44:14</LastSubmitted>
 	</Header>
 	<Values>
 		<contact>
@@ -34,19 +41,20 @@
 			<Name><![CDATA[Mina uppgifter]]></Name>
 			<firstname><![CDATA[Kalle]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
-			<citizenIdentifier><![CDATA[197408238272]]></citizenIdentifier>
+			<username><![CDATA[kontaktAnvändare]]></username>
+			<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>
 			<title><![CDATA[It-konsult]]></title>
 			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
 		</contact>
 		<subject>
 			<QueryID>13599</QueryID>
 			<Name><![CDATA[Vad gäller ärendet?]]></Name>
-			<Value>Schema</Value>
+			<Value><![CDATA[Testar]]></Value>
 		</subject>
 		<caseDescription>
 			<QueryID>13600</QueryID>
 			<Name><![CDATA[Beskriv ditt ärende]]></Name>
-			<Value><![CDATA[Blabla]]></Value>
+			<Value><![CDATA[Jag testar att skapa ett ärende.]]></Value>
 		</caseDescription>
 	</Values>
 </FlowInstance>

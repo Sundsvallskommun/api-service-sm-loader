@@ -66,7 +66,7 @@ class ReportSickProvider implements OpenEMapper {
 			.businessRelated(false)
 			.parameters(getParameters(xml, result))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
-			.reporterUserId(getReporterUserId(result));
+			.reporterUserId(result.applicantUserId());
 	}
 
 	private List<Stakeholder> getStakeholders(final ReportSick reportSick) {
@@ -107,10 +107,6 @@ class ReportSickProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
-	}
-
-	private String getReporterUserId(final ReportSick reportSick) {
-		return reportSick.posterFirstname() + " " + reportSick.posterLastname() + "-" + reportSick.posterEmail();
 	}
 
 	private List<Parameter> getParameters(final byte[] xml, final ReportSick reportSick) {

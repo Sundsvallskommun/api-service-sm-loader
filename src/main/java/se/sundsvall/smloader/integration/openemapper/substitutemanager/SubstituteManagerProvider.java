@@ -17,6 +17,7 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 import java.util.List;
 import java.util.Set;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
@@ -110,6 +111,6 @@ class SubstituteManagerProvider implements OpenEMapper {
 	}
 
 	private String getReporterUserId(final SubstituteManager substituteManager) {
-		return substituteManager.posterFirstname() + " " + substituteManager.posterLastname() + "-" + substituteManager.posterEmail();
+		return !isEmpty(substituteManager.managerUserId()) ? substituteManager.managerUserId() : substituteManager.approvingManagerUserId();
 	}
 }

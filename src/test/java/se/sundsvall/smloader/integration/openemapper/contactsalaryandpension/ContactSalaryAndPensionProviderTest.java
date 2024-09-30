@@ -28,6 +28,7 @@ import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 
@@ -70,12 +71,12 @@ class ContactSalaryAndPensionProviderTest {
 
 		// Assert and verify
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
-		assertThat(errand.getTitle()).isEqualTo("Schema");
+		assertThat(errand.getTitle()).isEqualTo("Testar");
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getDescription()).isEqualTo("Blabla");
+		assertThat(errand.getDescription()).isEqualTo("Jag testar att skapa ett ärende.");
 
 		assertThat(errand.getStakeholders()).hasSize(2).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
@@ -83,8 +84,8 @@ class ContactSalaryAndPensionProviderTest {
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6862")));
-		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
+		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6854")));
+		assertThat(errand.getReporterUserId()).isEqualTo("kontaktAnvändare");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
@@ -119,16 +120,18 @@ class ContactSalaryAndPensionProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getDescription()).isEqualTo("Jag testar som chef eller HR-administratör");
 
-		assertThat(errand.getStakeholders()).hasSize(3).
+		assertThat(errand.getStakeholders()).hasSize(4).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
 				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
+				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId),
 				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), null, "PRIVATE", partyId),
 				tuple(ROLE_USER, "Tjatte", "Anka", List.of(new ContactChannel().type("Email").value("tjatte.anka@sundsvall.se")), null, "PRIVATE", partyId));
 
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6855")));
+		assertThat(errand.getReporterUserId()).isEqualTo("chefAnvändare");
+		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6873")));
 
-		verify(partyClient, times(2)).getPartyId(anyString(), any(), anyString());
+		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
 		verify(properties).getCategory();
 		verify(properties).getType();

@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
@@ -74,6 +76,16 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 			.lastName(contactSalaryAndPension.posterLastname())
 			.contactChannels(getContactChannels(contactSalaryAndPension.posterEmail())));
 
+		if (contactSalaryAndPension.managerFirstname() != null) {
+			stakeholders.add(new Stakeholder()
+				.role(ROLE_MANAGER)
+				.firstName(contactSalaryAndPension.managerFirstname())
+				.lastName(contactSalaryAndPension.managerLastname())
+				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
+				.externalId(getPartyId(contactSalaryAndPension.managerLegalId()))
+				.organizationName(contactSalaryAndPension.managerOrganization()));
+		}
+
 		if (contactSalaryAndPension.contactFirstname() != null) {
 			stakeholders.add(new Stakeholder()
 				.role(ROLE_CONTACT_PERSON)
@@ -107,6 +119,10 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
 	}
 
+	private String getReporterUserId(final ContactSalaryAndPension contactSalaryAndPension) {
+		return !isEmpty(contactSalaryAndPension.managerUserId()) ? contactSalaryAndPension.managerUserId() : contactSalaryAndPension.contactUserId();
+	}
+
 	public static List<User> parseUsers(byte[] xml) {
 		final var elements = evaluateXPath(xml, "/FlowInstance/Values/personalIdentityNumbers/User");
 
@@ -122,9 +138,5 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 		);
 
 		return users;
-	}
-
-	private String getReporterUserId(final ContactSalaryAndPension contactSalaryAndPension) {
-		return contactSalaryAndPension.posterFirstname() + " " + contactSalaryAndPension.posterLastname() + "-" + contactSalaryAndPension.posterEmail();
 	}
 }

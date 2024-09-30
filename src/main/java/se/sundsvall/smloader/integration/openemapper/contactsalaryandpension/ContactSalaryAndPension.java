@@ -22,11 +22,29 @@ record ContactSalaryAndPension(
 	@XPath("/FlowInstance/Header/Poster/Email")
 	String posterEmail,
 
+	@XPath("/FlowInstance/Values/contactManager/firstname")
+	String managerFirstname,
+
+	@XPath("/FlowInstance/Values/contactManager/lastname")
+	String managerLastname,
+
+	@XPath("/FlowInstance/Values/contactManager/username")
+	String managerUserId,
+
+	@XPath("/FlowInstance/Values/contactManager/citizenIdentifier")
+	String managerLegalId,
+
+	@XPath("/FlowInstance/Values/contactManager/organization")
+	String managerOrganization,
+
 	@XPath("/FlowInstance/Values/contact/firstname")
 	String contactFirstname,
 
 	@XPath("/FlowInstance/Values/contact/lastname")
 	String contactLastname,
+
+	@XPath("/FlowInstance/Values/contact/username")
+	String contactUserId,
 
 	@XPath("/FlowInstance/Values/contact/citizenIdentifier")
 	String contactLegalId,
