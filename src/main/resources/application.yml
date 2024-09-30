@@ -41,6 +41,8 @@ spring:
             token-uri:  ${integration.support-management.token-uri}
           party:
             token-uri: ${integration.party.token-uri}
+          messaging:
+            token-uri: ${integration.messaging.token-uri}
         registration:
           support-management:
             authorization-grant-type: client_credentials
@@ -52,6 +54,12 @@ spring:
             provider: party
             client-id: ${integration.party.client-id}
             client-secret: ${integration.party.client-secret}
+          messaging:
+            authorization-grant-type: client_credentials
+            provider: messaging
+            client-id: ${integration.messaging.client-id}
+            client-secret: ${integration.messaging.client-secret}
+
 integration:
   open-e:
     external:
@@ -70,6 +78,9 @@ integration:
     connectTimeout: 5
     readTimeout: 30
   party:
+    connectTimeout: 5
+    readTimeout: 30
+  messaging:
     connectTimeout: 5
     readTimeout: 30
 

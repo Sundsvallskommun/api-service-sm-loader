@@ -60,6 +60,7 @@ class JobsIT extends AbstractAppTest {
 
 		// Assert that we have records with status PENDING.
 		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID)).isNotEmpty();
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(CREATED, MUNICIPALITY_ID)).size().isEqualTo(1);
 
 		// Call
 		setupCall()
@@ -67,7 +68,8 @@ class JobsIT extends AbstractAppTest {
 			.withHttpMethod(POST)
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse()
-			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID).isEmpty());
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID).isEmpty())
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(CREATED, MUNICIPALITY_ID).size() == 2);
 	}
 
 	@Test
@@ -87,5 +89,21 @@ class JobsIT extends AbstractAppTest {
 			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(CREATED, MUNICIPALITY_ID).isEmpty())
 			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(FAILED, MUNICIPALITY_ID).isEmpty())
 			.andVerifyThat(() -> caseMappingRepository.findAll().isEmpty());
+	}
+
+	@Test
+	void test04_export_when_fail() {
+
+		// Assert that we have records with status PENDING.
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID)).isNotEmpty();
+
+		// Call
+		setupCall()
+			.withServicePath(PATH + "/caseexporter")
+			.withHttpMethod(POST)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse()
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID).isEmpty())
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(FAILED, MUNICIPALITY_ID).size() == 2);
 	}
 }

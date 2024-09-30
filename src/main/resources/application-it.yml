@@ -29,6 +29,16 @@ integration:
     client-secret: the-client-secret
     connectTimeout: 10
     readTimeout: 20
+  messaging:
+    url: http://localhost:${wiremock.server.port:}/messaging
+    token-uri: http://localhost:${wiremock.server.port:}/api-gateway/token
+    client-id: the-client-id
+    client-secret: the-client-secret
+    connectTimeout: 10
+    readTimeout: 20
+    channel: channel
+    token: token
+    mailRecipient: mailRecipient
 # OpenE Services
 lamna-synpunkt:
   family-id: 161

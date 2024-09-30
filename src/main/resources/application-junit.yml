@@ -18,6 +18,11 @@ integration:
       url: http://oep-internal-soap.url
   support-management:
     url: http://support-management.url
+  messaging:
+    url: http://messaging.url
+    channel: channel
+    token: token
+    mailRecipient: mailRecipient
   party:
     url: http://party.url
 # OpenE Services

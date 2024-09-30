@@ -70,12 +70,12 @@ class ContactSalaryAndPensionProviderTest {
 
 		// Assert and verify
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
-		assertThat(errand.getTitle()).isEqualTo("Testar");
+		assertThat(errand.getTitle()).isEqualTo("Schema");
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getDescription()).isEqualTo("Jag testar att skapa ett ärende.");
+		assertThat(errand.getDescription()).isEqualTo("Blabla");
 
 		assertThat(errand.getStakeholders()).hasSize(2).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
@@ -83,7 +83,7 @@ class ContactSalaryAndPensionProviderTest {
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6854")));
+		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6862")));
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
