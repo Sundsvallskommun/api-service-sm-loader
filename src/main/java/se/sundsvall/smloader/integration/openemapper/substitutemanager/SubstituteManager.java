@@ -32,7 +32,7 @@ record SubstituteManager(
 	String managerLastname,
 
 	@XPath("/FlowInstance/Values/manager/username")
-	String managerUsername,
+	String managerUserId,
 
 	@XPath("/FlowInstance/Values/manager/citizenIdentifier")
 	String managerLegalId,
@@ -50,7 +50,7 @@ record SubstituteManager(
 	String substituteManagerLastname,
 
 	@XPath("/FlowInstance/Values/substituteManager/username")
-	String substituteManagerUsername,
+	String substituteManagerUserId,
 
 	@XPath("/FlowInstance/Values/substituteManager/citizenIdentifier")
 	String substituteManagerLegalId,
@@ -71,7 +71,7 @@ record SubstituteManager(
 	String approvingManagerLastname,
 
 	@XPath("/FlowInstance/Values/approvingManager/username")
-	String approvingManagerUsername,
+	String approvingManagerUserId,
 
 	@XPath("/FlowInstance/Values/approvingManager/citizenIdentifier")
 	String approvingManagerLegalId,

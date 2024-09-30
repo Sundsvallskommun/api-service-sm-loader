@@ -28,6 +28,9 @@ record TwentyFiveAtWork(
 	@XPath("/FlowInstance/Values/applicant/lastname")
 	String applicantLastname,
 
+	@XPath("/FlowInstance/Values/applicant/username")
+	String applicantUserId,
+
 	@XPath("/FlowInstance/Values/applicant/email")
 	String applicantEmail,
 

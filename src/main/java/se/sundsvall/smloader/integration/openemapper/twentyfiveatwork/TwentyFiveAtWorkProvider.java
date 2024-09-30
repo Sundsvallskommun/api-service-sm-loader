@@ -64,7 +64,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 			.parameters(List.of(new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()),
 				new Parameter().key(KEY_ORIGINAL_START_DATE).addValuesItem(result.originalStartDate())))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
-			.reporterUserId(getReporterUserId(result));
+			.reporterUserId(result.applicantUserId());
 	}
 
 	private List<Stakeholder> getStakeholders(final TwentyFiveAtWork twentyFiveAtWork) {
@@ -100,9 +100,5 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 
 	private String getPartyId(final String legalId) {
 		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
-	}
-
-	private String getReporterUserId(final TwentyFiveAtWork twentyFiveAtWork) {
-		return twentyFiveAtWork.posterFirstname() + " " + twentyFiveAtWork.posterLastname() + "-" + twentyFiveAtWork.posterEmail();
 	}
 }
