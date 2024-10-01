@@ -1,7 +1,7 @@
 {
 	"name": "api-support-management-get",
 	"request": {
-		"urlPath": "/support-management/CONTACTSUNDSVALL/2281/errands/1234",
+		"urlPath": "/support-management/2281/CONTACTSUNDSVALL/errands/1234",
 		"method": "GET",
 		"headers": {
 			"Authorization": {

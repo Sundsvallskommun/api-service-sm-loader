@@ -93,8 +93,8 @@ class SupportManagementServiceTest {
 					.value("a.b@c")))));
 
 		when(mockMapper.mapToErrand(flowInstanceXml.getBytes())).thenReturn(errand);
-		when(mockSupportManagementClient.createErrand(namespace, municipalityId, errand)).thenReturn(ResponseEntity.created(URI.create("http://localhost:8080/errands/errandId")).build());
-		when(mockSupportManagementClient.getErrand(namespace, municipalityId, "errandId")).thenReturn(errand.errandNumber(errandNumber));
+		when(mockSupportManagementClient.createErrand(municipalityId, namespace, errand)).thenReturn(ResponseEntity.created(URI.create("http://localhost:8080/errands/errandId")).build());
+		when(mockSupportManagementClient.getErrand(municipalityId, namespace, "errandId")).thenReturn(errand.errandNumber(errandNumber));
 
 		// Act
 		supportManagementService.exportCases(municipalityId);
@@ -103,8 +103,8 @@ class SupportManagementServiceTest {
 		verify(mockCaseRepository).findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 		verify(mockMapper).getSupportedFamilyId();
 		verify(mockMapper).mapToErrand(flowInstanceXml.getBytes());
-		verify(mockSupportManagementClient).createErrand(namespace, municipalityId, errand);
-		verify(mockSupportManagementClient).getErrand(namespace, municipalityId, "errandId");
+		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand);
+		verify(mockSupportManagementClient).getErrand(municipalityId, namespace, "errandId");
 		verify(mockCaseMappingRepository).save(any());
 		verify(mockCaseRepository).save(any());
 		verify(mockOpenEService).updateOpenECaseStatus(flowInstanceId, CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace(namespace).withMunicipalityId(municipalityId));
@@ -160,7 +160,7 @@ class SupportManagementServiceTest {
 					.value("a.b@c")))));
 
 		when(mockMapper.mapToErrand(flowInstanceXml)).thenReturn(errand);
-		when(mockSupportManagementClient.createErrand(namespace, municipalityId, errand)).thenThrow(new RuntimeException("Failed to send errand"));
+		when(mockSupportManagementClient.createErrand(municipalityId, namespace, errand)).thenThrow(new RuntimeException("Failed to send errand"));
 		when(mockMessagingMapper.toRequest(any())).thenReturn(slackRequest);
 		when(mockMessagingMapper.toEmailRequest(any(), any())).thenReturn(emailRequest);
 
@@ -171,7 +171,7 @@ class SupportManagementServiceTest {
 		verify(mockCaseRepository).findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 		verify(mockMapper).getSupportedFamilyId();
 		verify(mockMapper).mapToErrand(flowInstanceXml);
-		verify(mockSupportManagementClient).createErrand(namespace, municipalityId, errand);
+		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand);
 		verify(mockCaseRepository).save(casesToExport.getFirst().withDeliveryStatus(FAILED));
 		verify(mockMessagingClient).sendSlack(municipalityId, slackRequest);
 		verify(mockMessagingClient).sendEmail(municipalityId, emailRequest);
