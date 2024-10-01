@@ -39,43 +39,46 @@ sundsvallsforslaget:
 ersattare-chef:
   family-id: 789
   priority: MEDIUM
-  category: ORGANIZATION
-  type: EMPLOYMENT
+  category: SYSTEM_MANAGEMENT
+  type: SYSTEM_MANAGEMENT.SALARY_AND_WORKING_HOURS
 ny-behorighet:
   family-id: 101
   priority: MEDIUM
-  category: ADMINISTRATION
-  type: PERMISSION
+  category: SYSTEM_MANAGEMENT
+  type: SYSTEM_MANAGEMENT.PERMISSIONS
 lonevaxling-pension:
   family-id: 111
   priority: MEDIUM
-  category: SALARY
-  type: PENSION
+  category: PENSION
+  type: PENSION.SALARY_EXCHANGE
 kontakt-lon-pension:
   family-id: 121
   priority: MEDIUM
   category: SALARY
-  type: CONTACT_WANTED
+  type: SALARY.CONTACT_WANTED
 tjugofem-ar-pa-jobbet:
   family-id: 131
   priority: MEDIUM
-  category: STATISTICS
-  type: OTHER
+  category: SALARY
+  type: SALARY.OTHER
+  label: SALARY.OTHER.TWENTY_FIVE_YEARS_GIFT
 anmal-sjukfranvaro:
   family-id: 141
   priority: MEDIUM
   category: SALARY
-  type: ABSENCE
+  type: SALARY.ABSENCE
+  label: SALARY.ABSENCE.SICKNESS_ABSENCE
 arbetsgivarintyg:
   family-id: 151
   priority: MEDIUM
-  category: ADMINISTRATION
-  type: EMPLOYMENT
+  category: SALARY
+  type: SALARY.AUTHORITY_LETTER
+  label: SALARY.AUTHORITY_LETTER.CERTIFICATE
 foretradesratt-ateranstallning:
   family-id: 161
   priority: MEDIUM
-  category: ADMINISTRATION
-  type: EMPLOYMENT
+  category: OTHER_COMPANIES
+  type: OTHER_COMPANIES.PRECEDENCE
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver

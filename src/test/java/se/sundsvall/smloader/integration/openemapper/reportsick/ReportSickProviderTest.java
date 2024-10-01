@@ -59,10 +59,12 @@ class ReportSickProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
+		final var label = "label";
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
+		when(properties.getLabel()).thenReturn(label);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
 		var stringBytes = readOpenEFile("flow-instance-anmal-franvaro.xml");
@@ -76,6 +78,7 @@ class ReportSickProviderTest {
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
+		assertThat(errand.getLabels()).containsExactly(label);
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(5).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
 			tuple("administrativeUnit", List.of("bou")),

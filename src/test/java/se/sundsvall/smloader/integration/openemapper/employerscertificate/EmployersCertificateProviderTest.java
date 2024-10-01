@@ -57,10 +57,12 @@ class EmployersCertificateProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
+		final var label = "label";
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
+		when(properties.getLabel()).thenReturn(label);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
 		var stringBytes = readOpenEFile("flow-instance-begar-arbetsgivarintyg.xml");
@@ -74,6 +76,7 @@ class EmployersCertificateProviderTest {
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(EXTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
+		assertThat(errand.getLabels()).containsExactlyElementsOf(List.of(label));
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(4).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
 			tuple("unemploymentFund", List.of("Ja")),
@@ -104,10 +107,12 @@ class EmployersCertificateProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
+		final var label = "label";
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
+		when(properties.getLabel()).thenReturn(label);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
 		var stringBytes = readOpenEFile("flow-instance-begar-arbetsgivarintyg-phone.xml");
@@ -120,6 +125,7 @@ class EmployersCertificateProviderTest {
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(EXTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
+		assertThat(errand.getLabels()).containsExactly(label);
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(1).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
 			tuple("unemploymentFund", List.of("Nej")));

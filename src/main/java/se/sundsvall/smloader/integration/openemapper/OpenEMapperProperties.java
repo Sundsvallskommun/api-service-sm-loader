@@ -5,6 +5,7 @@ public class OpenEMapperProperties {
 	private String category;
 	private String type;
 	private String priority;
+	private String label;
 
 	public String getFamilyId() {
 		return familyId;
@@ -37,4 +38,8 @@ public class OpenEMapperProperties {
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
+
+	public String getLabel() { return label; }
+
+	public void setLabel(String label) { this.label = label; }
 }
