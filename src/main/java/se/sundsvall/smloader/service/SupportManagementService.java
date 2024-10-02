@@ -87,7 +87,7 @@ public class SupportManagementService {
 
 	private String sendToSupportManagement(final Errand errand, final String namespace, final String municipalityId) {
 		try {
-			final var result = supportManagementClient.createErrand(namespace, municipalityId, errand);
+			final var result = supportManagementClient.createErrand(municipalityId, namespace, errand);
 			final var location = String.valueOf(result.getHeaders().getFirst(LOCATION));
 			return location.substring(location.lastIndexOf("/") + 1);
 		} catch (Exception e) {
@@ -98,7 +98,7 @@ public class SupportManagementService {
 
 	private Errand getErrandFromSupportManagement(final String errandId, final String namespace, final String municipalityId) {
 		try {
-			return supportManagementClient.getErrand(namespace, municipalityId, errandId);
+			return supportManagementClient.getErrand(municipalityId, namespace, errandId);
 		} catch (Exception e) {
 			LOGGER.error("Failed to get errand from SupportManagement", e);
 			return null;

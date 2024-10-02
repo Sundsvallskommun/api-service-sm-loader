@@ -1,7 +1,7 @@
 {
 	"name": "api-support-management-send",
 	"request": {
-		"urlPath": "/support-management/CONTACTSUNDSVALL/2281/errands",
+		"urlPath": "/support-management/2281/CONTACTSUNDSVALL/errands",
 		"method": "POST",
 		"headers": {
 			"Authorization": {

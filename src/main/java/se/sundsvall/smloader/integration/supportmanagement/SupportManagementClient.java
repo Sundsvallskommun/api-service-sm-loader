@@ -21,8 +21,8 @@ public interface SupportManagementClient {
 	 *
 	 * @param errand with attributes for create an errand.
 	 */
-	@PostMapping(path = "/{namespace}/{municipalityId}/errands", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
-	ResponseEntity<Void> createErrand(@PathVariable(name = "namespace") String namespace,  @PathVariable(name = "municipalityId") String municipalityId,
+	@PostMapping(path = "/{municipalityId}/{namespace}/errands", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
+	ResponseEntity<Void> createErrand( @PathVariable(name = "municipalityId") String municipalityId, @PathVariable(name = "namespace") String namespace,
 		@RequestBody Errand errand);
 
 	/**
@@ -30,8 +30,8 @@ public interface SupportManagementClient {
 	 *
 	 * @param errandId with att.
 	 */
-	@GetMapping(path = "/{namespace}/{municipalityId}/errands/{errandId}", produces = APPLICATION_PROBLEM_JSON_VALUE)
-	Errand getErrand(@PathVariable(name = "namespace") String namespace,  @PathVariable(name = "municipalityId") String municipalityId,
+	@GetMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}", produces = APPLICATION_PROBLEM_JSON_VALUE)
+	Errand getErrand(@PathVariable(name = "municipalityId") String municipalityId, @PathVariable(name = "namespace") String namespace,
 		@PathVariable(name = "errandId") String errandId);
 
 }
