@@ -3,6 +3,7 @@ package se.sundsvall.smloader.service;
 import generated.se.sundsvall.supportmanagement.Errand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.requestid.RequestId;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
@@ -30,6 +31,11 @@ import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseMapping;
 public class SupportManagementService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SupportManagementService.class);
+	private static final String PRODUCTION = "production";
+	private static final String PROD_SUBJECT = "SmLoader - Production";
+	private static final String TEST_SUBJECT = "SmLoader - Test";
+	private static final String SLACK_MESSAGE = "SmLoader failed to export cases: ";
+	private static final String EMAIL_MESSAGE = "Failed to export cases: ";
 	private final SupportManagementClient supportManagementClient;
 	private final CaseRepository caseRepository;
 	private final CaseMappingRepository caseMappingRepository;
@@ -37,9 +43,10 @@ public class SupportManagementService {
 	private final OpenEService openEService;
 	private final MessagingClient messagingClient;
 	private final MessagingMapper messagingMapper;
+	private final Environment environment;
 
 	public SupportManagementService(final SupportManagementClient supportManagementClient, final CaseRepository caseRepository, final CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers,
-		final OpenEService openEService, final MessagingClient messagingClient, final MessagingMapper messagingMapper) {
+		final OpenEService openEService, final MessagingClient messagingClient, final MessagingMapper messagingMapper, final Environment environment) {
 		this.supportManagementClient = supportManagementClient;
 		this.caseRepository = caseRepository;
 		this.caseMappingRepository = caseMappingRepository;
@@ -47,6 +54,7 @@ public class SupportManagementService {
 		this.openEService = openEService;
 		this.messagingClient = messagingClient;
 		this.messagingMapper = messagingMapper;
+		this.environment = environment;
 	}
 
 	public void exportCases(final String municipalityId) {
@@ -108,8 +116,9 @@ public class SupportManagementService {
 	private void handleFailedCases(final String municipalityId, final List<String> failedCases) {
 		if (!failedCases.isEmpty()) {
 			LOGGER.error("Failed to export cases: {}", failedCases);
-			messagingClient.sendSlack(municipalityId, messagingMapper.toRequest("SmLoader failed to export cases: " + failedCases));
-			messagingClient.sendEmail(municipalityId, messagingMapper.toEmailRequest("SmLoader", "Failed to export cases: " + failedCases));
+			final var subject = List.of(environment.getActiveProfiles()).contains(PRODUCTION) ? PROD_SUBJECT : TEST_SUBJECT;
+			messagingClient.sendSlack(municipalityId, messagingMapper.toRequest(SLACK_MESSAGE + failedCases));
+			messagingClient.sendEmail(municipalityId, messagingMapper.toEmailRequest(subject, EMAIL_MESSAGE + failedCases));
 		}
 	}
 }

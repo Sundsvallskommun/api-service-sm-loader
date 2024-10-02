@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
@@ -58,13 +59,16 @@ class SupportManagementServiceTest {
 	@Mock
 	private MessagingMapper mockMessagingMapper;
 
+	@Mock
+	private Environment mockEnvironment;
+
 	private SupportManagementService supportManagementService;
 
 	@BeforeEach
 	void setUp() {
 		when(mockMapper.getSupportedFamilyId()).thenReturn("161");
 
-		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockOpenEService, mockMessagingClient, mockMessagingMapper);
+		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockOpenEService, mockMessagingClient, mockMessagingMapper, mockEnvironment);
 	}
 	@Test
 	void exportCases() {
@@ -146,6 +150,7 @@ class SupportManagementServiceTest {
 		final var emailRequest = new EmailRequest().message("Failed to send errand");
 		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId,  Base64.getEncoder().encode(flowInstanceXml)));
 		when(mockCaseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId)).thenReturn(casesToExport);
+		when(mockEnvironment.getActiveProfiles()).thenReturn(new String[]{"test"});
 		final var errand = new Errand()
 			.classification(new Classification()
 				.category("category")
@@ -173,6 +178,8 @@ class SupportManagementServiceTest {
 		verify(mockMapper).mapToErrand(flowInstanceXml);
 		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand);
 		verify(mockCaseRepository).save(casesToExport.getFirst().withDeliveryStatus(FAILED));
+		verify(mockMessagingMapper).toRequest("SmLoader failed to export cases: [123456]");
+		verify(mockMessagingMapper).toEmailRequest("SmLoader - Test", "Failed to export cases: [123456]");
 		verify(mockMessagingClient).sendSlack(municipalityId, slackRequest);
 		verify(mockMessagingClient).sendEmail(municipalityId, emailRequest);
 		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService, mockMessagingClient, mockMessagingMapper);

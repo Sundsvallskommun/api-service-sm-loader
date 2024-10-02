@@ -25,7 +25,7 @@ public class MessagingMapper {
 	public EmailRequest toEmailRequest(String subject, String message) {
 		return new EmailRequest()
 			.sender(new EmailSender()
-				.name("SmLoader")
+				.name(subject)
 				.address("noreply@sundsvall.se"))
 			.emailAddress(properties.mailRecipient())
 			.subject(subject)
