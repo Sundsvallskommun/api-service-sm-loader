@@ -48,7 +48,7 @@ class MessagingMapperTest {
 		final var result = messagingMapper.toEmailRequest(subject, message);
 
 		// Assert
-		assertThat(result.getSender().getName()).isEqualTo("SmLoader");
+		assertThat(result.getSender().getName()).isEqualTo(subject);
 		assertThat(result.getSender().getAddress()).isEqualTo("noreply@sundsvall.se");
 		assertThat(result.getEmailAddress()).isEqualTo(mailRecipient);
 		assertThat(result.getSubject()).isEqualTo(subject);

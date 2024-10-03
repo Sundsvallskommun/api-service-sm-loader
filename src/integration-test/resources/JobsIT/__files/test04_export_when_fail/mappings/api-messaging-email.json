@@ -7,10 +7,10 @@
 			{
 				"equalToJson": {
 					"emailAddress": "mailRecipient",
-					"subject": "SmLoader",
+					"subject": "SmLoader - Test",
 					"message": "Failed to export cases: [4238]",
 					"sender": {
-						"name": "SmLoader",
+						"name": "SmLoader - Test",
 						"address": "noreply@sundsvall.se"
 					},
 					"attachments": [],
