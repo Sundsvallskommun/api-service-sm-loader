@@ -20,10 +20,13 @@ import java.util.Set;
 import static java.util.Objects.isNull;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_LAST_DAY_OF_POSITION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_POSITION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_WORKPLACE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_LAST_DAY_OF_POSITION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_POSITION;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_WORKPLACE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
@@ -70,7 +73,9 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 			.lastName(precedenceOfReemployment.posterLastname())
 			.contactChannels(getContactChannels(precedenceOfReemployment.posterEmail(), null)),
 			new Stakeholder().role(ROLE_APPLICANT)
-				.contactChannels(getContactChannels(precedenceOfReemployment.privateEmail(), precedenceOfReemployment.privatePhone())),
+				.firstName(precedenceOfReemployment.applicantFirstname())
+				.lastName(precedenceOfReemployment.applicantLastname())
+				.contactChannels(getContactChannels(precedenceOfReemployment.applicantEmail(), precedenceOfReemployment.applicantPhone())),
 			new Stakeholder().role(ROLE_MANAGER)
 				.firstName(precedenceOfReemployment.managerFirstname())
 				.lastName(precedenceOfReemployment.managerLastname())
@@ -91,9 +96,12 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 
 	private List<Parameter> getParameters(final PrecedenceOfReemployment precedenceOfReemployment) {
 		var parameters = new ArrayList<Parameter>();
-		parameters.add(new Parameter().key(KEY_WORKPLACE).addValuesItem(precedenceOfReemployment.workplace()));
-		parameters.add(new Parameter().key(KEY_START_DATE).addValuesItem(precedenceOfReemployment.startDate()));
-		Optional.ofNullable(precedenceOfReemployment.position()).ifPresent(position -> parameters.add(new Parameter().key(KEY_POSITION).addValuesItem(position.trim())));
+		Optional.ofNullable(precedenceOfReemployment.workplace()).ifPresent(workplace -> parameters.add(new Parameter().key(KEY_WORKPLACE).addValuesItem(workplace)
+			.displayName(DISPLAY_WORKPLACE)));
+		Optional.ofNullable(precedenceOfReemployment.lastDayOfPosition()).ifPresent(lastDay ->parameters.add(new Parameter().key(KEY_LAST_DAY_OF_POSITION).addValuesItem(lastDay)
+			.displayName(DISPLAY_LAST_DAY_OF_POSITION)));
+		Optional.ofNullable(precedenceOfReemployment.position()).ifPresent(position -> parameters.add(new Parameter().key(KEY_POSITION).addValuesItem(position.trim())
+			.displayName(DISPLAY_POSITION)));
 
 		return parameters;
 	}

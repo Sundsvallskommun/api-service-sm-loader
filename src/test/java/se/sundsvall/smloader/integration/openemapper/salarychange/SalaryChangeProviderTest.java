@@ -75,9 +75,9 @@ class SalaryChangeProviderTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
-			tuple("amount", List.of("1000")),
-			tuple("fromMonth", List.of("Oktober"))
+		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+			tuple("amount", List.of("1000"), "Belopp"),
+					tuple("fromMonth", List.of("Oktober"), "Månad löneväxling sker från")
 		);
 
 		assertThat(errand.getStakeholders()).hasSize(2).

@@ -78,6 +78,37 @@
 			<Name><![CDATA[Datum första sjukdag]]></Name>
 			<StartDate>2024-07-31</StartDate>
 		</absentDateFrom>
+		<levelOfAbsence>
+			<QueryID>17986</QueryID>
+			<Name><![CDATA[Gäller det]]></Name>
+			<Value>Frånvaro del av dag?</Value>
+		</levelOfAbsence>
+		<absentDateStart>
+			<QueryID>17988</QueryID>
+			<Name><![CDATA[Medarbetaren gick hem:]]></Name>
+			<StartDate>2024-10-11</StartDate>
+		</absentDateStart>
+		<absentDateSpecific>
+			<QueryID>17989</QueryID>
+			<Name><![CDATA[Vad gäller för denna sjukperiod?]]></Name>
+			<Value>Medarbetaren kom på arbetet och gick hem pga. sjukdom</Value>
+		</absentDateSpecific>
+		<absentDateLeaveTime>
+			<QueryID>17990</QueryID>
+			<Name><![CDATA[Vilken tid gick medarbetaren hem?]]></Name>
+			<StartTime>10:00:00</StartTime>
+		</absentDateLeaveTime>
+		<absentContunuation>
+			<QueryID>17992</QueryID>
+			<Name><![CDATA[Var medarbetaren fortsatt sjuk efter detta pass?]]></Name>
+			<Value>Ja på heltid</Value>
+		</absentContunuation>
+		<absentDatePeriod>
+			<QueryID>17993</QueryID>
+			<Name><![CDATA[Ange datum för sjukfrånvaron]]></Name>
+			<StartDate>2024-10-11</StartDate>
+			<EndDate>2024-10-18</EndDate>
+		</absentDatePeriod>
 		<sickNotePeriod>
 			<QueryID>16948</QueryID>
 			<Name><![CDATA[Antal sjukskrivningsperioder i sjukintyget:]]></Name>

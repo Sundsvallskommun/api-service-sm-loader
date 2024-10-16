@@ -78,11 +78,12 @@ class EmployersCertificateProviderTest {
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(4).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
-			tuple("unemploymentFund", List.of("Ja")),
-			tuple("sendDigital", List.of("Nej")),
-			tuple("startDate", List.of("2024-01-01")),
-			tuple("endDate", List.of("2024-09-17")));
+		assertThat(errand.getParameters()).hasSize(5).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+			tuple("unemploymentFund", List.of("Ja"), "A-kassa"),
+			tuple("sendDigital", List.of("Nej"), "Skicka digitalt"),
+			tuple("startDate", List.of("2024-01-01"), "Startdatum"),
+			tuple("endDate", List.of("2024-09-17"), "Slutdatum"),
+			tuple("timePeriod", List.of("Viss period"), "Tidsperiod"));
 
 		assertThat(errand.getStakeholders()).hasSize(2).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
@@ -127,8 +128,9 @@ class EmployersCertificateProviderTest {
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(1).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
-			tuple("unemploymentFund", List.of("Nej")));
+		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+			tuple("unemploymentFund", List.of("Nej"), "A-kassa"),
+			tuple("timePeriod", List.of("De senaste tolv månaderna"), "Tidsperiod"));
 
 		assertThat(errand.getStakeholders()).hasSize(2).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,

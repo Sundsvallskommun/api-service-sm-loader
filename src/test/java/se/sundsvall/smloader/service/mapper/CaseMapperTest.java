@@ -29,7 +29,6 @@ class CaseMapperTest {
 
 		final var caseEntity = CaseMapper.toCaseEntity("456", caseMetaDataEntity, xml);
 
-
 		assertThat(caseEntity.getCaseMetaData()).isEqualTo(caseMetaDataEntity);
 		assertThat(caseEntity.getExternalCaseId()).isEqualTo("456");
 		assertThat(caseEntity.getOpenECase()).isEqualTo(Base64.getEncoder().encodeToString(xml));
@@ -40,18 +39,22 @@ class CaseMapperTest {
 	void toCaseMapping() {
 		final var errandId = "errandId";
 		final var externalCaseId = "externalCaseId";
+		final var familyId = "familyId";
+		final var municipalityId = "municipalityId";
 		final var caseEntity = CaseEntity.create()
 			.withExternalCaseId(externalCaseId)
 			.withOpenECase("openECase")
 			.withDeliveryStatus(DeliveryStatus.PENDING)
 			.withCaseMetaData(CaseMetaDataEntity.create()
-				.withFamilyId("familyId"));
+				.withFamilyId(familyId)
+				.withMunicipalityId(municipalityId));
 
 		final var caseMapping = CaseMapper.toCaseMapping(errandId, caseEntity);
 
 		assertThat(caseMapping.getErrandId()).isEqualTo(errandId);
 		assertThat(caseMapping.getExternalCaseId()).isEqualTo(externalCaseId);
-		assertThat(caseMapping.getCaseType()).isEqualTo("familyId");
+		assertThat(caseMapping.getCaseType()).isEqualTo(familyId);
+		assertThat(caseMapping.getMunicipalityId()).isEqualTo(municipalityId);
 		assertThat(caseMapping.getModified()).isCloseTo(OffsetDateTime.now(), within(1, SECONDS));
 	}
 }

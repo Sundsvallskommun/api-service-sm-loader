@@ -58,8 +58,41 @@ record ReportSick(
 	@XPath("/FlowInstance/Values/employmentType/Value")
 	String employmentType,
 
-	@XPath("/FlowInstance/Values/absentDateFrom/StartDate")
+	@XPath("/FlowInstance/Values/employeeTitle/Value")
+	String employeeTitle,
+
+	@XPath("/FlowInstance/Values/levelOfAbsence/Value")
+	String levelOfAbsence,
+
+	@XPath("/FlowInstance/Values/absentDateStart/StartDate")
 	String absentStartDate,
+
+	@XPath("/FlowInstance/Values/absentDateSpecific/Value")
+	String absentDescription,
+
+	@XPath("/FlowInstance/Values/absentDateLeaveTime/StartTime")
+	String absentStartTime,
+
+	@XPath("/FlowInstance/Values/absentContunuation/Value")
+	String absentContinuation,
+
+	@XPath("/FlowInstance/Values/absentDateLateStart/StartTime")
+	String absentLateStartTime,
+
+	@XPath("/FlowInstance/Values/absentDatePeriod/StartDate")
+	String absentPeriodStartDate,
+
+	@XPath("/FlowInstance/Values/absentDatePeriod/EndDate")
+	String absentPeriodEndDate,
+
+	@XPath("/FlowInstance/Values/haveSickNote/Value")
+	String haveSickNote,
+
+	@XPath("/FlowInstance/Values/absentNewOld/Value")
+	String absentType,
+
+	@XPath("/FlowInstance/Values/absentDateFrom/StartDate")
+	String absentFirstDay,
 
 	@XPath("/FlowInstance/Values/sickNotePeriod/Value")
 	Integer countOfSickLeavePeriods) { }

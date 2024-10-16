@@ -18,7 +18,11 @@ import java.util.List;
 import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_END_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_RESPONSIBILITY_NUMBER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
@@ -26,6 +30,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_END_DAT
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_RESPONSIBILITY_NUMBER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPROVER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
@@ -64,9 +69,9 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.parameters(List.of(new Parameter().key(KEY_RESPONSIBILITY_NUMBER).addValuesItem(result.responsibilityNumber()),
-				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()),
-				new Parameter().key(KEY_END_DATE).addValuesItem(result.endDate())))
+			.parameters(List.of(new Parameter().key(KEY_RESPONSIBILITY_NUMBER).addValuesItem(result.responsibilityNumber()).displayName(DISPLAY_RESPONSIBILITY_NUMBER),
+				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()).displayName(DISPLAY_START_DATE),
+				new Parameter().key(KEY_END_DATE).addValuesItem(result.endDate()).displayName(DISPLAY_END_DATE)))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
 			.reporterUserId(getReporterUserId(result));
 	}
@@ -78,19 +83,19 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.lastName(substituteManager.posterLastname())
 			.contactChannels(getContactChannels(substituteManager.posterEmail())),
 			new Stakeholder()
+				.role(ROLE_APPLICANT)
+				.firstName(substituteManager.applicantFirstname())
+				.lastName(substituteManager.applicantLastname())
+				.organizationName(substituteManager.applicantOrganization())
+				.contactChannels(getContactChannels(substituteManager.applicantEmail())),
+			new Stakeholder()
 				.role(ROLE_SUBSTITUTE)
 				.firstName(substituteManager.substituteManagerFirstname())
 				.lastName(substituteManager.substituteManagerLastname())
 				.organizationName(substituteManager.substituteManagerOrganization())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(substituteManager.substituteManagerLegalId())),
-			new Stakeholder()
-				.role(ROLE_MANAGER)
-				.firstName(substituteManager.managerFirstname())
-				.lastName(substituteManager.managerLastname())
-				.organizationName(substituteManager.managerOrganization())
-				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(substituteManager.managerLegalId())),
+			getManagerStakeholder(substituteManager),
 			new Stakeholder()
 				.role(ROLE_APPROVER)
 				.firstName(substituteManager.approvingManagerFirstname())
@@ -106,11 +111,29 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.value(email));
 	}
 
+	private Stakeholder getManagerStakeholder(final SubstituteManager substituteManager) {
+		return isNotEmpty(substituteManager.managerFirstname()) ?
+			new Stakeholder()
+				.role(ROLE_MANAGER)
+				.firstName(substituteManager.managerFirstname())
+				.lastName(substituteManager.managerLastname())
+				.organizationName(substituteManager.managerOrganization())
+				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
+				.externalId(getPartyId(substituteManager.managerLegalId())) :
+			new Stakeholder()
+				.role(ROLE_MANAGER)
+				.firstName(substituteManager.otherSenderFirstname())
+				.lastName(substituteManager.otherSenderLastname())
+				.organizationName(substituteManager.otherSenderOrganization())
+				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
+				.externalId(getPartyId(substituteManager.otherSenderLegalId()));
+	}
+
 	private String getPartyId(final String legalId) {
-		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+		return isNotEmpty(legalId) ? partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null) : null;
 	}
 
 	private String getReporterUserId(final SubstituteManager substituteManager) {
-		return !isEmpty(substituteManager.managerUserId()) ? substituteManager.managerUserId() : substituteManager.approvingManagerUserId();
+		return !isEmpty(substituteManager.managerUserId()) ? substituteManager.managerUserId() : substituteManager.otherSenderUserId();
 	}
 }
