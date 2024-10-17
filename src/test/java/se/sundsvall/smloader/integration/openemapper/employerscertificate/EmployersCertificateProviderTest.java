@@ -57,18 +57,18 @@ class EmployersCertificateProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
-		final var label = "label";
+		final var labels = List.of("label");
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
-		when(properties.getLabel()).thenReturn(label);
+		when(properties.getLabels()).thenReturn(labels);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
-		var stringBytes = readOpenEFile("flow-instance-begar-arbetsgivarintyg.xml");
+		final var stringBytes = readOpenEFile("flow-instance-begar-arbetsgivarintyg.xml");
 
 		// Act
-		var errand = provider.mapToErrand(stringBytes);
+		final var errand = provider.mapToErrand(stringBytes);
 
 		// Assert and verify
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
@@ -76,7 +76,7 @@ class EmployersCertificateProviderTest {
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(EXTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
-		assertThat(errand.getLabels()).containsExactlyElementsOf(List.of(label));
+		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(4).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
 			tuple("unemploymentFund", List.of("Ja")),
@@ -88,7 +88,7 @@ class EmployersCertificateProviderTest {
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
 				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")),  "PRIVATE", partyId));
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("4376")));
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
@@ -107,25 +107,25 @@ class EmployersCertificateProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
-		final var label = "label";
+		final var labels = List.of("label");
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
-		when(properties.getLabel()).thenReturn(label);
+		when(properties.getLabels()).thenReturn(labels);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
-		var stringBytes = readOpenEFile("flow-instance-begar-arbetsgivarintyg-phone.xml");
+		final var stringBytes = readOpenEFile("flow-instance-begar-arbetsgivarintyg-phone.xml");
 
 		// Act
-		var errand = provider.mapToErrand(stringBytes);
+		final var errand = provider.mapToErrand(stringBytes);
 
 		// Assert and verify
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(EXTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
-		assertThat(errand.getLabels()).containsExactly(label);
+		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(1).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
 			tuple("unemploymentFund", List.of("Nej")));
@@ -134,7 +134,7 @@ class EmployersCertificateProviderTest {
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
 				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Phone").value("0701112223")),  "PRIVATE", partyId));
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Phone").value("0701112223")), "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("4376")));
 

@@ -38,7 +38,6 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 
 	private final PartyClient partyClient;
 
-
 	public TwentyFiveAtWorkProvider(final @Qualifier("twentyfiveatwork") OpenEMapperProperties properties, final PartyClient partyClient) {
 		this.properties = properties;
 		this.partyClient = partyClient;
@@ -59,7 +58,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
-			.labels(List.of(properties.getLabel()))
+			.labels(properties.getLabels())
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()),
@@ -70,10 +69,10 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final TwentyFiveAtWork twentyFiveAtWork) {
 		return List.of(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(twentyFiveAtWork.posterFirstname())
-			.lastName(twentyFiveAtWork.posterLastname())
-			.contactChannels(getContactChannels(twentyFiveAtWork.posterEmail())),
+				.role(ROLE_CONTACT_PERSON)
+				.firstName(twentyFiveAtWork.posterFirstname())
+				.lastName(twentyFiveAtWork.posterLastname())
+				.contactChannels(getContactChannels(twentyFiveAtWork.posterEmail())),
 			new Stakeholder()
 				.role(ROLE_APPLICANT)
 				.firstName(twentyFiveAtWork.applicantFirstname())
