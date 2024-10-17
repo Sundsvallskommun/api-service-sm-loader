@@ -37,10 +37,26 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 
 	private final PartyClient partyClient;
 
-
 	public ContactSalaryAndPensionProvider(final @Qualifier("contactsalaryandpension") OpenEMapperProperties properties, final PartyClient partyClient) {
 		this.properties = properties;
 		this.partyClient = partyClient;
+	}
+
+	public static List<User> parseUsers(final byte[] xml) {
+		final var elements = evaluateXPath(xml, "/FlowInstance/Values/personalIdentityNumbers/User");
+
+		final var users = new ArrayList<User>();
+
+		elements.forEach(element ->
+			users.add(new User(
+				evaluateXPath(element, "/Username").text(),
+				evaluateXPath(element, "/Firstname").text(),
+				evaluateXPath(element, "/Lastname").text(),
+				evaluateXPath(element, "/CitizenIdentifier").text(),
+				evaluateXPath(element, "/Email").text()))
+		);
+
+		return users;
 	}
 
 	@Override
@@ -121,22 +137,5 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 
 	private String getReporterUserId(final ContactSalaryAndPension contactSalaryAndPension) {
 		return !isEmpty(contactSalaryAndPension.managerUserId()) ? contactSalaryAndPension.managerUserId() : contactSalaryAndPension.contactUserId();
-	}
-
-	public static List<User> parseUsers(byte[] xml) {
-		final var elements = evaluateXPath(xml, "/FlowInstance/Values/personalIdentityNumbers/User");
-
-		final var users = new ArrayList<User>();
-
-		elements.forEach(element ->
-			users.add(new User(
-							evaluateXPath(element, "/Username").text(),
-							evaluateXPath(element, "/Firstname").text(),
-							evaluateXPath(element, "/Lastname").text(),
-							evaluateXPath(element, "/CitizenIdentifier").text(),
-							evaluateXPath(element, "/Email").text()))
-		);
-
-		return users;
 	}
 }

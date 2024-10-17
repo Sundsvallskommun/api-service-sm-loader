@@ -41,7 +41,6 @@ class ReportSickProvider implements OpenEMapper {
 
 	private final PartyClient partyClient;
 
-
 	public ReportSickProvider(final @Qualifier("reportsick") OpenEMapperProperties properties, final PartyClient partyClient) {
 		this.properties = properties;
 		this.partyClient = partyClient;
@@ -62,7 +61,7 @@ class ReportSickProvider implements OpenEMapper {
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
-			.labels(List.of(properties.getLabel()))
+			.labels(properties.getLabels())
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(xml, result))
@@ -72,10 +71,10 @@ class ReportSickProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final ReportSick reportSick) {
 		return List.of(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(reportSick.posterFirstname())
-			.lastName(reportSick.posterLastname())
-			.contactChannels(getContactChannels(reportSick.posterEmail(), null)),
+				.role(ROLE_CONTACT_PERSON)
+				.firstName(reportSick.posterFirstname())
+				.lastName(reportSick.posterLastname())
+				.contactChannels(getContactChannels(reportSick.posterEmail(), null)),
 			new Stakeholder()
 				.role(ROLE_APPLICANT)
 				.firstName(reportSick.applicantFirstname())
@@ -112,7 +111,7 @@ class ReportSickProvider implements OpenEMapper {
 
 	private List<Parameter> getParameters(final byte[] xml, final ReportSick reportSick) {
 
-		var parameters = new ArrayList<Parameter>();
+		final var parameters = new ArrayList<Parameter>();
 
 		parameters.add(new Parameter().key("administrativeUnit").values(List.of(reportSick.administrativeUnit())));
 		parameters.add(new Parameter().key("employmentType").values(List.of(reportSick.employmentType())));
@@ -130,18 +129,18 @@ class ReportSickProvider implements OpenEMapper {
 
 	private List<Parameter> getSickLeaveParameters(final byte[] xml, final int countOfSickLeavePeriods) {
 
-		var parameters = new ArrayList<Parameter>();
+		final var parameters = new ArrayList<Parameter>();
 
-		var sickNotePercentRows = new ArrayList<String>();
+		final var sickNotePercentRows = new ArrayList<String>();
 
-		var sickNoteStartDateRows = new ArrayList<String>();
+		final var sickNoteStartDateRows = new ArrayList<String>();
 
-		var sickNoteEndDateRows = new ArrayList<String>();
+		final var sickNoteEndDateRows = new ArrayList<String>();
 
 		for (int i = 1; i <= countOfSickLeavePeriods; i++) {
-			var pathPercent = "/FlowInstance/Values/sickNotePercentRow" + i + "/Value";
-			var pathStartDate = "/FlowInstance/Values/sickNotePeriodRow" + i + "/Datum_fran";
-			var pathEndDate = "/FlowInstance/Values/sickNotePeriodRow" + i + "/Datum_fran";
+			final var pathPercent = "/FlowInstance/Values/sickNotePercentRow" + i + "/Value";
+			final var pathStartDate = "/FlowInstance/Values/sickNotePeriodRow" + i + "/Datum_fran";
+			final var pathEndDate = "/FlowInstance/Values/sickNotePeriodRow" + i + "/Datum_fran";
 
 			sickNotePercentRows.add(evaluateXPath(xml, pathPercent).text());
 			sickNoteStartDateRows.add(evaluateXPath(xml, pathStartDate).text());

@@ -75,19 +75,28 @@ tjugofem-ar-pa-jobbet:
   priority: MEDIUM
   category: SALARY
   type: SALARY.OTHER
-  label: SALARY.OTHER.TWENTY_FIVE_YEARS_GIFT
+  labels:
+    - SALARY
+    - SALARY.OTHER
+    - SALARY.OTHER.TWENTY_FIVE_YEARS_GIFT
 anmal-sjukfranvaro:
   family-id: 141
   priority: MEDIUM
   category: SALARY
   type: SALARY.ABSENCE
-  label: SALARY.ABSENCE.SICKNESS_ABSENCE
+  labels:
+    - SALARY
+    - SALARY.ABSENCE
+    - SALARY.ABSENCE.SICKNESS_ABSENCE
 arbetsgivarintyg:
   family-id: 151
   priority: MEDIUM
   category: SALARY
   type: SALARY.AUTHORITY_LETTER
-  label: SALARY.AUTHORITY_LETTER.CERTIFICATE
+  labels:
+    - SALARY
+    - SALARY.AUTHORITY_LETTER
+    - SALARY.AUTHORITY_LETTER.CERTIFICATE
 foretradesratt-ateranstallning:
   family-id: 171
   priority: MEDIUM

@@ -1,17 +1,19 @@
 package se.sundsvall.smloader.integration.openemapper;
 
+import java.util.List;
+
 public class OpenEMapperProperties {
 	private String familyId;
 	private String category;
 	private String type;
 	private String priority;
-	private String label;
+	private List<String> label;
 
 	public String getFamilyId() {
 		return familyId;
 	}
 
-	public void setFamilyId(String familyId) {
+	public void setFamilyId(final String familyId) {
 		this.familyId = familyId;
 	}
 
@@ -19,7 +21,7 @@ public class OpenEMapperProperties {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(final String category) {
 		this.category = category;
 	}
 
@@ -27,7 +29,7 @@ public class OpenEMapperProperties {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -35,11 +37,11 @@ public class OpenEMapperProperties {
 		return priority;
 	}
 
-	public void setPriority(String priority) {
+	public void setPriority(final String priority) {
 		this.priority = priority;
 	}
 
-	public String getLabel() { return label; }
+	public List<String> getLabels() {return label;}
 
-	public void setLabel(String label) { this.label = label; }
+	public void setLabels(final List<String> label) {this.label = label;}
 }
