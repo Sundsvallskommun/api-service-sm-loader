@@ -67,20 +67,20 @@ class PrecedenceOfReemploymentMapperTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(3).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
-			tuple("startDate", List.of("2024-06-11")),
-			tuple("workplace", List.of("Testplats")),
-			tuple("position", List.of("6 - Arbetsmarknadsåtgärd")));
+		assertThat(errand.getParameters()).hasSize(3).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+			tuple("lastDayOfPosition", List.of("2024-10-03"), "Sista anställningsdag"),
+			tuple("workplace", List.of("Testar"), "Arbetsplats"),
+			tuple("position", List.of("T - Tidsbegr anställning"), "Anställningsform"));
 
 		assertThat(errand.getStakeholders()).hasSize(3).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName)
 			.containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null),
-				tuple(ROLE_APPLICANT, null, null, List.of(new ContactChannel().type("Email").value("privat@test.se"),
-					new ContactChannel().type("Phone").value("0701234567")), null),
-				tuple(ROLE_MANAGER, "Joakim", "von Anka", List.of(new ContactChannel().type("Email").value("joakim.anka@sundsvall.se")), "KSK Avd Digital Utveckling"));
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"),
+					new ContactChannel().type("Phone").value("0701112223")), null),
+				tuple(ROLE_MANAGER, "Joakim", "von Anka", List.of(new ContactChannel().type("Email").value("joakim.anka@sundsvall.se")), "KSK Avd Digital arbetsplats"));
 
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6842")));
+		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6911")));
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(properties).getPriority();

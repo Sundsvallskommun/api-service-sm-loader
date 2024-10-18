@@ -17,7 +17,10 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 import java.util.List;
 import java.util.Set;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_AMOUNT;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_FROM_MONTH;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_AMOUNT;
@@ -58,8 +61,8 @@ class SalaryChangeProvider implements OpenEMapper {
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.parameters(List.of(new Parameter().key(KEY_AMOUNT).addValuesItem(result.amount()),
-				new Parameter().key(KEY_FROM_MONTH).addValuesItem(result.fromMonth())))
+			.parameters(List.of(new Parameter().key(KEY_AMOUNT).addValuesItem(result.amount()).displayName(DISPLAY_AMOUNT),
+				new Parameter().key(KEY_FROM_MONTH).addValuesItem(result.fromMonth()).displayName(DISPLAY_FROM_MONTH)))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
 			.reporterUserId(result.applicantUserId());
 	}
@@ -87,6 +90,6 @@ class SalaryChangeProvider implements OpenEMapper {
 	}
 
 	private String getPartyId(final String legalId) {
-		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+		return isNotEmpty(legalId) ? partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null) : null;
 	}
 }

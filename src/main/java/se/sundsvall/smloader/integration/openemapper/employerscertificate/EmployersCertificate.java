@@ -43,6 +43,15 @@ record EmployersCertificate(
 	@XPath("/FlowInstance/Values/periodDates/EndDate")
 	String endDate,
 
+	@XPath("/FlowInstance/Values/timePeriod/Value")
+	String timePeriod,
+
+	@XPath("/FlowInstance/Values/consent/Value")
+	String consent,
+
+	@XPath("/FlowInstance/Values/deliveryMethod/Value")
+	String deliveryMethod,
+
 	@XPath("/FlowInstance/Values/aKassa/Value")
 	String unemploymentFund,
 

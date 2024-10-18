@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
+              xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-471.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>194</FamilyID>
+			<Version>1</Version>
+			<FlowID>471</FlowID>
+			<Name><![CDATA[25 år på jobbet - Anmälan - TEST DRAKEN]]></Name>
+		</Flow>
+		<FlowInstanceID>6857</FlowInstanceID>
+		<Status>
+			<ID>4063</ID>
+			<Name><![CDATA[Inskickat]]></Name>
+		</Status>
+		<Poster>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Poster>
+		<Owner>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<ID>25953</ID>
+		</Owner>
+		<Posted>2024-09-13T15:26:35</Posted>
+		<FirstSubmitted>2024-09-13T15:26:35</FirstSubmitted>
+		<LastSubmitted>2024-09-13T15:26:35</LastSubmitted>
+	</Header>
+	<Values>
+		<applicant>
+			<QueryID>16907</QueryID>
+			<Name><![CDATA[Kontaktuppgifter]]></Name>
+			<firstname><![CDATA[Kalle]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<username><![CDATA[kal00ank]]></username>
+			<email><![CDATA[kalle.anka@sundsvall.se]]></email>
+			<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>
+			<title><![CDATA[It-konsult]]></title>
+			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
+		</applicant>
+		<personalDetails>
+			<QueryID>16908</QueryID>
+			<Name><![CDATA[Personuppgifter]]></Name>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Address><![CDATA[Storgatan 1]]></Address>
+			<ZipCode><![CDATA[111 22]]></ZipCode>
+			<PostalAddress><![CDATA[ANKEBORG]]></PostalAddress>
+			<SocialSecurityNumber><![CDATA[191010101010]]></SocialSecurityNumber>
+		</personalDetails>
+		<alternativeAdress>
+			<QueryID>17963</QueryID>
+			<Name><![CDATA[Postadress]]></Name>
+			<Address><![CDATA[Avkroken 1]]></Address>
+			<ZipCode><![CDATA[99999]]></ZipCode>
+			<PostalAddress><![CDATA[Fjärran]]></PostalAddress>
+		</alternativeAdress>
+		<startDate>
+			<QueryID>16911</QueryID>
+			<Name><![CDATA[När var din första anställningsdag i Sundsvalls kommun?]]></Name>
+			<StartDate>2022-11-01</StartDate>
+		</startDate>
+		<changeWork>
+			<QueryID>16912</QueryID>
+			<Name><![CDATA[Har du bytt huvudman till Sundsvalls kommun enligt särskild överenskommelse?]]></Name>
+			<Value>Ja</Value>
+		</changeWork>
+		<StartDateChangeWork>
+			<QueryID>16913</QueryID>
+			<Name><![CDATA[När var din första anställningsdag hos tidigare huvudman?]]></Name>
+			<StartDate>2021-01-01</StartDate>
+		</StartDateChangeWork>
+	</Values>
+</FlowInstance>

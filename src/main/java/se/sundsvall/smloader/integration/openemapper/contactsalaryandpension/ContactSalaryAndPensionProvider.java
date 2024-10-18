@@ -18,11 +18,13 @@ import java.util.List;
 import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
@@ -102,14 +104,15 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 				.organizationName(contactSalaryAndPension.managerOrganization()));
 		}
 
-		if (contactSalaryAndPension.contactFirstname() != null) {
+		if (contactSalaryAndPension.applicantFirstname() != null) {
 			stakeholders.add(new Stakeholder()
-				.role(ROLE_CONTACT_PERSON)
-				.firstName(contactSalaryAndPension.contactFirstname())
-				.lastName(contactSalaryAndPension.contactLastname())
+				.role(ROLE_APPLICANT)
+				.firstName(contactSalaryAndPension.applicantFirstname())
+				.lastName(contactSalaryAndPension.applicantLastname())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(contactSalaryAndPension.contactLegalId()))
-				.organizationName(contactSalaryAndPension.contactOrganization()));
+				.contactChannels(getContactChannels(contactSalaryAndPension.applicantEmail()))
+				.externalId(getPartyId(contactSalaryAndPension.applicantLegalId()))
+				.organizationName(contactSalaryAndPension.applicantOrganization()));
 		}
 
 		users.forEach(user ->
@@ -132,10 +135,10 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 	}
 
 	private String getPartyId(final String legalId) {
-		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+		return isNotEmpty(legalId) ? partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null) : null;
 	}
 
 	private String getReporterUserId(final ContactSalaryAndPension contactSalaryAndPension) {
-		return !isEmpty(contactSalaryAndPension.managerUserId()) ? contactSalaryAndPension.managerUserId() : contactSalaryAndPension.contactUserId();
+		return !isEmpty(contactSalaryAndPension.managerUserId()) ? contactSalaryAndPension.managerUserId() : contactSalaryAndPension.applicantUserId();
 	}
 }

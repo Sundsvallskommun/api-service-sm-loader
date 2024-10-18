@@ -22,6 +22,30 @@ record PermissionOrder(
 	@XPath("/FlowInstance/Header/Poster/Email")
 	String posterEmail,
 
+	@XPath("/FlowInstance/Values/isManager/Value")
+	String isManager,
+
+	@XPath("/FlowInstance/Values/notEmploye/Value")
+	String notEmployee,
+
+	@XPath("/FlowInstance/Values/manager/firstname")
+	String managerFirstname,
+
+	@XPath("/FlowInstance/Values/manager/lastname")
+	String managerLastname,
+
+	@XPath("/FlowInstance/Values/manager/username")
+	String managerUserId,
+
+	@XPath("/FlowInstance/Values/manager/email")
+	String managerEmail,
+
+	@XPath("/FlowInstance/Values/manager/title")
+	String managerTitle,
+
+	@XPath("/FlowInstance/Values/manager/organization")
+	String managerOrganization,
+
 	@XPath("/FlowInstance/Values/applicant/firstname")
 	String applicantFirstname,
 
@@ -67,17 +91,47 @@ record PermissionOrder(
 	@XPath("/FlowInstance/Values/administrativeUnit/Value")
 	String administrativeUnit,
 
-	@XPath("/FlowInstance/Values/administrativeUnitPartOfK/Value")
-	String partOfAdministrativeUnit,
+	@XPath("/FlowInstance/Values/userTypeHeroma/Value")
+	String userTypeHeroma,
+
+	@XPath("/FlowInstance/Values/accessTypeHeroma/Value")
+	String accessTypeHeroma,
+
+	@XPath("/FlowInstance/Values/uppdateDescription/Value")
+	String updateDescription,
 
 	@XPath("/FlowInstance/Values/typeOfAccess/Value")
 	String typeOfAccess,
+
+	@XPath("/FlowInstance/Values/stillEmployed/Value")
+	String stillEmployed,
+
+	@XPath("/FlowInstance/Values/nameTerminated/Value")
+	String nameTerminated,
 
 	@XPath("/FlowInstance/Values/systemAccess/Value")
 	String systemAccess,
 
 	@XPath("/FlowInstance/Values/fromDate/StartDate")
 	String startDate,
+
+	@XPath("/FlowInstance/Values/accessTemplate/firstname")
+	String templateFirstname,
+
+	@XPath("/FlowInstance/Values/accessTemplate/lastname")
+	String templateLastname,
+
+	@XPath("/FlowInstance/Values/accessTemplate/username")
+	String templateUsername,
+
+	@XPath("/FlowInstance/Values/accessTemplate/citizenIdentifier")
+	String templateLegalId,
+
+	@XPath("/FlowInstance/Values/accessTemplate/title")
+	String templateTitle,
+
+	@XPath("/FlowInstance/Values/accessTemplate/organization")
+	String templateOrganization,
 
 	@XPath("/FlowInstance/Values/otherInformation/Value")
 	String otherInformation) { }

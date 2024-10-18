@@ -22,6 +22,24 @@ record ContactSalaryAndPension(
 	@XPath("/FlowInstance/Header/Poster/Email")
 	String posterEmail,
 
+	@XPath("/FlowInstance/Values/applicant/firstname")
+	String applicantFirstname,
+
+	@XPath("/FlowInstance/Values/applicant/lastname")
+	String applicantLastname,
+
+	@XPath("/FlowInstance/Values/applicant/username")
+	String applicantUserId,
+
+	@XPath("/FlowInstance/Values/applicant/email")
+	String applicantEmail,
+
+	@XPath("/FlowInstance/Values/applicant/citizenIdentifier")
+	String applicantLegalId,
+
+	@XPath("/FlowInstance/Values/applicant/organization")
+	String applicantOrganization,
+
 	@XPath("/FlowInstance/Values/contactManager/firstname")
 	String managerFirstname,
 
@@ -36,21 +54,6 @@ record ContactSalaryAndPension(
 
 	@XPath("/FlowInstance/Values/contactManager/organization")
 	String managerOrganization,
-
-	@XPath("/FlowInstance/Values/contact/firstname")
-	String contactFirstname,
-
-	@XPath("/FlowInstance/Values/contact/lastname")
-	String contactLastname,
-
-	@XPath("/FlowInstance/Values/contact/username")
-	String contactUserId,
-
-	@XPath("/FlowInstance/Values/contact/citizenIdentifier")
-	String contactLegalId,
-
-	@XPath("/FlowInstance/Values/contact/organization")
-	String contactOrganization,
 
 	@XPath("/FlowInstance/Values/subject/Value")
 	String subject,

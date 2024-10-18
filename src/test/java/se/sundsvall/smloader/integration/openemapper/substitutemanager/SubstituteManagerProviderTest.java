@@ -8,6 +8,8 @@ import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,6 +30,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPROVER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
@@ -54,8 +57,9 @@ class SubstituteManagerProviderTest {
 		assertThat(provider.getSupportedFamilyId()).isEqualTo("789");
 	}
 
-	@Test
-	void mapToErrand() throws Exception {
+	@ParameterizedTest
+	@ValueSource(strings = {"flow-instance-ersattare-chef.xml", "flow-instance-ersattare-chef-annan-skickar.xml"})
+	void mapToErrand(String oepErrandFile) throws Exception {
 		// Arrange
 		final var priority = "MEDIUM";
 		final var category = "category";
@@ -67,7 +71,7 @@ class SubstituteManagerProviderTest {
 		when(properties.getType()).thenReturn(type);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
-		var stringBytes = readOpenEFile("flow-instance-ersattare-chef.xml");
+		var stringBytes = readOpenEFile(oepErrandFile);
 
 		// Act
 		var errand = provider.mapToErrand(stringBytes);
@@ -79,14 +83,15 @@ class SubstituteManagerProviderTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(3).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
-			tuple("startDate", List.of("2024-08-30")),
-			tuple("endDate", List.of("2024-09-27")),
-			tuple("responsibilityNumber", List.of("25610000 - AoF Arenor i samverkan")));
+		assertThat(errand.getParameters()).hasSize(3).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+			tuple("startDate", List.of("2024-08-30"), "Startdatum"),
+			tuple("endDate", List.of("2024-09-27"), "Slutdatum"),
+			tuple("responsibilityNumber", List.of("25610000 - AoF Arenor i samverkan"), "Ansvarsnummer"));
 
-		assertThat(errand.getStakeholders()).hasSize(4).
+		assertThat(errand.getStakeholders()).hasSize(5).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
 				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
 				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId),
 				tuple(ROLE_SUBSTITUTE, "Tjatte", "Anka", emptyList(), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId),

@@ -21,14 +21,25 @@ import java.util.Set;
 
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_CONSENT;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_DELIVERY_METHOD;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_END_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SEND_DIGITAL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_START_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_TIME_PERIOD;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_UNEMPLOYMENT_FUND;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CONSENT;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_DELIVERY_METHOD;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_END_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SEND_DIGITAL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TIME_PERIOD;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_UNEMPLOYMENT_FUND;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
@@ -107,16 +118,26 @@ class EmployersCertificateProvider implements OpenEMapper {
 
 	private List<Parameter> getParameters(final EmployersCertificate employersCertificate) {
 		final var parameters = new ArrayList<Parameter>();
-		parameters.add(new Parameter().key(KEY_UNEMPLOYMENT_FUND).addValuesItem(employersCertificate.unemploymentFund()));
-		Optional.ofNullable(employersCertificate.sendDigital()).ifPresent(sendDigital -> parameters.add(new Parameter().key(KEY_SEND_DIGITAL).addValuesItem(sendDigital)));
-		Optional.ofNullable(employersCertificate.startDate()).ifPresent(startDate -> parameters.add(new Parameter().key(KEY_START_DATE).addValuesItem(startDate)));
-		Optional.ofNullable(employersCertificate.endDate()).ifPresent(endDate -> parameters.add(new Parameter().key(KEY_END_DATE).addValuesItem(endDate)));
+		Optional.ofNullable(employersCertificate.sendDigital()).ifPresent(sendDigital -> parameters.add(new Parameter().key(KEY_SEND_DIGITAL).addValuesItem(sendDigital)
+			.displayName(DISPLAY_SEND_DIGITAL)));
+		Optional.ofNullable(employersCertificate.startDate()).ifPresent(startDate -> parameters.add(new Parameter().key(KEY_START_DATE).addValuesItem(startDate)
+			.displayName(DISPLAY_START_DATE)));
+		Optional.ofNullable(employersCertificate.endDate()).ifPresent(endDate -> parameters.add(new Parameter().key(KEY_END_DATE).addValuesItem(endDate)
+			.displayName(DISPLAY_END_DATE)));
+		Optional.ofNullable(employersCertificate.timePeriod()).ifPresent(timePeriod -> parameters.add(new Parameter().key(KEY_TIME_PERIOD).addValuesItem(timePeriod)
+			.displayName(DISPLAY_TIME_PERIOD)));
+		Optional.ofNullable(employersCertificate.consent()).ifPresent(consent -> parameters.add(new Parameter().key(KEY_CONSENT).addValuesItem(consent)
+			.displayName(DISPLAY_CONSENT)));
+		Optional.ofNullable(employersCertificate.deliveryMethod()).ifPresent(consent -> parameters.add(new Parameter().key(KEY_DELIVERY_METHOD).addValuesItem(consent)
+			.displayName(DISPLAY_DELIVERY_METHOD)));
+		Optional.ofNullable(employersCertificate.unemploymentFund()).ifPresent(unemploymentFund -> parameters.add(new Parameter().key(KEY_UNEMPLOYMENT_FUND).addValuesItem(unemploymentFund)
+			.displayName(DISPLAY_UNEMPLOYMENT_FUND)));
 
 		return parameters;
 	}
 
 	private String getPartyId(final String legalId) {
-		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+		return isNotEmpty(legalId) ? partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null) : null;
 	}
 
 	private String getReporterUserId(final EmployersCertificate employersCertificate) {

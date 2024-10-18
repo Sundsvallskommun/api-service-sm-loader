@@ -42,8 +42,18 @@
 		<isManager>
 			<QueryID>13632</QueryID>
 			<Name><![CDATA[Är du chef för enheten där beställning ligger?]]></Name>
-			<Value>Ja, jag är chef och har rätt att godkänna beställningen</Value>
+			<Value>Nej</Value>
 		</isManager>
+		<manager>
+			<QueryID>13633</QueryID>
+			<Name><![CDATA[Chef för enheten]]></Name>
+			<firstname><![CDATA[Jocke]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<username><![CDATA[joc22ank]]></username>
+			<email><![CDATA[jocke.anka@sundsvall.se]]></email>
+			<title><![CDATA[Chef]]></title>
+			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
+		</manager>
 		<user>
 			<QueryID>13634</QueryID>
 			<Name><![CDATA[Vem ska tilldelas behörighet?]]></Name>

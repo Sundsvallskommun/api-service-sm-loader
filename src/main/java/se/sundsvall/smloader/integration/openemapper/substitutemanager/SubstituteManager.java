@@ -25,6 +25,21 @@ record SubstituteManager(
 	@XPath("/FlowInstance/Values/ordinaryManager/Value")
 	String sentByOrdinaryManager,
 
+	@XPath("/FlowInstance/Values/applicant/firstname")
+	String applicantFirstname,
+
+	@XPath("/FlowInstance/Values/applicant/lastname")
+	String applicantLastname,
+
+	@XPath("/FlowInstance/Values/applicant/username")
+	String applicantUserId,
+
+	@XPath("/FlowInstance/Values/applicant/email")
+	String applicantEmail,
+
+	@XPath("/FlowInstance/Values/applicant/organization")
+	String applicantOrganization,
+
 	@XPath("/FlowInstance/Values/manager/firstname")
 	String managerFirstname,
 
@@ -39,6 +54,21 @@ record SubstituteManager(
 
 	@XPath("/FlowInstance/Values/manager/organization")
 	String managerOrganization,
+
+	@XPath("/FlowInstance/Values/manager2/firstname")
+	String otherSenderFirstname,
+
+	@XPath("/FlowInstance/Values/manager2/lastname")
+	String otherSenderLastname,
+
+	@XPath("/FlowInstance/Values/manager2/username")
+	String otherSenderUserId,
+
+	@XPath("/FlowInstance/Values/manager2/citizenIdentifier")
+	String otherSenderLegalId,
+
+	@XPath("/FlowInstance/Values/manager2/organization")
+	String otherSenderOrganization,
 
 	@XPath("/FlowInstance/Values/responsibilityNumber/Value")
 	String responsibilityNumber,
