@@ -71,10 +71,10 @@ record TwentyFiveAtWork(
 	String legalId,
 
 	@XPath("/FlowInstance/Values/startDate/StartDate")
-	String startDate,
+	String originalStartDate,
 
 	@XPath("/FlowInstance/Values/StartDateChangeWork/StartDate")
-	String originalStartDate,
+	String startDateChangeWork,
 
 	@XPath("/FlowInstance/Values/title/Value")
 	String title) { }

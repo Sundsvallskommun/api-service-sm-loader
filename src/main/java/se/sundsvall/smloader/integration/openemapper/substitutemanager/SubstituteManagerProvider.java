@@ -20,9 +20,9 @@ import java.util.Set;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_END_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_END_DATE_CERTIFY;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_RESPONSIBILITY_NUMBER;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_START_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_START_DATE_CERTIIFY;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
@@ -70,8 +70,8 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_RESPONSIBILITY_NUMBER).addValuesItem(result.responsibilityNumber()).displayName(DISPLAY_RESPONSIBILITY_NUMBER),
-				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()).displayName(DISPLAY_START_DATE),
-				new Parameter().key(KEY_END_DATE).addValuesItem(result.endDate()).displayName(DISPLAY_END_DATE)))
+				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()).displayName(DISPLAY_START_DATE_CERTIIFY),
+				new Parameter().key(KEY_END_DATE).addValuesItem(result.endDate()).displayName(DISPLAY_END_DATE_CERTIFY)))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
 			.reporterUserId(getReporterUserId(result));
 	}

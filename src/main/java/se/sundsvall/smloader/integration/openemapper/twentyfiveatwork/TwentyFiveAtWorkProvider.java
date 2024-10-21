@@ -64,7 +64,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 			.labels(properties.getLabels())
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.parameters(List.of(new Parameter().key(KEY_LATEST_START_DATE).addValuesItem(result.startDate()).displayName(DISPLAY_LATEST_START_DATE),
+			.parameters(List.of(new Parameter().key(KEY_LATEST_START_DATE).addValuesItem(result.startDateChangeWork()).displayName(DISPLAY_LATEST_START_DATE),
 				new Parameter().key(KEY_ORIGINAL_START_DATE).addValuesItem(result.originalStartDate()).displayName(DISPLAY_ORIGINAL_START_DATE)))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
 			.reporterUserId(result.applicantUserId());

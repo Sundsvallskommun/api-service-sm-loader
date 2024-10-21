@@ -28,7 +28,9 @@ public final class ErrandConstants {
 	public static final String DISPLAY_ADMINISTRATIVE_UNIT  = "Förvaltning/verksamhet";
 	//SubstituteManager
 	public static final String KEY_RESPONSIBILITY_NUMBER = "responsibilityNumber";
-	public static final String DISPLAY_RESPONSIBILITY_NUMBER = "Ansvarsnummer";
+	public static final String DISPLAY_RESPONSIBILITY_NUMBER = "Ordinarie chef ansvarsnummer";
+	public static final String DISPLAY_START_DATE_CERTIIFY = "Attesteringsperiods startdatum";
+	public static final String DISPLAY_END_DATE_CERTIFY = "Attesteringsperiods slutdatum";
 	//PrecedenceOfReemployment
 	public static final String KEY_LAST_DAY_OF_POSITION = "lastDayOfPosition";
 	public static final String DISPLAY_LAST_DAY_OF_POSITION = "Sista anställningsdag";
