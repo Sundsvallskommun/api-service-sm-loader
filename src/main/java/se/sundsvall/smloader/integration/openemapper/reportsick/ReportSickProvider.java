@@ -36,6 +36,12 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADM
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_EMPLOYEE_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_EMPLOYMENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_HAVE_SICK_NOTE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_NOTE_END_DATES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_NOTE_PERCENTAGES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_NOTE_START_DATES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_DATES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_END_TIMES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_START_TIMES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ABSENT_CONTINUATION;
@@ -52,6 +58,12 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYEE_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYMENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_HAVE_SICK_NOTE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_END_DATES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_PERCENTAGES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_START_DATES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_DATES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_END_TIMES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_START_TIMES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
@@ -182,9 +194,9 @@ class ReportSickProvider implements OpenEMapper {
 		});
 
 		if (!sickPeriodDates.isEmpty()) {
-			parameters.add(new Parameter().key("sickPeriodDates").values(sickPeriodDates).displayName("Sjukperiodens datum"));
-			parameters.add(new Parameter().key("sickPeriodStartTimes").values(sickPeriodStartTimes).displayName("Sjukperiodens starttider"));
-			parameters.add(new Parameter().key("sickPeriodEndTimes").values(sickPeriodEndTimes).displayName("Sjukperiodens sluttider"));
+			parameters.add(new Parameter().key(KEY_SICK_PERIOD_DATES).values(sickPeriodDates).displayName(DISPLAY_SICK_PERIOD_DATES));
+			parameters.add(new Parameter().key(KEY_SICK_PERIOD_START_TIMES).values(sickPeriodStartTimes).displayName(DISPLAY_SICK_PERIOD_START_TIMES));
+			parameters.add(new Parameter().key(KEY_SICK_PERIOD_END_TIMES).values(sickPeriodEndTimes).displayName(DISPLAY_SICK_PERIOD_END_TIMES));
 		}
 
 		final int countOfSickLeavePeriods = Optional.ofNullable(reportSick.countOfSickLeavePeriods()).orElse(0);
@@ -218,9 +230,9 @@ class ReportSickProvider implements OpenEMapper {
 			sickNoteEndDateRows.add(evaluateXPath(xml, pathEndDate).text());
 		}
 
-		parameters.add(new Parameter().key("sickNotePercentages").values(sickNotePercentRows).displayName("Sjukskrivningsgrad i procent"));
-		parameters.add(new Parameter().key("sickNoteStartDates").values(sickNoteStartDateRows).displayName("Sjukskrivnings startdatum"));
-		parameters.add(new Parameter().key("sickNoteEndDates").values(sickNoteEndDateRows).displayName("Sjukskrivnings slutdatum"));
+		parameters.add(new Parameter().key(KEY_SICK_NOTE_PERCENTAGES).values(sickNotePercentRows).displayName(DISPLAY_SICK_NOTE_PERCENTAGES));
+		parameters.add(new Parameter().key(KEY_SICK_NOTE_START_DATES).values(sickNoteStartDateRows).displayName(DISPLAY_SICK_NOTE_START_DATES));
+		parameters.add(new Parameter().key(KEY_SICK_NOTE_END_DATES).values(sickNoteEndDateRows).displayName(DISPLAY_SICK_NOTE_END_DATES));
 		return parameters;
 	}
 
