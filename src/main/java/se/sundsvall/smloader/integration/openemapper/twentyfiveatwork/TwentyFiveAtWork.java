@@ -58,6 +58,15 @@ record TwentyFiveAtWork(
 	@XPath("/FlowInstance/Values/personalDetails/PostalAddress")
 	String postalAddress,
 
+	@XPath("/FlowInstance/Values/alternativeAdress/Address")
+	String otherAddress,
+
+	@XPath("/FlowInstance/Values/alternativeAdress/ZipCode")
+	String otherZipCode,
+
+	@XPath("/FlowInstance/Values/alternativeAdress/PostalAddress")
+	String otherPostalAddress,
+
 	@XPath("/FlowInstance/Values/personalDetails/SocialSecurityNumber")
 	String legalId,
 

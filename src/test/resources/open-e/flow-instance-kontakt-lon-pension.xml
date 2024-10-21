@@ -36,16 +36,17 @@
 		<LastSubmitted>2024-09-11T12:44:14</LastSubmitted>
 	</Header>
 	<Values>
-		<contact>
-			<QueryID>13596</QueryID>
-			<Name><![CDATA[Mina uppgifter]]></Name>
+		<applicant>
+			<QueryID>16907</QueryID>
+			<Name><![CDATA[Kontaktuppgifter]]></Name>
 			<firstname><![CDATA[Kalle]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
-			<username><![CDATA[kontaktAnvändare]]></username>
+			<username><![CDATA[kal00ank]]></username>
+			<email><![CDATA[kalle.anka@sundsvall.se]]></email>
 			<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>
 			<title><![CDATA[It-konsult]]></title>
 			<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
-		</contact>
+		</applicant>
 		<subject>
 			<QueryID>13599</QueryID>
 			<Name><![CDATA[Vad gäller ärendet?]]></Name>

@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
@@ -81,11 +82,11 @@ class ContactSalaryAndPensionProviderTest {
 		assertThat(errand.getStakeholders()).hasSize(2).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
 				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId),
+				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6854")));
-		assertThat(errand.getReporterUserId()).isEqualTo("kontaktAnvändare");
+		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

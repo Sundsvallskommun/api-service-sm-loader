@@ -27,6 +27,7 @@ public final class CaseMapper {
 			.withErrandId(errandId)
 			.withCaseType(caseEntity.getCaseMetaData().getFamilyId())
 			.withExternalCaseId(caseEntity.getExternalCaseId())
+			.withMunicipalityId(caseEntity.getCaseMetaData().getMunicipalityId())
 			.withModified(OffsetDateTime.now());
 	}
 }

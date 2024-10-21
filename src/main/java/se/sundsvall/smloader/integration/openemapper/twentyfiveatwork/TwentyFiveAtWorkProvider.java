@@ -17,12 +17,15 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 import java.util.List;
 import java.util.Set;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_LATEST_START_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ORIGINAL_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_LATEST_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ORIGINAL_START_DATE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
@@ -61,8 +64,8 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 			.labels(properties.getLabels())
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.parameters(List.of(new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()),
-				new Parameter().key(KEY_ORIGINAL_START_DATE).addValuesItem(result.originalStartDate())))
+			.parameters(List.of(new Parameter().key(KEY_LATEST_START_DATE).addValuesItem(result.startDate()).displayName(DISPLAY_LATEST_START_DATE),
+				new Parameter().key(KEY_ORIGINAL_START_DATE).addValuesItem(result.originalStartDate()).displayName(DISPLAY_ORIGINAL_START_DATE)))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
 			.reporterUserId(result.applicantUserId());
 	}
@@ -81,15 +84,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 				.organizationName(twentyFiveAtWork.applicantOrganization())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(twentyFiveAtWork.applicantLegalId())),
-			new Stakeholder()
-				.role(ROLE_EMPLOYEE)
-				.firstName(twentyFiveAtWork.firstname())
-				.lastName(twentyFiveAtWork.lastname())
-				.address(twentyFiveAtWork.address())
-				.zipCode(twentyFiveAtWork.zipCode())
-				.city(twentyFiveAtWork.postalAddress())
-				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(twentyFiveAtWork.legalId())));
+			getEmployee(twentyFiveAtWork));
 	}
 
 	private List<ContactChannel> getContactChannels(final String email) {
@@ -98,7 +93,24 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 			.value(email));
 	}
 
+	private Stakeholder getEmployee(final TwentyFiveAtWork twentyFiveAtWork) {
+		final var stakeholder = new Stakeholder()
+			.role(ROLE_EMPLOYEE)
+			.firstName(twentyFiveAtWork.firstname())
+			.lastName(twentyFiveAtWork.lastname())
+			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
+			.externalId(getPartyId(twentyFiveAtWork.legalId()));
+
+		return isNotEmpty(twentyFiveAtWork.otherAddress()) ?
+			stakeholder.address(twentyFiveAtWork.otherAddress())
+				.zipCode(twentyFiveAtWork.otherZipCode())
+				.city(twentyFiveAtWork.otherPostalAddress()) :
+			stakeholder.address(twentyFiveAtWork.address())
+				.zipCode(twentyFiveAtWork.zipCode())
+				.city(twentyFiveAtWork.postalAddress());
+	}
+
 	private String getPartyId(final String legalId) {
-		return partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null);
+		return isNotEmpty(legalId) ? partyClient.getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, legalId).orElse(null) : null;
 	}
 }

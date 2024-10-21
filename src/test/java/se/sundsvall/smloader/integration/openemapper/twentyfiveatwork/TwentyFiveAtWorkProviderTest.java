@@ -8,6 +8,8 @@ import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -53,8 +55,9 @@ class TwentyFiveAtWorkProviderTest {
 		assertThat(provider.getSupportedFamilyId()).isEqualTo("110");
 	}
 
-	@Test
-	void mapToErrand() throws Exception {
+	@ParameterizedTest
+	@ValueSource(strings = {"flow-instance-25-pa-jobbet.xml", "flow-instance-25-pa-jobbet-annan-adress.xml"})
+	void mapToErrand(String oepErrandFile) throws Exception {
 		// Arrange
 		final var priority = "MEDIUM";
 		final var category = "category";
@@ -68,7 +71,7 @@ class TwentyFiveAtWorkProviderTest {
 		when(properties.getLabels()).thenReturn(labels);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
-		final var stringBytes = readOpenEFile("flow-instance-25-pa-jobbet.xml");
+		final var stringBytes = readOpenEFile(oepErrandFile);
 
 		// Act
 		final var errand = provider.mapToErrand(stringBytes);
@@ -81,17 +84,26 @@ class TwentyFiveAtWorkProviderTest {
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getLabels()).hasSize(1).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues).containsExactlyInAnyOrder(
-			tuple("startDate", List.of("2022-11-01")),
-			tuple("originalStartDate", List.of("2021-01-01")));
+		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+			tuple("latestStartDate", List.of("2022-11-01"), "Startdatum för anställning hos tidigare huvudman"),
+			tuple("originalStartDate", List.of("2021-01-01"), "Startdatum för anställning"));
 
-		assertThat(errand.getStakeholders()).hasSize(3).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getZipCode, Stakeholder::getCity).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId, null, null, null),
-				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Storgatan 1", "111 22", "ANKEBORG"));
+		if(oepErrandFile.contains("annan-adress")) {
 
+			assertThat(errand.getStakeholders()).hasSize(3).
+				extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+					Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getZipCode, Stakeholder::getCity).containsExactlyInAnyOrder(
+					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null),
+					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId, null, null, null),
+					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Avkroken 1", "99999", "Fjärran"));
+		} else {
+			assertThat(errand.getStakeholders()).hasSize(3).
+				extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+					Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getZipCode, Stakeholder::getCity).containsExactlyInAnyOrder(
+					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null),
+					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId, null, null, null),
+					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Storgatan 1", "111 22", "ANKEBORG"));
+		}
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6857")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 

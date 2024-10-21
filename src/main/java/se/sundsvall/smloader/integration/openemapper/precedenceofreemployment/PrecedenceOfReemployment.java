@@ -29,7 +29,7 @@ record PrecedenceOfReemployment(
 	String position,
 
 	@XPath("/FlowInstance/Values/lastDayOfPosition/StartDate")
-	String startDate,
+	String lastDayOfPosition,
 
 	@XPath("/FlowInstance/Values/manager/firstname")
 	String managerFirstname,
@@ -43,8 +43,14 @@ record PrecedenceOfReemployment(
 	@XPath("/FlowInstance/Values/manager/organization")
 	String managerOrganization,
 
-	@XPath("/FlowInstance/Values/contactInformation/E-post__privat_")
-	String privateEmail,
+	@XPath("/FlowInstance/Values/applicant/Fornamn")
+	String applicantFirstname,
 
-	@XPath("/FlowInstance/Values/contactInformation/Telefonnummer__privat_")
-	String privatePhone) { }
+	@XPath("/FlowInstance/Values/applicant/Efternamn")
+	String applicantLastname,
+
+	@XPath("/FlowInstance/Values/applicant/E-post__privat_")
+	String applicantEmail,
+
+	@XPath("/FlowInstance/Values/applicant/Telefonnummer__privat_")
+	String applicantPhone) { }
