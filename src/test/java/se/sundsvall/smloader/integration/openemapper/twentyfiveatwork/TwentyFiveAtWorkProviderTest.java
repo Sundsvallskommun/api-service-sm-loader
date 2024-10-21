@@ -85,8 +85,8 @@ class TwentyFiveAtWorkProviderTest {
 		assertThat(errand.getLabels()).hasSize(1).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
-			tuple("latestStartDate", List.of("2022-11-01"), "Startdatum för anställning hos tidigare huvudman"),
-			tuple("originalStartDate", List.of("2021-01-01"), "Startdatum för anställning"));
+			tuple("latestStartDate", List.of("2021-01-01"), "Startdatum för anställning hos tidigare huvudman"),
+			tuple("originalStartDate", List.of("2022-11-01"), "Startdatum för anställning"));
 
 		if(oepErrandFile.contains("annan-adress")) {
 
