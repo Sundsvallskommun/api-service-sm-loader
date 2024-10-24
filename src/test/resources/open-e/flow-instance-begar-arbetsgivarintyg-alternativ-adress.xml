@@ -42,23 +42,42 @@
 		<contactMethod>
 			<QueryID>63315</QueryID>
 			<Name><![CDATA[När ärendet är klart, hur vill du bli aviserad?]]></Name>
-			<Value>SMS</Value>
+			<Value>E-post</Value>
 		</contactMethod>
-		<phone>
-			<QueryID>63317</QueryID>
-			<Name><![CDATA[SMS]]></Name>
-			<MobilePhone><![CDATA[0701112223]]></MobilePhone>
-			<ContactBySMS><![CDATA[true]]></ContactBySMS>
-		</phone>
+		<email>
+			<QueryID>63316</QueryID>
+			<Name><![CDATA[E-post]]></Name>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+		</email>
 		<timePeriod>
 			<QueryID>63318</QueryID>
 			<Name><![CDATA[Intyg för]]></Name>
-			<Value>De senaste tolv månaderna</Value>
+			<Value>Viss period</Value>
 		</timePeriod>
+		<periodDates>
+			<QueryID>63319</QueryID>
+			<Name><![CDATA[Tidsperiod]]></Name>
+			<StartDate>2024-01-01</StartDate>
+			<EndDate>2024-09-17</EndDate>
+		</periodDates>
 		<aKassa>
 			<QueryID>63320</QueryID>
 			<Name><![CDATA[Ska du använda ditt intyg till att söka ersättning från a-kassa?]]></Name>
-			<Value>Nej</Value>
+			<Value>Ja</Value>
 		</aKassa>
+		<sendDigital>
+			<QueryID>63321</QueryID>
+			<Name><![CDATA[Vill du att arbetsgivarintyget skickas digitalt till arbetsgivarintyg.nu?]]></Name>
+			<Value>Nej</Value>
+		</sendDigital>
+		<alternativeAddress>
+			<QueryID>65683</QueryID>
+			<Name><![CDATA[Postadress]]></Name>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Address><![CDATA[Alternativet 1]]></Address>
+			<ZipCode><![CDATA[67890]]></ZipCode>
+			<PostalAddress><![CDATA[Alternativ]]></PostalAddress>
+		</alternativeAddress>
 	</Values>
 </FlowInstance>

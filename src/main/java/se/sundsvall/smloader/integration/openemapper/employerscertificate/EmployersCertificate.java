@@ -31,6 +31,24 @@ record EmployersCertificate(
 	@XPath("/FlowInstance/Values/applicant/SocialSecurityNumber")
 	String applicantLegalId,
 
+	@XPath("/FlowInstance/Values/applicant/Address")
+	String applicantAddress,
+
+	@XPath("/FlowInstance/Values/applicant/ZipCode")
+	String applicantZipCode,
+
+	@XPath("/FlowInstance/Values/applicant/PostalAddress")
+	String applicantPostalAddress,
+
+	@XPath("/FlowInstance/Values/alternativeAddress/Address")
+	String alternativeAddress,
+
+	@XPath("/FlowInstance/Values/alternativeAddress/ZipCode")
+	String alternativeZipCode,
+
+	@XPath("/FlowInstance/Values/alternativeAddress/PostalAddress")
+	String alternativePostalAddress,
+
 	@XPath("/FlowInstance/Values/email/Email")
 	String applicantEmail,
 
