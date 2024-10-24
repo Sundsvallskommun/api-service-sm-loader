@@ -89,13 +89,7 @@ class EmployersCertificateProvider implements OpenEMapper {
 				.firstName(employersCertificate.posterFirstname())
 				.lastName(employersCertificate.posterLastname())
 				.contactChannels(getContactChannels(employersCertificate.posterEmail())),
-			new Stakeholder()
-				.role(ROLE_APPLICANT)
-				.firstName(employersCertificate.applicantFirstname())
-				.lastName(employersCertificate.applicantLastname())
-				.contactChannels(getContactChannelsForApplicant(employersCertificate.applicantEmail(), employersCertificate.applicantPhone()))
-				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(employersCertificate.applicantLegalId())));
+			getApplicant(employersCertificate));
 	}
 
 	private List<ContactChannel> getContactChannels(final String email) {
@@ -134,6 +128,24 @@ class EmployersCertificateProvider implements OpenEMapper {
 			.displayName(DISPLAY_UNEMPLOYMENT_FUND)));
 
 		return parameters;
+	}
+
+	private Stakeholder getApplicant(final EmployersCertificate employersCertificate) {
+		final var stakeholder = new Stakeholder()
+			.role(ROLE_APPLICANT)
+			.firstName(employersCertificate.applicantFirstname())
+			.lastName(employersCertificate.applicantLastname())
+			.contactChannels(getContactChannelsForApplicant(employersCertificate.applicantEmail(), employersCertificate.applicantPhone()))
+			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
+			.externalId(getPartyId(employersCertificate.applicantLegalId()));
+
+		return isNotEmpty(employersCertificate.alternativeAddress()) ?
+			stakeholder.address(employersCertificate.alternativeAddress())
+				.zipCode(employersCertificate.alternativeZipCode())
+				.city(employersCertificate.alternativePostalAddress()) :
+			stakeholder.address(employersCertificate.applicantAddress())
+				.zipCode(employersCertificate.applicantZipCode())
+				.city(employersCertificate.applicantPostalAddress());
 	}
 
 	private String getPartyId(final String legalId) {
