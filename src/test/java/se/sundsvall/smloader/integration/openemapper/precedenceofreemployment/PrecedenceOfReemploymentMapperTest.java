@@ -67,10 +67,11 @@ class PrecedenceOfReemploymentMapperTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(3).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+		assertThat(errand.getParameters()).hasSize(4).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
 			tuple("lastDayOfPosition", List.of("2024-10-03"), "Sista anställningsdag"),
 			tuple("workplace", List.of("Testar"), "Arbetsplats"),
-			tuple("position", List.of("T - Tidsbegr anställning"), "Anställningsform"));
+			tuple("position", List.of("T - Tidsbegr anställning"), "Anställningsform"),
+			tuple("salaryType", List.of("Månadslön"), "Lönetyp"));
 
 		assertThat(errand.getStakeholders()).hasSize(3).
 			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName)
