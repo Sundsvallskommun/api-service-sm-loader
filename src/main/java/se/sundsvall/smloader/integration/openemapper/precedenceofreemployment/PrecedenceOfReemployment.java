@@ -31,6 +31,9 @@ record PrecedenceOfReemployment(
 	@XPath("/FlowInstance/Values/lastDayOfPosition/StartDate")
 	String lastDayOfPosition,
 
+	@XPath("/FlowInstance/Values/salaryType/Value")
+	String salaryType,
+
 	@XPath("/FlowInstance/Values/manager/firstname")
 	String managerFirstname,
 

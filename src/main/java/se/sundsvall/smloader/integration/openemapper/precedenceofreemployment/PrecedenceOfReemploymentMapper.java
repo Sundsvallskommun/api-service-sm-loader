@@ -22,11 +22,13 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHA
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_LAST_DAY_OF_POSITION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_POSITION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SALARY_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_WORKPLACE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_LAST_DAY_OF_POSITION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_POSITION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SALARY_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_WORKPLACE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
@@ -102,6 +104,8 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 			.displayName(DISPLAY_LAST_DAY_OF_POSITION)));
 		Optional.ofNullable(precedenceOfReemployment.position()).ifPresent(position -> parameters.add(new Parameter().key(KEY_POSITION).addValuesItem(position.trim())
 			.displayName(DISPLAY_POSITION)));
+		Optional.ofNullable(precedenceOfReemployment.salaryType()).ifPresent(salaryType -> parameters.add(new Parameter().key(KEY_SALARY_TYPE).addValuesItem(salaryType.trim())
+			.displayName(DISPLAY_SALARY_TYPE)));
 
 		return parameters;
 	}

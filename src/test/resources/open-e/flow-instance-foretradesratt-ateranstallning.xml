@@ -61,5 +61,10 @@
 			<E-post__privat_><![CDATA[kalle.anka@sundsvall.se]]></E-post__privat_>
 			<Telefonnummer__privat_><![CDATA[0701112223]]></Telefonnummer__privat_>
 		</applicant>
+		<salaryType>
+			<QueryID>52976</QueryID>
+			<Name><![CDATA[Hade du månadslön eller timlön när du arbetade i Sundsvalls kommun?]]></Name>
+			<Value>Månadslön</Value>
+		</salaryType>
 	</Values>
 </FlowInstance>
