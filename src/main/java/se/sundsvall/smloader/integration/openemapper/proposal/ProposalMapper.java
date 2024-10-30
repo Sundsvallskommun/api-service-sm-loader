@@ -55,8 +55,7 @@ class ProposalMapper implements OpenEMapper {
 	}
 
 	private String getReporterUserId(final Proposal proposal) {
-		return proposal.firstname() != null ? proposal.firstname() + " " + proposal.lastname() + "-" + proposal.email() :
-			proposal.posterFirstname() + " " + proposal.posterLastname() + "-" + proposal.posterEmail();
+		return proposal.firstname() != null ? proposal.firstname() + " " + proposal.lastname() + "-" + proposal.email() : proposal.posterFirstname() + " " + proposal.posterLastname() + "-" + proposal.posterEmail();
 	}
 
 	private List<Stakeholder> getStakeholder(final Proposal proposal) {
@@ -73,7 +72,7 @@ class ProposalMapper implements OpenEMapper {
 		return List.of(new ContactChannel()
 			.type(CONTACT_CHANNEL_TYPE_EMAIL)
 			.value(proposal.email()), new ContactChannel()
-			.type(CONTACT_CHANNEL_TYPE_PHONE)
-			.value(proposal.mobilePhone()));
+				.type(CONTACT_CHANNEL_TYPE_PHONE)
+				.value(proposal.mobilePhone()));
 	}
 }

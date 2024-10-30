@@ -56,7 +56,9 @@ class TwentyFiveAtWorkProviderTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"flow-instance-25-pa-jobbet.xml", "flow-instance-25-pa-jobbet-annan-adress.xml"})
+	@ValueSource(strings = {
+		"flow-instance-25-pa-jobbet.xml", "flow-instance-25-pa-jobbet-annan-adress.xml"
+	})
 	void mapToErrand(String oepErrandFile) throws Exception {
 		// Arrange
 		final var priority = "MEDIUM";
@@ -88,18 +90,16 @@ class TwentyFiveAtWorkProviderTest {
 			tuple("latestStartDate", List.of("2021-01-01"), "Startdatum för anställning hos tidigare huvudman"),
 			tuple("originalStartDate", List.of("2022-11-01"), "Startdatum för anställning"));
 
-		if(oepErrandFile.contains("annan-adress")) {
+		if (oepErrandFile.contains("annan-adress")) {
 
-			assertThat(errand.getStakeholders()).hasSize(3).
-				extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-					Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getZipCode, Stakeholder::getCity).containsExactlyInAnyOrder(
+			assertThat(errand.getStakeholders()).hasSize(3).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getZipCode, Stakeholder::getCity).containsExactlyInAnyOrder(
 					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null),
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId, null, null, null),
 					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Avkroken 1", "99999", "Fjärran"));
 		} else {
-			assertThat(errand.getStakeholders()).hasSize(3).
-				extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-					Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getZipCode, Stakeholder::getCity).containsExactlyInAnyOrder(
+			assertThat(errand.getStakeholders()).hasSize(3).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getZipCode, Stakeholder::getCity).containsExactlyInAnyOrder(
 					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null),
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId, null, null, null),
 					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Storgatan 1", "111 22", "ANKEBORG"));

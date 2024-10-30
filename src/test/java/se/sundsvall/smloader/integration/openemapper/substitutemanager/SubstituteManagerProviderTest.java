@@ -58,7 +58,9 @@ class SubstituteManagerProviderTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"flow-instance-ersattare-chef.xml", "flow-instance-ersattare-chef-annan-skickar.xml"})
+	@ValueSource(strings = {
+		"flow-instance-ersattare-chef.xml", "flow-instance-ersattare-chef-annan-skickar.xml"
+	})
 	void mapToErrand(String oepErrandFile) throws Exception {
 		// Arrange
 		final var priority = "MEDIUM";
@@ -88,13 +90,12 @@ class SubstituteManagerProviderTest {
 			tuple("endDate", List.of("2024-09-27"), "Attesteringsperiods slutdatum"),
 			tuple("responsibilityNumber", List.of("25610000 - AoF Arenor i samverkan"), "Ordinarie chef ansvarsnummer"));
 
-		assertThat(errand.getStakeholders()).hasSize(5).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
+		assertThat(errand.getStakeholders()).hasSize(5).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
 				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId),
-				tuple(ROLE_SUBSTITUTE, "Tjatte", "Anka", emptyList(), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId),
+				tuple(ROLE_SUBSTITUTE, "Tjatte", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId),
 				tuple(ROLE_APPROVER, "Joakim", "von Anka", emptyList(), "KSK Avd Kansli och Säkerhet", "PRIVATE", partyId));
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6849")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kall22ank");

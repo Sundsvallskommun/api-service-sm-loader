@@ -69,10 +69,10 @@ class SalaryChangeProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final SalaryChange salaryChange) {
 		return List.of(new Stakeholder()
-				.role(ROLE_CONTACT_PERSON)
-				.firstName(salaryChange.posterFirstname())
-				.lastName(salaryChange.posterLastname())
-				.contactChannels(getContactChannels(salaryChange.posterEmail())),
+			.role(ROLE_CONTACT_PERSON)
+			.firstName(salaryChange.posterFirstname())
+			.lastName(salaryChange.posterLastname())
+			.contactChannels(getContactChannels(salaryChange.posterEmail())),
 			new Stakeholder()
 				.role(ROLE_APPLICANT)
 				.firstName(salaryChange.applicantFirstname())

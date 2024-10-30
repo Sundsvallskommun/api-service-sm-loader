@@ -124,8 +124,10 @@ public class CaseMappingEntity {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 		CaseMappingEntity that = (CaseMappingEntity) o;
 		return Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getErrandId(), that.getErrandId()) && Objects.equals(getCaseType(), that.getCaseType()) && Objects.equals(getModified(), that.getModified())
 			&& Objects.equals(getMunicipalityId(), that.getMunicipalityId());

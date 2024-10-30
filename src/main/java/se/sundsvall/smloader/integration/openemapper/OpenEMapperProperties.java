@@ -41,7 +41,11 @@ public class OpenEMapperProperties {
 		this.priority = priority;
 	}
 
-	public List<String> getLabels() {return label;}
+	public List<String> getLabels() {
+		return label;
+	}
 
-	public void setLabels(final List<String> label) {this.label = label;}
+	public void setLabels(final List<String> label) {
+		this.label = label;
+	}
 }

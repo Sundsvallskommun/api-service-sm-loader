@@ -7,7 +7,6 @@ public record OpenEExternalSoapProperties(
 	String username,
 	String password,
 	int connectTimeout,
-	int readTimeout
-) {
+	int readTimeout) {
 
 }

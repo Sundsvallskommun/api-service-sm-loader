@@ -2,8 +2,7 @@ package se.sundsvall.smloader.integration.util;
 
 public final class ErrandConstants {
 
-	private ErrandConstants() {
-	}
+	private ErrandConstants() {}
 
 	public static final String MUNICIPALITY_ID = "2281";
 	public static final String ROLE_CONTACT_PERSON = "CONTACT_PERSON";
@@ -25,13 +24,13 @@ public final class ErrandConstants {
 	public static final String DISPLAY_END_DATE = "Slutdatum";
 	public static final String KEY_CASE_ID = "caseId";
 	public static final String KEY_ADMINISTRATIVE_UNIT = "administrativeUnit";
-	public static final String DISPLAY_ADMINISTRATIVE_UNIT  = "Förvaltning/verksamhet";
-	//SubstituteManager
+	public static final String DISPLAY_ADMINISTRATIVE_UNIT = "Förvaltning/verksamhet";
+	// SubstituteManager
 	public static final String KEY_RESPONSIBILITY_NUMBER = "responsibilityNumber";
 	public static final String DISPLAY_RESPONSIBILITY_NUMBER = "Ordinarie chef ansvarsnummer";
 	public static final String DISPLAY_START_DATE_CERTIIFY = "Attesteringsperiods startdatum";
 	public static final String DISPLAY_END_DATE_CERTIFY = "Attesteringsperiods slutdatum";
-	//PrecedenceOfReemployment
+	// PrecedenceOfReemployment
 	public static final String KEY_LAST_DAY_OF_POSITION = "lastDayOfPosition";
 	public static final String DISPLAY_LAST_DAY_OF_POSITION = "Sista anställningsdag";
 	public static final String KEY_WORKPLACE = "workplace";
@@ -40,7 +39,7 @@ public final class ErrandConstants {
 	public static final String DISPLAY_POSITION = "Anställningsform";
 	public static final String KEY_SALARY_TYPE = "salaryType";
 	public static final String DISPLAY_SALARY_TYPE = "Lönetyp";
-	//EmployersCertificate
+	// EmployersCertificate
 	public static final String KEY_TIME_PERIOD = "timePeriod";
 	public static final String DISPLAY_TIME_PERIOD = "Tidsperiod";
 	public static final String KEY_CONSENT = "consent";
@@ -51,12 +50,12 @@ public final class ErrandConstants {
 	public static final String DISPLAY_UNEMPLOYMENT_FUND = "A-kassa";
 	public static final String KEY_SEND_DIGITAL = "sendDigital";
 	public static final String DISPLAY_SEND_DIGITAL = "Skicka digitalt";
-	//TwentyFiveAtWork
+	// TwentyFiveAtWork
 	public static final String KEY_LATEST_START_DATE = "latestStartDate";
 	public static final String DISPLAY_LATEST_START_DATE = "Startdatum för anställning hos tidigare huvudman";
 	public static final String KEY_ORIGINAL_START_DATE = "originalStartDate";
 	public static final String DISPLAY_ORIGINAL_START_DATE = "Startdatum för anställning";
-	//PermissionOrder
+	// PermissionOrder
 	public static final String KEY_COMPUTER_ID = "computerId";
 	public static final String DISPLAY_COMPUTER_ID = "Dator-id";
 	public static final String KEY_TYPE_OF_ACCESS = "typeOfAccess";
@@ -117,12 +116,12 @@ public final class ErrandConstants {
 	public static final String DISPLAY_IS_MANAGER = "Är chef eller ej";
 	public static final String KEY_NOT_EMPLOYEE = "notEmployee";
 	public static final String DISPLAY_NOT_EMPLOYEE = "Anställning";
-	//SalaryChange
+	// SalaryChange
 	public static final String KEY_AMOUNT = "amount";
 	public static final String DISPLAY_AMOUNT = "Belopp";
 	public static final String KEY_FROM_MONTH = "fromMonth";
 	public static final String DISPLAY_FROM_MONTH = "Månad löneväxling sker från";
-	//ReportSick
+	// ReportSick
 	public static final String KEY_EMPLOYMENT_TYPE = "employmentType";
 	public static final String DISPLAY_EMPLOYMENT_TYPE = "Anställningsform";
 	public static final String KEY_ABSENT_START_DATE = "absentStartDate";

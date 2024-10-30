@@ -6,4 +6,4 @@ record SickPeriod(
 
 	String startTime,
 
-	String endTime) { }
+	String endTime) {}

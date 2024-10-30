@@ -26,7 +26,6 @@ public class CaseProcessingScheduler {
 	@Value("${config.scheduler.fetch-days:1}")
 	private int daysToFetch;
 
-
 	private final OpenEService openEService;
 	private final SupportManagementService supportManagementService;
 

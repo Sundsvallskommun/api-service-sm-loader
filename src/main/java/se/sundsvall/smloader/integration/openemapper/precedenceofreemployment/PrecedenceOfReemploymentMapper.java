@@ -55,7 +55,6 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 	public Errand mapToErrand(final byte[] xml) {
 		final var result = extractValue(xml, PrecedenceOfReemployment.class);
 
-
 		return new Errand()
 			.status(STATUS_NEW)
 			.title(TITLE_PRECEDENCE_OF_REEMPLOYMENT)
@@ -88,19 +87,19 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 	private List<ContactChannel> getContactChannels(final String email, final String phone) {
 		return isNull(phone) ? List.of(new ContactChannel()
 			.type(CONTACT_CHANNEL_TYPE_EMAIL)
-			.value(email)) :
-			List.of(new ContactChannel()
-			.type(CONTACT_CHANNEL_TYPE_EMAIL)
-			.value(email), new ContactChannel()
-			.type(CONTACT_CHANNEL_TYPE_PHONE)
-			.value(phone));
+			.value(email))
+			: List.of(new ContactChannel()
+				.type(CONTACT_CHANNEL_TYPE_EMAIL)
+				.value(email), new ContactChannel()
+					.type(CONTACT_CHANNEL_TYPE_PHONE)
+					.value(phone));
 	}
 
 	private List<Parameter> getParameters(final PrecedenceOfReemployment precedenceOfReemployment) {
 		var parameters = new ArrayList<Parameter>();
 		Optional.ofNullable(precedenceOfReemployment.workplace()).ifPresent(workplace -> parameters.add(new Parameter().key(KEY_WORKPLACE).addValuesItem(workplace)
 			.displayName(DISPLAY_WORKPLACE)));
-		Optional.ofNullable(precedenceOfReemployment.lastDayOfPosition()).ifPresent(lastDay ->parameters.add(new Parameter().key(KEY_LAST_DAY_OF_POSITION).addValuesItem(lastDay)
+		Optional.ofNullable(precedenceOfReemployment.lastDayOfPosition()).ifPresent(lastDay -> parameters.add(new Parameter().key(KEY_LAST_DAY_OF_POSITION).addValuesItem(lastDay)
 			.displayName(DISPLAY_LAST_DAY_OF_POSITION)));
 		Optional.ofNullable(precedenceOfReemployment.position()).ifPresent(position -> parameters.add(new Parameter().key(KEY_POSITION).addValuesItem(position.trim())
 			.displayName(DISPLAY_POSITION)));

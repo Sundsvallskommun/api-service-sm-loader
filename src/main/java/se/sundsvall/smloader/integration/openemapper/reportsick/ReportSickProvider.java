@@ -110,10 +110,10 @@ class ReportSickProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final ReportSick reportSick) {
 		return List.of(new Stakeholder()
-				.role(ROLE_CONTACT_PERSON)
-				.firstName(reportSick.posterFirstname())
-				.lastName(reportSick.posterLastname())
-				.contactChannels(getContactChannels(reportSick.posterEmail(), null)),
+			.role(ROLE_CONTACT_PERSON)
+			.firstName(reportSick.posterFirstname())
+			.lastName(reportSick.posterLastname())
+			.contactChannels(getContactChannels(reportSick.posterEmail(), null)),
 			new Stakeholder()
 				.role(ROLE_APPLICANT)
 				.firstName(reportSick.applicantFirstname())
@@ -241,12 +241,10 @@ class ReportSickProvider implements OpenEMapper {
 
 		final var periods = new ArrayList<SickPeriod>();
 
-		elements.forEach(element ->
-			periods.add(new SickPeriod(
-				evaluateXPath(element, "/Column/Value").text(),
-				evaluateXPath(element, "/Column1/Value").text(),
-				evaluateXPath(element, "/Column2/Value").text())
-		));
+		elements.forEach(element -> periods.add(new SickPeriod(
+			evaluateXPath(element, "/Column/Value").text(),
+			evaluateXPath(element, "/Column1/Value").text(),
+			evaluateXPath(element, "/Column2/Value").text())));
 
 		return periods;
 	}

@@ -79,9 +79,8 @@ class ContactSalaryAndPensionProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getDescription()).isEqualTo("Jag testar att skapa ett ärende.");
 
-		assertThat(errand.getStakeholders()).hasSize(2).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
+		assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId),
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null));
 
@@ -121,9 +120,8 @@ class ContactSalaryAndPensionProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getDescription()).isEqualTo("Jag testar som chef eller HR-administratör");
 
-		assertThat(errand.getStakeholders()).hasSize(4).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
+		assertThat(errand.getStakeholders()).hasSize(4).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
 				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId),
 				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), null, "PRIVATE", partyId),

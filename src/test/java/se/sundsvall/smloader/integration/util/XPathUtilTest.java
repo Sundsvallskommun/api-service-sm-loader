@@ -10,33 +10,35 @@ import se.sundsvall.dept44.test.extension.ResourceLoaderExtension;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith({MockitoExtension.class, ResourceLoaderExtension.class})
+@ExtendWith({
+	MockitoExtension.class, ResourceLoaderExtension.class
+})
 class XPathUtilTest {
 
-    private byte[] xml;
+	private byte[] xml;
 
-    @BeforeEach
-    void setUp(@Load("/open-e/misc.xml") final String xml) {
-        this.xml = xml.getBytes(UTF_8);
-    }
+	@BeforeEach
+	void setUp(@Load("/open-e/misc.xml") final String xml) {
+		this.xml = xml.getBytes(UTF_8);
+	}
 
-    @Test
-    void parseXmlDocument() {
-        final var document = XPathUtil.parseXmlDocument(xml);
-        assertThat(document.getAllElements()).isNotNull();
-        assertThat(document.getElementsByTag("menu")).hasSize(1);
-        assertThat(document.getElementsByTag("dish")).hasSize(2);
-    }
+	@Test
+	void parseXmlDocument() {
+		final var document = XPathUtil.parseXmlDocument(xml);
+		assertThat(document.getAllElements()).isNotNull();
+		assertThat(document.getElementsByTag("menu")).hasSize(1);
+		assertThat(document.getElementsByTag("dish")).hasSize(2);
+	}
 
-    @Test
-    void evaluateXpathFromXml() {
-        assertThat(XPathUtil.evaluateXPath(xml, "//menu")).hasSize(1);
-    }
+	@Test
+	void evaluateXpathFromXml() {
+		assertThat(XPathUtil.evaluateXPath(xml, "//menu")).hasSize(1);
+	}
 
-    @Test
-    void evaluateXpathFromElement() {
-        final var elements = XPathUtil.evaluateXPath(xml, "//menu");
+	@Test
+	void evaluateXpathFromElement() {
+		final var elements = XPathUtil.evaluateXPath(xml, "//menu");
 
-        assertThat(XPathUtil.evaluateXPath(elements.first(), "//dish")).hasSize(2);
-    }
+		assertThat(XPathUtil.evaluateXPath(elements.first(), "//dish")).hasSize(2);
+	}
 }

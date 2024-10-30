@@ -72,10 +72,10 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final TwentyFiveAtWork twentyFiveAtWork) {
 		return List.of(new Stakeholder()
-				.role(ROLE_CONTACT_PERSON)
-				.firstName(twentyFiveAtWork.posterFirstname())
-				.lastName(twentyFiveAtWork.posterLastname())
-				.contactChannels(getContactChannels(twentyFiveAtWork.posterEmail())),
+			.role(ROLE_CONTACT_PERSON)
+			.firstName(twentyFiveAtWork.posterFirstname())
+			.lastName(twentyFiveAtWork.posterLastname())
+			.contactChannels(getContactChannels(twentyFiveAtWork.posterEmail())),
 			new Stakeholder()
 				.role(ROLE_APPLICANT)
 				.firstName(twentyFiveAtWork.applicantFirstname())
@@ -101,11 +101,10 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 			.externalId(getPartyId(twentyFiveAtWork.legalId()));
 
-		return isNotEmpty(twentyFiveAtWork.otherAddress()) ?
-			stakeholder.address(twentyFiveAtWork.otherAddress())
-				.zipCode(twentyFiveAtWork.otherZipCode())
-				.city(twentyFiveAtWork.otherPostalAddress()) :
-			stakeholder.address(twentyFiveAtWork.address())
+		return isNotEmpty(twentyFiveAtWork.otherAddress()) ? stakeholder.address(twentyFiveAtWork.otherAddress())
+			.zipCode(twentyFiveAtWork.otherZipCode())
+			.city(twentyFiveAtWork.otherPostalAddress())
+			: stakeholder.address(twentyFiveAtWork.address())
 				.zipCode(twentyFiveAtWork.zipCode())
 				.city(twentyFiveAtWork.postalAddress());
 	}

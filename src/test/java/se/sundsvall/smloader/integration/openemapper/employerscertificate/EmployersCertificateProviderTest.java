@@ -53,7 +53,9 @@ class EmployersCertificateProviderTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"flow-instance-begar-arbetsgivarintyg.xml", "flow-instance-begar-arbetsgivarintyg-alternativ-adress.xml"})
+	@ValueSource(strings = {
+		"flow-instance-begar-arbetsgivarintyg.xml", "flow-instance-begar-arbetsgivarintyg-alternativ-adress.xml"
+	})
 	void mapToErrand(String oepErrandFile) throws Exception {
 		// Arrange
 		final var priority = "MEDIUM";
@@ -89,15 +91,13 @@ class EmployersCertificateProviderTest {
 			tuple("timePeriod", List.of("Viss period"), "Tidsperiod"));
 
 		if (oepErrandFile.contains("alternativ-adress")) {
-			assertThat(errand.getStakeholders()).hasSize(2).
-				extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
-					Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactlyInAnyOrder(
+			assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
+				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactlyInAnyOrder(
 					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null),
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "PRIVATE", partyId, "Alternativet 1", "Alternativ", "67890"));
 		} else {
-			assertThat(errand.getStakeholders()).hasSize(2).
-				extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
-					Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactlyInAnyOrder(
+			assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
+				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactlyInAnyOrder(
 					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null),
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "PRIVATE", partyId, "Storgatan 1", "Ankeborg", "12345"));
 		}
@@ -143,9 +143,8 @@ class EmployersCertificateProviderTest {
 			tuple("unemploymentFund", List.of("Nej"), "A-kassa"),
 			tuple("timePeriod", List.of("De senaste tolv månaderna"), "Tidsperiod"));
 
-		assertThat(errand.getStakeholders()).hasSize(2).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactlyInAnyOrder(
+		assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null),
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Phone").value("0701112223")), "PRIVATE", partyId, "Storgatan 1", "Ankeborg", "12345"));
 

@@ -74,7 +74,7 @@ class DatabaseCleanerServiceTest {
 			.toList();
 	}
 
-	private CaseId createCaseIdInstance(final String  id) {
+	private CaseId createCaseIdInstance(final String id) {
 		return () -> id;
 	}
 }

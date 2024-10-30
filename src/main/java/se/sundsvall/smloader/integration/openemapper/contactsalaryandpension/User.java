@@ -10,4 +10,4 @@ record User(
 
 	String legalId,
 
-	String email) { }
+	String email) {}

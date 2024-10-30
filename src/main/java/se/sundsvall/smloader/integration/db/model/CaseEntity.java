@@ -138,10 +138,13 @@ public class CaseEntity {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 		CaseEntity that = (CaseEntity) o;
-		return Objects.equals(getId(), that.getId()) && Objects.equals(getCaseMetaData(), that.caseMetaDataEntity) && Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getOpenECase(), that.getOpenECase()) && getDeliveryStatus() == that.getDeliveryStatus()
+		return Objects.equals(getId(), that.getId()) && Objects.equals(getCaseMetaData(), that.caseMetaDataEntity) && Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getOpenECase(), that.getOpenECase())
+			&& getDeliveryStatus() == that.getDeliveryStatus()
 			&& Objects.equals(getCreated(), that.getCreated());
 	}
 

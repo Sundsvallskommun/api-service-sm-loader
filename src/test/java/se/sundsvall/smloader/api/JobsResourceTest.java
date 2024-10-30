@@ -51,7 +51,7 @@ class JobsResourceTest {
 		webTestClient.post().uri(uriBuilder -> uriBuilder.path(PATH + "/caseimporter")
 			.queryParam("from", from.toString())
 			.queryParam("to", to.toString())
-				.build())
+			.build())
 			.exchange()
 			.expectStatus().isNoContent();
 
@@ -67,8 +67,8 @@ class JobsResourceTest {
 
 		// Call
 		webTestClient.post().uri(uriBuilder -> uriBuilder.path(PATH + "/dbcleaner")
-				.queryParam("from", from.toString())
-				.build())
+			.queryParam("from", from.toString())
+			.build())
 			.exchange()
 			.expectStatus().isNoContent();
 

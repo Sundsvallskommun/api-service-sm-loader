@@ -87,13 +87,12 @@ class PermissionOrderProviderTest {
 			tuple("systemAccess", List.of("Rapp82"), "Systembehörighet"),
 			tuple("startDate", List.of("2024-09-04"), "Startdatum"));
 
-		assertThat(errand.getStakeholders()).hasSize(4).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
+		assertThat(errand.getStakeholders()).hasSize(4).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
 				tuple(ROLE_MANAGER, "Jocke", "Anka", List.of(new ContactChannel().type("Email").value("jocke.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
-				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId));
+				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).hasSize(1).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6850")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
@@ -124,8 +123,8 @@ class PermissionOrderProviderTest {
 		var errand = provider.mapToErrand(stringBytes);
 
 		var administrativeUnit = List.of("Barn och utbildningsförvaltningen", "Kultur och fritidsförvaltningen", "Vård och omsorgsförvaltningen",
-			"Individ och arbetsmarknadsförvaltningen", "Kommunstyrelsekontoret",  "Stadsbyggnadskontoret", "Lantmäterikontoret",
-			"Miljökontoret",  "Överförmyndarkontoret");
+			"Individ och arbetsmarknadsförvaltningen", "Kommunstyrelsekontoret", "Stadsbyggnadskontoret", "Lantmäterikontoret",
+			"Miljökontoret", "Överförmyndarkontoret");
 		// Assert and verify
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
 		assertThat(errand.getTitle()).isEqualTo(TITLE_PERMISSION_ORDER);
@@ -150,7 +149,7 @@ class PermissionOrderProviderTest {
 			tuple("administrativeUnitPartVoF", List.of("Äldreboende eller Hemtjänstgrupp"), "Del av förvaltning VoF"),
 			tuple("unitVoF", List.of("05682 Förskola Copernicus, Bryggaregränd 1"), "Enhet VoF"),
 			tuple("administrativeUnitPartIaF", List.of("Arbete och försörjning", "Barn, unga och familj", "Missbruk och psykisk ohälsa", "Vuxenutbildningen"), "Del av förvaltning IaF"),
-			tuple("administrativeUnitPartKsK", List.of("Drakfastigheter", "Servicecenter",  "KSK Avdelningar", "Övrigt"), "Del av förvaltning KsK"),
+			tuple("administrativeUnitPartKsK", List.of("Drakfastigheter", "Servicecenter", "KSK Avdelningar", "Övrigt"), "Del av förvaltning KsK"),
 			tuple("otherUnitsKsK", List.of("Test"), "Övriga enheter KsK"),
 			tuple("administrativeUnitPartSbK", List.of("Byggavdelningen", "Gatuavdelningen", "Markavdelningen"), "Del av förvaltning SbK"),
 			tuple("administrativeUnitPartLmK", List.of("Lantmäterikontoret", "Lantmäterimyndigheten"), "Del av förvaltning LmK"),
@@ -159,12 +158,11 @@ class PermissionOrderProviderTest {
 			tuple("otherUnitsOfK", List.of("Test", "Test2"), "Övriga enheter OfK"),
 			tuple("startDate", List.of("2024-10-21"), "Startdatum"));
 
-		assertThat(errand.getStakeholders()).hasSize(3).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
+		assertThat(errand.getStakeholders()).hasSize(3).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka",  List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
-				tuple(ROLE_USER, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId));
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
+				tuple(ROLE_USER, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).hasSize(1).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6920")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
