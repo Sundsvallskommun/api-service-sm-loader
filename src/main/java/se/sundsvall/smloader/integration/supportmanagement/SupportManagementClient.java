@@ -22,7 +22,7 @@ public interface SupportManagementClient {
 	 * @param errand with attributes for create an errand.
 	 */
 	@PostMapping(path = "/{municipalityId}/{namespace}/errands", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
-	ResponseEntity<Void> createErrand( @PathVariable(name = "municipalityId") String municipalityId, @PathVariable(name = "namespace") String namespace,
+	ResponseEntity<Void> createErrand(@PathVariable(name = "municipalityId") String municipalityId, @PathVariable(name = "namespace") String namespace,
 		@RequestBody Errand errand);
 
 	/**

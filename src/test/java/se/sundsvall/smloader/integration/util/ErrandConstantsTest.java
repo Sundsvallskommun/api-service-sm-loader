@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ErrandConstantsTest {
-	//Test ErrandConstants
+	// Test ErrandConstants
 
 	@Test
 	void errandConstants() {

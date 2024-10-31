@@ -73,8 +73,7 @@ class PrecedenceOfReemploymentMapperTest {
 			tuple("position", List.of("T - Tidsbegr anställning"), "Anställningsform"),
 			tuple("salaryType", List.of("Månadslön"), "Lönetyp"));
 
-		assertThat(errand.getStakeholders()).hasSize(3).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName)
+		assertThat(errand.getStakeholders()).hasSize(3).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName)
 			.containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null),
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"),

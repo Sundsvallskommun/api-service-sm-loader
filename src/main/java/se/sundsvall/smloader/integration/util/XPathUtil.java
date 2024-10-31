@@ -12,19 +12,19 @@ import static org.jsoup.parser.Parser.xmlParser;
 
 public final class XPathUtil {
 
-    private XPathUtil() { }
+	private XPathUtil() {}
 
-    public static Document parseXmlDocument(final byte[] xml) {
-        return parse(new String(xml, StandardCharsets.ISO_8859_1), xmlParser());
-    }
+	public static Document parseXmlDocument(final byte[] xml) {
+		return parse(new String(xml, StandardCharsets.ISO_8859_1), xmlParser());
+	}
 
-    public static Elements evaluateXPath(final byte[] xml, final String expression) {
-        var doc = parseXmlDocument(xml);
+	public static Elements evaluateXPath(final byte[] xml, final String expression) {
+		var doc = parseXmlDocument(xml);
 
-        return Xsoup.compile(expression).evaluate(doc).getElements();
-    }
+		return Xsoup.compile(expression).evaluate(doc).getElements();
+	}
 
-    public static Elements evaluateXPath(final Element element, final String expression) {
-        return Xsoup.compile(expression).evaluate(element).getElements();
-    }
+	public static Elements evaluateXPath(final Element element, final String expression) {
+		return Xsoup.compile(expression).evaluate(element).getElements();
+	}
 }

@@ -85,10 +85,10 @@ class EmployersCertificateProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final EmployersCertificate employersCertificate) {
 		return List.of(new Stakeholder()
-				.role(ROLE_CONTACT_PERSON)
-				.firstName(employersCertificate.posterFirstname())
-				.lastName(employersCertificate.posterLastname())
-				.contactChannels(getContactChannels(employersCertificate.posterEmail())),
+			.role(ROLE_CONTACT_PERSON)
+			.firstName(employersCertificate.posterFirstname())
+			.lastName(employersCertificate.posterLastname())
+			.contactChannels(getContactChannels(employersCertificate.posterEmail())),
 			getApplicant(employersCertificate));
 	}
 
@@ -104,8 +104,8 @@ class EmployersCertificateProvider implements OpenEMapper {
 		}
 		return isNull(email) ? List.of(new ContactChannel()
 			.type(CONTACT_CHANNEL_TYPE_PHONE)
-			.value(phone)) :
-			List.of(new ContactChannel()
+			.value(phone))
+			: List.of(new ContactChannel()
 				.type(CONTACT_CHANNEL_TYPE_EMAIL)
 				.value(email));
 	}
@@ -139,11 +139,10 @@ class EmployersCertificateProvider implements OpenEMapper {
 			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 			.externalId(getPartyId(employersCertificate.applicantLegalId()));
 
-		return isNotEmpty(employersCertificate.alternativeAddress()) ?
-			stakeholder.address(employersCertificate.alternativeAddress())
-				.zipCode(employersCertificate.alternativeZipCode())
-				.city(employersCertificate.alternativePostalAddress()) :
-			stakeholder.address(employersCertificate.applicantAddress())
+		return isNotEmpty(employersCertificate.alternativeAddress()) ? stakeholder.address(employersCertificate.alternativeAddress())
+			.zipCode(employersCertificate.alternativeZipCode())
+			.city(employersCertificate.alternativePostalAddress())
+			: stakeholder.address(employersCertificate.applicantAddress())
 				.zipCode(employersCertificate.applicantZipCode())
 				.city(employersCertificate.applicantPostalAddress());
 	}

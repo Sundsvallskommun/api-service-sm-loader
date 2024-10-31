@@ -46,7 +46,6 @@ class SupportManagementServiceTest {
 	@Mock
 	private SupportManagementClient mockSupportManagementClient;
 
-
 	@Mock
 	private OpenEMapper mockMapper;
 
@@ -70,6 +69,7 @@ class SupportManagementServiceTest {
 
 		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockOpenEService, mockMessagingClient, mockMessagingMapper, mockEnvironment);
 	}
+
 	@Test
 	void exportCases() {
 		// Arrange
@@ -81,7 +81,6 @@ class SupportManagementServiceTest {
 		final var municipalityId = "municipalityId";
 		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml.getBytes())));
 		when(mockCaseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId)).thenReturn(casesToExport);
-
 
 		final var errand = new Errand()
 			.classification(new Classification()
@@ -119,7 +118,7 @@ class SupportManagementServiceTest {
 	@Test
 	void exportCasesWhenNoMapperFound() {
 		// Arrange
-		final var flowInstanceXml ="flowInstanceXml".getBytes(); // "flow-instance-lamna-synpunkt.xml
+		final var flowInstanceXml = "flowInstanceXml".getBytes(); // "flow-instance-lamna-synpunkt.xml
 		final var familyId = "familyIdWithoutMapper";
 		final var flowInstanceId = "123456";
 		final var caseEntity = createCaseEntity(flowInstanceId, familyId, flowInstanceXml);
@@ -141,16 +140,18 @@ class SupportManagementServiceTest {
 	@Test
 	void exportCasesWhenExceptionInSending() {
 		// Arrange
-		final var flowInstanceXml ="flowInstanceXml".getBytes(); // "flow-instance-lamna-synpunkt.xml
+		final var flowInstanceXml = "flowInstanceXml".getBytes(); // "flow-instance-lamna-synpunkt.xml
 		final var familyId = "161";
 		final var flowInstanceId = "123456";
 		final var namespace = "namespace";
 		final var municipalityId = "municipalityId";
 		final var slackRequest = new SlackRequest().message("Failed to send errand");
 		final var emailRequest = new EmailRequest().message("Failed to send errand");
-		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId,  Base64.getEncoder().encode(flowInstanceXml)));
+		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml)));
 		when(mockCaseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId)).thenReturn(casesToExport);
-		when(mockEnvironment.getActiveProfiles()).thenReturn(new String[]{"test"});
+		when(mockEnvironment.getActiveProfiles()).thenReturn(new String[] {
+			"test"
+		});
 		final var errand = new Errand()
 			.classification(new Classification()
 				.category("category")

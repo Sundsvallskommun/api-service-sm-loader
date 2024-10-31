@@ -96,9 +96,8 @@ class ReportSickProviderTest {
 			tuple("sickNoteStartDates", List.of("2024-07-01", "2024-07-01", "2024-07-01", "2024-07-04"), "Sjukskrivnings startdatum"),
 			tuple("sickNoteEndDates", List.of("2024-07-01", "2024-07-01", "2024-07-01", "2024-07-04"), "Sjukskrivnings slutdatum"));
 
-		assertThat(errand.getStakeholders()).hasSize(3).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
+		assertThat(errand.getStakeholders()).hasSize(3).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"),
 					new ContactChannel().type("Phone").value("0701112223")), "KSK Avd Digital Utveckling", null, null),
@@ -152,15 +151,14 @@ class ReportSickProviderTest {
 			tuple("absentLateStartTime", List.of("14:00:00"), "Tidpunkt för senare start på grund av sjukdom"),
 			tuple("sickPeriodDates", List.of("2024-10-11", "2024-10-14"), "Sjukperiodens datum"),
 			tuple("sickPeriodStartTimes", List.of("14:00", "10:00"), "Sjukperiodens starttider"),
-			tuple("sickPeriodEndTimes", List.of("17:00",	"14:00"), "Sjukperiodens sluttider"),
+			tuple("sickPeriodEndTimes", List.of("17:00", "14:00"), "Sjukperiodens sluttider"),
 			tuple("haveSickNote", List.of("Nej"), "Har läkarintyg"));
 
-		assertThat(errand.getStakeholders()).hasSize(3).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
+		assertThat(errand.getStakeholders()).hasSize(3).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
-				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab",  "PRIVATE", partyId));
+				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6910")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");

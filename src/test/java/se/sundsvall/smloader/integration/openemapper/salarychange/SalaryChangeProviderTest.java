@@ -77,12 +77,10 @@ class SalaryChangeProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
 			tuple("amount", List.of("1000"), "Belopp"),
-					tuple("fromMonth", List.of("Oktober"), "Månad löneväxling sker från")
-		);
+			tuple("fromMonth", List.of("Oktober"), "Månad löneväxling sker från"));
 
-		assertThat(errand.getStakeholders()).hasSize(2).
-			extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
+		assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 

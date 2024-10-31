@@ -28,13 +28,11 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 })
 class CaseRepositoryTest {
 
-
 	@Autowired
 	private CaseRepository caseRepository;
 
 	@Autowired
 	private CaseMetaDataRepository caseMetaDataRepository;
-
 
 	@Test
 	void create() throws Exception {

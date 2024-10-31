@@ -40,7 +40,7 @@ public class OpenEService {
 	private final CaseMetaDataRepository caseMetaDataRepository;
 
 	public OpenEService(final OpenEExternalClient openEExternalClient, final OpenEInternalClient openEInternalClient, final OpenEExternalSoapClient openEExternalSoapClient, final OpenEInternalSoapClient openEInternalSoapClient,
-			final CaseRepository caseRepository, final CaseMetaDataRepository caseMetaDataRepository) {
+		final CaseRepository caseRepository, final CaseMetaDataRepository caseMetaDataRepository) {
 		this.openEExternalClient = openEExternalClient;
 		this.openEInternalClient = openEInternalClient;
 		this.openEExternalSoapClient = openEExternalSoapClient;

@@ -138,10 +138,10 @@ class PermissionOrderProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final PermissionOrder permissionOrder) {
 		final var stakeholders = new ArrayList<>(List.of(new Stakeholder()
-				.role(ROLE_CONTACT_PERSON)
-				.firstName(permissionOrder.posterFirstname())
-				.lastName(permissionOrder.posterLastname())
-				.contactChannels(getContactChannels(permissionOrder.posterEmail())),
+			.role(ROLE_CONTACT_PERSON)
+			.firstName(permissionOrder.posterFirstname())
+			.lastName(permissionOrder.posterLastname())
+			.contactChannels(getContactChannels(permissionOrder.posterEmail())),
 			new Stakeholder()
 				.role(ROLE_APPLICANT)
 				.firstName(permissionOrder.applicantFirstname())
@@ -260,7 +260,6 @@ class PermissionOrderProvider implements OpenEMapper {
 
 	private List<String> getValuesFromXPath(final byte[] xml, final String xpath) {
 		final var elements = evaluateXPath(xml, BASE_XPATH + xpath + "/Value");
-
 
 		if (isNull(elements) || elements.isEmpty()) {
 			return null;

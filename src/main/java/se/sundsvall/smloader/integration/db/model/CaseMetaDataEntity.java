@@ -115,8 +115,10 @@ public class CaseMetaDataEntity {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 		CaseMetaDataEntity that = (CaseMetaDataEntity) o;
 		return Objects.equals(familyId, that.familyId) && instance == that.instance && Objects.equals(openEUpdateStatus, that.openEUpdateStatus) && Objects.equals(openEImportStatus, that.openEImportStatus) &&
 			Objects.equals(namespace, that.namespace) && Objects.equals(municipalityId, that.municipalityId);

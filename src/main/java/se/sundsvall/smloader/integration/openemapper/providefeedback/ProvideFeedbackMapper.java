@@ -54,8 +54,8 @@ class ProvideFeedbackMapper implements OpenEMapper {
 	}
 
 	private String getReporterUserId(final ProvideFeedback provideFeedback) {
-		return provideFeedback.firstname() != null ? provideFeedback.firstname() + " " + provideFeedback.lastname() + "-" + provideFeedback.email() :
-			provideFeedback.posterFirstname() + " " +  provideFeedback.posterLastname() + "-" + provideFeedback.posterEmail();
+		return provideFeedback.firstname() != null ? provideFeedback.firstname() + " " + provideFeedback.lastname() + "-" + provideFeedback.email()
+			: provideFeedback.posterFirstname() + " " + provideFeedback.posterLastname() + "-" + provideFeedback.posterEmail();
 	}
 
 	private List<Stakeholder> getStakeholder(final ProvideFeedback provideFeedback) {
@@ -69,7 +69,7 @@ class ProvideFeedbackMapper implements OpenEMapper {
 		return List.of(new ContactChannel()
 			.type(CONTACT_CHANNEL_TYPE_EMAIL)
 			.value(provideFeedback.email()), new ContactChannel()
-			.type(CONTACT_CHANNEL_TYPE_PHONE)
-			.value(provideFeedback.mobilePhone()));
+				.type(CONTACT_CHANNEL_TYPE_PHONE)
+				.value(provideFeedback.mobilePhone()));
 	}
 }

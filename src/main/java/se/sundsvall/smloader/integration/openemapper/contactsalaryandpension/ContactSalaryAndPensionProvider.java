@@ -49,14 +49,12 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 
 		final var users = new ArrayList<User>();
 
-		elements.forEach(element ->
-			users.add(new User(
-				evaluateXPath(element, "/Username").text(),
-				evaluateXPath(element, "/Firstname").text(),
-				evaluateXPath(element, "/Lastname").text(),
-				evaluateXPath(element, "/CitizenIdentifier").text(),
-				evaluateXPath(element, "/Email").text()))
-		);
+		elements.forEach(element -> users.add(new User(
+			evaluateXPath(element, "/Username").text(),
+			evaluateXPath(element, "/Firstname").text(),
+			evaluateXPath(element, "/Lastname").text(),
+			evaluateXPath(element, "/CitizenIdentifier").text(),
+			evaluateXPath(element, "/Email").text())));
 
 		return users;
 	}
@@ -115,15 +113,13 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 				.organizationName(contactSalaryAndPension.applicantOrganization()));
 		}
 
-		users.forEach(user ->
-			stakeholders.add(new Stakeholder()
-				.role(ROLE_USER)
-				.firstName(user.firstname())
-				.lastName(user.lastname())
-				.contactChannels(getContactChannels(user.email()))
-				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(user.legalId())))
-		);
+		users.forEach(user -> stakeholders.add(new Stakeholder()
+			.role(ROLE_USER)
+			.firstName(user.firstname())
+			.lastName(user.lastname())
+			.contactChannels(getContactChannels(user.email()))
+			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
+			.externalId(getPartyId(user.legalId()))));
 
 		return stakeholders;
 	}

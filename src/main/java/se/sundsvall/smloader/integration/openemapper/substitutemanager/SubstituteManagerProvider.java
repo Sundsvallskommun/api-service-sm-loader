@@ -46,7 +46,6 @@ class SubstituteManagerProvider implements OpenEMapper {
 
 	private final PartyClient partyClient;
 
-
 	public SubstituteManagerProvider(final @Qualifier("substitutemanager") OpenEMapperProperties properties, final PartyClient partyClient) {
 		this.properties = properties;
 		this.partyClient = partyClient;
@@ -112,15 +111,14 @@ class SubstituteManagerProvider implements OpenEMapper {
 	}
 
 	private Stakeholder getManagerStakeholder(final SubstituteManager substituteManager) {
-		return isNotEmpty(substituteManager.managerFirstname()) ?
-			new Stakeholder()
-				.role(ROLE_MANAGER)
-				.firstName(substituteManager.managerFirstname())
-				.lastName(substituteManager.managerLastname())
-				.organizationName(substituteManager.managerOrganization())
-				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(substituteManager.managerLegalId())) :
-			new Stakeholder()
+		return isNotEmpty(substituteManager.managerFirstname()) ? new Stakeholder()
+			.role(ROLE_MANAGER)
+			.firstName(substituteManager.managerFirstname())
+			.lastName(substituteManager.managerLastname())
+			.organizationName(substituteManager.managerOrganization())
+			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
+			.externalId(getPartyId(substituteManager.managerLegalId()))
+			: new Stakeholder()
 				.role(ROLE_MANAGER)
 				.firstName(substituteManager.otherSenderFirstname())
 				.lastName(substituteManager.otherSenderLastname())

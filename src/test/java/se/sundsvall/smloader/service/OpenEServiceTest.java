@@ -133,7 +133,7 @@ class OpenEServiceTest {
 
 		verify(mockCaseRepository, times(6)).save(caseEntityCaptor.capture());
 
-		assertThat( caseEntityCaptor.getAllValues()).hasSize(6)
+		assertThat(caseEntityCaptor.getAllValues()).hasSize(6)
 			.extracting(CaseEntity::getExternalCaseId,
 				CaseEntity::getCaseMetaData,
 				CaseEntity::getDeliveryStatus,
@@ -173,8 +173,6 @@ class OpenEServiceTest {
 		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId)).thenReturn(true);
 		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId)).thenReturn(true);
 		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(true);
-
-
 
 		// Act
 		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId);

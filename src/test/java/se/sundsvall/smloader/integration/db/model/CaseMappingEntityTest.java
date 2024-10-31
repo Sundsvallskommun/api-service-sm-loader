@@ -23,6 +23,7 @@ class CaseMappingEntityTest {
 	static void setup() {
 		registerValueGenerator(() -> now().plusDays(new Random().nextInt()), OffsetDateTime.class);
 	}
+
 	@Test
 	void testBean() {
 		assertThat(CaseMappingEntity.class, allOf(

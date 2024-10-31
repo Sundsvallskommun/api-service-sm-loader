@@ -1,12 +1,10 @@
-<?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>se.sundsvall.dept44</groupId>
 		<artifactId>dept44-service-parent</artifactId>
-		<version>6.0.2</version>
+		<version>6.0.3</version>
 		<relativePath />
 		<!-- lookup parent from repository -->
 	</parent>
@@ -114,8 +112,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>src/main/resources/integrations/rest/supportmanagement-api.yaml
-							</inputSpec>
+							<inputSpec>src/main/resources/integrations/rest/supportmanagement-api.yaml</inputSpec>
 							<output>${generated-sources-path}</output>
 							<generatorName>spring</generatorName>
 							<generateApis>false</generateApis>
@@ -140,8 +137,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>src/main/resources/integrations/rest/party-api.yaml
-							</inputSpec>
+							<inputSpec>src/main/resources/integrations/rest/party-api.yaml</inputSpec>
 							<output>${generated-sources-path}</output>
 							<generatorName>spring</generatorName>
 							<generateApis>false</generateApis>
@@ -166,8 +162,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>src/main/resources/integrations/rest/messaging-api.yaml
-							</inputSpec>
+							<inputSpec>src/main/resources/integrations/rest/messaging-api.yaml</inputSpec>
 							<output>${generated-sources-path}</output>
 							<generatorName>spring</generatorName>
 							<generateApis>false</generateApis>
@@ -208,9 +203,7 @@
 							<goal>xjc</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>
-								${generated-sources-path}/${generated-sources-java-path}
-							</outputDirectory>
+							<outputDirectory>${generated-sources-path}/${generated-sources-java-path}</outputDirectory>
 							<clearOutputDir>false</clearOutputDir>
 							<packageName>generated.se.sundsvall.callback</packageName>
 							<encoding>UTF-8</encoding>
@@ -222,14 +215,10 @@
 								<argument>-XautoNameResolution</argument>
 							</arguments>
 							<sources>
-								<source>
-									${project.basedir}/src/main/resources/integrations/soap/callback/oep.wsdl
-								</source>
+								<source>${project.basedir}/src/main/resources/integrations/soap/callback/oep.wsdl</source>
 							</sources>
 							<xjbSources>
-								<xjbSource>
-									${project.basedir}/src/main/resources/integrations/soap/bindings.xjb
-								</xjbSource>
+								<xjbSource>${project.basedir}/src/main/resources/integrations/soap/bindings.xjb</xjbSource>
 							</xjbSources>
 						</configuration>
 					</execution>

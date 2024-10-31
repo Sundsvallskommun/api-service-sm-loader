@@ -22,5 +22,5 @@ public interface CaseRepository extends JpaRepository<CaseEntity, String> {
 
 	boolean existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(String externalCaseId, Instance instance, String municipalityId);
 
-	long countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(OffsetDateTime created, String  municipalityId, DeliveryStatus... deliveryStatuses);
+	long countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(OffsetDateTime created, String municipalityId, DeliveryStatus... deliveryStatuses);
 }

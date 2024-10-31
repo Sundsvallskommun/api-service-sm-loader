@@ -41,7 +41,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 @ActiveProfiles("junit")
 class CaseProcessingSchedulerShedlockTest {
 
-
 	@TestConfiguration
 	public static class ShedlockTestConfiguration {
 		@Bean
