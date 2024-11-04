@@ -5,11 +5,11 @@ public final class ErrandConstants {
 	private ErrandConstants() {}
 
 	public static final String MUNICIPALITY_ID = "2281";
-	public static final String ROLE_CONTACT_PERSON = "CONTACT_PERSON";
+	public static final String ROLE_CONTACT_PERSON = "CONTACT";
 	public static final String ROLE_MANAGER = "MANAGER";
 	public static final String ROLE_SUBSTITUTE = "SUBSTITUTE";
 	public static final String ROLE_APPROVER = "APPROVER";
-	public static final String ROLE_APPLICANT = "APPLICANT";
+	public static final String ROLE_APPLICANT = "PRIMARY";
 	public static final String ROLE_USER = "USER";
 	public static final String ROLE_EMPLOYEE = "EMPLOYEE";
 	public static final String CONTACT_CHANNEL_TYPE_EMAIL = "Email";
