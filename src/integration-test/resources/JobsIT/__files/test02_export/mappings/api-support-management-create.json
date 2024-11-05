@@ -16,7 +16,7 @@
 				"firstName": "Kalle",
 				"lastName": "Anka",
 				"metadata": {},
-				"role": "CONTACT_PERSON",
+				"role": "CONTACT",
 				"contactChannels": [
 					{
 						"type": "Email",
