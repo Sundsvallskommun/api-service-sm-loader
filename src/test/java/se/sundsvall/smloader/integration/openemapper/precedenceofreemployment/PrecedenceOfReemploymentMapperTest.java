@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -80,12 +81,14 @@ class PrecedenceOfReemploymentMapperTest {
 					new ContactChannel().type("Phone").value("0701112223")), null),
 				tuple(ROLE_MANAGER, "Joakim", "von Anka", List.of(new ContactChannel().type("Email").value("joakim.anka@sundsvall.se")), "KSK Avd Digital arbetsplats"));
 
+		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
+
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6911")));
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(properties).getPriority();
-		verify(properties).getCategory();
-		verify(properties).getType();
+		verify(properties, times(2)).getCategory();
+		verify(properties, times(2)).getType();
 		verifyNoMoreInteractions(properties);
 	}
 }
