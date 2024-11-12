@@ -132,7 +132,7 @@ public class OpenEService {
 	}
 
 	private List<String> getErrandIds(final byte[] xml) {
-		var result = evaluateXPath(xml, "/FlowInstances/FlowInstance/flowInstanceID");
+		final var result = evaluateXPath(xml, "/FlowInstances/FlowInstance/flowInstanceID");
 
 		return result.eachText().stream()
 			.map(String::trim)
@@ -140,7 +140,7 @@ public class OpenEService {
 	}
 
 	private String getFamilyId(final byte[] xml) {
-		var result = evaluateXPath(xml, "/FlowInstance/Header/Flow/FamilyID");
+		final var result = evaluateXPath(xml, "/FlowInstance/Header/Flow/FamilyID");
 
 		return result.eachText().stream()
 			.map(String::trim)
@@ -148,7 +148,11 @@ public class OpenEService {
 			.orElse(null);
 	}
 
-	private byte[] getOpenECase(Instance instance, String flowInstanceId) {
+	byte[] getFile(final String flowInstanceId, final String fileId, final String queryId, final Instance instance) {
+		return instance == EXTERNAL ? openEExternalClient.getFile(flowInstanceId, queryId, fileId) : openEInternalClient.getFile(flowInstanceId, queryId, fileId);
+	}
+
+	private byte[] getOpenECase(final Instance instance, final String flowInstanceId) {
 		return instance == EXTERNAL ? openEExternalClient.getErrand(flowInstanceId) : openEInternalClient.getErrand(flowInstanceId);
 	}
 }

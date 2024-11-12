@@ -16,11 +16,9 @@
 		<!--- Service properties -->
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
-		<jaxb2-maven-plugin.version>3.2.0</jaxb2-maven-plugin.version>
-		<jaxb2-fluent-api.version>3.0</jaxb2-fluent-api.version>
+		<jaxb-plugins.version>4.0.8</jaxb-plugins.version>
 		<xsoup.version>0.3.7</xsoup.version>
 		<shedlock.version>5.16.0</shedlock.version>
-
 	</properties>
 	<dependencies>
 		<!-- Dept44 Framework-->
@@ -185,42 +183,36 @@
 			</plugin>
 			<!-- Generate java from wsdl -->
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>${jaxb2-maven-plugin.version}</version>
-				<!-- Enables fluent builder for generated classes -->
-				<dependencies>
-					<dependency>
-						<groupId>org.jvnet.jaxb2_commons</groupId>
-						<artifactId>jaxb2-fluent-api</artifactId>
-						<version>${jaxb2-fluent-api.version}</version>
-					</dependency>
-				</dependencies>
+				<groupId>org.jvnet.jaxb</groupId>
+				<artifactId>jaxb-maven-plugin</artifactId>
+				<version>${jaxb-plugins.version}</version>
+				<configuration>
+					<bindingDirectory>${project.basedir}/src/main/resources/integrations/soap/xjb</bindingDirectory>
+					<extension>true</extension>
+					<args>
+						<arg>-wsdl</arg>
+						<arg>-Xfluent-api</arg>
+					</args>
+					<plugins>
+						<plugin>
+							<groupId>org.jvnet.jaxb</groupId>
+							<artifactId>jaxb-plugins</artifactId>
+							<version>${jaxb-plugins.version}</version>
+						</plugin>
+					</plugins>
+					<generatePackage>generated.se.sundsvall.callback</generatePackage>
+					<schemaIncludes>
+						<include>**/*.wsdl</include>
+					</schemaIncludes>
+					<generateDirectory>${generated-sources-path}/${generated-sources-java-path}</generateDirectory>
+					<schemaDirectory>${project.basedir}/src/main/resources/integrations/soap</schemaDirectory>
+				</configuration>
 				<executions>
 					<execution>
-						<id>callback</id>
+						<id>generate-sources</id>
 						<goals>
-							<goal>xjc</goal>
+							<goal>generate</goal>
 						</goals>
-						<configuration>
-							<outputDirectory>${generated-sources-path}/${generated-sources-java-path}</outputDirectory>
-							<clearOutputDir>false</clearOutputDir>
-							<packageName>generated.se.sundsvall.callback</packageName>
-							<encoding>UTF-8</encoding>
-							<addGeneratedAnnotation>true</addGeneratedAnnotation>
-							<noGeneratedHeaderComments>true</noGeneratedHeaderComments>
-							<sourceType>wsdl</sourceType>
-							<arguments>
-								<argument>-Xfluent-api</argument>
-								<argument>-XautoNameResolution</argument>
-							</arguments>
-							<sources>
-								<source>${project.basedir}/src/main/resources/integrations/soap/callback/oep.wsdl</source>
-							</sources>
-							<xjbSources>
-								<xjbSource>${project.basedir}/src/main/resources/integrations/soap/bindings.xjb</xjbSource>
-							</xjbSources>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
