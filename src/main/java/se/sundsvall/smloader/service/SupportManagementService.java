@@ -44,9 +44,10 @@ public class SupportManagementService {
 	private final MessagingClient messagingClient;
 	private final MessagingMapper messagingMapper;
 	private final Environment environment;
+	private final AttachmentService attachmentService;
 
 	public SupportManagementService(final SupportManagementClient supportManagementClient, final CaseRepository caseRepository, final CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers,
-		final OpenEService openEService, final MessagingClient messagingClient, final MessagingMapper messagingMapper, final Environment environment) {
+		final OpenEService openEService, final MessagingClient messagingClient, final MessagingMapper messagingMapper, final Environment environment, final AttachmentService attachmentService) {
 		this.supportManagementClient = supportManagementClient;
 		this.caseRepository = caseRepository;
 		this.caseMappingRepository = caseMappingRepository;
@@ -55,6 +56,7 @@ public class SupportManagementService {
 		this.messagingClient = messagingClient;
 		this.messagingMapper = messagingMapper;
 		this.environment = environment;
+		this.attachmentService = attachmentService;
 	}
 
 	public void exportCases(final String municipalityId) {
@@ -87,7 +89,10 @@ public class SupportManagementService {
 
 			final var createdErrand = getErrandFromSupportManagement(errandId, caseEntity.getCaseMetaData().getNamespace(), caseEntity.getCaseMetaData().getMunicipalityId());
 
-			openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData().getInstance(), Optional.ofNullable(createdErrand).map(Errand::getErrandNumber).orElse(null));
+			if (createdErrand != null) {
+				attachmentService.handleAttachments(decodedOpenECase, caseEntity, createdErrand.getId());
+				openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData().getInstance(), createdErrand.getErrandNumber());
+			}
 		});
 
 		handleFailedCases(municipalityId, failedCases);
@@ -98,7 +103,7 @@ public class SupportManagementService {
 			final var result = supportManagementClient.createErrand(municipalityId, namespace, errand);
 			final var location = String.valueOf(result.getHeaders().getFirst(LOCATION));
 			return location.substring(location.lastIndexOf("/") + 1);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.error("Failed to send errand to SupportManagement", e);
 			return null;
 		}
@@ -107,7 +112,7 @@ public class SupportManagementService {
 	private Errand getErrandFromSupportManagement(final String errandId, final String namespace, final String municipalityId) {
 		try {
 			return supportManagementClient.getErrand(municipalityId, namespace, errandId);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.error("Failed to get errand from SupportManagement", e);
 			return null;
 		}
