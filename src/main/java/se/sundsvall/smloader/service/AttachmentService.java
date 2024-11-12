@@ -1,5 +1,6 @@
 package se.sundsvall.smloader.service;
 
+import org.springframework.stereotype.Service;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.openemapper.Attachment;
 
@@ -7,6 +8,7 @@ import java.util.List;
 
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 
+@Service
 public class AttachmentService {
 
 	private final OpenEService openEService;
