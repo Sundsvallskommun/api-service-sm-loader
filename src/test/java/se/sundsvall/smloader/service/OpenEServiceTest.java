@@ -193,7 +193,7 @@ class OpenEServiceTest {
 
 	@ParameterizedTest
 	@EnumSource(Instance.class)
-	void updateOpenECaseStatus(Instance instance) {
+	void updateOpenECaseStatus(final Instance instance) {
 		// Arrange
 		final var flowInstanceId = "123";
 		final var caseMetaDataEntity = CaseMetaDataEntity.create().withOpenEUpdateStatus("status").withInstance(instance);
@@ -214,7 +214,7 @@ class OpenEServiceTest {
 
 	@ParameterizedTest
 	@EnumSource(Instance.class)
-	void confirmDelivery(Instance instance) {
+	void confirmDelivery(final Instance instance) {
 		// Arrange
 		final var flowInstanceId = "123";
 		final var errandId = "errandId";
@@ -235,6 +235,38 @@ class OpenEServiceTest {
 		assertThat(confirmDeliveryCaptor.getValue().getExternalID().getID()).isEqualTo(errandId);
 
 		verifyNoMoreInteractions(mockOpenEExternalSoapClient, mockOpenEInternalSoapClient);
+	}
+
+	@ParameterizedTest
+	@EnumSource(Instance.class)
+	void getFile(final Instance instance) {
+
+		// Arrange
+		final var externalCaseId = "externalCaseId";
+		final var fileId = "fileId";
+		final var queryId = "queryId";
+		final var fileBytes = new byte[] {
+			1, 2, 3
+		};
+
+		if (EXTERNAL.equals(instance)) {
+			when(mockOpenEExternalClient.getFile(externalCaseId, queryId, fileId)).thenReturn(fileBytes);
+		} else {
+			when(mockOpenEInternalClient.getFile(externalCaseId, queryId, fileId)).thenReturn(fileBytes);
+		}
+
+		// Act
+		final var result = openEService.getFile(externalCaseId, fileId, queryId, instance);
+
+		// Assert and verify
+		assertThat(result).isEqualTo(fileBytes);
+
+		if (EXTERNAL.equals(instance)) {
+			verify(mockOpenEExternalClient).getFile(externalCaseId, queryId, fileId);
+		} else {
+			verify(mockOpenEInternalClient).getFile(externalCaseId, queryId, fileId);
+		}
+		verifyNoMoreInteractions(mockOpenEExternalClient);
 	}
 
 }
