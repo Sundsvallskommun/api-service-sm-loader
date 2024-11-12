@@ -87,10 +87,12 @@ class ContactSalaryAndPensionProviderTest {
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6854")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
+		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
+
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
-		verify(properties).getCategory();
-		verify(properties).getType();
+		verify(properties, times(2)).getCategory();
+		verify(properties, times(2)).getType();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 
@@ -127,13 +129,15 @@ class ContactSalaryAndPensionProviderTest {
 				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), null, "PRIVATE", partyId),
 				tuple(ROLE_USER, "Tjatte", "Anka", List.of(new ContactChannel().type("Email").value("tjatte.anka@sundsvall.se")), null, "PRIVATE", partyId));
 
+		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
+
 		assertThat(errand.getReporterUserId()).isEqualTo("chefAnvändare");
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6873")));
 
 		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
-		verify(properties).getCategory();
-		verify(properties).getType();
+		verify(properties, times(2)).getCategory();
+		verify(properties, times(2)).getType();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 }

@@ -90,6 +90,8 @@ class SubstituteManagerProviderTest {
 			tuple("endDate", List.of("2024-09-27"), "Attesteringsperiods slutdatum"),
 			tuple("responsibilityNumber", List.of("25610000 - AoF Arenor i samverkan"), "Ordinarie chef ansvarsnummer"));
 
+		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
+
 		assertThat(errand.getStakeholders()).hasSize(5).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
 			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
@@ -102,8 +104,8 @@ class SubstituteManagerProviderTest {
 
 		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
-		verify(properties).getCategory();
-		verify(properties).getType();
+		verify(properties, times(2)).getCategory();
+		verify(properties, times(2)).getType();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 }

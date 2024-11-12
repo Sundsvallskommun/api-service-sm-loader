@@ -77,6 +77,7 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 			.description(result.description())
 			.stakeholders(getStakeholders(result, users))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
+			.labels(List.of(properties.getCategory(), properties.getType()))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))

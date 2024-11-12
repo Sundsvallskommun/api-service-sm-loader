@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -94,13 +95,15 @@ class PermissionOrderProviderTest {
 				tuple(ROLE_MANAGER, "Jocke", "Anka", List.of(new ContactChannel().type("Email").value("jocke.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
 				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
 
+		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
+
 		assertThat(errand.getExternalTags()).hasSize(1).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6850")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
-		verify(properties).getCategory();
-		verify(properties).getType();
+		verify(properties, times(2)).getCategory();
+		verify(properties, times(2)).getType();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 
@@ -169,8 +172,8 @@ class PermissionOrderProviderTest {
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
-		verify(properties).getCategory();
-		verify(properties).getType();
+		verify(properties, times(2)).getCategory();
+		verify(properties, times(2)).getType();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 }
