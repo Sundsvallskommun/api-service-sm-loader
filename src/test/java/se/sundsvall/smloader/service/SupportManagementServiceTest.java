@@ -38,6 +38,9 @@ import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL
 class SupportManagementServiceTest {
 
 	@Mock
+	private AttachmentService mockAttachmentService;
+
+	@Mock
 	private CaseRepository mockCaseRepository;
 
 	@Mock
@@ -66,8 +69,8 @@ class SupportManagementServiceTest {
 	@BeforeEach
 	void setUp() {
 		when(mockMapper.getSupportedFamilyId()).thenReturn("161");
-
-		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockOpenEService, mockMessagingClient, mockMessagingMapper, mockEnvironment);
+		supportManagementService = new SupportManagementService(mockSupportManagementClient, mockCaseRepository, mockCaseMappingRepository, List.of(mockMapper), mockOpenEService, mockMessagingClient, mockMessagingMapper, mockEnvironment,
+			mockAttachmentService);
 	}
 
 	@Test
@@ -77,6 +80,7 @@ class SupportManagementServiceTest {
 		final var familyId = "161";
 		final var flowInstanceId = "123456";
 		final var errandNumber = "errandNumber";
+		final var errandId = "errandId";
 		final var namespace = "namespace";
 		final var municipalityId = "municipalityId";
 		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml.getBytes())));
@@ -97,7 +101,7 @@ class SupportManagementServiceTest {
 
 		when(mockMapper.mapToErrand(flowInstanceXml.getBytes())).thenReturn(errand);
 		when(mockSupportManagementClient.createErrand(municipalityId, namespace, errand)).thenReturn(ResponseEntity.created(URI.create("http://localhost:8080/errands/errandId")).build());
-		when(mockSupportManagementClient.getErrand(municipalityId, namespace, "errandId")).thenReturn(errand.errandNumber(errandNumber));
+		when(mockSupportManagementClient.getErrand(municipalityId, namespace, errandId)).thenReturn(errand.errandNumber(errandNumber).id(errandId));
 
 		// Act
 		supportManagementService.exportCases(municipalityId);
@@ -105,6 +109,7 @@ class SupportManagementServiceTest {
 		// Assert and verify
 		verify(mockCaseRepository).findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 		verify(mockMapper).getSupportedFamilyId();
+		verify(mockAttachmentService).handleAttachments(flowInstanceXml.getBytes(), casesToExport.getFirst(), errandId);
 		verify(mockMapper).mapToErrand(flowInstanceXml.getBytes());
 		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand);
 		verify(mockSupportManagementClient).getErrand(municipalityId, namespace, "errandId");
@@ -134,7 +139,7 @@ class SupportManagementServiceTest {
 		verify(mockCaseRepository).findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 		verify(mockCaseRepository).save(caseEntity.withDeliveryStatus(FAILED));
 		verify(mockMapper).getSupportedFamilyId();
-		verifyNoMoreInteractions(mockMapper, mockCaseRepository, mockCaseMappingRepository, mockSupportManagementClient, mockOpenEService, mockMessagingClient, mockMessagingMapper);
+		verifyNoMoreInteractions(mockMapper, mockCaseRepository, mockCaseMappingRepository, mockSupportManagementClient, mockOpenEService, mockMessagingClient, mockMessagingMapper, mockAttachmentService);
 	}
 
 	@Test
@@ -183,10 +188,10 @@ class SupportManagementServiceTest {
 		verify(mockMessagingMapper).toEmailRequest("SmLoader - Test", "Failed to export cases: [123456]");
 		verify(mockMessagingClient).sendSlack(municipalityId, slackRequest);
 		verify(mockMessagingClient).sendEmail(municipalityId, emailRequest);
-		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService, mockMessagingClient, mockMessagingMapper);
+		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService, mockMessagingClient, mockMessagingMapper, mockAttachmentService);
 	}
 
-	private CaseEntity createCaseEntity(String flowInstanceId, String familyId, byte[] flowInstanceXml) {
+	private CaseEntity createCaseEntity(final String flowInstanceId, final String familyId, final byte[] flowInstanceXml) {
 		return CaseEntity.create()
 			.withId("id")
 			.withExternalCaseId(flowInstanceId)

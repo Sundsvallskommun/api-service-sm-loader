@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 import se.sundsvall.smloader.integration.supportmanagement.configuration.SupportManagementConfiguration;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -22,7 +23,9 @@ public interface SupportManagementClient {
 	 * @param errand with attributes for create an errand.
 	 */
 	@PostMapping(path = "/{municipalityId}/{namespace}/errands", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
-	ResponseEntity<Void> createErrand(@PathVariable(name = "municipalityId") String municipalityId, @PathVariable(name = "namespace") String namespace,
+	ResponseEntity<Void> createErrand(
+		@PathVariable(name = "municipalityId") String municipalityId,
+		@PathVariable(name = "namespace") String namespace,
 		@RequestBody Errand errand);
 
 	/**
@@ -31,7 +34,18 @@ public interface SupportManagementClient {
 	 * @param errandId with att.
 	 */
 	@GetMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}", produces = APPLICATION_PROBLEM_JSON_VALUE)
-	Errand getErrand(@PathVariable(name = "municipalityId") String municipalityId, @PathVariable(name = "namespace") String namespace,
+	Errand getErrand(
+		@PathVariable(name = "municipalityId") String municipalityId,
+		@PathVariable(name = "namespace") String namespace,
 		@PathVariable(name = "errandId") String errandId);
 
+	/**
+	 * Export file to support management.
+	 */
+	@PostMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/attachments", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
+	ResponseEntity<Void> createAttachment(
+		@PathVariable(name = "municipalityId") String municipalityId,
+		@PathVariable(name = "namespace") String namespace,
+		@PathVariable(name = "errandId") String errandId,
+		@RequestBody MultipartFile file);
 }

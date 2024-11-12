@@ -1,4 +1,4 @@
-package se.sundsvall.smloader.integration.openemapper;
+package se.sundsvall.smloader.integration.openemapper.attachment;
 
 import java.util.Objects;
 
