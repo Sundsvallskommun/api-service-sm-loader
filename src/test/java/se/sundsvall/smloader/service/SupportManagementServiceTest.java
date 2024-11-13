@@ -27,6 +27,7 @@ import java.util.Base64;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -198,5 +199,65 @@ class SupportManagementServiceTest {
 			.withCaseMetaData(CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace("namespace").withMunicipalityId("municipalityId"))
 			.withOpenECase(new String(flowInstanceXml))
 			.withDeliveryStatus(PENDING);
+	}
+
+	@Test
+	void exportCasesWhenFaultyAttachments() {
+		// Arrange
+		final var flowInstanceXml = "flowInstanceXml".getBytes(); // "flow-instance-lamna-synpunkt.xml
+		final var familyId = "161";
+		final var flowInstanceId = "123456";
+		final var errandNumber = "errandNumber";
+		final var errandId = "errandId";
+		final var namespace = "namespace";
+		final var municipalityId = "municipalityId";
+		final var slackRequest = new SlackRequest().message("Failed to send errand");
+		final var emailRequest = new EmailRequest().message("Failed to send errand");
+		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml)));
+		when(mockCaseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId)).thenReturn(casesToExport);
+
+		final var errand = new Errand()
+			.classification(new Classification()
+				.category("category")
+				.type("type"))
+			.description("description")
+			.stakeholders(List.of(new Stakeholder()
+				.role("role")
+				.firstName("firstName")
+				.lastName("lastName")
+				.contactChannels(List.of(new ContactChannel()
+					.type("email")
+					.value("a.b@c")))));
+
+		when(mockMapper.mapToErrand(flowInstanceXml)).thenReturn(errand);
+		when(mockSupportManagementClient.createErrand(municipalityId, namespace, errand)).thenReturn(ResponseEntity.created(URI.create("http://localhost:8080/errands/errandId")).build());
+		when(mockSupportManagementClient.getErrand(municipalityId, namespace, errandId)).thenReturn(errand.errandNumber(errandNumber).id(errandId));
+		when(mockAttachmentService.handleAttachments(flowInstanceXml, casesToExport.getFirst(), errandId)).thenReturn(List.of("attachmentId"));
+		when(mockEnvironment.getActiveProfiles()).thenReturn(new String[] {
+			"test"
+		});
+
+		when(mockMessagingMapper.toRequest(any())).thenReturn(slackRequest);
+		when(mockMessagingMapper.toEmailRequest(any(), any())).thenReturn(emailRequest);
+
+		// Act
+		supportManagementService.exportCases(municipalityId);
+
+		// Assert and verify
+		verify(mockCaseRepository).findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
+		verify(mockMapper).getSupportedFamilyId();
+		verify(mockAttachmentService).handleAttachments(flowInstanceXml, casesToExport.getFirst(), errandId);
+		verify(mockMapper).mapToErrand(flowInstanceXml);
+		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand);
+		verify(mockSupportManagementClient).getErrand(municipalityId, namespace, "errandId");
+		verify(mockCaseMappingRepository).save(any());
+		verify(mockCaseRepository, times(2)).save(casesToExport.getFirst());
+		verify(mockOpenEService).updateOpenECaseStatus(flowInstanceId, CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace(namespace).withMunicipalityId(municipalityId));
+		verify(mockOpenEService).confirmDelivery(flowInstanceId, EXTERNAL, errandNumber);
+		verify(mockMessagingMapper).toRequest("SmLoader failed to export attachments: For case errandId the attachments [attachmentId] were not exported.");
+		verify(mockMessagingMapper).toEmailRequest("SmLoader - Test", "Failed to export attachments: For case errandId the attachments [attachmentId] were not exported.");
+		verify(mockMessagingClient).sendSlack(municipalityId, slackRequest);
+		verify(mockMessagingClient).sendEmail(municipalityId, emailRequest);
+		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService, mockMessagingClient, mockMessagingMapper, mockAttachmentService);
 	}
 }

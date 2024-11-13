@@ -7,12 +7,15 @@ import se.sundsvall.smloader.integration.openemapper.attachment.AttachmentMultiP
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Logger;
 
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 
 @Service
 public class AttachmentService {
 
+	private static final Logger log = Logger.getLogger(AttachmentService.class.getName());
 	private final OpenEService openEService;
 	private final SupportManagementClient supportManagementClient;
 
@@ -21,14 +24,29 @@ public class AttachmentService {
 		this.supportManagementClient = supportManagementClient;
 	}
 
-	public void handleAttachments(final byte[] xml, final CaseEntity caseEntity, final String errandId) {
-		final var result = getFileIds(xml);
+	public List<String> handleAttachments(final byte[] xml, final CaseEntity caseEntity, final String errandId) {
+		return getFileIds(xml).stream()
+			.map(attachment -> {
+				final var filesAsBytes = openEService.getFile(caseEntity.getExternalCaseId(), attachment.getFileId(), attachment.getQueryId(), caseEntity.getCaseMetaData().getInstance());
 
-		result.forEach(attachment -> {
-			final var filesAsBytes = openEService.getFile(caseEntity.getExternalCaseId(), attachment.getFileId(), attachment.getQueryId(), caseEntity.getCaseMetaData().getInstance());
-			final var multiPartFile = AttachmentMultiPartFile.create(attachment, filesAsBytes);
-			supportManagementClient.createAttachment(caseEntity.getCaseMetaData().getMunicipalityId(), caseEntity.getCaseMetaData().getNamespace(), errandId, multiPartFile);
-		});
+				if (filesAsBytes == null) {
+					log.info("Failed to fetch file for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
+					return attachment.getFileId();
+				}
+
+				final var multiPartFile = AttachmentMultiPartFile.create(attachment, filesAsBytes);
+				final var response = supportManagementClient.createAttachment(caseEntity.getCaseMetaData().getMunicipalityId(), caseEntity.getCaseMetaData().getNamespace(), errandId, multiPartFile);
+
+				if (response.getStatusCode().isError()) {
+					log.info("Failed to create attachment for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
+					return attachment.getFileId();
+				}
+
+				return null;
+			})
+			.filter(Objects::nonNull)
+			.toList();
+
 	}
 
 	private List<Attachment> getFileIds(final byte[] xml) {
