@@ -15,6 +15,7 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +36,9 @@ public class SupportManagementService {
 	private static final String PROD_SUBJECT = "SmLoader - Production";
 	private static final String TEST_SUBJECT = "SmLoader - Test";
 	private static final String SLACK_MESSAGE = "SmLoader failed to export cases: ";
+	private static final String SLACK_ATTACHMENT_MESSAGE = "SmLoader failed to export attachments: ";
 	private static final String EMAIL_MESSAGE = "Failed to export cases: ";
+	private static final String EMAIL_ATTACHMENT_MESSAGE = "Failed to export attachments: ";
 	private final SupportManagementClient supportManagementClient;
 	private final CaseRepository caseRepository;
 	private final CaseMappingRepository caseMappingRepository;
@@ -62,6 +65,7 @@ public class SupportManagementService {
 	public void exportCases(final String municipalityId) {
 		RequestId.init();
 		final var failedCases = new ArrayList<String>();
+		final var failedAttachments = new HashMap<String, List<String>>();
 
 		final var casesToExport = caseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
 
@@ -89,13 +93,16 @@ public class SupportManagementService {
 
 			final var createdErrand = getErrandFromSupportManagement(errandId, caseEntity.getCaseMetaData().getNamespace(), caseEntity.getCaseMetaData().getMunicipalityId());
 
-			if (createdErrand != null) {
-				attachmentService.handleAttachments(decodedOpenECase, caseEntity, createdErrand.getId());
-				openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData().getInstance(), createdErrand.getErrandNumber());
+			final var faultyAttachments = attachmentService.handleAttachments(decodedOpenECase, caseEntity, errandId);
+			if (!faultyAttachments.isEmpty()) {
+				caseRepository.save(caseEntity.withDeliveryStatus(FAILED));
+				failedAttachments.put(errandId, faultyAttachments);
 			}
+			openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData().getInstance(), Optional.ofNullable(createdErrand).map(Errand::getErrandNumber).orElse(null));
 		});
 
 		handleFailedCases(municipalityId, failedCases);
+		handleFailedAttachments(municipalityId, failedAttachments);
 	}
 
 	private String sendToSupportManagement(final Errand errand, final String namespace, final String municipalityId) {
@@ -124,6 +131,23 @@ public class SupportManagementService {
 			final var subject = List.of(environment.getActiveProfiles()).contains(PRODUCTION) ? PROD_SUBJECT : TEST_SUBJECT;
 			messagingClient.sendSlack(municipalityId, messagingMapper.toRequest(SLACK_MESSAGE + failedCases));
 			messagingClient.sendEmail(municipalityId, messagingMapper.toEmailRequest(subject, EMAIL_MESSAGE + failedCases));
+		}
+	}
+
+	private void handleFailedAttachments(final String municipalityId, final Map<String, List<String>> failedAttachments) {
+		if (!failedAttachments.isEmpty()) {
+			final var subject = List.of(environment.getActiveProfiles()).contains(PRODUCTION) ? PROD_SUBJECT : TEST_SUBJECT;
+			final var slackMessage = new StringBuilder(SLACK_ATTACHMENT_MESSAGE);
+			final var emailMessage = new StringBuilder(EMAIL_ATTACHMENT_MESSAGE);
+
+			failedAttachments.forEach((caseId, attachments) -> {
+				slackMessage.append(String.format("For case %s the attachments %s were not exported.", caseId, attachments));
+				emailMessage.append(String.format("For case %s the attachments %s were not exported.", caseId, attachments));
+			});
+
+			LOGGER.error("Failed to export attachments: {}", failedAttachments);
+			messagingClient.sendSlack(municipalityId, messagingMapper.toRequest(slackMessage.toString()));
+			messagingClient.sendEmail(municipalityId, messagingMapper.toEmailRequest(subject, emailMessage.toString()));
 		}
 	}
 }
