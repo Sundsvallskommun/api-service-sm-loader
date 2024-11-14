@@ -1,27 +1,11 @@
 package se.sundsvall.smloader.integration.openemapper.contactsalaryandpension;
 
-import generated.se.sundsvall.party.PartyType;
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-import se.sundsvall.smloader.service.mapper.OpenEMapper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
@@ -31,6 +15,23 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+
+import generated.se.sundsvall.party.PartyType;
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
 class ContactSalaryAndPensionProvider implements OpenEMapper {
@@ -100,7 +101,7 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 				.lastName(contactSalaryAndPension.managerLastname())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(contactSalaryAndPension.managerLegalId()))
-				.organizationName(contactSalaryAndPension.managerOrganization()));
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, contactSalaryAndPension.managerOrganization())));
 		}
 
 		if (contactSalaryAndPension.applicantFirstname() != null) {
@@ -111,7 +112,7 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.contactChannels(getContactChannels(contactSalaryAndPension.applicantEmail()))
 				.externalId(getPartyId(contactSalaryAndPension.applicantLegalId()))
-				.organizationName(contactSalaryAndPension.applicantOrganization()));
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, contactSalaryAndPension.applicantOrganization())));
 		}
 
 		users.forEach(user -> stakeholders.add(new Stakeholder()

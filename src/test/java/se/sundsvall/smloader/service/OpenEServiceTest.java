@@ -1,7 +1,26 @@
 package se.sundsvall.smloader.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static se.sundsvall.smloader.TestUtil.readOpenEFile;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.INTERNAL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
+
 import generated.se.sundsvall.callback.ConfirmDelivery;
 import generated.se.sundsvall.callback.SetStatus;
+import java.time.LocalDateTime;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,25 +39,6 @@ import se.sundsvall.smloader.integration.openeexternal.OpenEExternalClient;
 import se.sundsvall.smloader.integration.openeexternalsoap.OpenEExternalSoapClient;
 import se.sundsvall.smloader.integration.openeinternal.OpenEInternalClient;
 import se.sundsvall.smloader.integration.openeinternalsoap.OpenEInternalSoapClient;
-
-import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.AssertionsForClassTypes.tuple;
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static se.sundsvall.smloader.TestUtil.readOpenEFile;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
-import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
-import static se.sundsvall.smloader.integration.db.model.enums.Instance.INTERNAL;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
 
 @ExtendWith(MockitoExtension.class)
 class OpenEServiceTest {
@@ -86,16 +86,15 @@ class OpenEServiceTest {
 		final var fromDate = LocalDateTime.now().minusDays(1);
 		final var toDate = LocalDateTime.now();
 		final var status = "status";
-		final var caseMetaDataEntity_123 = CaseMetaDataEntity.create().withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity_456 = CaseMetaDataEntity.create().withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity_789 = CaseMetaDataEntity.create().withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity_101 = CaseMetaDataEntity.create().withFamilyId("101").withInstance(INTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity_112 = CaseMetaDataEntity.create().withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity_115 = CaseMetaDataEntity.create().withFamilyId("115").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity456 = CaseMetaDataEntity.create().withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity789 = CaseMetaDataEntity.create().withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity101 = CaseMetaDataEntity.create().withFamilyId("101").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity112 = CaseMetaDataEntity.create().withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity115 = CaseMetaDataEntity.create().withFamilyId("115").withInstance(INTERNAL).withOpenEImportStatus(status);
 
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityId(EXTERNAL, municipalityId)).thenReturn(List.of(caseMetaDataEntity_123, caseMetaDataEntity_456, caseMetaDataEntity_789));
-
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityId(INTERNAL, municipalityId)).thenReturn(List.of(caseMetaDataEntity_101, caseMetaDataEntity_112, caseMetaDataEntity_115));
+		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityId(EXTERNAL, municipalityId)).thenReturn(List.of(caseMetaDataEntity123, caseMetaDataEntity456, caseMetaDataEntity789));
+		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityId(INTERNAL, municipalityId)).thenReturn(List.of(caseMetaDataEntity101, caseMetaDataEntity112, caseMetaDataEntity115));
 
 		when(mockOpenEExternalClient.getErrandIds("123", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
 		when(mockOpenEExternalClient.getErrandIds("456", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
@@ -113,12 +112,12 @@ class OpenEServiceTest {
 		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId)).thenReturn(false);
 		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(false);
 
-		when(mockCaseMetaDataRepository.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity_101))
-			.thenReturn(Optional.of(caseMetaDataEntity_112))
-			.thenReturn(Optional.of(caseMetaDataEntity_115))
-			.thenReturn(Optional.of(caseMetaDataEntity_123))
-			.thenReturn(Optional.of(caseMetaDataEntity_456))
-			.thenReturn(Optional.of(caseMetaDataEntity_789));
+		when(mockCaseMetaDataRepository.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity101))
+			.thenReturn(Optional.of(caseMetaDataEntity112))
+			.thenReturn(Optional.of(caseMetaDataEntity115))
+			.thenReturn(Optional.of(caseMetaDataEntity123))
+			.thenReturn(Optional.of(caseMetaDataEntity456))
+			.thenReturn(Optional.of(caseMetaDataEntity789));
 
 		// Act
 		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId);
@@ -137,12 +136,12 @@ class OpenEServiceTest {
 			.extracting(CaseEntity::getExternalCaseId,
 				CaseEntity::getCaseMetaData,
 				CaseEntity::getDeliveryStatus,
-				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity_101, PENDING, expectedFlowInstance),
-					tuple("234567", caseMetaDataEntity_112, PENDING, expectedFlowInstance),
-					tuple("345678", caseMetaDataEntity_115, PENDING, expectedFlowInstance),
-					tuple("123456", caseMetaDataEntity_123, PENDING, expectedFlowInstance),
-					tuple("234567", caseMetaDataEntity_456, PENDING, expectedFlowInstance),
-					tuple("345678", caseMetaDataEntity_789, PENDING, expectedFlowInstance));
+				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity101, PENDING, expectedFlowInstance),
+					tuple("234567", caseMetaDataEntity112, PENDING, expectedFlowInstance),
+					tuple("345678", caseMetaDataEntity115, PENDING, expectedFlowInstance),
+					tuple("123456", caseMetaDataEntity123, PENDING, expectedFlowInstance),
+					tuple("234567", caseMetaDataEntity456, PENDING, expectedFlowInstance),
+					tuple("345678", caseMetaDataEntity789, PENDING, expectedFlowInstance));
 	}
 
 	@Test

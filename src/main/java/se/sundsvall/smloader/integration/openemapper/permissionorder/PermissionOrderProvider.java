@@ -1,25 +1,5 @@
 package se.sundsvall.smloader.integration.openemapper.permissionorder;
 
-import generated.se.sundsvall.party.PartyType;
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.jsoup.nodes.Element;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-import se.sundsvall.smloader.service.mapper.OpenEMapper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
@@ -58,6 +38,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_USE
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ACCESS_TYPE_HEROMA;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT_PART_BOU;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT_PART_IAF;
@@ -100,12 +81,32 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PERMI
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
+import generated.se.sundsvall.party.PartyType;
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.service.mapper.OpenEMapper;
+
 @Component
 class PermissionOrderProvider implements OpenEMapper {
 
 	private static final String BASE_XPATH = "/FlowInstance/Values/";
-	private final OpenEMapperProperties properties;
 
+	private final OpenEMapperProperties properties;
 	private final PartyClient partyClient;
 
 	public PermissionOrderProvider(final @Qualifier("permissionorder") OpenEMapperProperties properties, final PartyClient partyClient) {
@@ -147,14 +148,14 @@ class PermissionOrderProvider implements OpenEMapper {
 				.role(ROLE_APPLICANT)
 				.firstName(permissionOrder.applicantFirstname())
 				.lastName(permissionOrder.applicantLastname())
-				.organizationName(permissionOrder.applicantOrganization())
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, permissionOrder.applicantOrganization()))
 				.contactChannels(getContactChannels(permissionOrder.applicantEmail())),
 			new Stakeholder()
 				.role(ROLE_USER)
 				.firstName(permissionOrder.userFirstname())
 				.lastName(permissionOrder.userLastname())
 				.contactChannels(getContactChannels(permissionOrder.userEmail()))
-				.organizationName(permissionOrder.userOrganization())
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, permissionOrder.userOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(permissionOrder.userLegalId()))));
 		if (isNotEmpty(permissionOrder.managerFirstname())) {
@@ -163,7 +164,7 @@ class PermissionOrderProvider implements OpenEMapper {
 				.firstName(permissionOrder.managerFirstname())
 				.lastName(permissionOrder.managerLastname())
 				.contactChannels(getContactChannels(permissionOrder.managerEmail()))
-				.organizationName(permissionOrder.managerOrganization()));
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, permissionOrder.managerOrganization())));
 		}
 		return stakeholders;
 	}
@@ -179,7 +180,7 @@ class PermissionOrderProvider implements OpenEMapper {
 	}
 
 	private List<Parameter> getParameters(final PermissionOrder permissionOrder, final byte[] xml) {
-		var parameters = new ArrayList<Parameter>();
+		final var parameters = new ArrayList<Parameter>();
 
 		Optional.ofNullable(permissionOrder.computerId()).ifPresent(computerId -> parameters.add(new Parameter().key(KEY_COMPUTER_ID).addValuesItem(computerId)
 			.displayName(DISPLAY_COMPUTER_ID)));

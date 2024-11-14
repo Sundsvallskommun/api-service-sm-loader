@@ -1,22 +1,6 @@
 package se.sundsvall.smloader.integration.openemapper.salarychange;
 
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-
-import java.util.List;
-import java.util.Optional;
-
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,6 +15,23 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLIC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SALARY_CHANGE;
+
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
 
 @ExtendWith(MockitoExtension.class)
 class SalaryChangeProviderTest {
@@ -64,10 +65,10 @@ class SalaryChangeProviderTest {
 		when(properties.getType()).thenReturn(type);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
-		var stringBytes = readOpenEFile("flow-instance-lonevaxling.xml");
+		final var stringBytes = readOpenEFile("flow-instance-lonevaxling.xml");
 
 		// Act
-		var errand = provider.mapToErrand(stringBytes);
+		final var errand = provider.mapToErrand(stringBytes);
 
 		// Assert
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
@@ -80,13 +81,19 @@ class SalaryChangeProviderTest {
 			tuple("amount", List.of("1000"), "Belopp"),
 			tuple("fromMonth", List.of("Oktober"), "Månad löneväxling sker från"));
 
-		assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
+		assertThat(errand.getStakeholders()).hasSize(2).extracting(
+			Stakeholder::getRole,
+			Stakeholder::getFirstName,
+			Stakeholder::getLastName,
+			Stakeholder::getContactChannels,
+			Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType,
+			Stakeholder::getExternalId,
+			Stakeholder::getMetadata).containsExactlyInAnyOrder(
+				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyMap()),
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, Map.of("administrationName", "KSK AVD Digitalisering IT stab")));
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
-
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6851")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
