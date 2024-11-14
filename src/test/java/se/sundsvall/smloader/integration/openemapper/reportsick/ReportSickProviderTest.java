@@ -1,23 +1,7 @@
 package se.sundsvall.smloader.integration.openemapper.reportsick;
 
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-
-import java.util.List;
-import java.util.Optional;
-
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,6 +16,23 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTAC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_REPORT_SICK;
+
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
 
 @ExtendWith(MockitoExtension.class)
 class ReportSickProviderTest {
@@ -96,12 +97,19 @@ class ReportSickProviderTest {
 			tuple("sickNoteStartDates", List.of("2024-07-01", "2024-07-01", "2024-07-01", "2024-07-04"), "Sjukskrivnings startdatum"),
 			tuple("sickNoteEndDates", List.of("2024-07-01", "2024-07-01", "2024-07-01", "2024-07-04"), "Sjukskrivnings slutdatum"));
 
-		assertThat(errand.getStakeholders()).hasSize(3).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"),
-					new ContactChannel().type("Phone").value("0701112223")), "KSK Avd Digital Utveckling", null, null),
-				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), "KSK Avd Digital Utveckling", "PRIVATE", partyId));
+		assertThat(errand.getStakeholders()).hasSize(3).extracting(
+			Stakeholder::getRole,
+			Stakeholder::getFirstName,
+			Stakeholder::getLastName,
+			Stakeholder::getContactChannels,
+			Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType,
+			Stakeholder::getExternalId,
+			Stakeholder::getMetadata).containsExactlyInAnyOrder(
+				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyMap()),
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"), new ContactChannel().type("Phone").value("0701112223")), null, null, null, Map.of("administrationName",
+					"KSK Avd Digital Utveckling")),
+				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, Map.of("administrationName", "KSK Avd Digital Utveckling")));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6846")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
@@ -154,11 +162,18 @@ class ReportSickProviderTest {
 			tuple("sickPeriodEndTimes", List.of("17:00", "14:00"), "Sjukperiodens sluttider"),
 			tuple("haveSickNote", List.of("Nej"), "Har läkarintyg"));
 
-		assertThat(errand.getStakeholders()).hasSize(3).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName,
-			Stakeholder::getExternalIdType, Stakeholder::getExternalId).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "KSK AVD Digitalisering IT stab", null, null),
-				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), "KSK AVD Digitalisering IT stab", "PRIVATE", partyId));
+		assertThat(errand.getStakeholders()).hasSize(3).extracting(
+			Stakeholder::getRole,
+			Stakeholder::getFirstName,
+			Stakeholder::getLastName,
+			Stakeholder::getContactChannels,
+			Stakeholder::getOrganizationName,
+			Stakeholder::getExternalIdType,
+			Stakeholder::getExternalId,
+			Stakeholder::getMetadata).containsExactlyInAnyOrder(
+				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyMap()),
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
+				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, Map.of("administrationName", "KSK AVD Digitalisering IT stab")));
 
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6910")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");

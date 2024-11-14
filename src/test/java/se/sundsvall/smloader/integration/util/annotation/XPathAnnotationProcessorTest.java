@@ -1,5 +1,11 @@
 package se.sundsvall.smloader.integration.util.annotation;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mockStatic;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -8,12 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.dept44.test.annotation.resource.Load;
 import se.sundsvall.dept44.test.extension.ResourceLoaderExtension;
 import se.sundsvall.smloader.integration.util.XPathException;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith({
 	MockitoExtension.class, ResourceLoaderExtension.class
@@ -51,21 +51,21 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void extractValueForClass() {
-		var result = XPathAnnotationProcessor.extractValue(xml, DishAsClass.class);
+		final var result = XPathAnnotationProcessor.extractValue(xml, DishAsClass.class);
 
 		assertThat(result).isNotNull().satisfies(dish -> assertThat(dish.name).isEqualTo("Waffles"));
 	}
 
 	@Test
 	void extractValueForRecord() {
-		var result = XPathAnnotationProcessor.extractValue(xml, DishAsRecord.class);
+		final var result = XPathAnnotationProcessor.extractValue(xml, DishAsRecord.class);
 
 		assertThat(result).isNotNull().satisfies(dish -> assertThat(dish.name).isEqualTo("Cheeseburger"));
 	}
 
 	@Test
 	void getValueForString() {
-		var dummyStringValue = "someStringValue";
+		final var dummyStringValue = "someStringValue";
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
@@ -82,7 +82,7 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getValueForInteger() {
-		var dummyIntegerValue = 12345;
+		final var dummyIntegerValue = 12345;
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
@@ -98,7 +98,7 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getValueForBoolean() {
-		var dummyBooleanValue = true;
+		final var dummyBooleanValue = true;
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
@@ -114,7 +114,7 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getValueForDouble() {
-		var dummyDoubleValue = 123.45;
+		final var dummyDoubleValue = 123.45;
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
@@ -130,7 +130,7 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getValueForFloat() {
-		var dummyFloatValue = 123.45f;
+		final var dummyFloatValue = 123.45f;
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
@@ -146,7 +146,7 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getValueForOtherType() {
-		var dummyDish = new DishAsRecord("someDummyValue");
+		final var dummyDish = new DishAsRecord("someDummyValue");
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
@@ -162,9 +162,9 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getString() {
-		var first = XPathAnnotationProcessor.getString(xml, "/menu/dish[1]/name");
-		var second = XPathAnnotationProcessor.getString(xml, "/menu/dish[2]/name");
-		var third = XPathAnnotationProcessor.getString(xml, "/menu/dish[3]/name");
+		final var first = XPathAnnotationProcessor.getString(xml, "/menu/dish[1]/name");
+		final var second = XPathAnnotationProcessor.getString(xml, "/menu/dish[2]/name");
+		final var third = XPathAnnotationProcessor.getString(xml, "/menu/dish[3]/name");
 
 		assertThat(first).isEqualTo("Waffles");
 		assertThat(second).isEqualTo("Cheeseburger");
@@ -173,9 +173,9 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getInteger() {
-		var first = XPathAnnotationProcessor.getInteger(xml, "/menu/dish[1]/calories");
-		var second = XPathAnnotationProcessor.getInteger(xml, "/menu/dish[2]/calories");
-		var third = XPathAnnotationProcessor.getInteger(xml, "/menu/dish[3]/calories");
+		final var first = XPathAnnotationProcessor.getInteger(xml, "/menu/dish[1]/calories");
+		final var second = XPathAnnotationProcessor.getInteger(xml, "/menu/dish[2]/calories");
+		final var third = XPathAnnotationProcessor.getInteger(xml, "/menu/dish[3]/calories");
 
 		assertThat(first).isEqualTo(650);
 		assertThat(second).isEqualTo(900);
@@ -184,9 +184,9 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getBoolean() {
-		var first = XPathAnnotationProcessor.getBoolean(xml, "/menu/dish[1]/vegetarian");
-		var second = XPathAnnotationProcessor.getBoolean(xml, "/menu/dish[2]/vegetarian");
-		var third = XPathAnnotationProcessor.getBoolean(xml, "/menu/dish[3]/vegetarian");
+		final var first = XPathAnnotationProcessor.getBoolean(xml, "/menu/dish[1]/vegetarian");
+		final var second = XPathAnnotationProcessor.getBoolean(xml, "/menu/dish[2]/vegetarian");
+		final var third = XPathAnnotationProcessor.getBoolean(xml, "/menu/dish[3]/vegetarian");
 
 		assertThat(first).isTrue();
 		assertThat(second).isFalse();
@@ -195,9 +195,9 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getDouble() {
-		var first = XPathAnnotationProcessor.getDouble(xml, "/menu/dish[1]/price");
-		var second = XPathAnnotationProcessor.getDouble(xml, "/menu/dish[2]/price");
-		var third = XPathAnnotationProcessor.getDouble(xml, "/menu/dish[3]/price");
+		final var first = XPathAnnotationProcessor.getDouble(xml, "/menu/dish[1]/price");
+		final var second = XPathAnnotationProcessor.getDouble(xml, "/menu/dish[2]/price");
+		final var third = XPathAnnotationProcessor.getDouble(xml, "/menu/dish[3]/price");
 
 		assertThat(first).isEqualTo(55.0);
 		assertThat(second).isEqualTo(119.95);
@@ -206,9 +206,9 @@ class XPathAnnotationProcessorTest {
 
 	@Test
 	void getFloat() {
-		var first = XPathAnnotationProcessor.getFloat(xml, "/menu/dish[1]/price");
-		var second = XPathAnnotationProcessor.getFloat(xml, "/menu/dish[2]/price");
-		var third = XPathAnnotationProcessor.getFloat(xml, "/menu/dish[3]/price");
+		final var first = XPathAnnotationProcessor.getFloat(xml, "/menu/dish[1]/price");
+		final var second = XPathAnnotationProcessor.getFloat(xml, "/menu/dish[2]/price");
+		final var third = XPathAnnotationProcessor.getFloat(xml, "/menu/dish[3]/price");
 
 		assertThat(first).isEqualTo(55.0f);
 		assertThat(second).isEqualTo(119.95f);
@@ -220,7 +220,6 @@ class XPathAnnotationProcessorTest {
 		@XPath("/menu/dish[1]/name")
 		private String name;
 
-		private String something;
 	}
 
 	record DishAsRecord(@XPath("/menu/dish[2]/name") String name) {}
@@ -233,11 +232,11 @@ class XPathAnnotationProcessorTest {
 
 		@Test
 		void constructorAndAccessors() throws Exception {
-			var field = getClass().getDeclaredField("dummy");
-			var type = getClass();
-			var value = "someValue";
+			final var field = getClass().getDeclaredField("dummy");
+			final var type = getClass();
+			final var value = "someValue";
 
-			var parameter = new XPathAnnotationProcessor.Parameter(field, type, value);
+			final var parameter = new XPathAnnotationProcessor.Parameter(field, type, value);
 
 			assertThat(parameter.field()).isEqualTo(field);
 			assertThat(parameter.type()).isEqualTo(type);

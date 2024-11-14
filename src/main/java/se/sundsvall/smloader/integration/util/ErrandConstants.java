@@ -25,6 +25,7 @@ public final class ErrandConstants {
 	public static final String KEY_CASE_ID = "caseId";
 	public static final String KEY_ADMINISTRATIVE_UNIT = "administrativeUnit";
 	public static final String DISPLAY_ADMINISTRATIVE_UNIT = "Förvaltning/verksamhet";
+	public static final String KEY_ADMINISTRATION_NAME = "administrationName";
 	// SubstituteManager
 	public static final String KEY_RESPONSIBILITY_NUMBER = "responsibilityNumber";
 	public static final String DISPLAY_RESPONSIBILITY_NUMBER = "Ordinarie chef ansvarsnummer";

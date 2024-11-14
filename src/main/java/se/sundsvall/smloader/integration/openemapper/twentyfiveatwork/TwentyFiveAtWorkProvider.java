@@ -1,28 +1,12 @@
 package se.sundsvall.smloader.integration.openemapper.twentyfiveatwork;
 
-import generated.se.sundsvall.party.PartyType;
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-import se.sundsvall.smloader.service.mapper.OpenEMapper;
-
-import java.util.List;
-import java.util.Set;
-
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_LATEST_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ORIGINAL_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_LATEST_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ORIGINAL_START_DATE;
@@ -33,6 +17,23 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOY
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_TWENTY_FIVE_AT_WORK;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+
+import generated.se.sundsvall.party.PartyType;
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
 class TwentyFiveAtWorkProvider implements OpenEMapper {
@@ -81,7 +82,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 				.firstName(twentyFiveAtWork.applicantFirstname())
 				.lastName(twentyFiveAtWork.applicantLastname())
 				.contactChannels(getContactChannels(twentyFiveAtWork.applicantEmail()))
-				.organizationName(twentyFiveAtWork.applicantOrganization())
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, twentyFiveAtWork.applicantOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(twentyFiveAtWork.applicantLegalId())),
 			getEmployee(twentyFiveAtWork));

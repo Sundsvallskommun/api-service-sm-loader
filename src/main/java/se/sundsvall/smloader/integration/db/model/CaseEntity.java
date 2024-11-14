@@ -8,15 +8,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import org.hibernate.Length;
 import org.hibernate.annotations.TimeZoneStorage;
 import org.hibernate.annotations.TimeZoneStorageType;
 import org.hibernate.annotations.UuidGenerator;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
-
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 
 @Entity
 @Table(name = "'case'")
@@ -27,7 +26,7 @@ public class CaseEntity {
 	@Column(name = "id")
 	private String id;
 
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "family_id", nullable = false, foreignKey = @ForeignKey(name = "fk_case_case_meta_data_family_id"))
 	private CaseMetaDataEntity caseMetaDataEntity;
 
@@ -138,13 +137,15 @@ public class CaseEntity {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if ((o == null) || (getClass() != o.getClass())) {
 			return false;
-		CaseEntity that = (CaseEntity) o;
+		}
+		final CaseEntity that = (CaseEntity) o;
 		return Objects.equals(getId(), that.getId()) && Objects.equals(getCaseMetaData(), that.caseMetaDataEntity) && Objects.equals(getExternalCaseId(), that.getExternalCaseId()) && Objects.equals(getOpenECase(), that.getOpenECase())
-			&& getDeliveryStatus() == that.getDeliveryStatus()
+			&& (getDeliveryStatus() == that.getDeliveryStatus())
 			&& Objects.equals(getCreated(), that.getCreated());
 	}
 

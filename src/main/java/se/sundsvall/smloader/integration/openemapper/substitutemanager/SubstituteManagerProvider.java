@@ -1,22 +1,5 @@
 package se.sundsvall.smloader.integration.openemapper.substitutemanager;
 
-import generated.se.sundsvall.party.PartyType;
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-import se.sundsvall.smloader.service.mapper.OpenEMapper;
-
-import java.util.List;
-import java.util.Set;
-
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
@@ -25,6 +8,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_RES
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_START_DATE_CERTIIFY;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_END_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_RESPONSIBILITY_NUMBER;
@@ -38,6 +22,23 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_SUBSTI
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SUBSTITUTE_MANAGER;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+
+import generated.se.sundsvall.party.PartyType;
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
 class SubstituteManagerProvider implements OpenEMapper {
@@ -86,13 +87,13 @@ class SubstituteManagerProvider implements OpenEMapper {
 				.role(ROLE_APPLICANT)
 				.firstName(substituteManager.applicantFirstname())
 				.lastName(substituteManager.applicantLastname())
-				.organizationName(substituteManager.applicantOrganization())
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, substituteManager.applicantOrganization()))
 				.contactChannels(getContactChannels(substituteManager.applicantEmail())),
 			new Stakeholder()
 				.role(ROLE_SUBSTITUTE)
 				.firstName(substituteManager.substituteManagerFirstname())
 				.lastName(substituteManager.substituteManagerLastname())
-				.organizationName(substituteManager.substituteManagerOrganization())
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, substituteManager.substituteManagerOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(substituteManager.substituteManagerLegalId())),
 			getManagerStakeholder(substituteManager),
@@ -100,7 +101,7 @@ class SubstituteManagerProvider implements OpenEMapper {
 				.role(ROLE_APPROVER)
 				.firstName(substituteManager.approvingManagerFirstname())
 				.lastName(substituteManager.approvingManagerLastname())
-				.organizationName(substituteManager.approvingManagerOrganization())
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, substituteManager.approvingManagerOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(substituteManager.approvingManagerLegalId())));
 	}
@@ -116,14 +117,14 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.role(ROLE_MANAGER)
 			.firstName(substituteManager.managerFirstname())
 			.lastName(substituteManager.managerLastname())
-			.organizationName(substituteManager.managerOrganization())
+			.metadata(Map.of(KEY_ADMINISTRATION_NAME, substituteManager.managerOrganization()))
 			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 			.externalId(getPartyId(substituteManager.managerLegalId()))
 			: new Stakeholder()
 				.role(ROLE_MANAGER)
 				.firstName(substituteManager.otherSenderFirstname())
 				.lastName(substituteManager.otherSenderLastname())
-				.organizationName(substituteManager.otherSenderOrganization())
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, substituteManager.otherSenderOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(substituteManager.otherSenderLegalId()));
 	}

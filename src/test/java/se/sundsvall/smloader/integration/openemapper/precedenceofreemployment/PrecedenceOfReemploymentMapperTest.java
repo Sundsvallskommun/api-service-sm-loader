@@ -1,20 +1,6 @@
 package se.sundsvall.smloader.integration.openemapper.precedenceofreemployment;
 
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-
-import java.util.List;
-
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.Mockito.times;
@@ -28,6 +14,21 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTAC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PRECEDENCE_OF_REEMPLOYMENT;
+
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 
 @ExtendWith(MockitoExtension.class)
 class PrecedenceOfReemploymentMapperTest {
@@ -56,10 +57,10 @@ class PrecedenceOfReemploymentMapperTest {
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
 
-		var stringBytes = readOpenEFile("flow-instance-foretradesratt-ateranstallning.xml");
+		final var stringBytes = readOpenEFile("flow-instance-foretradesratt-ateranstallning.xml");
 
 		// Act
-		var errand = mapper.mapToErrand(stringBytes);
+		final var errand = mapper.mapToErrand(stringBytes);
 
 		// Assert and verify
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
@@ -74,12 +75,17 @@ class PrecedenceOfReemploymentMapperTest {
 			tuple("position", List.of("T - Tidsbegr anställning"), "Anställningsform"),
 			tuple("salaryType", List.of("Månadslön"), "Lönetyp"));
 
-		assertThat(errand.getStakeholders()).hasSize(3).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels, Stakeholder::getOrganizationName)
+		assertThat(errand.getStakeholders()).hasSize(3).extracting(
+			Stakeholder::getRole,
+			Stakeholder::getFirstName,
+			Stakeholder::getLastName,
+			Stakeholder::getContactChannels,
+			Stakeholder::getOrganizationName,
+			Stakeholder::getMetadata)
 			.containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"),
-					new ContactChannel().type("Phone").value("0701112223")), null),
-				tuple(ROLE_MANAGER, "Joakim", "von Anka", List.of(new ContactChannel().type("Email").value("joakim.anka@sundsvall.se")), "KSK Avd Digital arbetsplats"));
+				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, emptyMap()),
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"), new ContactChannel().type("Phone").value("0701112223")), null, emptyMap()),
+				tuple(ROLE_MANAGER, "Joakim", "von Anka", List.of(new ContactChannel().type("Email").value("joakim.anka@sundsvall.se")), null, Map.of("administrationName", "KSK Avd Digital arbetsplats")));
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
 

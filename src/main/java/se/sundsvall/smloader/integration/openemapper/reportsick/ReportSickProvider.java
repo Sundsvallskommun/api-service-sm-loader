@@ -1,24 +1,5 @@
 package se.sundsvall.smloader.integration.openemapper.reportsick;
 
-import generated.se.sundsvall.party.PartyType;
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-import se.sundsvall.smloader.service.mapper.OpenEMapper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
@@ -53,6 +34,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ABSENT_
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ABSENT_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ABSENT_START_TIME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ABSENT_TYPE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYEE_TITLE;
@@ -72,6 +54,25 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_REPORT_SICK;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+
+import generated.se.sundsvall.party.PartyType;
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
 class ReportSickProvider implements OpenEMapper {
@@ -119,14 +120,14 @@ class ReportSickProvider implements OpenEMapper {
 				.firstName(reportSick.applicantFirstname())
 				.lastName(reportSick.applicantLastname())
 				.contactChannels(getContactChannels(reportSick.applicantEmail(), reportSick.applicantPhone()))
-				.organizationName(reportSick.applicantOrganization()),
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, reportSick.applicantOrganization())),
 			new Stakeholder()
 				.role(ROLE_EMPLOYEE)
 				.firstName(reportSick.employeeFirstname())
 				.lastName(reportSick.employeeLastname())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(reportSick.employeeLegalId()))
-				.organizationName(reportSick.employeeOrganization()));
+				.metadata(Map.of(KEY_ADMINISTRATION_NAME, reportSick.employeeOrganization())));
 	}
 
 	private List<ContactChannel> getContactChannels(final String email, final String phone) {
@@ -179,11 +180,11 @@ class ReportSickProvider implements OpenEMapper {
 		Optional.ofNullable(reportSick.haveSickNote()).ifPresent(haveSickNote -> parameters.add(new Parameter().key(KEY_HAVE_SICK_NOTE).values(List.of(haveSickNote))
 			.displayName(DISPLAY_HAVE_SICK_NOTE)));
 
-		var sickPeriodDates = new ArrayList<String>();
+		final var sickPeriodDates = new ArrayList<String>();
 
-		var sickPeriodStartTimes = new ArrayList<String>();
+		final var sickPeriodStartTimes = new ArrayList<String>();
 
-		var sickPeriodEndTimes = new ArrayList<String>();
+		final var sickPeriodEndTimes = new ArrayList<String>();
 
 		final var sickPeriods = parsePeriods(xml);
 
