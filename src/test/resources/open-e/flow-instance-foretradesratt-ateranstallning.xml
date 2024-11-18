@@ -29,6 +29,13 @@
 		<LastSubmitted>2024-10-14T16:45:58</LastSubmitted>
 	</Header>
 	<Values>
+		<employmentInformation>
+			<QueryID>52976</QueryID>
+			<Name><![CDATA[Anställningsinformation]]></Name>
+			<workPlace><![CDATA[Testar]]></workPlace>
+			<position><![CDATA[T - Tidsbegr anställning          ]]></position>
+			<manager><![CDATA[Joakim von Anka]]></manager>
+		</employmentInformation>
 		<workPlace>
 			<QueryID>18146</QueryID>
 			<Name><![CDATA[Ange din anställningsinformation]]></Name>
@@ -44,20 +51,14 @@
 			<Name><![CDATA[Ange datum för anställningens sista dag]]></Name>
 			<StartDate>2024-10-03</StartDate>
 		</lastDayOfPosition>
-		<manager>
-			<QueryID>18149</QueryID>
-			<Name><![CDATA[Ange din chef]]></Name>
-			<firstname><![CDATA[Joakim]]></firstname>
-			<lastname><![CDATA[von Anka]]></lastname>
-			<email><![CDATA[joakim.anka@sundsvall.se]]></email>
-			<title><![CDATA[Enhetschef]]></title>
-			<organization><![CDATA[KSK Avd Digital arbetsplats]]></organization>
-		</manager>
 		<applicant>
 			<QueryID>18150</QueryID>
 			<Name><![CDATA[Kontaktuppgifter]]></Name>
 			<Fornamn><![CDATA[Kalle]]></Fornamn>
 			<Efternamn><![CDATA[Anka]]></Efternamn>
+			<Adress><![CDATA[Storgatan 1]]></Adress>
+			<Postnummer><![CDATA[11122]]></Postnummer>
+			<Postadress><![CDATA[Ankeborg]]></Postadress>
 			<E-post__privat_><![CDATA[kalle.anka@sundsvall.se]]></E-post__privat_>
 			<Telefonnummer__privat_><![CDATA[0701112223]]></Telefonnummer__privat_>
 		</applicant>

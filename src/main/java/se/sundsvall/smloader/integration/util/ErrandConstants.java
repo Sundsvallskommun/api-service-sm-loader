@@ -40,6 +40,8 @@ public final class ErrandConstants {
 	public static final String DISPLAY_POSITION = "Anställningsform";
 	public static final String KEY_SALARY_TYPE = "salaryType";
 	public static final String DISPLAY_SALARY_TYPE = "Lönetyp";
+	public static final String KEY_MANAGER = "manager";
+	public static final String DISPLAY_MANAGER = "Chef";
 	// EmployersCertificate
 	public static final String KEY_TIME_PERIOD = "timePeriod";
 	public static final String DISPLAY_TIME_PERIOD = "Tidsperiod";
