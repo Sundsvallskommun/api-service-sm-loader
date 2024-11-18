@@ -1,26 +1,5 @@
 package se.sundsvall.smloader.integration.openemapper.precedenceofreemployment;
 
-import static java.util.Objects.isNull;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_LAST_DAY_OF_POSITION;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_POSITION;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SALARY_TYPE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_WORKPLACE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_LAST_DAY_OF_POSITION;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_POSITION;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SALARY_TYPE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_WORKPLACE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PRECEDENCE_OF_REEMPLOYMENT;
-import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
-
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
@@ -28,15 +7,36 @@ import generated.se.sundsvall.supportmanagement.ExternalTag;
 import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.Objects.isNull;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_LAST_DAY_OF_POSITION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_MANAGER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_POSITION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SALARY_TYPE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_WORKPLACE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_LAST_DAY_OF_POSITION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_MANAGER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_POSITION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SALARY_TYPE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_WORKPLACE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PRECEDENCE_OF_REEMPLOYMENT;
+import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 @Component
 class PrecedenceOfReemploymentMapper implements OpenEMapper {
@@ -78,12 +78,10 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 			new Stakeholder().role(ROLE_APPLICANT)
 				.firstName(precedenceOfReemployment.applicantFirstname())
 				.lastName(precedenceOfReemployment.applicantLastname())
-				.contactChannels(getContactChannels(precedenceOfReemployment.applicantEmail(), precedenceOfReemployment.applicantPhone())),
-			new Stakeholder().role(ROLE_MANAGER)
-				.firstName(precedenceOfReemployment.managerFirstname())
-				.lastName(precedenceOfReemployment.managerLastname())
-				.contactChannels(getContactChannels(precedenceOfReemployment.managerEmail(), null))
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, precedenceOfReemployment.managerOrganization())));
+				.address(precedenceOfReemployment.applicantAddress())
+				.zipCode(precedenceOfReemployment.applicantZipCode())
+				.city(precedenceOfReemployment.applicantPostalAddress())
+				.contactChannels(getContactChannels(precedenceOfReemployment.applicantEmail(), precedenceOfReemployment.applicantPhone())));
 	}
 
 	private List<ContactChannel> getContactChannels(final String email, final String phone) {
@@ -107,6 +105,8 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 			.displayName(DISPLAY_POSITION)));
 		Optional.ofNullable(precedenceOfReemployment.salaryType()).ifPresent(salaryType -> parameters.add(new Parameter().key(KEY_SALARY_TYPE).addValuesItem(salaryType.trim())
 			.displayName(DISPLAY_SALARY_TYPE)));
+		Optional.ofNullable(precedenceOfReemployment.manager()).ifPresent(manager -> parameters.add(new Parameter().key(KEY_MANAGER).addValuesItem(manager)
+			.displayName(DISPLAY_MANAGER)));
 
 		return parameters;
 	}

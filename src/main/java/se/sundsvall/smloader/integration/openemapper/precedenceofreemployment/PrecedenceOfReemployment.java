@@ -16,25 +16,25 @@ record PrecedenceOfReemployment(
 
 	@XPath("/FlowInstance/Header/Poster/Email") String posterEmail,
 
-	@XPath("/FlowInstance/Values/workPlace/Ange_arbetsplats") String workplace,
+	@XPath("/FlowInstance/Values/employmentInformation/workPlace") String workplace,
 
-	@XPath("/FlowInstance/Values/position/Value") String position,
+	@XPath("/FlowInstance/Values/employmentInformation/position") String position,
+
+	@XPath("/FlowInstance/Values/employmentInformation/manager") String manager,
 
 	@XPath("/FlowInstance/Values/lastDayOfPosition/StartDate") String lastDayOfPosition,
 
 	@XPath("/FlowInstance/Values/salaryType/Value") String salaryType,
 
-	@XPath("/FlowInstance/Values/manager/firstname") String managerFirstname,
-
-	@XPath("/FlowInstance/Values/manager/lastname") String managerLastname,
-
-	@XPath("/FlowInstance/Values/manager/email") String managerEmail,
-
-	@XPath("/FlowInstance/Values/manager/organization") String managerOrganization,
-
 	@XPath("/FlowInstance/Values/applicant/Fornamn") String applicantFirstname,
 
 	@XPath("/FlowInstance/Values/applicant/Efternamn") String applicantLastname,
+
+	@XPath("/FlowInstance/Values/applicant/Adress") String applicantAddress,
+
+	@XPath("/FlowInstance/Values/applicant/Postnummer") String applicantZipCode,
+
+	@XPath("/FlowInstance/Values/applicant/Postadress") String applicantPostalAddress,
 
 	@XPath("/FlowInstance/Values/applicant/E-post__privat_") String applicantEmail,
 
