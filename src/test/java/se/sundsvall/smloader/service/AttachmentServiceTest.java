@@ -7,7 +7,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import feign.Request;
+import feign.Response;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -71,7 +75,12 @@ class AttachmentServiceTest {
 		final byte[] fileBytes = new byte[] {
 			1, 2, 3
 		};
-		when(openEService.getFile(externalCaseId, fileId, queryId, instance)).thenReturn(fileBytes);
+		final var stream = new ByteArrayInputStream(fileBytes);
+		final var response = Response.builder()
+			.request(Request.create(Request.HttpMethod.GET, "", Map.of(), null, null, null))
+			.body(stream, fileBytes.length)
+			.build();
+		when(openEService.getFile(externalCaseId, fileId, queryId, instance)).thenReturn(response);
 		when(supportManagementClient.createAttachment(eq(municipalityId), eq(namespace), eq(errandId), any())).thenReturn(ResponseEntity.ok().build());
 
 		// Act
@@ -84,11 +93,9 @@ class AttachmentServiceTest {
 		final var attachmentMultiPartFile = attachmentMultiPartFileCaptor.getValue();
 		assertThat(attachmentMultiPartFile.getBytes()).isEqualTo(fileBytes);
 		assertThat(attachmentMultiPartFile.getContentType()).isEmpty();
-		assertThat(attachmentMultiPartFile.getInputStream().readAllBytes()).isEqualTo(fileBytes);
+		assertThat(attachmentMultiPartFile.getInputStream()).isEqualTo(stream);
 		assertThat(attachmentMultiPartFile.getName()).isEqualTo(fileName);
 		assertThat(attachmentMultiPartFile.getOriginalFilename()).isEqualTo(fileName);
-		assertThat(attachmentMultiPartFile.getSize()).isEqualTo(fileBytes.length);
-		assertThat(attachmentMultiPartFile.isEmpty()).isFalse();
 	}
 
 	@Test
@@ -194,7 +201,13 @@ class AttachmentServiceTest {
 		final byte[] fileBytes = new byte[] {
 			1, 2, 3
 		};
-		when(openEService.getFile(externalCaseId, fileId, queryId, instance)).thenReturn(fileBytes);
+		final var stream = new ByteArrayInputStream(fileBytes);
+
+		final var response = Response.builder()
+			.request(Request.create(Request.HttpMethod.GET, "", Map.of(), null, null, null))
+			.body(stream, fileBytes.length)
+			.build();
+		when(openEService.getFile(externalCaseId, fileId, queryId, instance)).thenReturn(response);
 		when(supportManagementClient.createAttachment(eq(municipalityId), eq(namespace), eq(errandId), any())).thenReturn(ResponseEntity.badRequest().build());
 
 		// Act

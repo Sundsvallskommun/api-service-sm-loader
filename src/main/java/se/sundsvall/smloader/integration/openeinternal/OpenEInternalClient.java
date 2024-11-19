@@ -2,6 +2,7 @@ package se.sundsvall.smloader.integration.openeinternal;
 
 import static se.sundsvall.smloader.integration.openeinternal.configuration.OpenEInternalConfiguration.CLIENT_ID;
 
+import feign.Response;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +25,8 @@ public interface OpenEInternalClient {
 	@GetMapping(path = "/api/instanceapi/getinstance/{flowInstanceId}/xml", consumes = TEXT_XML_CHARSET_ISO_8859_1, produces = TEXT_XML_CHARSET_ISO_8859_1)
 	byte[] getErrand(@PathVariable(name = "flowInstanceId") String flowInstanceId);
 
-	@GetMapping(path = "/api/fileuploadqueryapi/getfile/{flowInstanceId}/{queryId}/{fileId}", consumes = TEXT_XML_CHARSET_ISO_8859_1, produces = TEXT_XML_CHARSET_ISO_8859_1)
-	byte[] getFile(@PathVariable(name = "flowInstanceId") String flowInstanceId, @PathVariable(name = "queryId") String queryId,
+	@GetMapping(path = "/api/fileuploadqueryapi/getfile/{flowInstanceId}/{queryId}/{fileId}")
+	Response getFile(@PathVariable(name = "flowInstanceId") String flowInstanceId, @PathVariable(name = "queryId") String queryId,
 		@PathVariable(name = "fileId") String fileId);
 
 }

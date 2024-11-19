@@ -15,11 +15,15 @@ import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.INTERNAL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
 
+import feign.Request;
+import feign.Response;
 import generated.se.sundsvall.callback.ConfirmDelivery;
 import generated.se.sundsvall.callback.SetStatus;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -247,18 +251,22 @@ class OpenEServiceTest {
 		final var fileBytes = new byte[] {
 			1, 2, 3
 		};
-
+		final var stream = new ByteArrayInputStream(fileBytes);
+		final var response = Response.builder()
+			.request(Request.create(Request.HttpMethod.GET, "", Map.of(), null, null, null))
+			.body(stream, fileBytes.length)
+			.build();
 		if (EXTERNAL.equals(instance)) {
-			when(mockOpenEExternalClient.getFile(externalCaseId, queryId, fileId)).thenReturn(fileBytes);
+			when(mockOpenEExternalClient.getFile(externalCaseId, queryId, fileId)).thenReturn(response);
 		} else {
-			when(mockOpenEInternalClient.getFile(externalCaseId, queryId, fileId)).thenReturn(fileBytes);
+			when(mockOpenEInternalClient.getFile(externalCaseId, queryId, fileId)).thenReturn(response);
 		}
 
 		// Act
 		final var result = openEService.getFile(externalCaseId, fileId, queryId, instance);
 
 		// Assert and verify
-		assertThat(result).isEqualTo(fileBytes);
+		assertThat(result).isEqualTo(response);
 
 		if (EXTERNAL.equals(instance)) {
 			verify(mockOpenEExternalClient).getFile(externalCaseId, queryId, fileId);

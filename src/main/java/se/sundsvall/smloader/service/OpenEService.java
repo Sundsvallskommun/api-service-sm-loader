@@ -1,8 +1,19 @@
 package se.sundsvall.smloader.service;
 
+import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
+import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
+import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseEntity;
+
+import feign.Response;
 import generated.se.sundsvall.callback.ConfirmDelivery;
 import generated.se.sundsvall.callback.ExternalID;
 import generated.se.sundsvall.callback.SetStatus;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,17 +26,6 @@ import se.sundsvall.smloader.integration.openeexternal.OpenEExternalClient;
 import se.sundsvall.smloader.integration.openeexternalsoap.OpenEExternalSoapClient;
 import se.sundsvall.smloader.integration.openeinternal.OpenEInternalClient;
 import se.sundsvall.smloader.integration.openeinternalsoap.OpenEInternalSoapClient;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-
-import static java.util.Objects.nonNull;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
-import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
-import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseEntity;
 
 @Service
 public class OpenEService {
@@ -148,7 +148,7 @@ public class OpenEService {
 			.orElse(null);
 	}
 
-	byte[] getFile(final String flowInstanceId, final String fileId, final String queryId, final Instance instance) {
+	Response getFile(final String flowInstanceId, final String fileId, final String queryId, final Instance instance) {
 		return instance == EXTERNAL ? openEExternalClient.getFile(flowInstanceId, queryId, fileId) : openEInternalClient.getFile(flowInstanceId, queryId, fileId);
 	}
 

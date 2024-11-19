@@ -5,7 +5,7 @@
 		"urlPath": "/open-e-external/api/fileuploadqueryapi/getfile/4238/queryId1/fileId1"
 	},
 	"response": {
-		"headers": {"Content-Type": "text/xml;charset=ISO-8859-1"},
+		"headers": {"Content-Type": "application/pdf"},
 		"bodyFileName": "test02_export/mocks/test.jpg",
 		"status": 200
 	},
