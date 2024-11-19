@@ -1,16 +1,15 @@
 package se.sundsvall.smloader.service;
 
+import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.openemapper.attachment.Attachment;
 import se.sundsvall.smloader.integration.openemapper.attachment.AttachmentMultiPartFile;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.logging.Logger;
-
-import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 
 @Service
 public class AttachmentService {
@@ -54,7 +53,7 @@ public class AttachmentService {
 
 		return result.stream()
 			.map(fileElement -> Attachment.create()
-				.withFileId(evaluateXPath(fileElement, "/Value").text())
+				.withFileId(evaluateXPath(fileElement, "/ID").text())
 				.withFileName(evaluateXPath(fileElement, "/Name").text())
 				.withQueryId(evaluateXPath(fileElement.parent(), "/QueryID").text()))
 			.toList();
