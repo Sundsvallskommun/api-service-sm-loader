@@ -12,6 +12,7 @@ import se.sundsvall.smloader.integration.supportmanagement.configuration.Support
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static se.sundsvall.smloader.integration.supportmanagement.configuration.SupportManagementConfiguration.CLIENT_ID;
 
 @FeignClient(name = CLIENT_ID, url = "${integration.support-management.url}", configuration = SupportManagementConfiguration.class)
@@ -42,7 +43,7 @@ public interface SupportManagementClient {
 	/**
 	 * Export file to support management.
 	 */
-	@PostMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/attachments", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
+	@PostMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/attachments", consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
 	ResponseEntity<Void> createAttachment(
 		@PathVariable(name = "municipalityId") String municipalityId,
 		@PathVariable(name = "namespace") String namespace,
