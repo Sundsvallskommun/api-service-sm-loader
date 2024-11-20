@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 public class AttachmentMultiPartFile implements MultipartFile {
@@ -25,7 +24,6 @@ public class AttachmentMultiPartFile implements MultipartFile {
 		return new AttachmentMultiPartFile(attachment, contentStream);
 	}
 
-	@NotNull
 	@Override
 	public String getName() {
 		return attachment.getFileName();
@@ -61,20 +59,18 @@ public class AttachmentMultiPartFile implements MultipartFile {
 
 	}
 
-	@NotNull
 	@Override
 	public byte[] getBytes() throws IOException {
 		return contentStream.readAllBytes();
 	}
 
-	@NotNull
 	@Override
 	public InputStream getInputStream() {
 		return contentStream;
 	}
 
 	@Override
-	public void transferTo(@NotNull final File dest) throws IOException, IllegalStateException {
+	public void transferTo(final File dest) throws IOException, IllegalStateException {
 		try (final FileOutputStream fileOutputStream = new FileOutputStream(dest)) {
 			contentStream.transferTo(fileOutputStream);
 		}

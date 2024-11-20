@@ -79,6 +79,10 @@
 			<artifactId>dept44-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-jre8-standalone</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
