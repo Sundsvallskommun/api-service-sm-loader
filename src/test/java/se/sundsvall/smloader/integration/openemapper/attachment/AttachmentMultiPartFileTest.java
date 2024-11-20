@@ -1,22 +1,28 @@
 package se.sundsvall.smloader.integration.openemapper.attachment;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import wiremock.org.apache.commons.io.FileUtils;
 
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verifyNoInteractions;
-
 @ExtendWith(MockitoExtension.class)
 class AttachmentMultiPartFileTest {
 
 	@Mock
 	private File fileMock;
+
+	@Mock
+	private InputStream inputStreamMock;
 
 	@Test
 	void fromAttachmentWithContent() throws Exception {
@@ -30,17 +36,57 @@ class AttachmentMultiPartFileTest {
 			.withFileName(fileName)
 			.withQueryId(queryId);
 
+		final var stream = new ByteArrayInputStream(content);
+
 		// Act
-		final var multipartFile = AttachmentMultiPartFile.create(attachment, content);
+		final var multipartFile = AttachmentMultiPartFile.create(attachment, stream);
 
 		// Assert
 		assertThat(multipartFile.getBytes()).isEqualTo(content);
 		assertThat(multipartFile.getContentType()).isEmpty();
-		assertThat(multipartFile.getInputStream().readAllBytes()).isEqualTo(content);
+		assertThat(multipartFile.getInputStream()).isEqualTo(stream);
 		assertThat(multipartFile.getName()).isEqualTo(fileName);
 		assertThat(multipartFile.getOriginalFilename()).isEqualTo(fileName);
-		assertThat(multipartFile.getSize()).isEqualTo(content.length);
-		assertThat(multipartFile.isEmpty()).isFalse();
+		assertThat(multipartFile.getSize()).isZero();
+		assertThat(multipartFile.isEmpty()).isTrue();
+	}
+
+	@Test
+	void getSizeThrowsIOException() throws Exception {
+		// Arrange
+		final var fileId = "fileId";
+		final var fileName = "fileName";
+		final var queryId = "queryId";
+		final var attachment = Attachment.create()
+			.withFileId(fileId)
+			.withFileName(fileName)
+			.withQueryId(queryId);
+
+		when(inputStreamMock.available()).thenThrow(new IOException("Test IOException"));
+
+		final var multipartFile = AttachmentMultiPartFile.create(attachment, inputStreamMock);
+
+		// Act & Assert
+		assertThat(multipartFile.getSize()).isZero();
+	}
+
+	@Test
+	void isEmptyThrowsIOException() throws Exception {
+		// Arrange
+		final var fileId = "fileId";
+		final var fileName = "fileName";
+		final var queryId = "queryId";
+		final var attachment = Attachment.create()
+			.withFileId(fileId)
+			.withFileName(fileName)
+			.withQueryId(queryId);
+
+		when(inputStreamMock.available()).thenThrow(new IOException("Test IOException"));
+
+		final var multipartFile = AttachmentMultiPartFile.create(attachment, inputStreamMock);
+
+		// Act & Assert
+		assertThat(multipartFile.isEmpty()).isTrue();
 	}
 
 	@Test
@@ -55,9 +101,10 @@ class AttachmentMultiPartFileTest {
 			.withFileId(fileId)
 			.withFileName(fileName)
 			.withQueryId(queryId);
+		final var stream = new ByteArrayInputStream(content.getBytes());
 
 		// Act
-		final var multipartFile = AttachmentMultiPartFile.create(attachment, content.getBytes());
+		final var multipartFile = AttachmentMultiPartFile.create(attachment, stream);
 
 		// Assert
 		assertThat(multipartFile.getBytes()).isNullOrEmpty();
@@ -95,7 +142,8 @@ class AttachmentMultiPartFileTest {
 			.withFileId(fileId)
 			.withFileName(fileName)
 			.withQueryId(queryId);
-		final var multipartFile = AttachmentMultiPartFile.create(attachment, content);
+		final var stream = new ByteArrayInputStream(content);
+		final var multipartFile = AttachmentMultiPartFile.create(attachment, stream);
 		final var file = File.createTempFile("test_", null);
 
 		// Act

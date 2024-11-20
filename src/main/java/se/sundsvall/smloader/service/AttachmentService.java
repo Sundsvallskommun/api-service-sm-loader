@@ -26,26 +26,27 @@ public class AttachmentService {
 	public List<String> handleAttachments(final byte[] xml, final CaseEntity caseEntity, final String errandId) {
 		return getFileIds(xml).stream()
 			.map(attachment -> {
-				final var filesAsBytes = openEService.getFile(caseEntity.getExternalCaseId(), attachment.getFileId(), attachment.getQueryId(), caseEntity.getCaseMetaData().getInstance());
+				try (final var fileStream = openEService.getFile(caseEntity.getExternalCaseId(), attachment.getFileId(), attachment.getQueryId(), caseEntity.getCaseMetaData().getInstance()).body().asInputStream()) {
+					if (fileStream == null) {
+						log.info("Failed to fetch file for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
+						return attachment.getFileId();
+					}
 
-				if (filesAsBytes == null) {
-					log.info("Failed to fetch file for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
+					final AttachmentMultiPartFile multiPartFile = AttachmentMultiPartFile.create(attachment, fileStream);
+					final var response = supportManagementClient.createAttachment(caseEntity.getCaseMetaData().getMunicipalityId(), caseEntity.getCaseMetaData().getNamespace(), errandId, multiPartFile);
+
+					if (response.getStatusCode().isError()) {
+						log.info("Failed to create attachment for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
+						return attachment.getFileId();
+					}
+				} catch (final Exception e) {
+					log.severe("Error handling attachment: " + e.getMessage());
 					return attachment.getFileId();
 				}
-
-				final var multiPartFile = AttachmentMultiPartFile.create(attachment, filesAsBytes);
-				final var response = supportManagementClient.createAttachment(caseEntity.getCaseMetaData().getMunicipalityId(), caseEntity.getCaseMetaData().getNamespace(), errandId, multiPartFile);
-
-				if (response.getStatusCode().isError()) {
-					log.info("Failed to create attachment for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
-					return attachment.getFileId();
-				}
-
 				return null;
 			})
 			.filter(Objects::nonNull)
 			.toList();
-
 	}
 
 	private List<Attachment> getFileIds(final byte[] xml) {
@@ -58,5 +59,4 @@ public class AttachmentService {
 				.withQueryId(evaluateXPath(fileElement.parent(), "/QueryID").text()))
 			.toList();
 	}
-
 }
