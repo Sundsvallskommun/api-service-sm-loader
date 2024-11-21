@@ -1,5 +1,7 @@
 package se.sundsvall.smloader.service;
 
+import java.time.OffsetDateTime;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -7,9 +9,6 @@ import se.sundsvall.smloader.integration.db.CaseMappingRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseId;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
-
-import java.time.OffsetDateTime;
-import java.util.List;
 
 @Service
 public class DatabaseCleanerService {

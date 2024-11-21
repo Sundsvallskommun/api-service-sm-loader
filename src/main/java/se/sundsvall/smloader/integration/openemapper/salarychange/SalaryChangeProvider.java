@@ -26,7 +26,6 @@ import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -79,7 +78,7 @@ class SalaryChangeProvider implements OpenEMapper {
 				.role(ROLE_APPLICANT)
 				.firstName(salaryChange.applicantFirstname())
 				.lastName(salaryChange.applicantLastname())
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, salaryChange.applicantOrganization()))
+				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(salaryChange.applicantOrganization()))))
 				.contactChannels(getContactChannels(salaryChange.applicantEmail()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(salaryChange.applicantLegalId())));

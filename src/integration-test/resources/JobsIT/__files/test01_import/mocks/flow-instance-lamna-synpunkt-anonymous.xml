@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
-              xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1736.xsd">
+	xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
+	xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1736.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>161</FamilyID>
-			<Version>3</Version>s
-			<FlowID>1736</FlowID>
+			<Version>3</Version>s <FlowID>1736</FlowID>
 			<Name><![CDATA[Lämna synpunkt-TEST]]></Name>
 		</Flow>
 		<FlowInstanceID>234567</FlowInstanceID>

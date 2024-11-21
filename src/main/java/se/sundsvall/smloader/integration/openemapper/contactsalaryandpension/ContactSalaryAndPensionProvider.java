@@ -21,11 +21,11 @@ import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -101,7 +101,7 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 				.lastName(contactSalaryAndPension.managerLastname())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(contactSalaryAndPension.managerLegalId()))
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, contactSalaryAndPension.managerOrganization())));
+				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(contactSalaryAndPension.managerOrganization())))));
 		}
 
 		if (contactSalaryAndPension.applicantFirstname() != null) {
@@ -112,7 +112,7 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.contactChannels(getContactChannels(contactSalaryAndPension.applicantEmail()))
 				.externalId(getPartyId(contactSalaryAndPension.applicantLegalId()))
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, contactSalaryAndPension.applicantOrganization())));
+				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(contactSalaryAndPension.applicantOrganization())))));
 		}
 
 		users.forEach(user -> stakeholders.add(new Stakeholder()

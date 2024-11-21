@@ -1,6 +1,20 @@
 package se.sundsvall.smloader.service;
 
+import static java.util.stream.Collectors.toMap;
+import static org.springframework.http.HttpHeaders.LOCATION;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseMapping;
+
 import generated.se.sundsvall.supportmanagement.Errand;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -12,21 +26,6 @@ import se.sundsvall.smloader.integration.messaging.MessagingClient;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 import se.sundsvall.smloader.service.mapper.MessagingMapper;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
-
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-
-import static java.util.stream.Collectors.toMap;
-import static org.springframework.http.HttpHeaders.LOCATION;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
-import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseMapping;
 
 @Service
 public class SupportManagementService {

@@ -1,15 +1,15 @@
 package se.sundsvall.smloader.integration.openemapper.proposal;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static se.sundsvall.smloader.TestUtil.readOpenEFile;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
+
 import generated.se.sundsvall.supportmanagement.Priority;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import se.sundsvall.smloader.Application;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static se.sundsvall.smloader.TestUtil.readOpenEFile;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")

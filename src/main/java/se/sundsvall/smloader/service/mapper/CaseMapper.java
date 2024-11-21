@@ -1,12 +1,11 @@
 package se.sundsvall.smloader.service.mapper;
 
+import java.time.OffsetDateTime;
+import java.util.Base64;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMappingEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
-
-import java.time.OffsetDateTime;
-import java.util.Base64;
 
 public final class CaseMapper {
 

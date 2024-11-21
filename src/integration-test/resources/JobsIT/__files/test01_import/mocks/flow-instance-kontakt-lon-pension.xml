@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-423.xsd">
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-423.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>174</FamilyID>

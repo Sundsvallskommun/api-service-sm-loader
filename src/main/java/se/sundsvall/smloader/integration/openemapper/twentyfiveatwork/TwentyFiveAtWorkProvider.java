@@ -27,7 +27,6 @@ import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -82,7 +81,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 				.firstName(twentyFiveAtWork.applicantFirstname())
 				.lastName(twentyFiveAtWork.applicantLastname())
 				.contactChannels(getContactChannels(twentyFiveAtWork.applicantEmail()))
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, twentyFiveAtWork.applicantOrganization()))
+				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(twentyFiveAtWork.applicantOrganization()))))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(twentyFiveAtWork.applicantLegalId())),
 			getEmployee(twentyFiveAtWork));

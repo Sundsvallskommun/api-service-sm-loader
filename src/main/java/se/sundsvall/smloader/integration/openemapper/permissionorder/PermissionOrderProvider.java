@@ -91,7 +91,6 @@ import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.jsoup.nodes.Element;
@@ -148,14 +147,14 @@ class PermissionOrderProvider implements OpenEMapper {
 				.role(ROLE_APPLICANT)
 				.firstName(permissionOrder.applicantFirstname())
 				.lastName(permissionOrder.applicantLastname())
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, permissionOrder.applicantOrganization()))
+				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(permissionOrder.applicantOrganization()))))
 				.contactChannels(getContactChannels(permissionOrder.applicantEmail())),
 			new Stakeholder()
 				.role(ROLE_USER)
 				.firstName(permissionOrder.userFirstname())
 				.lastName(permissionOrder.userLastname())
 				.contactChannels(getContactChannels(permissionOrder.userEmail()))
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, permissionOrder.userOrganization()))
+				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(permissionOrder.userOrganization()))))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(permissionOrder.userLegalId()))));
 		if (isNotEmpty(permissionOrder.managerFirstname())) {
@@ -164,7 +163,7 @@ class PermissionOrderProvider implements OpenEMapper {
 				.firstName(permissionOrder.managerFirstname())
 				.lastName(permissionOrder.managerLastname())
 				.contactChannels(getContactChannels(permissionOrder.managerEmail()))
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, permissionOrder.managerOrganization())));
+				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(permissionOrder.managerOrganization())))));
 		}
 		return stakeholders;
 	}

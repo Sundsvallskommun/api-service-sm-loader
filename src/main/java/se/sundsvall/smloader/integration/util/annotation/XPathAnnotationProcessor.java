@@ -1,18 +1,17 @@
 package se.sundsvall.smloader.integration.util.annotation;
 
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.core.annotation.AnnotationUtils;
-import se.sundsvall.smloader.integration.util.XPathException;
-
-import java.lang.reflect.Field;
-import java.util.Optional;
-
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isInterface;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
+
+import java.lang.reflect.Field;
+import java.util.Optional;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.core.annotation.AnnotationUtils;
+import se.sundsvall.smloader.integration.util.XPathException;
 
 public final class XPathAnnotationProcessor {
 

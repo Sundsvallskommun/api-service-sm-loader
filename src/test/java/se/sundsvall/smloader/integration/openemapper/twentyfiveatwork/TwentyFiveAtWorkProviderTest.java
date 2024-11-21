@@ -1,7 +1,6 @@
 package se.sundsvall.smloader.integration.openemapper.twentyfiveatwork;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,7 +24,6 @@ import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -103,10 +101,12 @@ class TwentyFiveAtWorkProviderTest {
 				Stakeholder::getAddress,
 				Stakeholder::getZipCode,
 				Stakeholder::getCity,
-				Stakeholder::getMetadata).containsExactlyInAnyOrder(
-					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null, emptyMap()),
-					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, null, null, null, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
-					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Avkroken 1", "99999", "Fjärran", emptyMap()));
+				Stakeholder::getParameters).containsExactlyInAnyOrder(
+					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null, emptyList()),
+					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, null, null, null, List.of(new Parameter()
+						.key("administrationName")
+						.values(List.of("KSK AVD Digitalisering IT stab")))),
+					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Avkroken 1", "99999", "Fjärran", emptyList()));
 		} else {
 			assertThat(errand.getStakeholders()).hasSize(3).extracting(
 				Stakeholder::getRole,
@@ -119,10 +119,12 @@ class TwentyFiveAtWorkProviderTest {
 				Stakeholder::getAddress,
 				Stakeholder::getZipCode,
 				Stakeholder::getCity,
-				Stakeholder::getMetadata).containsExactlyInAnyOrder(
-					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null, emptyMap()),
-					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, null, null, null, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
-					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Storgatan 1", "111 22", "ANKEBORG", emptyMap()));
+				Stakeholder::getParameters).containsExactlyInAnyOrder(
+					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null, emptyList()),
+					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, null, null, null, List.of(new Parameter()
+						.key("administrationName")
+						.values(List.of("KSK AVD Digitalisering IT stab")))),
+					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Storgatan 1", "111 22", "ANKEBORG", emptyList()));
 		}
 		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6857")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");

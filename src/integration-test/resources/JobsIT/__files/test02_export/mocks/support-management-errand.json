@@ -11,8 +11,8 @@
 	"stakeholders": [{
 		"firstName": "Kalle",
 		"lastName": "Anka",
-		"metadata": {},
 		"role": "CONTACT",
+		"parameters": [],
 		"contactChannels": [
 			{
 				"type": "Email",
