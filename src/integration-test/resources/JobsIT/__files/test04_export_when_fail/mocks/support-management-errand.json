@@ -1,8 +1,14 @@
 {
-	"externalTags": [{
-		"value": "4241",
-		"key": "caseId"
-	}],
+	"externalTags": [
+		{
+			"value": "161",
+			"key": "familyId"
+		},
+		{
+			"value": "4241",
+			"key": "caseId"
+		}
+	],
 	"touched": "2024-07-04T09:55:04.909+02:00",
 	"errandNumber": "KS-24070019",
 	"created": "2024-07-04T09:55:04.909+02:00",

@@ -1,5 +1,23 @@
 package se.sundsvall.smloader.integration.openemapper.substitutemanager;
 
+import generated.se.sundsvall.party.PartyType;
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.service.mapper.OpenEMapper;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
@@ -11,6 +29,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CH
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_END_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_RESPONSIBILITY_NUMBER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
@@ -22,23 +41,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_SUBSTI
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SUBSTITUTE_MANAGER;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
-
-import generated.se.sundsvall.party.PartyType;
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
 class SubstituteManagerProvider implements OpenEMapper {
@@ -73,7 +75,8 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.parameters(List.of(new Parameter().key(KEY_RESPONSIBILITY_NUMBER).addValuesItem(result.responsibilityNumber()).displayName(DISPLAY_RESPONSIBILITY_NUMBER),
 				new Parameter().key(KEY_START_DATE).addValuesItem(result.startDate()).displayName(DISPLAY_START_DATE_CERTIIFY),
 				new Parameter().key(KEY_END_DATE).addValuesItem(result.endDate()).displayName(DISPLAY_END_DATE_CERTIFY)))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
+				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(getReporterUserId(result));
 	}
 

@@ -88,7 +88,8 @@ class PrecedenceOfReemploymentMapperTest {
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
 
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6911")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6911"),
+			new ExternalTag().key("familyId").value("197")));
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(properties).getPriority();

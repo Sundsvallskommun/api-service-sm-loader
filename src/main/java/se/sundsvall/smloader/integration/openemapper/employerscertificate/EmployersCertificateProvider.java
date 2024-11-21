@@ -37,6 +37,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CONSENT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_DELIVERY_METHOD;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_END_DATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SEND_DIGITAL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TIME_PERIOD;
@@ -79,7 +80,8 @@ class EmployersCertificateProvider implements OpenEMapper {
 			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(result))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
+				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(getReporterUserId(result));
 	}
 

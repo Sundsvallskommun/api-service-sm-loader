@@ -1,5 +1,25 @@
 package se.sundsvall.smloader.integration.openemapper.reportsick;
 
+import generated.se.sundsvall.party.PartyType;
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.service.mapper.OpenEMapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
@@ -39,6 +59,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINIS
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYEE_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYMENT_TYPE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_HAVE_SICK_NOTE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_END_DATES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_PERCENTAGES;
@@ -54,25 +75,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_REPORT_SICK;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
-
-import generated.se.sundsvall.party.PartyType;
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
 class ReportSickProvider implements OpenEMapper {
@@ -105,7 +107,8 @@ class ReportSickProvider implements OpenEMapper {
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(xml, result))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
+				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(result.applicantUserId());
 	}
 

@@ -102,13 +102,15 @@ class EmployersCertificateProviderTest {
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "PRIVATE", partyId, "Storgatan 1", "Ankeborg", "12345"));
 		}
 
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("4376")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4376"),
+			new ExternalTag().key("familyId").value("526")));
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
 		verify(properties).getCategory();
 		verify(properties).getType();
+		verify(properties).getLabels();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 
@@ -148,12 +150,14 @@ class EmployersCertificateProviderTest {
 				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null),
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Phone").value("0701112223")), "PRIVATE", partyId, "Storgatan 1", "Ankeborg", "12345"));
 
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("4376")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4376"),
+			new ExternalTag().key("familyId").value("526")));
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
 		verify(properties).getCategory();
 		verify(properties).getType();
+		verify(properties).getLabels();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 

@@ -1,5 +1,23 @@
 package se.sundsvall.smloader.integration.openemapper.permissionorder;
 
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -17,23 +35,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGE
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PERMISSION_ORDER;
-
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
 
 @ExtendWith(MockitoExtension.class)
 class PermissionOrderProviderTest {
@@ -105,7 +106,8 @@ class PermissionOrderProviderTest {
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
 
-		assertThat(errand.getExternalTags()).hasSize(1).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6850")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6850"),
+			new ExternalTag().key("familyId").value("185")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
@@ -182,7 +184,8 @@ class PermissionOrderProviderTest {
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
 				tuple(ROLE_USER, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, Map.of("administrationName", "KSK AVD Digitalisering IT stab")));
 
-		assertThat(errand.getExternalTags()).hasSize(1).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6920")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6920"),
+			new ExternalTag().key("familyId").value("185")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());

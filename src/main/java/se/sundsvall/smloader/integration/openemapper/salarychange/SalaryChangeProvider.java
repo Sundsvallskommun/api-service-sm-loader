@@ -1,5 +1,23 @@
 package se.sundsvall.smloader.integration.openemapper.salarychange;
 
+import generated.se.sundsvall.party.PartyType;
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.service.mapper.OpenEMapper;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_AMOUNT;
@@ -9,6 +27,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CH
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_AMOUNT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FROM_MONTH;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
@@ -16,23 +35,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTAC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SALARY_CHANGE;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
-
-import generated.se.sundsvall.party.PartyType;
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.ContactChannel;
-import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.party.PartyClient;
-import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
 class SalaryChangeProvider implements OpenEMapper {
@@ -65,7 +67,8 @@ class SalaryChangeProvider implements OpenEMapper {
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_AMOUNT).addValuesItem(result.amount()).displayName(DISPLAY_AMOUNT),
 				new Parameter().key(KEY_FROM_MONTH).addValuesItem(result.fromMonth()).displayName(DISPLAY_FROM_MONTH)))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
+				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(result.applicantUserId());
 	}
 
