@@ -1,11 +1,23 @@
 package se.sundsvall.smloader.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
+
 import generated.se.sundsvall.messaging.EmailRequest;
 import generated.se.sundsvall.messaging.SlackRequest;
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.net.URI;
+import java.util.Base64;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,19 +33,6 @@ import se.sundsvall.smloader.integration.messaging.MessagingClient;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 import se.sundsvall.smloader.service.mapper.MessagingMapper;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
-
-import java.net.URI;
-import java.util.Base64;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
-import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 
 @ExtendWith(MockitoExtension.class)
 class SupportManagementServiceTest {

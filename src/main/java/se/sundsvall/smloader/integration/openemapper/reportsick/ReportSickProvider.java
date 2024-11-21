@@ -66,7 +66,6 @@ import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -122,14 +121,14 @@ class ReportSickProvider implements OpenEMapper {
 				.firstName(reportSick.applicantFirstname())
 				.lastName(reportSick.applicantLastname())
 				.contactChannels(getContactChannels(reportSick.applicantEmail(), reportSick.applicantPhone()))
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, reportSick.applicantOrganization())),
+				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(reportSick.applicantOrganization())))),
 			new Stakeholder()
 				.role(ROLE_EMPLOYEE)
 				.firstName(reportSick.employeeFirstname())
 				.lastName(reportSick.employeeLastname())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(reportSick.employeeLegalId()))
-				.metadata(Map.of(KEY_ADMINISTRATION_NAME, reportSick.employeeOrganization())));
+				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(reportSick.employeeOrganization())))));
 	}
 
 	private List<ContactChannel> getContactChannels(final String email, final String phone) {

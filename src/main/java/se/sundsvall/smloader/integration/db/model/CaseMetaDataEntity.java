@@ -4,9 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import se.sundsvall.smloader.integration.db.model.enums.Instance;
-
 import java.util.Objects;
+import se.sundsvall.smloader.integration.db.model.enums.Instance;
 
 @Entity
 @Table(name = "case_meta_data")

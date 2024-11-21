@@ -1,6 +1,6 @@
 package se.sundsvall.smloader.integration.openemapper.salarychange;
 
-import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,7 +23,6 @@ import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,7 +79,6 @@ class SalaryChangeProviderTest {
 		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
 			tuple("amount", List.of("1000"), "Belopp"),
 			tuple("fromMonth", List.of("Oktober"), "Månad löneväxling sker från"));
-
 		assertThat(errand.getStakeholders()).hasSize(2).extracting(
 			Stakeholder::getRole,
 			Stakeholder::getFirstName,
@@ -89,9 +87,11 @@ class SalaryChangeProviderTest {
 			Stakeholder::getOrganizationName,
 			Stakeholder::getExternalIdType,
 			Stakeholder::getExternalId,
-			Stakeholder::getMetadata).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyMap()),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, Map.of("administrationName", "KSK AVD Digitalisering IT stab")));
+			Stakeholder::getParameters).containsExactlyInAnyOrder(
+				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyList()),
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, List.of(new Parameter()
+					.key("administrationName")
+					.values(List.of("KSK AVD Digitalisering IT stab")))));
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6851"),

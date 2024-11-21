@@ -1,6 +1,6 @@
 package se.sundsvall.smloader.integration.openemapper.precedenceofreemployment;
 
-import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.Mockito.times;
@@ -17,8 +17,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PRECE
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -80,15 +78,15 @@ class PrecedenceOfReemploymentMapperTest {
 			Stakeholder::getLastName,
 			Stakeholder::getContactChannels,
 			Stakeholder::getOrganizationName,
-			Stakeholder::getMetadata)
+			Stakeholder::getParameters)
 			.containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, emptyMap()),
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"), new ContactChannel().type("Phone").value("0701112223")), null, emptyMap()));
+				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, emptyList()),
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"), new ContactChannel().type("Phone").value("0701112223")), null, emptyList()));
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
-
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6911"),
 			new ExternalTag().key("familyId").value("197")));
+
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(properties).getPriority();

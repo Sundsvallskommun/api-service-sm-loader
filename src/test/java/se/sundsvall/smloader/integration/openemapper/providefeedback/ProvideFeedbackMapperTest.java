@@ -5,7 +5,6 @@ import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 
 import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Priority;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,8 @@ class ProvideFeedbackMapperTest {
 
 	@Test
 	void mapToErrand() throws Exception {
-		var stringBytes = readOpenEFile("flow-instance-lamna-synpunkt.xml");
-		var errand = mapper.mapToErrand(stringBytes);
+		final var stringBytes = readOpenEFile("flow-instance-lamna-synpunkt.xml");
+		final var errand = mapper.mapToErrand(stringBytes);
 
 		assertThat(errand.getDescription()).isEqualTo("beskriver synpunkten här");
 		assertThat(errand.getBusinessRelated()).isFalse();
@@ -53,8 +52,8 @@ class ProvideFeedbackMapperTest {
 
 	@Test
 	void mapToAnonymousErrand() throws Exception {
-		var stringBytes = readOpenEFile("flow-instance-lamna-synpunkt-anonymous.xml");
-		var errand = mapper.mapToErrand(stringBytes);
+		final var stringBytes = readOpenEFile("flow-instance-lamna-synpunkt-anonymous.xml");
+		final var errand = mapper.mapToErrand(stringBytes);
 
 		assertThat(errand.getDescription()).isEqualTo("testar synen");
 		assertThat(errand.getBusinessRelated()).isFalse();

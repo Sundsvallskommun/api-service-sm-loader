@@ -1,5 +1,11 @@
 package se.sundsvall.smloader.integration.openeinternal.configuration;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static se.sundsvall.smloader.integration.openeinternal.configuration.OpenEInternalConfiguration.CLIENT_ID;
+
 import feign.auth.BasicAuthRequestInterceptor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,12 +19,6 @@ import org.springframework.cloud.openfeign.FeignBuilderCustomizer;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import se.sundsvall.dept44.configuration.feign.FeignMultiCustomizer;
 import se.sundsvall.dept44.configuration.feign.decoder.ProblemErrorDecoder;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static se.sundsvall.smloader.integration.openeinternal.configuration.OpenEInternalConfiguration.CLIENT_ID;
 
 @ExtendWith(MockitoExtension.class)
 class OpenEInternalConfigurationTest {

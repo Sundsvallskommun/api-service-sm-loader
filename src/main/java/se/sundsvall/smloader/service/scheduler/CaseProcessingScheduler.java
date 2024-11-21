@@ -1,5 +1,8 @@
 package se.sundsvall.smloader.service.scheduler;
 
+import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
+
+import java.time.LocalDateTime;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +12,6 @@ import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.requestid.RequestId;
 import se.sundsvall.smloader.service.OpenEService;
 import se.sundsvall.smloader.service.SupportManagementService;
-
-import java.time.LocalDateTime;
-
-import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 
 @Service
 public class CaseProcessingScheduler {

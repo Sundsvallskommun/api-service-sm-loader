@@ -1,18 +1,17 @@
 package se.sundsvall.smloader.integration.util;
 
+import static org.zalando.problem.Status.BAD_REQUEST;
+
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.SOAPConstants;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-import org.zalando.problem.ThrowableProblem;
-import se.sundsvall.dept44.exception.ClientProblem;
-
 import java.io.IOException;
 import java.io.InputStream;
-
-import static org.zalando.problem.Status.BAD_REQUEST;
+import org.zalando.problem.ThrowableProblem;
+import se.sundsvall.dept44.exception.ClientProblem;
 
 public class OpenESoapErrorDecoder implements ErrorDecoder {
 
