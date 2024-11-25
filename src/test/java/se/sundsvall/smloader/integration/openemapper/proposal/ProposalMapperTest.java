@@ -1,15 +1,17 @@
 package se.sundsvall.smloader.integration.openemapper.proposal;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static se.sundsvall.smloader.TestUtil.readOpenEFile;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
+
+import generated.se.sundsvall.supportmanagement.ExternalTag;
 import generated.se.sundsvall.supportmanagement.Priority;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import se.sundsvall.smloader.Application;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static se.sundsvall.smloader.TestUtil.readOpenEFile;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")
@@ -47,5 +49,8 @@ class ProposalMapperTest {
 		assertThat(errand.getTitle()).isEqualTo("Testing");
 		assertThat(errand.getStatus()).isEqualTo("NEW");
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
+
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4234"),
+			new ExternalTag().key("familyId").value("370")));
 	}
 }

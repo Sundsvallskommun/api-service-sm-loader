@@ -23,6 +23,7 @@ public final class ErrandConstants {
 	public static final String KEY_END_DATE = "endDate";
 	public static final String DISPLAY_END_DATE = "Slutdatum";
 	public static final String KEY_CASE_ID = "caseId";
+	public static final String KEY_FAMILY_ID = "familyId";
 	public static final String KEY_ADMINISTRATIVE_UNIT = "administrativeUnit";
 	public static final String DISPLAY_ADMINISTRATIVE_UNIT = "Förvaltning/verksamhet";
 	public static final String KEY_ADMINISTRATION_NAME = "administrationName";

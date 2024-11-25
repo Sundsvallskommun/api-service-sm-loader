@@ -8,6 +8,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_LATEST_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ORIGINAL_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
@@ -67,7 +68,8 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_LATEST_START_DATE).addValuesItem(result.startDateChangeWork()).displayName(DISPLAY_LATEST_START_DATE),
 				new Parameter().key(KEY_ORIGINAL_START_DATE).addValuesItem(result.originalStartDate()).displayName(DISPLAY_ORIGINAL_START_DATE)))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
+				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(result.applicantUserId());
 	}
 

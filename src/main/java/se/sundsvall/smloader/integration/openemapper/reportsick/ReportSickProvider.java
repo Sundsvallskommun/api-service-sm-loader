@@ -39,6 +39,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINIS
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYEE_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYMENT_TYPE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_HAVE_SICK_NOTE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_END_DATES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_PERCENTAGES;
@@ -105,7 +106,8 @@ class ReportSickProvider implements OpenEMapper {
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(xml, result))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
+				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(result.applicantUserId());
 	}
 

@@ -124,7 +124,8 @@ class TwentyFiveAtWorkProviderTest {
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, null, null, null, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
 					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Storgatan 1", "111 22", "ANKEBORG", emptyMap()));
 		}
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6857")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6857"),
+			new ExternalTag().key("familyId").value("194")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
 		verify(partyClient, times(2)).getPartyId(anyString(), any(), anyString());

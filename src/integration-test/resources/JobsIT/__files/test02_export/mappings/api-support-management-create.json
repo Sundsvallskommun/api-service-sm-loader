@@ -6,10 +6,16 @@
 		},
 		"method": "POST",
 		"bodyPatterns": [{"equalToJson": {
-			"externalTags": [{
-				"value": "4241",
-				"key": "caseId"
-			}],
+			"externalTags": [
+				{
+					"value": "161",
+					"key": "familyId"
+				},
+				{
+					"value": "4241",
+					"key": "caseId"
+				}
+			],
 			"channel": "ESERVICE",
 			"description": "Testar att lämna synpunkt",
 			"stakeholders": [{

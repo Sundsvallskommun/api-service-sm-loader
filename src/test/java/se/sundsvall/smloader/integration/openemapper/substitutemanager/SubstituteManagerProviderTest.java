@@ -107,7 +107,8 @@ class SubstituteManagerProviderTest {
 				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
 				tuple(ROLE_SUBSTITUTE, "Tjatte", "Anka", emptyList(), null, "PRIVATE", partyId, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
 				tuple(ROLE_APPROVER, "Joakim", "von Anka", emptyList(), null, "PRIVATE", partyId, Map.of("administrationName", "KSK Avd Kansli och Säkerhet")));
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6849")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6849"),
+			new ExternalTag().key("familyId").value("182")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kall22ank");
 
 		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());

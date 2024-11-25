@@ -51,6 +51,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINIS
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT_PART_VOF;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_COMPUTER_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_IS_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_NAME_TERMINATED;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_NOT_EMPLOYEE;
@@ -134,7 +135,8 @@ class PermissionOrderProvider implements OpenEMapper {
 			.businessRelated(false)
 			.parameters(getParameters(result, xml))
 			.description(result.otherInformation())
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
+				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(result.applicantUserId());
 	}
 
