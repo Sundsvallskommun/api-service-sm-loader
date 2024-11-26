@@ -22,6 +22,8 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SUBST
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.List;
 import java.util.Optional;
@@ -112,7 +114,9 @@ class SubstituteManagerProviderTest {
 				tuple(ROLE_APPROVER, "Joakim", "von Anka", emptyList(), null, "PRIVATE", partyId, List.of(new Parameter()
 					.key("administrationName")
 					.values(List.of("KSK Avd Kansli och Säkerhet")))));
-		assertThat(errand.getExternalTags()).containsExactlyElementsOf(List.of(new ExternalTag().key("caseId").value("6849")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrder(
+			new ExternalTag().key("caseId").value("6849"),
+			new ExternalTag().key("familyId").value("182"));
 		assertThat(errand.getReporterUserId()).isEqualTo("kall22ank");
 
 		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());

@@ -17,6 +17,8 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PRECE
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.List;
 import org.junit.jupiter.api.Test;

@@ -5,6 +5,7 @@ import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Priority;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
