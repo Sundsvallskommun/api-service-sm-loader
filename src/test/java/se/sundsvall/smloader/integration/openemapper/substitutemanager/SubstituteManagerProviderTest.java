@@ -99,7 +99,6 @@ class SubstituteManagerProviderTest {
 			Stakeholder::getOrganizationName,
 			Stakeholder::getExternalIdType,
 			Stakeholder::getExternalId,
-
 			Stakeholder::getParameters).containsExactlyInAnyOrder(
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, List.of(new Parameter()
 					.key("administrationName")

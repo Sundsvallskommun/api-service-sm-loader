@@ -106,8 +106,9 @@ class PermissionOrderProviderTest {
 					.key("administrationName").values(List.of("KSK AVD Digitalisering IT stab")))));
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
-		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6850"),
-			new ExternalTag().key("familyId").value("185")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrder(
+			new ExternalTag().key("caseId").value("6850"),
+			new ExternalTag().key("familyId").value("185"));
 
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 

@@ -86,8 +86,9 @@ class PrecedenceOfReemploymentMapperTest {
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"), new ContactChannel().type("Phone").value("0701112223")), null, emptyList()));
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
-		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6911"),
-			new ExternalTag().key("familyId").value("197")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrder(
+			new ExternalTag().key("caseId").value("6911"),
+			new ExternalTag().key("familyId").value("197"));
 
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
