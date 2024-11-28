@@ -5,14 +5,13 @@ import feign.jaxb.JAXBContextFactory;
 import feign.soap.SOAPDecoder;
 import feign.soap.SOAPEncoder;
 import jakarta.xml.soap.SOAPConstants;
+import java.nio.charset.StandardCharsets;
 import org.springframework.cloud.openfeign.FeignBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import se.sundsvall.dept44.configuration.feign.FeignConfiguration;
 import se.sundsvall.dept44.configuration.feign.FeignMultiCustomizer;
 import se.sundsvall.smloader.integration.util.OpenESoapErrorDecoder;
-
-import java.nio.charset.StandardCharsets;
 
 @Import(FeignConfiguration.class)
 public class OpenEInternalSoapConfiguration {

@@ -1,5 +1,7 @@
 package se.sundsvall.smloader.integration.openeinternalsoap;
 
+import static se.sundsvall.smloader.integration.openeinternalsoap.configuration.OpenEInternalSoapConfiguration.CLIENT_ID;
+
 import generated.se.sundsvall.callback.ConfirmDelivery;
 import generated.se.sundsvall.callback.ConfirmDeliveryResponse;
 import generated.se.sundsvall.callback.SetStatus;
@@ -9,8 +11,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import se.sundsvall.smloader.integration.openeinternalsoap.configuration.OpenEInternalSoapConfiguration;
-
-import static se.sundsvall.smloader.integration.openeinternalsoap.configuration.OpenEInternalSoapConfiguration.CLIENT_ID;
 
 @FeignClient(name = CLIENT_ID, url = "${integration.open-e.internal-soap.url}", configuration = OpenEInternalSoapConfiguration.class)
 @CircuitBreaker(name = CLIENT_ID)

@@ -27,8 +27,8 @@ class ProvideFeedbackMapperTest {
 
 	@Test
 	void mapToErrand() throws Exception {
-		var stringBytes = readOpenEFile("flow-instance-lamna-synpunkt.xml");
-		var errand = mapper.mapToErrand(stringBytes);
+		final var stringBytes = readOpenEFile("flow-instance-lamna-synpunkt.xml");
+		final var errand = mapper.mapToErrand(stringBytes);
 
 		assertThat(errand.getDescription()).isEqualTo("beskriver synpunkten här");
 		assertThat(errand.getBusinessRelated()).isFalse();
@@ -53,8 +53,8 @@ class ProvideFeedbackMapperTest {
 
 	@Test
 	void mapToAnonymousErrand() throws Exception {
-		var stringBytes = readOpenEFile("flow-instance-lamna-synpunkt-anonymous.xml");
-		var errand = mapper.mapToErrand(stringBytes);
+		final var stringBytes = readOpenEFile("flow-instance-lamna-synpunkt-anonymous.xml");
+		final var errand = mapper.mapToErrand(stringBytes);
 
 		assertThat(errand.getDescription()).isEqualTo("testar synen");
 		assertThat(errand.getBusinessRelated()).isFalse();

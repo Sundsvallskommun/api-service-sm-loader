@@ -1,7 +1,6 @@
 package se.sundsvall.smloader.integration.openemapper.substitutemanager;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,7 +26,6 @@ import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -101,14 +99,23 @@ class SubstituteManagerProviderTest {
 			Stakeholder::getOrganizationName,
 			Stakeholder::getExternalIdType,
 			Stakeholder::getExternalId,
-			Stakeholder::getMetadata).containsExactlyInAnyOrder(
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyMap()),
-				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
-				tuple(ROLE_SUBSTITUTE, "Tjatte", "Anka", emptyList(), null, "PRIVATE", partyId, Map.of("administrationName", "KSK AVD Digitalisering IT stab")),
-				tuple(ROLE_APPROVER, "Joakim", "von Anka", emptyList(), null, "PRIVATE", partyId, Map.of("administrationName", "KSK Avd Kansli och Säkerhet")));
-		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6849"),
-			new ExternalTag().key("familyId").value("182")));
+			Stakeholder::getParameters).containsExactlyInAnyOrder(
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, List.of(new Parameter()
+					.key("administrationName")
+					.values(List.of("KSK AVD Digitalisering IT stab")))),
+				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyList()),
+				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, List.of(new Parameter()
+					.key("administrationName")
+					.values(List.of("KSK AVD Digitalisering IT stab")))),
+				tuple(ROLE_SUBSTITUTE, "Tjatte", "Anka", emptyList(), null, "PRIVATE", partyId, List.of(new Parameter()
+					.key("administrationName")
+					.values(List.of("KSK AVD Digitalisering IT stab")))),
+				tuple(ROLE_APPROVER, "Joakim", "von Anka", emptyList(), null, "PRIVATE", partyId, List.of(new Parameter()
+					.key("administrationName")
+					.values(List.of("KSK Avd Kansli och Säkerhet")))));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrder(
+			new ExternalTag().key("caseId").value("6849"),
+			new ExternalTag().key("familyId").value("182"));
 		assertThat(errand.getReporterUserId()).isEqualTo("kall22ank");
 
 		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());

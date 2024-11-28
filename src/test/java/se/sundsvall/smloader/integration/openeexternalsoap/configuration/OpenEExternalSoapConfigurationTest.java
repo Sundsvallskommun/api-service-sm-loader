@@ -1,5 +1,10 @@
 package se.sundsvall.smloader.integration.openeexternalsoap.configuration;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import feign.auth.BasicAuthRequestInterceptor;
 import feign.soap.SOAPDecoder;
 import feign.soap.SOAPEncoder;
@@ -14,11 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cloud.openfeign.FeignBuilderCustomizer;
 import se.sundsvall.dept44.configuration.feign.FeignMultiCustomizer;
 import se.sundsvall.smloader.integration.util.OpenESoapErrorDecoder;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OpenEExternalSoapConfigurationTest {

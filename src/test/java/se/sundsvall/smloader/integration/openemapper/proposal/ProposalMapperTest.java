@@ -27,8 +27,8 @@ class ProposalMapperTest {
 
 	@Test
 	void mapToErrand() throws Exception {
-		var stringBytes = readOpenEFile("flow-instance-sundsvallsforslaget.xml");
-		var errand = mapper.mapToErrand(stringBytes);
+		final var stringBytes = readOpenEFile("flow-instance-sundsvallsforslaget.xml");
+		final var errand = mapper.mapToErrand(stringBytes);
 
 		assertThat(errand.getDescription()).isEqualTo("Testar att lämna förslag");
 		assertThat(errand.getBusinessRelated()).isFalse();

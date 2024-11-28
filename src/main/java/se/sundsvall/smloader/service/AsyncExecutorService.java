@@ -1,10 +1,9 @@
 package se.sundsvall.smloader.service;
 
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 /**
  * Class responsible for async-execution of import/export services.

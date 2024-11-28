@@ -1,43 +1,54 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?><FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1745.xsd">
-    <Header>
-        <Flow>
-            <FamilyID>161</FamilyID>
-            <Version>4</Version>
-            <FlowID>1745</FlowID>
-            <Name><![CDATA[Lämna synpunkt-TEST]]></Name>
-        </Flow>
-        <FlowInstanceID>4241</FlowInstanceID>
-        <Status>
-            <ID>10988</ID>
-            <Name><![CDATA[Preliminär]]></Name>
-        </Status>
-        <Posted>2024-07-03T11:04:00</Posted>
-        <FirstSubmitted>2024-07-03T11:04:00</FirstSubmitted>
-        <LastSubmitted>2024-07-03T11:04:00</LastSubmitted>
-    </Header>
-    <Values>
-        <title>
-            <QueryID>63169</QueryID>
-            <Name><![CDATA[Rubrik]]></Name>
-            <Rubrik><![CDATA[Testar]]></Rubrik>
-        </title>
-        <description>
-            <QueryID>63170</QueryID>
-            <Name><![CDATA[Beskriv din synpunkt]]></Name>
-            <Value><![CDATA[Testar att lämna synpunkt]]></Value>
-        </description>
-        <reportType>
-            <QueryID>63172</QueryID>
-            <Name><![CDATA[Typ av återkoppling]]></Name>
-            <Value>Jag vill få återkoppling via e-post/sms</Value>
-        </reportType>
-        <contact>
-            <QueryID>63173</QueryID>
-            <Name><![CDATA[Kontaktuppgifter]]></Name>
-            <Firstname><![CDATA[Kalle]]></Firstname>
-            <Lastname><![CDATA[Anka]]></Lastname>
-            <Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
-            <MobilePhone><![CDATA[070-1112223]]></MobilePhone>
-        </contact>
-    </Values>
-    <ExtraParameters><Parameters><Parameter><Name>municipalityId</Name><Value><![CDATA[2281]]></Value></Parameter></Parameters></ExtraParameters></FlowInstance>
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1745.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>161</FamilyID>
+			<Version>4</Version>
+			<FlowID>1745</FlowID>
+			<Name><![CDATA[Lämna synpunkt-TEST]]></Name>
+		</Flow>
+		<FlowInstanceID>4241</FlowInstanceID>
+		<Status>
+			<ID>10988</ID>
+			<Name><![CDATA[Preliminär]]></Name>
+		</Status>
+		<Posted>2024-07-03T11:04:00</Posted>
+		<FirstSubmitted>2024-07-03T11:04:00</FirstSubmitted>
+		<LastSubmitted>2024-07-03T11:04:00</LastSubmitted>
+	</Header>
+	<Values>
+		<title>
+			<QueryID>63169</QueryID>
+			<Name><![CDATA[Rubrik]]></Name>
+			<Rubrik><![CDATA[Testar]]></Rubrik>
+		</title>
+		<description>
+			<QueryID>63170</QueryID>
+			<Name><![CDATA[Beskriv din synpunkt]]></Name>
+			<Value><![CDATA[Testar att lämna synpunkt]]></Value>
+		</description>
+		<reportType>
+			<QueryID>63172</QueryID>
+			<Name><![CDATA[Typ av återkoppling]]></Name>
+			<Value>Jag vill få återkoppling via e-post/sms</Value>
+		</reportType>
+		<contact>
+			<QueryID>63173</QueryID>
+			<Name><![CDATA[Kontaktuppgifter]]></Name>
+			<Firstname><![CDATA[Kalle]]></Firstname>
+			<Lastname><![CDATA[Anka]]></Lastname>
+			<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+			<MobilePhone><![CDATA[070-1112223]]></MobilePhone>
+		</contact>
+	</Values>
+	<ExtraParameters>
+		<Parameters>
+			<Parameter>
+				<Name>municipalityId</Name>
+				<Value><![CDATA[2281]]></Value>
+			</Parameter>
+		</Parameters>
+	</ExtraParameters>
+</FlowInstance>
