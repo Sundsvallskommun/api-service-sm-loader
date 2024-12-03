@@ -55,6 +55,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_REPORT_SICK;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameterList;
 
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
@@ -121,14 +122,14 @@ class ReportSickProvider implements OpenEMapper {
 				.firstName(reportSick.applicantFirstname())
 				.lastName(reportSick.applicantLastname())
 				.contactChannels(getContactChannels(reportSick.applicantEmail(), reportSick.applicantPhone()))
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(reportSick.applicantOrganization())))),
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, reportSick.applicantOrganization())),
 			new Stakeholder()
 				.role(ROLE_EMPLOYEE)
 				.firstName(reportSick.employeeFirstname())
 				.lastName(reportSick.employeeLastname())
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(reportSick.employeeLegalId()))
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(reportSick.employeeOrganization())))));
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, reportSick.employeeOrganization())));
 	}
 
 	private List<ContactChannel> getContactChannels(final String email, final String phone) {

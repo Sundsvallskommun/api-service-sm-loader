@@ -18,6 +18,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOY
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_TWENTY_FIVE_AT_WORK;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameterList;
 
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
@@ -83,7 +84,7 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 				.firstName(twentyFiveAtWork.applicantFirstname())
 				.lastName(twentyFiveAtWork.applicantLastname())
 				.contactChannels(getContactChannels(twentyFiveAtWork.applicantEmail()))
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(twentyFiveAtWork.applicantOrganization()))))
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, twentyFiveAtWork.applicantOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(twentyFiveAtWork.applicantLegalId())),
 			getEmployee(twentyFiveAtWork));

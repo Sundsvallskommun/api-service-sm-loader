@@ -23,6 +23,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_SUBSTI
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SUBSTITUTE_MANAGER;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameterList;
 
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
@@ -88,13 +89,13 @@ class SubstituteManagerProvider implements OpenEMapper {
 				.role(ROLE_APPLICANT)
 				.firstName(substituteManager.applicantFirstname())
 				.lastName(substituteManager.applicantLastname())
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(substituteManager.applicantOrganization()))))
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, substituteManager.applicantOrganization()))
 				.contactChannels(getContactChannels(substituteManager.applicantEmail())),
 			new Stakeholder()
 				.role(ROLE_SUBSTITUTE)
 				.firstName(substituteManager.substituteManagerFirstname())
 				.lastName(substituteManager.substituteManagerLastname())
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(substituteManager.substituteManagerOrganization()))))
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, substituteManager.substituteManagerOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(substituteManager.substituteManagerLegalId())),
 			getManagerStakeholder(substituteManager),
@@ -102,7 +103,7 @@ class SubstituteManagerProvider implements OpenEMapper {
 				.role(ROLE_APPROVER)
 				.firstName(substituteManager.approvingManagerFirstname())
 				.lastName(substituteManager.approvingManagerLastname())
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(substituteManager.approvingManagerOrganization()))))
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, substituteManager.approvingManagerOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(substituteManager.approvingManagerLegalId())));
 	}
@@ -118,14 +119,14 @@ class SubstituteManagerProvider implements OpenEMapper {
 			.role(ROLE_MANAGER)
 			.firstName(substituteManager.managerFirstname())
 			.lastName(substituteManager.managerLastname())
-			.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(substituteManager.managerOrganization()))))
+			.parameters(toParameterList(KEY_ADMINISTRATION_NAME, substituteManager.managerOrganization()))
 			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 			.externalId(getPartyId(substituteManager.managerLegalId()))
 			: new Stakeholder()
 				.role(ROLE_MANAGER)
 				.firstName(substituteManager.otherSenderFirstname())
 				.lastName(substituteManager.otherSenderLastname())
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(substituteManager.otherSenderOrganization()))))
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, substituteManager.otherSenderOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(substituteManager.otherSenderLegalId()));
 	}
