@@ -1,7 +1,7 @@
 package se.sundsvall.smloader.integration.supportmanagement;
 
+import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static se.sundsvall.smloader.integration.supportmanagement.configuration.SupportManagementConfiguration.CLIENT_ID;
 
@@ -24,7 +24,7 @@ public interface SupportManagementClient {
 	 *
 	 * @param errand with attributes for create an errand.
 	 */
-	@PostMapping(path = "/{municipalityId}/{namespace}/errands", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
+	@PostMapping(path = "/{municipalityId}/{namespace}/errands", consumes = APPLICATION_JSON_VALUE, produces = ALL_VALUE)
 	ResponseEntity<Void> createErrand(
 		@PathVariable(name = "municipalityId") String municipalityId,
 		@PathVariable(name = "namespace") String namespace,
@@ -35,7 +35,7 @@ public interface SupportManagementClient {
 	 *
 	 * @param errandId with att.
 	 */
-	@GetMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}", produces = APPLICATION_PROBLEM_JSON_VALUE)
+	@GetMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}", produces = APPLICATION_JSON_VALUE)
 	Errand getErrand(
 		@PathVariable(name = "municipalityId") String municipalityId,
 		@PathVariable(name = "namespace") String namespace,
@@ -44,7 +44,7 @@ public interface SupportManagementClient {
 	/**
 	 * Export file to support management.
 	 */
-	@PostMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/attachments", consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
+	@PostMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/attachments", consumes = MULTIPART_FORM_DATA_VALUE, produces = ALL_VALUE)
 	ResponseEntity<Void> createAttachment(
 		@PathVariable(name = "municipalityId") String municipalityId,
 		@PathVariable(name = "namespace") String namespace,
