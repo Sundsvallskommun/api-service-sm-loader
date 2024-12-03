@@ -17,6 +17,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTAC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SALARY_CHANGE;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameterList;
 
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
@@ -80,7 +81,7 @@ class SalaryChangeProvider implements OpenEMapper {
 				.role(ROLE_APPLICANT)
 				.firstName(salaryChange.applicantFirstname())
 				.lastName(salaryChange.applicantLastname())
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(salaryChange.applicantOrganization()))))
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, salaryChange.applicantOrganization()))
 				.contactChannels(getContactChannels(salaryChange.applicantEmail()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(salaryChange.applicantLegalId())));

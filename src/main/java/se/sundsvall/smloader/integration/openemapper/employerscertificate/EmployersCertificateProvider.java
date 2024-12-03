@@ -100,7 +100,7 @@ class EmployersCertificateProvider implements OpenEMapper {
 	}
 
 	private List<ContactChannel> getContactChannelsForApplicant(final String email, final String phone) {
-		if (email == null && phone == null) {
+		if ((email == null) && (phone == null)) {
 			return emptyList();
 		}
 		return isNull(email) ? List.of(new ContactChannel()

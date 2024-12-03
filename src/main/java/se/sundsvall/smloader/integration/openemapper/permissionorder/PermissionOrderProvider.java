@@ -81,6 +81,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PERMISSION_ORDER;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameterList;
 
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
@@ -149,14 +150,14 @@ class PermissionOrderProvider implements OpenEMapper {
 				.role(ROLE_APPLICANT)
 				.firstName(permissionOrder.applicantFirstname())
 				.lastName(permissionOrder.applicantLastname())
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(permissionOrder.applicantOrganization()))))
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, permissionOrder.applicantOrganization()))
 				.contactChannels(getContactChannels(permissionOrder.applicantEmail())),
 			new Stakeholder()
 				.role(ROLE_USER)
 				.firstName(permissionOrder.userFirstname())
 				.lastName(permissionOrder.userLastname())
 				.contactChannels(getContactChannels(permissionOrder.userEmail()))
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(permissionOrder.userOrganization()))))
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, permissionOrder.userOrganization()))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(permissionOrder.userLegalId()))));
 		if (isNotEmpty(permissionOrder.managerFirstname())) {
@@ -165,7 +166,7 @@ class PermissionOrderProvider implements OpenEMapper {
 				.firstName(permissionOrder.managerFirstname())
 				.lastName(permissionOrder.managerLastname())
 				.contactChannels(getContactChannels(permissionOrder.managerEmail()))
-				.parameters(List.of(new Parameter().key(KEY_ADMINISTRATION_NAME).values(List.of(permissionOrder.managerOrganization())))));
+				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, permissionOrder.managerOrganization())));
 		}
 		return stakeholders;
 	}

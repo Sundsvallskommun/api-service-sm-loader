@@ -1,0 +1,25 @@
+package se.sundsvall.smloader.service.mapper;
+
+import static java.util.Arrays.asList;
+import static java.util.Optional.ofNullable;
+
+import generated.se.sundsvall.supportmanagement.Parameter;
+import java.util.ArrayList;
+import java.util.List;
+
+public final class SupportManagementMapper {
+
+	private SupportManagementMapper() {}
+
+	public static List<Parameter> toParameterList(String parameterName, String value) {
+		final var parameterList = new ArrayList<Parameter>();
+		ofNullable(toParameter(parameterName, value)).ifPresent(parameterList::add);
+		return parameterList;
+	}
+
+	public static Parameter toParameter(String parameterName, String value) {
+		return ofNullable(value)
+			.map(v -> new Parameter().key(parameterName).values(asList(v)))
+			.orElse(null);
+	}
+}
