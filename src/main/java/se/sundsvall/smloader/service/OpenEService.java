@@ -1,6 +1,8 @@
 package se.sundsvall.smloader.service;
 
 import static java.util.Objects.nonNull;
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
@@ -14,6 +16,7 @@ import generated.se.sundsvall.callback.SetStatus;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -105,12 +108,18 @@ public class OpenEService {
 
 		final var flowInstanceIds = metaDataEntities.stream()
 			.map(metaData -> {
-				if (instance == EXTERNAL) {
-					return openEExternalClient.getErrandIds(metaData.getFamilyId(), metaData.getOpenEImportStatus(), fromDate.toString(), toDate.toString());
-				} else {
-					return openEInternalClient.getErrandIds(metaData.getFamilyId(), metaData.getOpenEImportStatus(), fromDate.toString(), toDate.toString());
+				try {
+					if (instance == EXTERNAL) {
+						return openEExternalClient.getErrandIds(metaData.getFamilyId(), metaData.getOpenEImportStatus(), fromDate.toString(), toDate.toString());
+					} else {
+						return openEInternalClient.getErrandIds(metaData.getFamilyId(), metaData.getOpenEImportStatus(), fromDate.toString(), toDate.toString());
+					}
+				} catch (final Exception e) {
+					LOGGER.error("Error while fetching errandIds for familyId: '{}'", metaData.getFamilyId(), e);
+					return null;
 				}
 			})
+			.filter(Objects::nonNull)
 			.map(this::getErrandIds)
 			.flatMap(List::stream)
 			.distinct()
@@ -122,8 +131,8 @@ public class OpenEService {
 				return;
 			}
 			final var openECase = getOpenECase(instance, flowInstanceId);
-			final var familyId = getFamilyId(openECase);
-			final var caseMetaData = caseMetaDataRepository.findById(familyId);
+			final var familyId = ofNullable(openECase).map(oepCase -> getFamilyId(openECase)).orElse(null);
+			final var caseMetaData = ofNullable(familyId).map(caseMetaDataRepository::findById).orElse(empty());
 
 			if (nonNull(openECase) && caseMetaData.isPresent()) {
 				caseRepository.save(toCaseEntity(flowInstanceId, caseMetaData.get(), openECase));
@@ -153,6 +162,11 @@ public class OpenEService {
 	}
 
 	private byte[] getOpenECase(final Instance instance, final String flowInstanceId) {
-		return instance == EXTERNAL ? openEExternalClient.getErrand(flowInstanceId) : openEInternalClient.getErrand(flowInstanceId);
+		try {
+			return instance == EXTERNAL ? openEExternalClient.getErrand(flowInstanceId) : openEInternalClient.getErrand(flowInstanceId);
+		} catch (final Exception e) {
+			LOGGER.error("Error while fetching errand for flowInstanceId: '{}'", flowInstanceId, e);
+			return null;
+		}
 	}
 }
