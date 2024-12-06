@@ -226,7 +226,7 @@ class ReportSickProvider implements OpenEMapper {
 		for (int i = 1; i <= countOfSickLeavePeriods; i++) {
 			final var pathPercent = "/FlowInstance/Values/sickNotePercentRow" + i + "/Value";
 			final var pathStartDate = "/FlowInstance/Values/sickNotePeriodRow" + i + "/Datum_fran";
-			final var pathEndDate = "/FlowInstance/Values/sickNotePeriodRow" + i + "/Datum_fran";
+			final var pathEndDate = "/FlowInstance/Values/sickNotePeriodRow" + i + "/Datum_till";
 
 			sickNotePercentRows.add(evaluateXPath(xml, pathPercent).text());
 			sickNoteStartDateRows.add(evaluateXPath(xml, pathStartDate).text());

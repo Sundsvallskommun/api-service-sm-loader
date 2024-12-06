@@ -93,7 +93,7 @@ class ReportSickProviderTest {
 			tuple("absentPeriodEndDate", List.of("2024-10-18"), "Sjukperiodens slutdatum"),
 			tuple("sickNotePercentages", List.of("75", "100", "50", "25"), "Sjukskrivningsgrad i procent"),
 			tuple("sickNoteStartDates", List.of("2024-07-01", "2024-07-01", "2024-07-01", "2024-07-04"), "Sjukskrivnings startdatum"),
-			tuple("sickNoteEndDates", List.of("2024-07-01", "2024-07-01", "2024-07-01", "2024-07-04"), "Sjukskrivnings slutdatum"));
+			tuple("sickNoteEndDates", List.of("2024-07-31", "2024-07-31", "2024-07-31", "2024-07-18"), "Sjukskrivnings slutdatum"));
 
 		assertThat(errand.getStakeholders()).hasSize(3).extracting(
 			Stakeholder::getRole,
