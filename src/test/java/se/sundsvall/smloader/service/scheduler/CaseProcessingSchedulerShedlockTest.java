@@ -97,7 +97,7 @@ class CaseProcessingSchedulerShedlockTest {
 
 	private LocalDateTime mapTimestamp(final ResultSet rs) throws SQLException {
 		if (rs.next()) {
-			return LocalDateTime.parse(rs.getString("locked_at"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+			return return rs.getTimestamp("locked_at").toLocalDateTime();
 		}
 		return null;
 	}
