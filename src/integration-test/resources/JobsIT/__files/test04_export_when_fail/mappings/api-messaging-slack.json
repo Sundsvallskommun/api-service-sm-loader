@@ -1,22 +1,30 @@
 {
 	"request": {
 		"method": "POST",
-		"bodyPatterns": [{"equalToJson": {
-			"channel": "channel",
-			"message": "SmLoader failed to export cases: [4238]",
-			"token": "token"
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"channel": "channel",
+					"message": "SmLoader failed to export cases: [4238]",
+					"token": "token"
+				}
+			}
+		],
 		"urlPath": "/messaging/2281/slack"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
 		"jsonBody": {
 			"messageId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-			"deliveries": [{
-				"deliveryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-				"messageType": "SLACK",
-				"status": "SENT"
-			}]
+			"deliveries": [
+				{
+					"deliveryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+					"messageType": "SLACK",
+					"status": "SENT"
+				}
+			]
 		},
 		"status": 200
 	},

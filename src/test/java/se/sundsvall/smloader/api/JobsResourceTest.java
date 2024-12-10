@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.sundsvall.smloader.service.AsyncExecutorService;
 
@@ -21,7 +21,7 @@ class JobsResourceTest {
 	private static final String MUNICIPALITY_ID = "2281";
 	private static final String PATH = "/" + MUNICIPALITY_ID + "/jobs";
 
-	@MockBean
+	@MockitoBean
 	private AsyncExecutorService asyncExecutorService;
 
 	@Autowired
