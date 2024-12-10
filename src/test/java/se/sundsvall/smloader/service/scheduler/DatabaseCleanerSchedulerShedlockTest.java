@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -92,7 +91,7 @@ class DatabaseCleanerSchedulerShedlockTest {
 
 	private LocalDateTime mapTimestamp(final ResultSet rs) throws SQLException {
 		if (rs.next()) {
-			return return rs.getTimestamp("locked_at").toLocalDateTime();
+			return rs.getTimestamp("locked_at").toLocalDateTime();
 		}
 		return null;
 	}

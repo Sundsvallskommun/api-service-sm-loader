@@ -13,7 +13,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -97,7 +96,7 @@ class CaseProcessingSchedulerShedlockTest {
 
 	private LocalDateTime mapTimestamp(final ResultSet rs) throws SQLException {
 		if (rs.next()) {
-			return return rs.getTimestamp("locked_at").toLocalDateTime();
+			return rs.getTimestamp("locked_at").toLocalDateTime();
 		}
 		return null;
 	}
