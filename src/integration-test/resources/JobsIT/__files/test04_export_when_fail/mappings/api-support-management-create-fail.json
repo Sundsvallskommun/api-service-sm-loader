@@ -1,56 +1,66 @@
 {
 	"request": {
 		"headers": {
-			"Authorization": {"equalTo": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"},
-			"x-request-id": {"matches": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"}
+			"Authorization": {
+				"equalTo": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"
+			},
+			"x-request-id": {
+				"matches": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+			}
 		},
 		"method": "POST",
-		"bodyPatterns": [{
-			"equalToJson": {
-				"externalTags": [
-					{
-						"value": "4241",
-						"key": "caseId"
-					},
-					{
-						"value": "161",
-						"key": "familyId"
-					}
-				],
-				"channel": "ESERVICE",
-				"description": "Testar att lämna synpunkt",
-				"stakeholders": [{
-					"firstName": "Kalle",
-					"lastName": "Anka",
-					"role": "CONTACT",
-					"parameters": [],
-					"contactChannels": [
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"externalTags": [
 						{
-							"type": "Email",
-							"value": "kalle.anka@sundsvall.se"
+							"value": "4241",
+							"key": "caseId"
 						},
 						{
-							"type": "Phone",
-							"value": "070-1112223"
+							"value": "161",
+							"key": "familyId"
 						}
-					]
-				}],
-				"businessRelated": false,
-				"title": "Testar",
-				"priority": "LOW",
-				"classification": {
-					"category": "FEEDBACK_CATEGORY",
-					"type": "FEEDBACK_TYPE"
+					],
+					"channel": "ESERVICE",
+					"description": "Testar att lämna synpunkt",
+					"stakeholders": [
+						{
+							"firstName": "Kalle",
+							"lastName": "Anka",
+							"role": "CONTACT",
+							"parameters": [],
+							"contactChannels": [
+								{
+									"type": "Email",
+									"value": "kalle.anka@sundsvall.se"
+								},
+								{
+									"type": "Phone",
+									"value": "070-1112223"
+								}
+							]
+						}
+					],
+					"businessRelated": false,
+					"title": "Testar",
+					"priority": "LOW",
+					"classification": {
+						"category": "FEEDBACK_CATEGORY",
+						"type": "FEEDBACK_TYPE"
+					},
+					"reporterUserId": "Kalle Anka-kalle.anka@sundsvall.se",
+					"parameters": [],
+					"status": "NEW",
+					"labels": []
 				},
-				"reporterUserId": "Kalle Anka-kalle.anka@sundsvall.se",
-				"parameters": [],
-				"status": "NEW",
-				"labels": []
-			},
-			"ignoreArrayOrder": true
-		}],
+				"ignoreArrayOrder": true
+			}
+		],
 		"urlPath": "/support-management/2281/CONTACTSUNDSVALL/errands"
 	},
-	"response": {"status": 400},
+	"response": {
+		"status": 400
+	},
 	"name": "api-support-management-send"
 }
