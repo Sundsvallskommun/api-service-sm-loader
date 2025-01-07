@@ -53,7 +53,7 @@ public final class ErrandConstants {
 	public static final String KEY_UNEMPLOYMENT_FUND = "unemploymentFund";
 	public static final String DISPLAY_UNEMPLOYMENT_FUND = "A-kassa";
 	public static final String KEY_SEND_DIGITAL = "sendDigital";
-	public static final String DISPLAY_SEND_DIGITAL = "Skicka digitalt";
+	public static final String DISPLAY_SEND_DIGITAL = "Skicka digitalt till arbetsgivareintyg.nu";
 	// TwentyFiveAtWork
 	public static final String KEY_LATEST_START_DATE = "latestStartDate";
 	public static final String DISPLAY_LATEST_START_DATE = "Startdatum för anställning hos tidigare huvudman";
