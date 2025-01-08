@@ -13,7 +13,6 @@
 	<version>1.0</version>
 	<name>api-service-sm-loader</name>
 	<properties>
-		<!--- Service properties -->
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 		<jaxb-plugins.version>4.0.8</jaxb-plugins.version>
