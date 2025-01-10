@@ -106,4 +106,38 @@ class JobsIT extends AbstractAppTest {
 			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID).isEmpty())
 			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(FAILED, MUNICIPALITY_ID).size() == 2);
 	}
+
+	@Test
+	void test05_export_when_errand_exists() {
+
+		// Assert that we have records with status PENDING.
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID)).isNotEmpty();
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(CREATED, MUNICIPALITY_ID)).size().isEqualTo(1);
+
+		// Call
+		setupCall()
+			.withServicePath(PATH + "/caseexporter")
+			.withHttpMethod(POST)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse()
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID).isEmpty())
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(CREATED, MUNICIPALITY_ID).size() == 2);
+	}
+
+	@Test
+	void test06_export_when_attachment_exists() {
+
+		// Assert that we have records with status PENDING.
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID)).isNotEmpty();
+		assertThat(repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(CREATED, MUNICIPALITY_ID)).size().isEqualTo(1);
+
+		// Call
+		setupCall()
+			.withServicePath(PATH + "/caseexporter")
+			.withHttpMethod(POST)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse()
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, MUNICIPALITY_ID).isEmpty())
+			.andVerifyThat(() -> repository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(CREATED, MUNICIPALITY_ID).size() == 2);
+	}
 }

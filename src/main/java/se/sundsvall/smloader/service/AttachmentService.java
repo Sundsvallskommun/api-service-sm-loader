@@ -2,9 +2,14 @@ package se.sundsvall.smloader.service;
 
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 
+import generated.se.sundsvall.supportmanagement.ErrandAttachmentHeader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
+import org.apache.commons.io.IOUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.openemapper.attachment.Attachment;
@@ -24,6 +29,11 @@ public class AttachmentService {
 	}
 
 	public List<String> handleAttachments(final byte[] xml, final CaseEntity caseEntity, final String errandId) {
+		final var attachmentHeaders = supportManagementClient.getAttachmentHeader(
+			caseEntity.getCaseMetaData().getMunicipalityId(),
+			caseEntity.getCaseMetaData().getNamespace(),
+			errandId);
+
 		return getFileIds(xml).stream()
 			.map(attachment -> {
 				try (final var fileStream = openEService.getFile(caseEntity.getExternalCaseId(), attachment.getFileId(), attachment.getQueryId(), caseEntity.getCaseMetaData().getInstance()).body().asInputStream()) {
@@ -31,13 +41,14 @@ public class AttachmentService {
 						log.info("Failed to fetch file for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
 						return attachment.getFileId();
 					}
+					if (!attachmentExists(attachmentHeaders, attachment, caseEntity, errandId, fileStream)) {
+						final AttachmentMultiPartFile multiPartFile = AttachmentMultiPartFile.create(attachment, fileStream);
+						final var response = supportManagementClient.createAttachment(caseEntity.getCaseMetaData().getMunicipalityId(), caseEntity.getCaseMetaData().getNamespace(), errandId, multiPartFile);
 
-					final AttachmentMultiPartFile multiPartFile = AttachmentMultiPartFile.create(attachment, fileStream);
-					final var response = supportManagementClient.createAttachment(caseEntity.getCaseMetaData().getMunicipalityId(), caseEntity.getCaseMetaData().getNamespace(), errandId, multiPartFile);
-
-					if (response.getStatusCode().isError()) {
-						log.info("Failed to create attachment for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
-						return attachment.getFileId();
+						if (response.getStatusCode().isError()) {
+							log.info("Failed to create attachment for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
+							return attachment.getFileId();
+						}
 					}
 				} catch (final Exception e) {
 					log.severe("Error handling attachment: " + e.getMessage());
@@ -47,6 +58,22 @@ public class AttachmentService {
 			})
 			.filter(Objects::nonNull)
 			.toList();
+	}
+
+	private boolean attachmentExists(final List<ErrandAttachmentHeader> errandAttachments, final Attachment attachment, final CaseEntity caseEntity, final String errandId, final InputStream inputStream) {
+		return errandAttachments.stream()
+			.filter(errandAttachment -> errandAttachment.getFileName().equals(attachment.getFileName()))
+			.map(errandAttachment -> supportManagementClient.getAttachment(caseEntity.getCaseMetaData().getMunicipalityId(), caseEntity.getCaseMetaData().getNamespace(), errandId, errandAttachment.getId()))
+			.map(ResponseEntity::getBody)
+			.filter(Objects::nonNull)
+			.anyMatch(inputStreamResource -> {
+				try {
+					return IOUtils.contentEquals(inputStream, inputStreamResource.getInputStream());
+				} catch (IOException e) {
+					log.severe("Error comparing attachments with filename: " + attachment.getFileName());
+					throw new RuntimeException(e);
+				}
+			});
 	}
 
 	private List<Attachment> getFileIds(final byte[] xml) {
