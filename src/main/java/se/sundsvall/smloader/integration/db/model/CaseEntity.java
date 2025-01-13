@@ -82,7 +82,7 @@ public class CaseEntity {
 		return externalCaseId;
 	}
 
-	public void setexternalCaseId(String externalCaseId) {
+	public void setExternalCaseId(String externalCaseId) {
 		this.externalCaseId = externalCaseId;
 	}
 
