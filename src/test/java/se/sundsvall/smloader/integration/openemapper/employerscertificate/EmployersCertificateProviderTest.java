@@ -84,7 +84,7 @@ class EmployersCertificateProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(5).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
 			tuple("unemploymentFund", List.of("Ja"), "A-kassa"),
-			tuple("sendDigital", List.of("Nej"), "Skicka digitalt till arbetsgivareintyg.nu"),
+			tuple("sendDigital", List.of("Nej"), "Skicka digitalt till arbetsgivarintyg.nu"),
 			tuple("startDate", List.of("2024-01-01"), "Startdatum"),
 			tuple("endDate", List.of("2024-09-17"), "Slutdatum"),
 			tuple("timePeriod", List.of("Viss period"), "Tidsperiod"));
