@@ -179,7 +179,7 @@ public class SupportManagementService {
 			StringBuilder attachmentMessage = new StringBuilder(".\n");
 			if (!failedAttachments.isEmpty()) {
 				failedAttachments.forEach((caseId, attachments) -> {
-					attachmentMessage.append(String.format(String.format("For case %s the attachments %s were not exported.\n", caseId, attachments)));
+					attachmentMessage.append(String.format(String.format("For case %s the attachments %s were not exported.%n", caseId, attachments)));
 				});
 			}
 			var message = MESSAGE
