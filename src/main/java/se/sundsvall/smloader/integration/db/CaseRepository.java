@@ -15,7 +15,7 @@ import se.sundsvall.smloader.integration.db.model.enums.Instance;
 @Transactional(isolation = READ_COMMITTED)
 @CircuitBreaker(name = "CaseRepository")
 public interface CaseRepository extends JpaRepository<CaseEntity, String> {
-	List<CaseEntity> findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(DeliveryStatus deliveryStatus, String municipalityId);
+	List<CaseEntity> findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(String municipalityId, DeliveryStatus... deliveryStatus);
 
 	List<CaseId> findIdsByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(OffsetDateTime created, String municipalityId, DeliveryStatus... deliveryStatuses);
 

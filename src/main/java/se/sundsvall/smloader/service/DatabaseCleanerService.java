@@ -19,7 +19,7 @@ public class DatabaseCleanerService {
 	private static final String LOG_NOTHING_TO_REMOVE = "No entities found with status {}, hence no obsolete entities to remove";
 
 	private static final DeliveryStatus[] STATUS_FOR_ENTITIES_TO_REMOVE = {
-		DeliveryStatus.CREATED, DeliveryStatus.FAILED
+		DeliveryStatus.CREATED
 	};
 
 	private final CaseRepository caseRepository;

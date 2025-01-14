@@ -67,7 +67,7 @@ public class SupportManagementService {
 		final var failedCases = new ArrayList<String>();
 		final var failedAttachments = new HashMap<String, List<String>>();
 
-		final var casesToExport = caseRepository.findAllByDeliveryStatusAndCaseMetaDataEntityMunicipalityId(PENDING, municipalityId);
+		final var casesToExport = caseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED);
 
 		// Loop over all cases
 		casesToExport.forEach(caseEntity -> {
@@ -77,8 +77,7 @@ public class SupportManagementService {
 			}
 
 			// Each method can be called multiple times for the same caseEntity without causing duplication/error.
-			// If export fails caseEntity is marked as FAILED and will be removed form DB by scheduled job.
-			// This means that it will be imported again and get status PENDING and a retry occurs.
+			// If export fails caseEntity is marked as FAILED and retry will occur next time job is run.
 			// If all is successful caseEntity is marked as CREATED.
 			openEMapper
 				.map(mapper -> mapper.mapToErrand(Base64.getDecoder().decode(caseEntity.getOpenECase())))

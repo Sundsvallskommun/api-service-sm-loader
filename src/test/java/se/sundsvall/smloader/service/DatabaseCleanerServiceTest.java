@@ -6,7 +6,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -40,15 +39,15 @@ class DatabaseCleanerServiceTest {
 		final var municipalityId = "municipalityId";
 
 		// Setup mocking
-		when(caseRepositoryMock.countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED)).thenReturn(Integer.toUnsignedLong(entityIdsToRemove.size()));
-		when(caseRepositoryMock.findIdsByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED)).thenReturn(entityIdsToRemove);
+		when(caseRepositoryMock.countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED)).thenReturn(Integer.toUnsignedLong(entityIdsToRemove.size()));
+		when(caseRepositoryMock.findIdsByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED)).thenReturn(entityIdsToRemove);
 
 		// Call.
 		service.cleanDatabase(deleteBefore, municipalityId);
 
 		// Verification.
-		verify(caseRepositoryMock).countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED);
-		verify(caseRepositoryMock).findIdsByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED);
+		verify(caseRepositoryMock).countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED);
+		verify(caseRepositoryMock).findIdsByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED);
 		verify(caseRepositoryMock, times(5)).deleteById(anyString());
 		verify(caseMappingRepositoryMock).deleteByModifiedBeforeAndMunicipalityId(deleteBefore, municipalityId);
 	}
@@ -63,7 +62,7 @@ class DatabaseCleanerServiceTest {
 		service.cleanDatabase(deleteBefore, municipalityId);
 
 		// Verification
-		verify(caseRepositoryMock).countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED, FAILED);
+		verify(caseRepositoryMock).countByCreatedBeforeAndCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(deleteBefore, municipalityId, CREATED);
 		verifyNoMoreInteractions(caseRepositoryMock, caseMappingRepositoryMock);
 	}
 

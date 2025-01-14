@@ -6,7 +6,7 @@
 			}
 		},
 		"method": "GET",
-		"urlPath": "/open-e-external/api/fileuploadqueryapi/getfile/4238/queryId1/fileId1"
+		"urlPath": "/open-e-external/api/fileuploadqueryapi/getfile/4241/queryId1/fileId1"
 	},
 	"response": {
 		"headers": {

@@ -6,13 +6,13 @@
 			}
 		},
 		"method": "GET",
-		"urlPath": "/open-e-external/api/fileuploadqueryapi/getfile/4238/queryId1/fileId1"
+		"urlPath": "/open-e-external/api/fileuploadqueryapi/getfile/4242/queryId1/fileId2"
 	},
 	"response": {
 		"headers": {
 			"Content-Type": "application/pdf"
 		},
-		"bodyFileName": "test05_export_when_errand_exists/mocks/test.jpg",
+		"bodyFileName": "test06_export_when_attachment_exists/mocks/test2.jpg",
 		"status": 200
 	},
 	"name": "api-open-e-get-file"
