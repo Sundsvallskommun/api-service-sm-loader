@@ -9,7 +9,7 @@
 			}
 		},
 		"method": "GET",
-		"urlPath": "/support-management/2281/CONTACTSUNDSVALL/errands/",
+		"urlPath": "/support-management/2281/CONTACTSUNDSVALL/errands",
 		"queryParameters": {
 			"filter": {
 				"equalTo": "exists(externalTags.key:'caseId' and externalTags.value:'4241') and exists(externalTags.key:'familyId' and externalTags.value:'161') and channel:'ESERVICE'"
