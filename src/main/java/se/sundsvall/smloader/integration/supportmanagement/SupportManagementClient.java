@@ -63,7 +63,7 @@ public interface SupportManagementClient {
 	 *
 	 * @param filter filter errands on
 	 */
-	@GetMapping(path = "/{municipalityId}/{namespace}/errands/", produces = APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{municipalityId}/{namespace}/errands", produces = APPLICATION_JSON_VALUE)
 	Page<Errand> findErrands(
 		@PathVariable(name = "municipalityId") String municipalityId,
 		@PathVariable(name = "namespace") String namespace,
