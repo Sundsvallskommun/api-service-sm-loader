@@ -68,6 +68,7 @@ public class SupportManagementService {
 		final var failedAttachments = new HashMap<String, List<String>>();
 
 		final var casesToExport = caseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED);
+		final var onlyFailedCases = caseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING).isEmpty();
 
 		// Loop over all cases
 		casesToExport.forEach(caseEntity -> {
@@ -91,13 +92,16 @@ public class SupportManagementService {
 					saveFailed(caseEntity, failedCases));
 		});
 
-		reportFailedCases(municipalityId, failedCases, failedAttachments);
+		// Avoid reporting when run only consist of previously failed (reported) cases to minimize spam
+		if (!onlyFailedCases) {
+			reportFailedCases(municipalityId, failedCases, failedAttachments);
+		}
 	}
 
 	private Runnable saveFailed(CaseEntity caseEntity, List<String> failedCases) {
 		return () -> {
-			caseRepository.save(caseEntity.withDeliveryStatus(FAILED));
 			failedCases.add(caseEntity.getExternalCaseId());
+			caseRepository.save(caseEntity.withDeliveryStatus(FAILED));
 		};
 	}
 
