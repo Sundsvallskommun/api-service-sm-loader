@@ -1,0 +1,48 @@
+{
+	"externalTags": [
+		{
+			"value": "161",
+			"key": "familyId"
+		},
+		{
+			"value": "4241",
+			"key": "caseId"
+		}
+	],
+	"touched": "2024-07-04T09:55:04.909+02:00",
+	"errandNumber": "KS-24070019",
+	"created": "2024-07-04T09:55:04.909+02:00",
+	"channel": "ESERVICE",
+	"description": "test 3.1",
+	"stakeholders": [
+		{
+			"firstName": "Kalle",
+			"lastName": "Anka",
+			"role": "CONTACT",
+			"parameters": [],
+			"contactChannels": [
+				{
+					"type": "Email",
+					"value": "kalle.anka@sundsvall.se"
+				},
+				{
+					"type": "Phone",
+					"value": "0701112233"
+				}
+			]
+		}
+	],
+	"title": "test 3.1",
+	"priority": "LOW",
+	"classification": {
+		"category": "LAMNA_SYNPUNKT",
+		"type": "OTHER"
+	},
+	"labels": [],
+	"id": "1234",
+	"businessRelated": false,
+	"reporterUserId": "Kalle Anka-kalle.anka@sundsvall.se",
+	"parameters": [],
+	"suspension": {},
+	"status": "NEW"
+}

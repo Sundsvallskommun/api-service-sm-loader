@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import feign.Request;
@@ -88,6 +88,7 @@ class AttachmentServiceTest {
 
 		// Assert
 		verify(openEService).getFile(externalCaseId, fileId, queryId, instance);
+		verify(supportManagementClient).getAttachmentHeader(municipalityId, namespace, errandId);
 		verify(supportManagementClient).createAttachment(eq(municipalityId), eq(namespace), eq(errandId), attachmentMultiPartFileCaptor.capture());
 
 		final var attachmentMultiPartFile = attachmentMultiPartFileCaptor.getValue();
@@ -100,6 +101,9 @@ class AttachmentServiceTest {
 
 	@Test
 	void handleAttachmentsNoFiles() {
+
+		final var municipalityId = "municipalityId";
+		final var namespace = "namespace";
 
 		// Arrange
 		final var errandId = "errandId";
@@ -114,13 +118,14 @@ class AttachmentServiceTest {
 			</FlowInstance>
 			""".getBytes();
 
-		final var caseEntity = CaseEntity.create();
+		final var caseEntity = CaseEntity.create().withCaseMetaData(CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withNamespace(namespace));
 
 		// Act
 		attachmentService.handleAttachments(xml, caseEntity, errandId);
 
 		// Assert
-		verifyNoInteractions(openEService, supportManagementClient);
+		verify(supportManagementClient).getAttachmentHeader(municipalityId, namespace, errandId);
+		verifyNoMoreInteractions(openEService, supportManagementClient);
 	}
 
 	@Test
@@ -163,7 +168,8 @@ class AttachmentServiceTest {
 		// Assert
 		assertThat(result).containsExactly(fileId);
 		verify(openEService).getFile(externalCaseId, fileId, queryId, instance);
-		verifyNoInteractions(supportManagementClient);
+		verify(supportManagementClient).getAttachmentHeader(municipalityId, namespace, errandId);
+		verifyNoMoreInteractions(supportManagementClient);
 	}
 
 	@Test
@@ -216,6 +222,7 @@ class AttachmentServiceTest {
 		// Assert
 		assertThat(result).containsExactly(fileId);
 		verify(openEService).getFile(externalCaseId, fileId, queryId, instance);
+		verify(supportManagementClient).getAttachmentHeader(municipalityId, namespace, errandId);
 		verify(supportManagementClient).createAttachment(eq(municipalityId), eq(namespace), eq(errandId), attachmentMultiPartFileCaptor.capture());
 	}
 }

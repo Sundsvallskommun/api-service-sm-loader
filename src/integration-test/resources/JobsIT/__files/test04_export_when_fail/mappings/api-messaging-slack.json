@@ -5,7 +5,7 @@
 			{
 				"equalToJson": {
 					"channel": "channel",
-					"message": "SmLoader failed to export cases: [4238]",
+					"message": "${json-unit.regex}(SmLoader failed to export cases: \\[4241, 4242\\]\\.\\nRequestId: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})",
 					"token": "token"
 				}
 			}

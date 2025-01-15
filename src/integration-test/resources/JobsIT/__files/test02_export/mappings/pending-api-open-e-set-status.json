@@ -8,7 +8,7 @@
 		"method": "POST",
 		"bodyPatterns": [
 			{
-				"equalToXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><setStatus xmlns=\"http://www.oeplatform.org/version/1.0/schemas/integration/callback\"><flowInstanceID>4238</flowInstanceID><statusAlias>Mottagen</statusAlias></setStatus></SOAP-ENV:Body></SOAP-ENV:Envelope>"
+				"equalToXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><setStatus xmlns=\"http://www.oeplatform.org/version/1.0/schemas/integration/callback\"><flowInstanceID>4241</flowInstanceID><statusAlias>Mottagen</statusAlias></setStatus></SOAP-ENV:Body></SOAP-ENV:Envelope>"
 			}
 		],
 		"urlPath": "/open-e-external-soap"

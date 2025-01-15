@@ -64,41 +64,39 @@ public class OpenEService {
 		Arrays.stream(Instance.values()).forEach(instance -> handleCasesByInstance(instance, fromDate, effectiveToDate, municipalityId));
 	}
 
-	public void updateOpenECaseStatus(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity) {
-
-		if (isEmpty(caseMetaDataEntity.getOpenEUpdateStatus())) {
-			return;
-		}
-
-		final var setStatus = new SetStatus().withFlowInstanceID(Integer.parseInt(flowInstanceId)).withStatusAlias(caseMetaDataEntity.getOpenEUpdateStatus());
-
+	public boolean updateOpenECaseStatus(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity) {
 		try {
-			if (EXTERNAL.equals(caseMetaDataEntity.getInstance())) {
-				openEExternalSoapClient.setStatus(setStatus);
-			} else {
-				openEInternalSoapClient.setStatus(setStatus);
+			if (!isEmpty(caseMetaDataEntity.getOpenEUpdateStatus())) {
+				final var setStatus = new SetStatus().withFlowInstanceID(Integer.parseInt(flowInstanceId)).withStatusAlias(caseMetaDataEntity.getOpenEUpdateStatus());
+				if (EXTERNAL.equals(caseMetaDataEntity.getInstance())) {
+					openEExternalSoapClient.setStatus(setStatus);
+				} else {
+					openEInternalSoapClient.setStatus(setStatus);
+				}
 			}
+			return true;
 		} catch (final Exception e) {
 			LOGGER.error("Error while setting status for flowInstanceId: '{}'", flowInstanceId, e);
+			return false;
 		}
 	}
 
-	public void confirmDelivery(final String flowInstanceId, final Instance instance, final String errandId) {
-
-		final var confirmDelivery = new ConfirmDelivery().withFlowInstanceID(Integer.parseInt(flowInstanceId))
-			.withDelivered(true)
-			.withExternalID(new ExternalID()
-				.withSystem(SYSTEM_SUPPORT_MANAGEMENT)
-				.withID(errandId));
-
+	public boolean confirmDelivery(final String flowInstanceId, final Instance instance, final String errandId) {
 		try {
+			final var confirmDelivery = new ConfirmDelivery().withFlowInstanceID(Integer.parseInt(flowInstanceId))
+				.withDelivered(true)
+				.withExternalID(new ExternalID()
+					.withSystem(SYSTEM_SUPPORT_MANAGEMENT)
+					.withID(errandId));
 			if (EXTERNAL.equals(instance)) {
 				openEExternalSoapClient.confirmDelivery(confirmDelivery);
 			} else {
 				openEInternalSoapClient.confirmDelivery(confirmDelivery);
 			}
+			return true;
 		} catch (final Exception e) {
 			LOGGER.error("Error while confirming delivery for flowInstanceId: '{}'", flowInstanceId, e);
+			return false;
 		}
 	}
 
