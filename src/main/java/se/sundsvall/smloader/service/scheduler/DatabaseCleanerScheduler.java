@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import se.sundsvall.dept44.requestid.RequestId;
 import se.sundsvall.dept44.scheduling.Dept44Scheduled;
 import se.sundsvall.smloader.service.DatabaseCleanerService;
 
@@ -32,8 +31,6 @@ public class DatabaseCleanerScheduler {
 		name = "${scheduler.dbcleaner.name}",
 		lockAtMostFor = "${scheduler.dbcleaner.shedlock-lock-at-most-for}")
 	public void execute() {
-		RequestId.init();
-
 		LOGGER.info(LOG_CLEANING_STARTED);
 		databaseCleanerService.cleanDatabase(OffsetDateTime.now().minusDays(keepDays), MUNICIPALITY_ID);
 		LOGGER.info(LOG_CLEANING_ENDED);
