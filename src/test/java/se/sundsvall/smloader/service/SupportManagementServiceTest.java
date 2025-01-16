@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
@@ -22,6 +23,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,6 +71,9 @@ class SupportManagementServiceTest {
 
 	@Mock
 	private Environment mockEnvironment;
+
+	@Mock
+	private Consumer<String> consumerMock;
 
 	private SupportManagementService supportManagementService;
 
@@ -118,7 +123,7 @@ class SupportManagementServiceTest {
 		when(mockOpenEService.confirmDelivery(any(), any(), any())).thenReturn(true);
 
 		// Act
-		supportManagementService.exportCases(municipalityId);
+		supportManagementService.exportCases(municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(mockCaseRepository).findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED);
@@ -134,6 +139,7 @@ class SupportManagementServiceTest {
 		verify(mockCaseRepository).save(any());
 		verify(mockOpenEService).updateOpenECaseStatus(flowInstanceId, CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace(namespace).withMunicipalityId(municipalityId));
 		verify(mockOpenEService).confirmDelivery(flowInstanceId, EXTERNAL, errandNumber);
+		verifyNoInteractions(consumerMock);
 		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService, mockMessagingClient, mockMessagingMapper);
 	}
 
@@ -158,13 +164,14 @@ class SupportManagementServiceTest {
 		when(mockMessagingMapper.toEmailRequest(any(), any())).thenReturn(emailRequest);
 
 		// Act
-		supportManagementService.exportCases(municipalityId);
+		supportManagementService.exportCases(municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(mockCaseRepository).findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED);
 		verify(mockCaseRepository).findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING);
 		verify(mockCaseRepository).save(caseEntity.withDeliveryStatus(FAILED));
 		verify(mockMapper).getSupportedFamilyId();
+		verify(consumerMock).accept("Failed to export 1 errands!");
 		verify(mockMessagingClient).sendSlack(municipalityId, slackRequest);
 		verify(mockMessagingClient).sendEmail(municipalityId, emailRequest);
 		verifyNoMoreInteractions(mockMapper, mockCaseRepository, mockCaseMappingRepository, mockSupportManagementClient, mockOpenEService, mockMessagingClient, mockMessagingMapper, mockAttachmentService);
@@ -209,7 +216,7 @@ class SupportManagementServiceTest {
 		when(mockMessagingMapper.toEmailRequest(any(), any())).thenReturn(emailRequest);
 
 		// Act
-		supportManagementService.exportCases(municipalityId);
+		supportManagementService.exportCases(municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(mockCaseRepository).findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED);
@@ -219,6 +226,7 @@ class SupportManagementServiceTest {
 		verify(mockSupportManagementClient).findErrands(municipalityId, namespace, "exists(externalTags.key:'caseId' and externalTags.value:'123456') and exists(externalTags.key:'familyId' and externalTags.value:'161') and channel:'ESERVICE_INTERNAL'");
 		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand);
 		verify(mockCaseRepository).save(casesToExport.getFirst().withDeliveryStatus(FAILED));
+		verify(consumerMock).accept("Failed to export 1 errands!");
 		verify(mockMessagingMapper).toRequest(matches("SmLoader failed to export cases: \\[123456\\]\\.\\nRequestId: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"));
 		verify(mockMessagingMapper).toEmailRequest(eq("SmLoader - Test"), matches("SmLoader failed to export cases: \\[123456\\]\\.\\nRequestId: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"));
 		verify(mockMessagingClient).sendSlack(municipalityId, slackRequest);
@@ -234,8 +242,6 @@ class SupportManagementServiceTest {
 		final var flowInstanceId = "123456";
 		final var namespace = "namespace";
 		final var municipalityId = "municipalityId";
-		final var slackRequest = new SlackRequest().message("Failed to send errand");
-		final var emailRequest = new EmailRequest().message("Failed to send errand");
 		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml)));
 		when(mockCaseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED)).thenReturn(casesToExport);
 		when(mockCaseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING)).thenReturn(Collections.emptyList());
@@ -260,7 +266,7 @@ class SupportManagementServiceTest {
 		when(mockSupportManagementClient.createErrand(municipalityId, namespace, errand)).thenThrow(new RuntimeException("Failed to send errand"));
 
 		// Act
-		supportManagementService.exportCases(municipalityId);
+		supportManagementService.exportCases(municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(mockCaseRepository).findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED);
@@ -270,6 +276,7 @@ class SupportManagementServiceTest {
 		verify(mockSupportManagementClient).findErrands(municipalityId, namespace, "exists(externalTags.key:'caseId' and externalTags.value:'123456') and exists(externalTags.key:'familyId' and externalTags.value:'161') and channel:'ESERVICE_INTERNAL'");
 		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand);
 		verify(mockCaseRepository).save(casesToExport.getFirst().withDeliveryStatus(FAILED));
+		verify(consumerMock).accept("Failed to export 1 errands!");
 		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService, mockMessagingClient, mockMessagingMapper, mockAttachmentService);
 	}
 
@@ -325,7 +332,7 @@ class SupportManagementServiceTest {
 		when(mockCaseMappingRepository.existsById(any())).thenReturn(false);
 
 		// Act
-		supportManagementService.exportCases(municipalityId);
+		supportManagementService.exportCases(municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(mockCaseRepository).findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED);
@@ -336,6 +343,7 @@ class SupportManagementServiceTest {
 		verify(mockSupportManagementClient).findErrands(municipalityId, namespace, "exists(externalTags.key:'caseId' and externalTags.value:'123456') and exists(externalTags.key:'familyId' and externalTags.value:'161') and channel:'ESERVICE_INTERNAL'");
 		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand);
 		verify(mockCaseMappingRepository).save(any());
+		verify(consumerMock).accept("Failed to export 1 errands!");
 		verify(mockCaseRepository).save(casesToExport.getFirst());
 		verify(mockMessagingMapper).toRequest(
 			matches("SmLoader failed to export cases: \\[123456\\]\\.\\nFor case errandId the attachments \\[attachmentId\\] were not exported\\.\\nRequestId: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"));

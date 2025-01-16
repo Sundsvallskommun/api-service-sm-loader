@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -52,16 +53,17 @@ public class OpenEService {
 		this.caseMetaDataRepository = caseMetaDataRepository;
 	}
 
-	public void fetchAndSaveNewOpenECases(final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId) {
+	public void fetchAndSaveNewOpenECases(final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, Consumer<String> importHealthConsumer) {
 		RequestId.init();
 		final var effectiveToDate = nonNull(toDate) ? toDate : LocalDateTime.now();
 
 		if (fromDate.isAfter(effectiveToDate)) {
 			LOGGER.error("From-date: '{}' is after to-date: '{}'. No cases will be fetched.", fromDate, effectiveToDate);
+			importHealthConsumer.accept(String.format("From-date: '%s' is after to-date: '%s'. No cases will be fetched.", fromDate, effectiveToDate));
 			return;
 		}
 
-		Arrays.stream(Instance.values()).forEach(instance -> handleCasesByInstance(instance, fromDate, effectiveToDate, municipalityId));
+		Arrays.stream(Instance.values()).forEach(instance -> handleCasesByInstance(instance, fromDate, effectiveToDate, municipalityId, importHealthConsumer));
 	}
 
 	public boolean updateOpenECaseStatus(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity) {
@@ -100,7 +102,7 @@ public class OpenEService {
 		}
 	}
 
-	private void handleCasesByInstance(final Instance instance, final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId) {
+	private void handleCasesByInstance(final Instance instance, final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, Consumer<String> importHealthConsumer) {
 
 		final var metaDataEntities = caseMetaDataRepository.findByInstanceAndMunicipalityId(instance, municipalityId);
 
@@ -114,6 +116,7 @@ public class OpenEService {
 					}
 				} catch (final Exception e) {
 					LOGGER.error("Error while fetching errandIds for familyId: '{}'", metaData.getFamilyId(), e);
+					importHealthConsumer.accept("Error while fetching errands by familyId");
 					return null;
 				}
 			})
@@ -128,7 +131,7 @@ public class OpenEService {
 				LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
 				return;
 			}
-			final var openECase = getOpenECase(instance, flowInstanceId);
+			final var openECase = getOpenECase(instance, flowInstanceId, importHealthConsumer);
 			final var familyId = ofNullable(openECase).map(oepCase -> getFamilyId(openECase)).orElse(null);
 			final var caseMetaData = ofNullable(familyId).map(caseMetaDataRepository::findById).orElse(empty());
 
@@ -159,11 +162,12 @@ public class OpenEService {
 		return instance == EXTERNAL ? openEExternalClient.getFile(flowInstanceId, queryId, fileId) : openEInternalClient.getFile(flowInstanceId, queryId, fileId);
 	}
 
-	private byte[] getOpenECase(final Instance instance, final String flowInstanceId) {
+	private byte[] getOpenECase(final Instance instance, final String flowInstanceId, Consumer<String> importHealthConsumer) {
 		try {
 			return instance == EXTERNAL ? openEExternalClient.getErrand(flowInstanceId) : openEInternalClient.getErrand(flowInstanceId);
 		} catch (final Exception e) {
 			LOGGER.error("Error while fetching errand for flowInstanceId: '{}'", flowInstanceId, e);
+			importHealthConsumer.accept("Error while fetching errand by flowInstanceId");
 			return null;
 		}
 	}

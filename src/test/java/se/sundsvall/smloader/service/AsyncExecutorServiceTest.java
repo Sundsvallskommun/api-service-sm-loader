@@ -2,11 +2,13 @@ package se.sundsvall.smloader.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +27,9 @@ class AsyncExecutorServiceTest {
 	@Mock
 	private DatabaseCleanerService databaseCleanerServiceMock;
 
+	@Mock
+	private Consumer<String> consumerMock;
+
 	@InjectMocks
 	private AsyncExecutorService asyncExecutorService;
 
@@ -37,7 +42,7 @@ class AsyncExecutorServiceTest {
 		// Call
 		asyncExecutorService.importCases(from, to, municipalityId);
 
-		verify(openEServiceMock).fetchAndSaveNewOpenECases(from, to, municipalityId);
+		verify(openEServiceMock).fetchAndSaveNewOpenECases(eq(from), eq(to), eq(municipalityId), any());
 		verifyNoInteractions(supportManagementServiceMock);
 	}
 
@@ -48,7 +53,7 @@ class AsyncExecutorServiceTest {
 		// Call
 		asyncExecutorService.exportCases(municipalityId);
 
-		verify(supportManagementServiceMock).exportCases(municipalityId);
+		verify(supportManagementServiceMock).exportCases(eq(municipalityId), any());
 		verifyNoInteractions(openEServiceMock);
 	}
 

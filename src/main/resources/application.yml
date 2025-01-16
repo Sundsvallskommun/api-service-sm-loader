@@ -38,7 +38,7 @@ spring:
       client:
         provider:
           support-management:
-            token-uri:  ${integration.support-management.token-uri}
+            token-uri: ${integration.support-management.token-uri}
           party:
             token-uri: ${integration.party.token-uri}
           messaging:
@@ -86,9 +86,10 @@ integration:
 
 scheduler:
   caseprocessing:
-    cron:
-      expression: '${config.scheduler.cron.caseprocessing}'
+    name: 'CaseImportAndExportJob'
+    cron: '${config.scheduler.cron.caseprocessing}'
+    shedlock-lock-at-most-for: 'PT4M'
   dbcleaner:
-    cron:
-      expression: '${config.scheduler.cron.dbcleaner}'
-  shedlock-lock-at-most-for: PT2M
+    name: 'CaseDBCleanUpJob'
+    cron: '${config.scheduler.cron.dbcleaner}'
+    shedlock-lock-at-most-for: 'PT2M'

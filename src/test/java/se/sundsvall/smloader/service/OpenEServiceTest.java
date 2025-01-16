@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
@@ -26,6 +27,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -65,6 +67,9 @@ class OpenEServiceTest {
 
 	@Mock
 	private CaseMetaDataRepository mockCaseMetaDataRepository;
+
+	@Mock
+	private Consumer<String> consumerMock;
 
 	@InjectMocks
 	private OpenEService openEService;
@@ -125,17 +130,16 @@ class OpenEServiceTest {
 			.thenReturn(Optional.of(caseMetaDataEntity789));
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId);
+		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
 		verify(mockCaseRepository, times(6)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
-
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
-
 		verify(mockCaseRepository, times(6)).save(caseEntityCaptor.capture());
+		verifyNoInteractions(consumerMock);
 
 		assertThat(caseEntityCaptor.getAllValues()).hasSize(6)
 			.extracting(CaseEntity::getExternalCaseId,
@@ -179,7 +183,7 @@ class OpenEServiceTest {
 		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(true);
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId);
+		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
@@ -189,8 +193,8 @@ class OpenEServiceTest {
 		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId);
 		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId);
 		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId);
-
 		verify(mockOpenEInternalClient, times(2)).getErrandIds(anyString(), anyString(), anyString(), anyString());
+		verifyNoInteractions(consumerMock);
 
 		verifyNoMoreInteractions(mockOpenEExternalClient, mockOpenEInternalClient, mockCaseRepository);
 	}
@@ -242,17 +246,16 @@ class OpenEServiceTest {
 			.thenReturn(Optional.of(caseMetaDataEntity789));
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId);
+		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
 		verify(mockCaseRepository, times(6)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
-
 		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
 		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
-
 		verify(mockCaseRepository, times(6)).save(caseEntityCaptor.capture());
+		verify(consumerMock).accept("Error while fetching errands by familyId");
 
 		assertThat(caseEntityCaptor.getAllValues()).hasSize(6)
 			.extracting(CaseEntity::getExternalCaseId,
@@ -296,15 +299,14 @@ class OpenEServiceTest {
 		when(mockCaseMetaDataRepository.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity123));
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId);
+		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(mockOpenEExternalClient).getErrandIds(anyString(), anyString(), anyString(), anyString());
 		verify(mockCaseRepository, times(3)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
-
 		verify(mockOpenEExternalClient, times(3)).getErrand(anyString());
-
 		verify(mockCaseRepository, times(2)).save(caseEntityCaptor.capture());
+		verify(consumerMock).accept("Error while fetching errand by flowInstanceId");
 
 		assertThat(caseEntityCaptor.getAllValues()).hasSize(2)
 			.extracting(CaseEntity::getExternalCaseId,

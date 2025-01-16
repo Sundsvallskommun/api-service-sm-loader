@@ -3,13 +3,12 @@ package se.sundsvall.smloader.service.scheduler;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 
 import java.time.OffsetDateTime;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.requestid.RequestId;
+import se.sundsvall.dept44.scheduling.Dept44Scheduled;
 import se.sundsvall.smloader.service.DatabaseCleanerService;
 
 @Service
@@ -28,8 +27,10 @@ public class DatabaseCleanerScheduler {
 		this.databaseCleanerService = databaseCleanerService;
 	}
 
-	@Scheduled(cron = "${scheduler.dbcleaner.cron.expression}")
-	@SchedulerLock(name = "dbcleaner", lockAtMostFor = "${scheduler.shedlock-lock-at-most-for}")
+	@Dept44Scheduled(
+		cron = "${scheduler.dbcleaner.cron}",
+		name = "${scheduler.dbcleaner.name}",
+		lockAtMostFor = "${scheduler.dbcleaner.shedlock-lock-at-most-for}")
 	public void execute() {
 		RequestId.init();
 
