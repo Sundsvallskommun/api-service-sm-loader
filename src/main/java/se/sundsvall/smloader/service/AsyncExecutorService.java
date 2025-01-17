@@ -2,18 +2,21 @@ package se.sundsvall.smloader.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
  * Class responsible for async-execution of import/export services.
  *
- * The purpose with this is to detach the execution from the calling thread
- * when the call is initialized from the REST-API.
+ * The purpose with this is to detach the execution from the calling thread when the call is initialized from the
+ * REST-API.
  */
 @Service
 public class AsyncExecutorService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(AsyncExecutorService.class);
 	private final OpenEService openEService;
 	private final SupportManagementService supportManagementService;
 	private final DatabaseCleanerService databaseCleanerService;
@@ -26,12 +29,12 @@ public class AsyncExecutorService {
 
 	@Async
 	public void importCases(final LocalDateTime from, final LocalDateTime to, final String municipalityId) {
-		openEService.fetchAndSaveNewOpenECases(from, to, municipalityId);
+		openEService.fetchAndSaveNewOpenECases(from, to, municipalityId, msg -> LOGGER.error("Import: Error on manual run: {}", msg));
 	}
 
 	@Async
 	public void exportCases(final String municipalityId) {
-		supportManagementService.exportCases(municipalityId);
+		supportManagementService.exportCases(municipalityId, msg -> LOGGER.error("Export: Error on manual run: {}", msg));
 	}
 
 	@Async

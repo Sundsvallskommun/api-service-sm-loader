@@ -31,7 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 import se.sundsvall.smloader.service.DatabaseCleanerService;
 
 @SpringBootTest(properties = {
-	"scheduler.dbcleaner.cron.expression=* * * * * *", // Setup to execute every second
+	"scheduler.dbcleaner.cron=* * * * * *", // Setup to execute every second
 	"spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver",
 	"spring.datasource.url=jdbc:tc:mariadb:10.6.4:////",
 	"server.shutdown=immediate",
@@ -75,7 +75,7 @@ class DatabaseCleanerSchedulerShedlockTest {
 
 		// Verify lock
 		await().atMost(5, SECONDS)
-			.untilAsserted(() -> assertThat(getLockedAt("dbcleaner"))
+			.untilAsserted(() -> assertThat(getLockedAt("CaseDBCleanUpJob"))
 				.isCloseTo(LocalDateTime.now(systemUTC()), within(10, ChronoUnit.SECONDS)));
 
 		verify(databaseCleanerService).cleanDatabase(any(OffsetDateTime.class), eq(MUNICIPALITY_ID));

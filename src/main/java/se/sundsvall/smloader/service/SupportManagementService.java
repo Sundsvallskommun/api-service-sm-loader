@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,7 @@ public class SupportManagementService {
 		this.attachmentService = attachmentService;
 	}
 
-	public void exportCases(final String municipalityId) {
+	public void exportCases(final String municipalityId, Consumer<String> exportHealthConsumer) {
 		RequestId.init();
 		final var failedCases = new ArrayList<String>();
 		final var failedAttachments = new HashMap<String, List<String>>();
@@ -89,7 +90,7 @@ public class SupportManagementService {
 				.flatMap(errandId -> confirmDelivery(errandId, caseEntity))
 				.ifPresentOrElse(
 					errandId -> caseRepository.save(caseEntity.withDeliveryStatus(CREATED)),
-					saveFailed(caseEntity, failedCases));
+					saveFailed(caseEntity, failedCases, exportHealthConsumer));
 		});
 
 		// Avoid reporting when run only consist of previously failed (reported) cases to minimize spam
@@ -98,10 +99,11 @@ public class SupportManagementService {
 		}
 	}
 
-	private Runnable saveFailed(CaseEntity caseEntity, List<String> failedCases) {
+	private Runnable saveFailed(CaseEntity caseEntity, List<String> failedCases, Consumer<String> exportHealthConsumer) {
 		return () -> {
-			failedCases.add(caseEntity.getExternalCaseId());
 			caseRepository.save(caseEntity.withDeliveryStatus(FAILED));
+			failedCases.add(caseEntity.getExternalCaseId());
+			exportHealthConsumer.accept("Failed to export " + failedCases.size() + " errands!");
 		};
 	}
 

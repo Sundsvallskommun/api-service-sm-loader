@@ -2,6 +2,7 @@ package se.sundsvall.smloader.service.scheduler;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -29,8 +30,8 @@ class CaseProcessingSchedulerTest {
 	@Test
 	void exportCases() {
 		service.execute();
-		verify(openEServiceMock).fetchAndSaveNewOpenECases(any(LocalDateTime.class), any(LocalDateTime.class), anyString());
-		verify(supportManagementServiceMock).exportCases("2281");
+		verify(openEServiceMock).fetchAndSaveNewOpenECases(any(LocalDateTime.class), any(LocalDateTime.class), anyString(), any());
+		verify(supportManagementServiceMock).exportCases(eq("2281"), any());
 		verifyNoMoreInteractions(openEServiceMock, supportManagementServiceMock);
 	}
 }

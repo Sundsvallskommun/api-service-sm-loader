@@ -5,6 +5,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static org.awaitility.Awaitility.await;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -30,7 +31,7 @@ import se.sundsvall.smloader.service.OpenEService;
 import se.sundsvall.smloader.service.SupportManagementService;
 
 @SpringBootTest(properties = {
-	"scheduler.caseprocessing.cron.expression=* * * * * *", // Setup to execute every second
+	"scheduler.caseprocessing.cron=* * * * * *", // Setup to execute every second
 	"spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver",
 	"spring.datasource.url=jdbc:tc:mariadb:10.6.4:////",
 	"server.shutdown=immediate",
@@ -53,7 +54,7 @@ class CaseProcessingSchedulerShedlockTest {
 				await().forever()
 					.until(() -> false);
 				return null;
-			}).when(mockBean).exportCases(anyString());
+			}).when(mockBean).exportCases(anyString(), any());
 
 			return mockBean;
 		}
@@ -80,10 +81,10 @@ class CaseProcessingSchedulerShedlockTest {
 
 		// Verify lock
 		await().atMost(5, SECONDS)
-			.untilAsserted(() -> assertThat(getLockedAt("processcases"))
+			.untilAsserted(() -> assertThat(getLockedAt("CaseImportAndExportJob"))
 				.isCloseTo(LocalDateTime.now(systemUTC()), within(10, ChronoUnit.SECONDS)));
 
-		verify(supportManagementService).exportCases(anyString());
+		verify(supportManagementService).exportCases(anyString(), any());
 		verifyNoMoreInteractions(supportManagementService);
 	}
 
