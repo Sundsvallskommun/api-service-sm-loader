@@ -89,7 +89,9 @@ scheduler:
     name: 'CaseImportAndExportJob'
     cron: '${config.scheduler.cron.caseprocessing}'
     shedlock-lock-at-most-for: 'PT4M'
+    maximum-execution-time: 'PT4M'
   dbcleaner:
     name: 'CaseDBCleanUpJob'
     cron: '${config.scheduler.cron.dbcleaner}'
     shedlock-lock-at-most-for: 'PT2M'
+    maximum-execution-time: 'PT4M'

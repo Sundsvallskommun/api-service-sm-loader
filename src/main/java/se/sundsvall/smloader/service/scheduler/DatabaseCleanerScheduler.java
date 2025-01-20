@@ -29,7 +29,8 @@ public class DatabaseCleanerScheduler {
 	@Dept44Scheduled(
 		cron = "${scheduler.dbcleaner.cron}",
 		name = "${scheduler.dbcleaner.name}",
-		lockAtMostFor = "${scheduler.dbcleaner.shedlock-lock-at-most-for}")
+		lockAtMostFor = "${scheduler.dbcleaner.shedlock-lock-at-most-for}",
+		maximumExecutionTime = "${scheduler.dbcleaner.maximum-execution-time}")
 	public void execute() {
 		LOGGER.info(LOG_CLEANING_STARTED);
 		databaseCleanerService.cleanDatabase(OffsetDateTime.now().minusDays(keepDays), MUNICIPALITY_ID);
