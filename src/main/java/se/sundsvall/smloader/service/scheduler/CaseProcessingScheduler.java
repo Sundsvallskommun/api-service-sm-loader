@@ -41,7 +41,7 @@ public class CaseProcessingScheduler {
 		cron = "${scheduler.caseprocessing.cron}",
 		name = "${scheduler.caseprocessing.name}",
 		lockAtMostFor = "${scheduler.caseprocessing.shedlock-lock-at-most-for}",
-		maximumExecutionTime = 4)
+		maximumExecutionTime = "${scheduler.caseprocessing.maximum-execution-time}")
 	public void execute() {
 
 		Consumer<String> importHealthConsumer = msg -> dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, String.format("Import error: %s", msg));
