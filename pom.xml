@@ -17,7 +17,6 @@
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 		<jaxb-plugins.version>4.0.8</jaxb-plugins.version>
 		<xsoup.version>0.3.7</xsoup.version>
-		<shedlock.version>6.2.0</shedlock.version>
 	</properties>
 	<dependencies>
 		<!-- Dept44 Framework-->
@@ -60,16 +59,6 @@
 			<groupId>us.codecraft</groupId>
 			<artifactId>xsoup</artifactId>
 			<version>${xsoup.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.javacrumbs.shedlock</groupId>
-			<artifactId>shedlock-spring</artifactId>
-			<version>${shedlock.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.javacrumbs.shedlock</groupId>
-			<artifactId>shedlock-provider-jdbc-template</artifactId>
-			<version>${shedlock.version}</version>
 		</dependency>
 		<!-- Test -->
 		<dependency>
