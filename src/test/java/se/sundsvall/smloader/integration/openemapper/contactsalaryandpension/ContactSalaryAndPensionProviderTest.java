@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -52,8 +54,11 @@ class ContactSalaryAndPensionProviderTest {
 		assertThat(provider.getSupportedFamilyId()).isEqualTo("789");
 	}
 
-	@Test
-	void mapToErrand() throws Exception {
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"flow-instance-kontakt-lon-pension.xml", "flow-instance-kontakt-lon-pension-no-subject.xml"
+	})
+	void mapToErrand(String testfile) throws Exception {
 		// Arrange
 		final var priority = "MEDIUM";
 		final var category = "category";
@@ -65,14 +70,15 @@ class ContactSalaryAndPensionProviderTest {
 		when(properties.getType()).thenReturn(type);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
-		final var stringBytes = readOpenEFile("flow-instance-kontakt-lon-pension.xml");
+		final var stringBytes = readOpenEFile(testfile);
 
 		// Act
 		final var errand = provider.mapToErrand(stringBytes);
 
 		// Assert and verify
+		final var expectedTitle = testfile.equals("flow-instance-kontakt-lon-pension-no-subject.xml") ? "Kontakt lön och pension" : "Testar";
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
-		assertThat(errand.getTitle()).isEqualTo("Testar");
+		assertThat(errand.getTitle()).isEqualTo(expectedTitle);
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));

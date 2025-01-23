@@ -14,6 +14,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTAC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_CONTACT_SALARY_AND_PENSION;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameterList;
@@ -27,6 +28,7 @@ import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -75,7 +77,7 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 		return new Errand()
 			.status(STATUS_NEW)
 			.priority(Priority.fromValue(properties.getPriority()))
-			.title(result.subject())
+			.title(Optional.ofNullable(result.subject()).orElse(TITLE_CONTACT_SALARY_AND_PENSION))
 			.description(result.description())
 			.stakeholders(getStakeholders(result, users))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
