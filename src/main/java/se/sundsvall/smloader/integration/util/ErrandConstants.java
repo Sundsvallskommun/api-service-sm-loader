@@ -166,6 +166,7 @@ public final class ErrandConstants {
 	public static final String TITLE_EMPLOYERS_CERTIFICATE = "Arbetsgivarintyg";
 	public static final String TITLE_PERMISSION_ORDER = "Behörighetsorder";
 	public static final String TITLE_SUBSTITUTE_MANAGER = "Ersättare chef";
+	public static final String TITLE_CONTACT_SALARY_AND_PENSION = "Kontakt lön och pension";
 	public static final String TITLE_PRECEDENCE_OF_REEMPLOYMENT = "Företrädesrätt till återanställning";
 	public static final String TITLE_REPORT_SICK = "Sjukanmälan";
 	public static final String TITLE_SALARY_CHANGE = "Löneväxling pension";
