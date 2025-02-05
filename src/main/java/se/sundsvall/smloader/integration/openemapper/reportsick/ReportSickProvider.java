@@ -159,10 +159,14 @@ class ReportSickProvider implements OpenEMapper {
 			.displayName(DISPLAY_ADMINISTRATIVE_UNIT)));
 		Optional.ofNullable(reportSick.employmentType()).ifPresent(employmentType -> parameters.add(new Parameter().key(KEY_EMPLOYMENT_TYPE).values(List.of(employmentType))
 			.displayName(DISPLAY_EMPLOYMENT_TYPE)));
-		Optional.ofNullable(reportSick.absentStartDate()).ifPresent(absentStartDate -> parameters.add(new Parameter().key(KEY_ABSENT_START_DATE).values(List.of(absentStartDate))
-			.displayName(DISPLAY_ABSENT_START_DATE)));
 		Optional.ofNullable(reportSick.employeeTitle()).ifPresent(employeeTitle -> parameters.add(new Parameter().key(KEY_EMPLOYEE_TITLE).values(List.of(employeeTitle))
 			.displayName(DISPLAY_EMPLOYEE_TITLE)));
+		Optional.ofNullable(reportSick.absentType()).ifPresent(absentType -> parameters.add(new Parameter().key(KEY_ABSENT_TYPE).values(List.of(absentType))
+			.displayName(DISPLAY_ABSENT_TYPE)));
+		Optional.ofNullable(reportSick.absentFirstDay()).ifPresent(absentFirstDay -> parameters.add(new Parameter().key(KEY_ABSENT_FIRST_DAY).values(List.of(absentFirstDay))
+			.displayName(DISPLAY_ABSENT_FIRST_DAY)));
+		Optional.ofNullable(reportSick.absentStartDate()).ifPresent(absentStartDate -> parameters.add(new Parameter().key(KEY_ABSENT_START_DATE).values(List.of(absentStartDate))
+			.displayName(DISPLAY_ABSENT_START_DATE)));
 		Optional.ofNullable(reportSick.absentDescription()).ifPresent(absentDescription -> parameters.add(new Parameter().key(KEY_ABSENT_DESCRIPTION).values(List.of(absentDescription))
 			.displayName(DISPLAY_ABSENT_DESCRIPTION)));
 		Optional.ofNullable(reportSick.absentStartTime()).ifPresent(absentStartTime -> parameters.add(new Parameter().key(KEY_ABSENT_START_TIME).values(List.of(absentStartTime))
@@ -175,10 +179,6 @@ class ReportSickProvider implements OpenEMapper {
 			.displayName(DISPLAY_ABSENT_PERIOD_START_DATE)));
 		Optional.ofNullable(reportSick.absentPeriodEndDate()).ifPresent(absentPeriodEndDate -> parameters.add(new Parameter().key(KEY_ABSENT_PERIOD_END_DATE).values(List.of(absentPeriodEndDate))
 			.displayName(DISPLAY_ABSENT_PERIOD_END_DATE)));
-		Optional.ofNullable(reportSick.absentType()).ifPresent(absentType -> parameters.add(new Parameter().key(KEY_ABSENT_TYPE).values(List.of(absentType))
-			.displayName(DISPLAY_ABSENT_TYPE)));
-		Optional.ofNullable(reportSick.absentFirstDay()).ifPresent(absentFirstDay -> parameters.add(new Parameter().key(KEY_ABSENT_FIRST_DAY).values(List.of(absentFirstDay))
-			.displayName(DISPLAY_ABSENT_FIRST_DAY)));
 		Optional.ofNullable(reportSick.haveSickNote()).ifPresent(haveSickNote -> parameters.add(new Parameter().key(KEY_HAVE_SICK_NOTE).values(List.of(haveSickNote))
 			.displayName(DISPLAY_HAVE_SICK_NOTE)));
 

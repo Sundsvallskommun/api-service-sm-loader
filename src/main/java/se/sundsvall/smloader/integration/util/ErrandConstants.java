@@ -65,7 +65,7 @@ public final class ErrandConstants {
 	public static final String KEY_TYPE_OF_ACCESS = "typeOfAccess";
 	public static final String DISPLAY_TYPE_OF_ACCESS = "Typ av behörighet";
 	public static final String KEY_SYSTEM_ACCESS = "systemAccess";
-	public static final String DISPLAY_SYSTEM_ACCESS = "Systembehörighet";
+	public static final String DISPLAY_SYSTEM_ACCESS = "Vilken behörighet ska tilldelas?";
 	public static final String KEY_USER_TYPE_HEROMA = "userTypeHeroma";
 	public static final String DISPLAY_USER_TYPE_HEROMA = "Användartyp Heroma";
 	public static final String KEY_ACCESS_TYPE_HEROMA = "accessTypeHeroma";
@@ -74,6 +74,8 @@ public final class ErrandConstants {
 	public static final String DISPLAY_UPDATE_DESCRIPTION = "Uppdateringsbeskrivning";
 	public static final String KEY_STILL_EMPLOYED = "stillEmployed";
 	public static final String DISPLAY_STILL_EMPLOYED = "Fortfarande kommunanställd";
+	public static final String KEY_ACCESS_TEMPLATE_USER = "accessTemplateUser";
+	public static final String DISPLAY_ACCESS_TEMPLATE_USER = "Användare där behörigheten ska kopieras från";
 	public static final String KEY_NAME_TERMINATED = "nameTerminated";
 	public static final String DISPLAY_NAME_TERMINATED = "Namn på person som avslutat anställning";
 	public static final String KEY_ADMINISTRATIVE_UNIT_PART_BOU = "administrativeUnitPartBoU";

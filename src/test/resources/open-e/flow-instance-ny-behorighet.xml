@@ -93,8 +93,35 @@
 		<systemAccess>
 			<QueryID>13659</QueryID>
 			<Name><![CDATA[Vilken behörighet ska tilldelas?]]></Name>
+			<Value>Heroma</Value>
+			<Value>Adato</Value>
+			<Value>Stella</Value>
 			<Value>Rapp82</Value>
 		</systemAccess>
+		<accessTypeHeroma>
+			<QueryID>19835</QueryID>
+			<Name><![CDATA[Behörigheten avser (gäller för Heroma)]]></Name>
+			<Value>Läsbehörighet / Fullständig behörighet</Value>
+			<Value>Läsbehörighet / Schema resurshantering</Value>
+			<Value>Full uppdatering</Value>
+			<Value>Viss uppdatering</Value>
+			<Value>Kopiera behörighet från annan person (Inget behöver då väljas ovan)</Value>
+		</accessTypeHeroma>
+		<stillEmployed>
+			<QueryID>19837</QueryID>
+			<Name><![CDATA[Jobbar hen kvar i kommunen?]]></Name>
+			<Value>JA</Value>
+		</stillEmployed>
+		<accessTemplate>
+			<QueryID>19838</QueryID>
+			<Name><![CDATA[Kopiera beh?righet fr?n]]></Name>
+			<firstname><![CDATA[Kalle]]></firstname>
+			<lastname><![CDATA[Anka]]></lastname>
+			<username><![CDATA[kal10ank]]></username>
+			<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>
+			<title><![CDATA[It-konsult]]></title>
+			<organization><![CDATA[KSK Avd Digital Utveckling]]></organization>
+		</accessTemplate>
 		<fromDate>
 			<QueryID>13666</QueryID>
 			<Name><![CDATA[Startdatum för behörighet]]></Name>

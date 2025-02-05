@@ -113,20 +113,20 @@ class EmployersCertificateProvider implements OpenEMapper {
 
 	private List<Parameter> getParameters(final EmployersCertificate employersCertificate) {
 		final var parameters = new ArrayList<Parameter>();
-		Optional.ofNullable(employersCertificate.sendDigital()).ifPresent(sendDigital -> parameters.add(new Parameter().key(KEY_SEND_DIGITAL).addValuesItem(sendDigital)
-			.displayName(DISPLAY_SEND_DIGITAL)));
+		Optional.ofNullable(employersCertificate.timePeriod()).ifPresent(timePeriod -> parameters.add(new Parameter().key(KEY_TIME_PERIOD).addValuesItem(timePeriod)
+			.displayName(DISPLAY_TIME_PERIOD)));
 		Optional.ofNullable(employersCertificate.startDate()).ifPresent(startDate -> parameters.add(new Parameter().key(KEY_START_DATE).addValuesItem(startDate)
 			.displayName(DISPLAY_START_DATE)));
 		Optional.ofNullable(employersCertificate.endDate()).ifPresent(endDate -> parameters.add(new Parameter().key(KEY_END_DATE).addValuesItem(endDate)
 			.displayName(DISPLAY_END_DATE)));
-		Optional.ofNullable(employersCertificate.timePeriod()).ifPresent(timePeriod -> parameters.add(new Parameter().key(KEY_TIME_PERIOD).addValuesItem(timePeriod)
-			.displayName(DISPLAY_TIME_PERIOD)));
+		Optional.ofNullable(employersCertificate.unemploymentFund()).ifPresent(unemploymentFund -> parameters.add(new Parameter().key(KEY_UNEMPLOYMENT_FUND).addValuesItem(unemploymentFund)
+			.displayName(DISPLAY_UNEMPLOYMENT_FUND)));
+		Optional.ofNullable(employersCertificate.sendDigital()).ifPresent(sendDigital -> parameters.add(new Parameter().key(KEY_SEND_DIGITAL).addValuesItem(sendDigital)
+			.displayName(DISPLAY_SEND_DIGITAL)));
 		Optional.ofNullable(employersCertificate.consent()).ifPresent(consent -> parameters.add(new Parameter().key(KEY_CONSENT).addValuesItem(consent)
 			.displayName(DISPLAY_CONSENT)));
 		Optional.ofNullable(employersCertificate.deliveryMethod()).ifPresent(consent -> parameters.add(new Parameter().key(KEY_DELIVERY_METHOD).addValuesItem(consent)
 			.displayName(DISPLAY_DELIVERY_METHOD)));
-		Optional.ofNullable(employersCertificate.unemploymentFund()).ifPresent(unemploymentFund -> parameters.add(new Parameter().key(KEY_UNEMPLOYMENT_FUND).addValuesItem(unemploymentFund)
-			.displayName(DISPLAY_UNEMPLOYMENT_FUND)));
 
 		return parameters;
 	}
