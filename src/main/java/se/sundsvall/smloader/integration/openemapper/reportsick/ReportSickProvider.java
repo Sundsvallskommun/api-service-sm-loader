@@ -24,6 +24,8 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SIC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_END_TIMES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_START_TIMES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.GROUP_SICK_NOTE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.GROUP_SICK_PERIOD;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ABSENT_CONTINUATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ABSENT_DESCRIPTION;
@@ -197,9 +199,9 @@ class ReportSickProvider implements OpenEMapper {
 		});
 
 		if (!sickPeriodDates.isEmpty()) {
-			parameters.add(new Parameter().key(KEY_SICK_PERIOD_DATES).values(sickPeriodDates).displayName(DISPLAY_SICK_PERIOD_DATES));
-			parameters.add(new Parameter().key(KEY_SICK_PERIOD_START_TIMES).values(sickPeriodStartTimes).displayName(DISPLAY_SICK_PERIOD_START_TIMES));
-			parameters.add(new Parameter().key(KEY_SICK_PERIOD_END_TIMES).values(sickPeriodEndTimes).displayName(DISPLAY_SICK_PERIOD_END_TIMES));
+			parameters.add(new Parameter().key(KEY_SICK_PERIOD_DATES).values(sickPeriodDates).displayName(DISPLAY_SICK_PERIOD_DATES).group(GROUP_SICK_PERIOD));
+			parameters.add(new Parameter().key(KEY_SICK_PERIOD_START_TIMES).values(sickPeriodStartTimes).displayName(DISPLAY_SICK_PERIOD_START_TIMES).group(GROUP_SICK_PERIOD));
+			parameters.add(new Parameter().key(KEY_SICK_PERIOD_END_TIMES).values(sickPeriodEndTimes).displayName(DISPLAY_SICK_PERIOD_END_TIMES).group(GROUP_SICK_PERIOD));
 		}
 
 		final int countOfSickLeavePeriods = Optional.ofNullable(reportSick.countOfSickLeavePeriods()).orElse(0);
@@ -233,9 +235,9 @@ class ReportSickProvider implements OpenEMapper {
 			sickNoteEndDateRows.add(evaluateXPath(xml, pathEndDate).text());
 		}
 
-		parameters.add(new Parameter().key(KEY_SICK_NOTE_PERCENTAGES).values(sickNotePercentRows).displayName(DISPLAY_SICK_NOTE_PERCENTAGES));
-		parameters.add(new Parameter().key(KEY_SICK_NOTE_START_DATES).values(sickNoteStartDateRows).displayName(DISPLAY_SICK_NOTE_START_DATES));
-		parameters.add(new Parameter().key(KEY_SICK_NOTE_END_DATES).values(sickNoteEndDateRows).displayName(DISPLAY_SICK_NOTE_END_DATES));
+		parameters.add(new Parameter().key(KEY_SICK_NOTE_PERCENTAGES).values(sickNotePercentRows).displayName(DISPLAY_SICK_NOTE_PERCENTAGES).group(GROUP_SICK_NOTE));
+		parameters.add(new Parameter().key(KEY_SICK_NOTE_START_DATES).values(sickNoteStartDateRows).displayName(DISPLAY_SICK_NOTE_START_DATES).group(GROUP_SICK_NOTE));
+		parameters.add(new Parameter().key(KEY_SICK_NOTE_END_DATES).values(sickNoteEndDateRows).displayName(DISPLAY_SICK_NOTE_END_DATES).group(GROUP_SICK_NOTE));
 		return parameters;
 	}
 

@@ -152,12 +152,14 @@ public final class ErrandConstants {
 	public static final String DISPLAY_ABSENT_TYPE = "Ny eller förlängd sjukfrånvaro";
 	public static final String KEY_HAVE_SICK_NOTE = "haveSickNote";
 	public static final String DISPLAY_HAVE_SICK_NOTE = "Har läkarintyg";
+	public static final String GROUP_SICK_PERIOD = "sickPeriod";
 	public static final String KEY_SICK_PERIOD_DATES = "sickPeriodDates";
 	public static final String DISPLAY_SICK_PERIOD_DATES = "Sjukperiodens datum";
 	public static final String KEY_SICK_PERIOD_START_TIMES = "sickPeriodStartTimes";
 	public static final String DISPLAY_SICK_PERIOD_START_TIMES = "Sjukperiodens starttider";
 	public static final String KEY_SICK_PERIOD_END_TIMES = "sickPeriodEndTimes";
 	public static final String DISPLAY_SICK_PERIOD_END_TIMES = "Sjukperiodens sluttider";
+	public static final String GROUP_SICK_NOTE = "sickNote";
 	public static final String KEY_SICK_NOTE_PERCENTAGES = "sickNotePercentages";
 	public static final String DISPLAY_SICK_NOTE_PERCENTAGES = "Sjukskrivningsgrad i procent";
 	public static final String KEY_SICK_NOTE_START_DATES = "sickNoteStartDates";
