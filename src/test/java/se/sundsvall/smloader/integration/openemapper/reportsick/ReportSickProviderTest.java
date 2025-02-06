@@ -79,13 +79,13 @@ class ReportSickProviderTest {
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(14).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+		assertThat(errand.getParameters()).hasSize(14).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactly(
 			tuple("administrativeUnit", List.of("bou"), "Förvaltning/verksamhet"),
 			tuple("employmentType", List.of("Månadsavlönad"), "Anställningsform"),
 			tuple("employeeTitle", List.of("F040 Förskoleresurs"), "Befattning"),
 			tuple("absentType", List.of("Ny sjukfrånvaro"), "Ny eller förlängd sjukfrånvaro"),
-			tuple("absentStartDate", List.of("2024-10-11"), "Datum när sjukfrånvaro startade"),
 			tuple("absentFirstDay", List.of("2024-07-31"), "Första sjukdagen"),
+			tuple("absentStartDate", List.of("2024-10-11"), "Datum när sjukfrånvaro startade"),
 			tuple("absentDescription", List.of("Medarbetaren kom på arbetet och gick hem pga. sjukdom"), "Beskrivning av sjukfrånvaro"),
 			tuple("absentStartTime", List.of("10:00:00"), "Tidpunkt för sjukfrånvarons start"),
 			tuple("absentContinuation", List.of("Ja på heltid"), "Förlängning av sjukfrånvaro"),
@@ -151,18 +151,18 @@ class ReportSickProviderTest {
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getLabels()).hasSize(1).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(11).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+		assertThat(errand.getParameters()).hasSize(11).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactly(
 			tuple("administrativeUnit", List.of("ks"), "Förvaltning/verksamhet"),
 			tuple("employmentType", List.of("Timavlönad"), "Anställningsform"),
-			tuple("absentStartDate", List.of("2024-10-11"), "Datum när sjukfrånvaro startade"),
 			tuple("employeeTitle", List.of("3680 Barnskötare"), "Befattning"),
+			tuple("absentStartDate", List.of("2024-10-11"), "Datum när sjukfrånvaro startade"),
 			tuple("absentDescription", List.of("Medarbetaren började senare pga. sjukdom"), "Beskrivning av sjukfrånvaro"),
-			tuple("absentContinuation", List.of("Ja på deltid"), "Förlängning av sjukfrånvaro"),
 			tuple("absentLateStartTime", List.of("14:00:00"), "Tidpunkt för senare start på grund av sjukdom"),
+			tuple("absentContinuation", List.of("Ja på deltid"), "Förlängning av sjukfrånvaro"),
+			tuple("haveSickNote", List.of("Nej"), "Har läkarintyg"),
 			tuple("sickPeriodDates", List.of("2024-10-11", "2024-10-14"), "Sjukperiodens datum"),
 			tuple("sickPeriodStartTimes", List.of("14:00", "10:00"), "Sjukperiodens starttider"),
-			tuple("sickPeriodEndTimes", List.of("17:00", "14:00"), "Sjukperiodens sluttider"),
-			tuple("haveSickNote", List.of("Nej"), "Har läkarintyg"));
+			tuple("sickPeriodEndTimes", List.of("17:00", "14:00"), "Sjukperiodens sluttider"));
 
 		assertThat(errand.getStakeholders()).hasSize(3).extracting(
 			Stakeholder::getRole,

@@ -3,6 +3,7 @@ package se.sundsvall.smloader.integration.openemapper.permissionorder;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ACCESS_TEMPLATE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ACCESS_TYPE_HEROMA;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATIVE_UNIT_PART_BOU;
@@ -37,6 +38,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_UPD
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_USER_TYPE_HEROMA;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ACCESS_TEMPLATE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ACCESS_TYPE_HEROMA;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT;
@@ -184,28 +186,12 @@ class PermissionOrderProvider implements OpenEMapper {
 	private List<Parameter> getParameters(final PermissionOrder permissionOrder, final byte[] xml) {
 		final var parameters = new ArrayList<Parameter>();
 
-		Optional.ofNullable(permissionOrder.computerId()).ifPresent(computerId -> parameters.add(new Parameter().key(KEY_COMPUTER_ID).addValuesItem(computerId)
-			.displayName(DISPLAY_COMPUTER_ID)));
-		Optional.ofNullable(permissionOrder.typeOfAccess()).ifPresent(typeOfAccess -> parameters.add(new Parameter().key(KEY_TYPE_OF_ACCESS).addValuesItem(typeOfAccess)
-			.displayName(DISPLAY_TYPE_OF_ACCESS)));
-		Optional.ofNullable(permissionOrder.systemAccess()).ifPresent(systemAccess -> parameters.add(new Parameter().key(KEY_SYSTEM_ACCESS).addValuesItem(systemAccess)
-			.displayName(DISPLAY_SYSTEM_ACCESS)));
-		Optional.ofNullable(permissionOrder.startDate()).ifPresent(startDate -> parameters.add(new Parameter().key(KEY_START_DATE).addValuesItem(startDate)
-			.displayName(DISPLAY_START_DATE)));
 		Optional.ofNullable(permissionOrder.isManager()).ifPresent(isManager -> parameters.add(new Parameter().key(KEY_IS_MANAGER).addValuesItem(isManager)
 			.displayName(DISPLAY_IS_MANAGER)));
 		Optional.ofNullable(permissionOrder.notEmployee()).ifPresent(notEmployee -> parameters.add(new Parameter().key(KEY_NOT_EMPLOYEE).addValuesItem(notEmployee)
 			.displayName(DISPLAY_NOT_EMPLOYEE)));
-		Optional.ofNullable(permissionOrder.userTypeHeroma()).ifPresent(userTypeHeroma -> parameters.add(new Parameter().key(KEY_USER_TYPE_HEROMA).addValuesItem(userTypeHeroma)
-			.displayName(DISPLAY_USER_TYPE_HEROMA)));
-		Optional.ofNullable(permissionOrder.accessTypeHeroma()).ifPresent(accessTypeHeroma -> parameters.add(new Parameter().key(KEY_ACCESS_TYPE_HEROMA).addValuesItem(accessTypeHeroma)
-			.displayName(DISPLAY_ACCESS_TYPE_HEROMA)));
-		Optional.ofNullable(permissionOrder.updateDescription()).ifPresent(updateDescription -> parameters.add(new Parameter().key(KEY_UPDATE_DESCRIPTION).addValuesItem(updateDescription)
-			.displayName(DISPLAY_UPDATE_DESCRIPTION)));
-		Optional.ofNullable(permissionOrder.stillEmployed()).ifPresent(stillEmployed -> parameters.add(new Parameter().key(KEY_STILL_EMPLOYED).addValuesItem(stillEmployed)
-			.displayName(DISPLAY_STILL_EMPLOYED)));
-		Optional.ofNullable(permissionOrder.nameTerminated()).ifPresent(nameTerminated -> parameters.add(new Parameter().key(KEY_NAME_TERMINATED).addValuesItem(nameTerminated)
-			.displayName(DISPLAY_NAME_TERMINATED)));
+		Optional.ofNullable(permissionOrder.computerId()).ifPresent(computerId -> parameters.add(new Parameter().key(KEY_COMPUTER_ID).addValuesItem(computerId)
+			.displayName(DISPLAY_COMPUTER_ID)));
 
 		Optional.ofNullable(getValuesFromXPath(xml, KEY_ADMINISTRATIVE_UNIT)).ifPresent(units -> parameters.add(new Parameter().key(KEY_ADMINISTRATIVE_UNIT).values(units)
 			.displayName(DISPLAY_ADMINISTRATIVE_UNIT)));
@@ -258,6 +244,25 @@ class PermissionOrderProvider implements OpenEMapper {
 			.displayName(DISPLAY_ADMINISTRATIVE_UNIT_PART_OFK)));
 		Optional.ofNullable(getRowsFromXPath(xml, KEY_OTHER_UNITS_OFK)).ifPresent(otherUnitsOfk -> parameters.add(new Parameter().key(KEY_OTHER_UNITS_OFK).values(otherUnitsOfk)
 			.displayName(DISPLAY_OTHER_UNITS_OFK)));
+
+		Optional.ofNullable(permissionOrder.typeOfAccess()).ifPresent(typeOfAccess -> parameters.add(new Parameter().key(KEY_TYPE_OF_ACCESS).addValuesItem(typeOfAccess)
+			.displayName(DISPLAY_TYPE_OF_ACCESS)));
+		Optional.ofNullable(getValuesFromXPath(xml, KEY_SYSTEM_ACCESS)).ifPresent(systemAccesses -> parameters.add(new Parameter().key(KEY_SYSTEM_ACCESS).values(systemAccesses)
+			.displayName(DISPLAY_SYSTEM_ACCESS)));
+		Optional.ofNullable(permissionOrder.userTypeHeroma()).ifPresent(userTypeHeroma -> parameters.add(new Parameter().key(KEY_USER_TYPE_HEROMA).addValuesItem(userTypeHeroma)
+			.displayName(DISPLAY_USER_TYPE_HEROMA)));
+		Optional.ofNullable(getValuesFromXPath(xml, KEY_ACCESS_TYPE_HEROMA)).ifPresent(accessTypesHeroma -> parameters.add(new Parameter().key(KEY_ACCESS_TYPE_HEROMA).values(accessTypesHeroma)
+			.displayName(DISPLAY_ACCESS_TYPE_HEROMA)));
+		Optional.ofNullable(permissionOrder.updateDescription()).ifPresent(updateDescription -> parameters.add(new Parameter().key(KEY_UPDATE_DESCRIPTION).addValuesItem(updateDescription)
+			.displayName(DISPLAY_UPDATE_DESCRIPTION)));
+		Optional.ofNullable(permissionOrder.stillEmployed()).ifPresent(stillEmployed -> parameters.add(new Parameter().key(KEY_STILL_EMPLOYED).addValuesItem(stillEmployed)
+			.displayName(DISPLAY_STILL_EMPLOYED)));
+		Optional.ofNullable(permissionOrder.templateUsername()).ifPresent(templateUsername -> parameters.add(new Parameter().key(KEY_ACCESS_TEMPLATE_USER).addValuesItem(templateUsername)
+			.displayName(DISPLAY_ACCESS_TEMPLATE_USER)));
+		Optional.ofNullable(permissionOrder.nameTerminated()).ifPresent(nameTerminated -> parameters.add(new Parameter().key(KEY_NAME_TERMINATED).addValuesItem(nameTerminated)
+			.displayName(DISPLAY_NAME_TERMINATED)));
+		Optional.ofNullable(permissionOrder.startDate()).ifPresent(startDate -> parameters.add(new Parameter().key(KEY_START_DATE).addValuesItem(startDate)
+			.displayName(DISPLAY_START_DATE)));
 
 		return parameters;
 	}

@@ -100,14 +100,14 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 		final var parameters = new ArrayList<Parameter>();
 		Optional.ofNullable(precedenceOfReemployment.workplace()).ifPresent(workplace -> parameters.add(new Parameter().key(KEY_WORKPLACE).addValuesItem(workplace)
 			.displayName(DISPLAY_WORKPLACE)));
-		Optional.ofNullable(precedenceOfReemployment.lastDayOfPosition()).ifPresent(lastDay -> parameters.add(new Parameter().key(KEY_LAST_DAY_OF_POSITION).addValuesItem(lastDay)
-			.displayName(DISPLAY_LAST_DAY_OF_POSITION)));
 		Optional.ofNullable(precedenceOfReemployment.position()).ifPresent(position -> parameters.add(new Parameter().key(KEY_POSITION).addValuesItem(position.trim())
 			.displayName(DISPLAY_POSITION)));
-		Optional.ofNullable(precedenceOfReemployment.salaryType()).ifPresent(salaryType -> parameters.add(new Parameter().key(KEY_SALARY_TYPE).addValuesItem(salaryType.trim())
-			.displayName(DISPLAY_SALARY_TYPE)));
+		Optional.ofNullable(precedenceOfReemployment.lastDayOfPosition()).ifPresent(lastDay -> parameters.add(new Parameter().key(KEY_LAST_DAY_OF_POSITION).addValuesItem(lastDay)
+			.displayName(DISPLAY_LAST_DAY_OF_POSITION)));
 		Optional.ofNullable(precedenceOfReemployment.manager()).ifPresent(manager -> parameters.add(new Parameter().key(KEY_MANAGER).addValuesItem(manager)
 			.displayName(DISPLAY_MANAGER)));
+		Optional.ofNullable(precedenceOfReemployment.salaryType()).ifPresent(salaryType -> parameters.add(new Parameter().key(KEY_SALARY_TYPE).addValuesItem(salaryType.trim())
+			.displayName(DISPLAY_SALARY_TYPE)));
 
 		return parameters;
 	}

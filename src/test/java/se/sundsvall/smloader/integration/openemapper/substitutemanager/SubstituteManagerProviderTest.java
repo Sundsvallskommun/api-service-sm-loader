@@ -84,10 +84,10 @@ class SubstituteManagerProviderTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(3).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
+		assertThat(errand.getParameters()).hasSize(3).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactly(
+			tuple("responsibilityNumber", List.of("25610000 - AoF Arenor i samverkan"), "Ordinarie chef ansvarsnummer"),
 			tuple("startDate", List.of("2024-08-30"), "Attesteringsperiods startdatum"),
-			tuple("endDate", List.of("2024-09-27"), "Attesteringsperiods slutdatum"),
-			tuple("responsibilityNumber", List.of("25610000 - AoF Arenor i samverkan"), "Ordinarie chef ansvarsnummer"));
+			tuple("endDate", List.of("2024-09-27"), "Attesteringsperiods slutdatum"));
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
 

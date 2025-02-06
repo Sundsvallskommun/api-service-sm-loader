@@ -78,14 +78,18 @@ class PermissionOrderProviderTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(8).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
-			tuple("computerId", List.of("WB12345"), "Dator-id"),
+		assertThat(errand.getParameters()).hasSize(11).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactly(
 			tuple("isManager", List.of("Nej"), "Är chef eller ej"),
 			tuple("notEmployee", List.of("Personen ska inte ha anställning i kommunen utan har annan typ av förordnande"), "Anställning"),
+			tuple("computerId", List.of("WB12345"), "Dator-id"),
 			tuple("administrativeUnit", List.of("Överförmyndarkontoret"), "Förvaltning/verksamhet"),
 			tuple("administrativeUnitPartOfK", List.of("Hela förvaltningen"), "Del av förvaltning OfK"),
 			tuple("typeOfAccess", List.of("Ny"), "Typ av behörighet"),
-			tuple("systemAccess", List.of("Rapp82"), "Systembehörighet"),
+			tuple("systemAccess", List.of("Heroma", "Adato", "Stella", "Rapp82"), "Vilken behörighet ska tilldelas?"),
+			tuple("accessTypeHeroma", List.of("Läsbehörighet / Fullständig behörighet", "Läsbehörighet / Schema resurshantering", "Full uppdatering", "Viss uppdatering",
+				"Kopiera behörighet från annan person (Inget behöver då väljas ovan)"), "Behörighetstyp Heroma"),
+			tuple("stillEmployed", List.of("JA"), "Fortfarande kommunanställd"),
+			tuple("accessTemplateUser", List.of("kal10ank"), "Användare där behörigheten ska kopieras från"),
 			tuple("startDate", List.of("2024-09-04"), "Startdatum"));
 
 		assertThat(errand.getStakeholders()).hasSize(4).extracting(
@@ -147,15 +151,10 @@ class PermissionOrderProviderTest {
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(24).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
-			tuple("computerId", List.of("WB22334"), "Dator-id"),
+		assertThat(errand.getParameters()).hasSize(25).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactly(
 			tuple("isManager", List.of("Ja, jag är chef och har rätt att godkänna beställningen"), "Är chef eller ej"),
 			tuple("notEmployee", List.of("Personen ska inte ha anställning i kommunen utan har annan typ av förordnande"), "Anställning"),
-			tuple("typeOfAccess", List.of("Ny"), "Typ av behörighet"),
-			tuple("systemAccess", List.of("Heroma"), "Systembehörighet"),
-			tuple("userTypeHeroma", List.of("Medarbetare"), "Användartyp Heroma"),
-			tuple("uppdateDescription", List.of("Testar"), "Uppdateringsbeskrivning"),
-			tuple("stillEmployed", List.of("JA"), "Fortfarande kommunanställd"),
+			tuple("computerId", List.of("WB22334"), "Dator-id"),
 			tuple("administrativeUnit", administrativeUnit, "Förvaltning/verksamhet"),
 			tuple("administrativeUnitPartBoU", List.of("Förskola/Grundskola/Gymnasium"), "Del av förvaltning BoU"),
 			tuple("unitBoU", List.of("Testskola 1"), "Skola/enhet BoU"),
@@ -171,6 +170,12 @@ class PermissionOrderProviderTest {
 			tuple("administrativeUnitPartMK", List.of("Hela förvaltningen"), "Del av förvaltning MK"),
 			tuple("administrativeUnitPartOfK", List.of("Övrigt"), "Del av förvaltning OfK"),
 			tuple("otherUnitsOfK", List.of("Test", "Test2"), "Övriga enheter OfK"),
+			tuple("typeOfAccess", List.of("Ny"), "Typ av behörighet"),
+			tuple("systemAccess", List.of("Heroma"), "Vilken behörighet ska tilldelas?"),
+			tuple("userTypeHeroma", List.of("Medarbetare"), "Användartyp Heroma"),
+			tuple("uppdateDescription", List.of("Testar"), "Uppdateringsbeskrivning"),
+			tuple("stillEmployed", List.of("JA"), "Fortfarande kommunanställd"),
+			tuple("accessTemplateUser", List.of("tja00ank"), "Användare där behörigheten ska kopieras från"),
 			tuple("startDate", List.of("2024-10-21"), "Startdatum"));
 
 		assertThat(errand.getStakeholders()).hasSize(3).extracting(

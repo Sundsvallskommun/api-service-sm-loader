@@ -82,12 +82,12 @@ class EmployersCertificateProviderTest {
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(5).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
-			tuple("unemploymentFund", List.of("Ja"), "A-kassa"),
-			tuple("sendDigital", List.of("Nej"), "Skicka digitalt till arbetsgivarintyg.nu"),
+		assertThat(errand.getParameters()).hasSize(5).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactly(
+			tuple("timePeriod", List.of("Viss period"), "Tidsperiod"),
 			tuple("startDate", List.of("2024-01-01"), "Startdatum"),
 			tuple("endDate", List.of("2024-09-17"), "Slutdatum"),
-			tuple("timePeriod", List.of("Viss period"), "Tidsperiod"));
+			tuple("unemploymentFund", List.of("Ja"), "A-kassa"),
+			tuple("sendDigital", List.of("Nej"), "Skicka digitalt till arbetsgivarintyg.nu"));
 
 		if (oepErrandFile.contains("alternativ-adress")) {
 			assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
