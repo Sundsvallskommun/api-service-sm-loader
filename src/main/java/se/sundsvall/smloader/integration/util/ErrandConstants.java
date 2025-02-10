@@ -38,9 +38,9 @@ public final class ErrandConstants {
 	public static final String KEY_WORKPLACE = "workplace";
 	public static final String DISPLAY_WORKPLACE = "Arbetsplats";
 	public static final String KEY_POSITION = "position";
-	public static final String DISPLAY_POSITION = "Anställningsform";
+	public static final String DISPLAY_POSITION = "Löneform";
 	public static final String KEY_SALARY_TYPE = "salaryType";
-	public static final String DISPLAY_SALARY_TYPE = "Lönetyp";
+	public static final String DISPLAY_SALARY_TYPE = "Löneform";
 	public static final String KEY_MANAGER = "manager";
 	public static final String DISPLAY_MANAGER = "Chef";
 	// EmployersCertificate
@@ -129,7 +129,7 @@ public final class ErrandConstants {
 	public static final String DISPLAY_FROM_MONTH = "Månad löneväxling sker från";
 	// ReportSick
 	public static final String KEY_EMPLOYMENT_TYPE = "employmentType";
-	public static final String DISPLAY_EMPLOYMENT_TYPE = "Anställningsform";
+	public static final String DISPLAY_EMPLOYMENT_TYPE = "Löneform";
 	public static final String KEY_ABSENT_START_DATE = "absentStartDate";
 	public static final String DISPLAY_ABSENT_START_DATE = "Datum när sjukfrånvaro startade";
 	public static final String KEY_ABSENT_FIRST_DAY = "absentFirstDay";
