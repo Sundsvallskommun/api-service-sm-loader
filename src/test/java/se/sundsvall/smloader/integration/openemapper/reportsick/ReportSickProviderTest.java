@@ -83,7 +83,7 @@ class ReportSickProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(14).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName, Parameter::getGroup).containsExactly(
 			tuple("administrativeUnit", List.of("bou"), "Förvaltning/verksamhet", null),
-			tuple("employmentType", List.of("Månadsavlönad"), "Anställningsform", null),
+			tuple("employmentType", List.of("Månadsavlönad"), "Löneform", null),
 			tuple("employeeTitle", List.of("F040 Förskoleresurs"), "Befattning", null),
 			tuple("absentType", List.of("Ny sjukfrånvaro"), "Ny eller förlängd sjukfrånvaro", null),
 			tuple("absentFirstDay", List.of("2024-07-31"), "Första sjukdagen", null),
@@ -155,7 +155,7 @@ class ReportSickProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(11).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName, Parameter::getGroup).containsExactly(
 			tuple("administrativeUnit", List.of("ks"), "Förvaltning/verksamhet", null),
-			tuple("employmentType", List.of("Timavlönad"), "Anställningsform", null),
+			tuple("employmentType", List.of("Timavlönad"), "Löneform", null),
 			tuple("employeeTitle", List.of("3680 Barnskötare"), "Befattning", null),
 			tuple("absentStartDate", List.of("2024-10-11"), "Datum när sjukfrånvaro startade", null),
 			tuple("absentDescription", List.of("Medarbetaren började senare pga. sjukdom"), "Beskrivning av sjukfrånvaro", null),
