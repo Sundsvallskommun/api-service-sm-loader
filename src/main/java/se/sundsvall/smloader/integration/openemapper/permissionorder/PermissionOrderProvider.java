@@ -76,7 +76,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_UPDATE_
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_USER_TYPE_HEROMA;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
@@ -143,11 +142,7 @@ class PermissionOrderProvider implements OpenEMapper {
 	}
 
 	private List<Stakeholder> getStakeholders(final PermissionOrder permissionOrder) {
-		final var stakeholders = new ArrayList<>(List.of(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(permissionOrder.posterFirstname())
-			.lastName(permissionOrder.posterLastname())
-			.contactChannels(getContactChannels(permissionOrder.posterEmail())),
+		final var stakeholders = new ArrayList<>(List.of(
 			new Stakeholder()
 				.role(ROLE_APPLICANT)
 				.firstName(permissionOrder.applicantFirstname())

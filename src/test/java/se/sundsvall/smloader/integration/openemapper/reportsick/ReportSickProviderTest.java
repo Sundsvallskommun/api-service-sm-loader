@@ -13,7 +13,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.GROUP_SICK_
 import static se.sundsvall.smloader.integration.util.ErrandConstants.GROUP_SICK_PERIOD;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_REPORT_SICK;
@@ -97,7 +96,7 @@ class ReportSickProviderTest {
 			tuple("sickNoteStartDates", List.of("2024-07-01", "2024-07-01", "2024-07-01", "2024-07-04"), "Sjukskrivnings startdatum", GROUP_SICK_NOTE),
 			tuple("sickNoteEndDates", List.of("2024-07-31", "2024-07-31", "2024-07-31", "2024-07-18"), "Sjukskrivnings slutdatum", GROUP_SICK_NOTE));
 
-		assertThat(errand.getStakeholders()).hasSize(3).extracting(
+		assertThat(errand.getStakeholders()).hasSize(2).extracting(
 			Stakeholder::getRole,
 			Stakeholder::getFirstName,
 			Stakeholder::getLastName,
@@ -106,7 +105,6 @@ class ReportSickProviderTest {
 			Stakeholder::getExternalIdType,
 			Stakeholder::getExternalId,
 			Stakeholder::getParameters).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyList()),
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"), new ContactChannel().type("Phone").value("0701112223")), null, null, null, List.of(new Parameter()
 					.key("administrationName")
 					.values(List.of("KSK Avd Digital Utveckling")))),
@@ -166,7 +164,7 @@ class ReportSickProviderTest {
 			tuple("sickPeriodStartTimes", List.of("14:00", "10:00"), "Sjukperiodens starttider", GROUP_SICK_PERIOD),
 			tuple("sickPeriodEndTimes", List.of("17:00", "14:00"), "Sjukperiodens sluttider", GROUP_SICK_PERIOD));
 
-		assertThat(errand.getStakeholders()).hasSize(3).extracting(
+		assertThat(errand.getStakeholders()).hasSize(2).extracting(
 			Stakeholder::getRole,
 			Stakeholder::getFirstName,
 			Stakeholder::getLastName,
@@ -175,7 +173,6 @@ class ReportSickProviderTest {
 			Stakeholder::getExternalIdType,
 			Stakeholder::getExternalId,
 			Stakeholder::getParameters).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyList()),
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, List.of(new Parameter()
 					.key("administrationName")
 					.values(List.of("KSK AVD Digitalisering IT stab")))),

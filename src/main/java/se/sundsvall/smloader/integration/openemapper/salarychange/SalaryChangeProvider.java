@@ -13,7 +13,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FROM_MONTH;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_SALARY_CHANGE;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
@@ -73,18 +72,13 @@ class SalaryChangeProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final SalaryChange salaryChange) {
 		return List.of(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(salaryChange.posterFirstname())
-			.lastName(salaryChange.posterLastname())
-			.contactChannels(getContactChannels(salaryChange.posterEmail())),
-			new Stakeholder()
-				.role(ROLE_APPLICANT)
-				.firstName(salaryChange.applicantFirstname())
-				.lastName(salaryChange.applicantLastname())
-				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, salaryChange.applicantOrganization()))
-				.contactChannels(getContactChannels(salaryChange.applicantEmail()))
-				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(salaryChange.applicantLegalId())));
+			.role(ROLE_APPLICANT)
+			.firstName(salaryChange.applicantFirstname())
+			.lastName(salaryChange.applicantLastname())
+			.parameters(toParameterList(KEY_ADMINISTRATION_NAME, salaryChange.applicantOrganization()))
+			.contactChannels(getContactChannels(salaryChange.applicantEmail()))
+			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
+			.externalId(getPartyId(salaryChange.applicantLegalId())));
 	}
 
 	private List<ContactChannel> getContactChannels(final String email) {

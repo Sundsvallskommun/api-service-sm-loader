@@ -25,7 +25,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TIME_PE
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_UNEMPLOYMENT_FUND;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_EMPLOYERS_CERTIFICATE;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
@@ -85,18 +84,7 @@ class EmployersCertificateProvider implements OpenEMapper {
 	}
 
 	private List<Stakeholder> getStakeholders(final EmployersCertificate employersCertificate) {
-		return List.of(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(employersCertificate.posterFirstname())
-			.lastName(employersCertificate.posterLastname())
-			.contactChannels(getContactChannels(employersCertificate.posterEmail())),
-			getApplicant(employersCertificate));
-	}
-
-	private List<ContactChannel> getContactChannels(final String email) {
-		return List.of(new ContactChannel()
-			.type(CONTACT_CHANNEL_TYPE_EMAIL)
-			.value(email));
+		return List.of(getApplicant(employersCertificate));
 	}
 
 	private List<ContactChannel> getContactChannelsForApplicant(final String email, final String phone) {
@@ -153,6 +141,6 @@ class EmployersCertificateProvider implements OpenEMapper {
 	}
 
 	private String getReporterUserId(final EmployersCertificate employersCertificate) {
-		return employersCertificate.posterFirstname() + " " + employersCertificate.posterLastname() + "-" + employersCertificate.posterEmail();
+		return employersCertificate.applicantFirstname() + " " + employersCertificate.applicantLastname() + "-" + employersCertificate.applicantEmail();
 	}
 }

@@ -10,7 +10,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
@@ -91,12 +90,6 @@ class ContactSalaryAndPensionProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final ContactSalaryAndPension contactSalaryAndPension, final List<User> users) {
 		final var stakeholders = new ArrayList<Stakeholder>();
-
-		stakeholders.add(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(contactSalaryAndPension.posterFirstname())
-			.lastName(contactSalaryAndPension.posterLastname())
-			.contactChannels(getContactChannels(contactSalaryAndPension.posterEmail())));
 
 		if (contactSalaryAndPension.managerFirstname() != null) {
 			stakeholders.add(new Stakeholder()

@@ -10,12 +10,6 @@ record EmployersCertificate(
 
 	@XPath("/FlowInstance/Header/Status/Name") String status,
 
-	@XPath("/FlowInstance/Header/Poster/Firstname") String posterFirstname,
-
-	@XPath("/FlowInstance/Header/Poster/Lastname") String posterLastname,
-
-	@XPath("/FlowInstance/Header/Poster/Email") String posterEmail,
-
 	@XPath("/FlowInstance/Values/applicant/Firstname") String applicantFirstname,
 
 	@XPath("/FlowInstance/Values/applicant/Lastname") String applicantLastname,

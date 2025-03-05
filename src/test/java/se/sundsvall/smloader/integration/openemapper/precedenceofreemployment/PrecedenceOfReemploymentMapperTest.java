@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PRECEDENCE_OF_REEMPLOYMENT;
 
@@ -74,15 +73,14 @@ class PrecedenceOfReemploymentMapperTest {
 			tuple("manager", List.of("Joakim von Anka"), "Chef"),
 			tuple("salaryType", List.of("Månadslön"), "Löneform"));
 
-		assertThat(errand.getStakeholders()).hasSize(2).extracting(
+		assertThat(errand.getStakeholders()).extracting(
 			Stakeholder::getRole,
 			Stakeholder::getFirstName,
 			Stakeholder::getLastName,
 			Stakeholder::getContactChannels,
 			Stakeholder::getOrganizationName,
 			Stakeholder::getParameters)
-			.containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, emptyList()),
+			.containsExactly(
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se"), new ContactChannel().type("Phone").value("0701112223")), null, emptyList()));
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));

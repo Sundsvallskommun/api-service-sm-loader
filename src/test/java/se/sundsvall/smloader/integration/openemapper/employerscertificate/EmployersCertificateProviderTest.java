@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_EMPLOYERS_CERTIFICATE;
 
@@ -90,14 +89,12 @@ class EmployersCertificateProviderTest {
 			tuple("sendDigital", List.of("Nej"), "Skicka digitalt till arbetsgivarintyg.nu"));
 
 		if (oepErrandFile.contains("alternativ-adress")) {
-			assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactlyInAnyOrder(
-					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null),
+			assertThat(errand.getStakeholders()).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
+				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactly(
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "PRIVATE", partyId, "Alternativet 1", "Alternativ", "67890"));
 		} else {
-			assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
-				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactlyInAnyOrder(
-					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null),
+			assertThat(errand.getStakeholders()).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
+				Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactly(
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), "PRIVATE", partyId, "Storgatan 1", "Ankeborg", "12345"));
 		}
 
@@ -144,9 +141,8 @@ class EmployersCertificateProviderTest {
 			tuple("unemploymentFund", List.of("Nej"), "A-kassa"),
 			tuple("timePeriod", List.of("De senaste tolv månaderna"), "Tidsperiod"));
 
-		assertThat(errand.getStakeholders()).hasSize(2).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
-			Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null),
+		assertThat(errand.getStakeholders()).extracting(Stakeholder::getRole, Stakeholder::getFirstName, Stakeholder::getLastName, Stakeholder::getContactChannels,
+			Stakeholder::getExternalIdType, Stakeholder::getExternalId, Stakeholder::getAddress, Stakeholder::getCity, Stakeholder::getZipCode).containsExactly(
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Phone").value("0701112223")), "PRIVATE", partyId, "Storgatan 1", "Ankeborg", "12345"));
 
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4376"),

@@ -17,7 +17,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_D
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPROVER;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_SUBSTITUTE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
@@ -81,16 +80,11 @@ class SubstituteManagerProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final SubstituteManager substituteManager) {
 		return List.of(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(substituteManager.posterFirstname())
-			.lastName(substituteManager.posterLastname())
-			.contactChannels(getContactChannels(substituteManager.posterEmail())),
-			new Stakeholder()
-				.role(ROLE_APPLICANT)
-				.firstName(substituteManager.applicantFirstname())
-				.lastName(substituteManager.applicantLastname())
-				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, substituteManager.applicantOrganization()))
-				.contactChannels(getContactChannels(substituteManager.applicantEmail())),
+			.role(ROLE_APPLICANT)
+			.firstName(substituteManager.applicantFirstname())
+			.lastName(substituteManager.applicantLastname())
+			.parameters(toParameterList(KEY_ADMINISTRATION_NAME, substituteManager.applicantOrganization()))
+			.contactChannels(getContactChannels(substituteManager.applicantEmail())),
 			new Stakeholder()
 				.role(ROLE_SUBSTITUTE)
 				.firstName(substituteManager.substituteManagerFirstname())

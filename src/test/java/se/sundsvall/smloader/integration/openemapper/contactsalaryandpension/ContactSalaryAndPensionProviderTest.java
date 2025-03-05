@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
@@ -85,7 +84,7 @@ class ContactSalaryAndPensionProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getDescription()).isEqualTo("Jag testar att skapa ett ärende.");
 
-		assertThat(errand.getStakeholders()).hasSize(2).extracting(
+		assertThat(errand.getStakeholders()).extracting(
 			Stakeholder::getRole,
 			Stakeholder::getFirstName,
 			Stakeholder::getLastName,
@@ -93,11 +92,10 @@ class ContactSalaryAndPensionProviderTest {
 			Stakeholder::getOrganizationName,
 			Stakeholder::getExternalIdType,
 			Stakeholder::getExternalId,
-			Stakeholder::getParameters).containsExactlyInAnyOrder(
+			Stakeholder::getParameters).containsExactly(
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, List.of(new Parameter()
 					.key("administrationName")
-					.values(List.of("KSK AVD Digitalisering IT stab")))),
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyList()));
+					.values(List.of("KSK AVD Digitalisering IT stab")))));
 
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6854"),
 			new ExternalTag().key("familyId").value("174")));
@@ -138,7 +136,7 @@ class ContactSalaryAndPensionProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getDescription()).isEqualTo("Jag testar som chef eller HR-administratör");
 
-		assertThat(errand.getStakeholders()).hasSize(4).extracting(
+		assertThat(errand.getStakeholders()).hasSize(3).extracting(
 			Stakeholder::getRole,
 			Stakeholder::getFirstName,
 			Stakeholder::getLastName,
@@ -147,7 +145,6 @@ class ContactSalaryAndPensionProviderTest {
 			Stakeholder::getExternalIdType,
 			Stakeholder::getExternalId,
 			Stakeholder::getParameters).containsExactlyInAnyOrder(
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyList()),
 				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, List.of(new Parameter().key("administrationName").values(List.of("KSK AVD Digitalisering IT stab")))),
 				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), null, "PRIVATE", partyId, emptyList()),
 				tuple(ROLE_USER, "Tjatte", "Anka", List.of(new ContactChannel().type("Email").value("tjatte.anka@sundsvall.se")), null, "PRIVATE", partyId, emptyList()));

@@ -13,7 +13,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_LATEST_
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ORIGINAL_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_TWENTY_FIVE_AT_WORK;
@@ -75,18 +74,13 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 
 	private List<Stakeholder> getStakeholders(final TwentyFiveAtWork twentyFiveAtWork) {
 		return List.of(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(twentyFiveAtWork.posterFirstname())
-			.lastName(twentyFiveAtWork.posterLastname())
-			.contactChannels(getContactChannels(twentyFiveAtWork.posterEmail())),
-			new Stakeholder()
-				.role(ROLE_APPLICANT)
-				.firstName(twentyFiveAtWork.applicantFirstname())
-				.lastName(twentyFiveAtWork.applicantLastname())
-				.contactChannels(getContactChannels(twentyFiveAtWork.applicantEmail()))
-				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, twentyFiveAtWork.applicantOrganization()))
-				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
-				.externalId(getPartyId(twentyFiveAtWork.applicantLegalId())),
+			.role(ROLE_APPLICANT)
+			.firstName(twentyFiveAtWork.applicantFirstname())
+			.lastName(twentyFiveAtWork.applicantLastname())
+			.contactChannels(getContactChannels(twentyFiveAtWork.applicantEmail()))
+			.parameters(toParameterList(KEY_ADMINISTRATION_NAME, twentyFiveAtWork.applicantOrganization()))
+			.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
+			.externalId(getPartyId(twentyFiveAtWork.applicantLegalId())),
 			getEmployee(twentyFiveAtWork));
 	}
 

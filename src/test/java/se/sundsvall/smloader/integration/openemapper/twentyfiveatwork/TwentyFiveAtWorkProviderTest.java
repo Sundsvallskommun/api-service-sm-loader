@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_TWENTY_FIVE_AT_WORK;
@@ -90,7 +89,7 @@ class TwentyFiveAtWorkProviderTest {
 			tuple("latestStartDate", List.of("2021-01-01"), "Startdatum för anställning hos tidigare huvudman"));
 
 		if (oepErrandFile.contains("annan-adress")) {
-			assertThat(errand.getStakeholders()).hasSize(3).extracting(
+			assertThat(errand.getStakeholders()).hasSize(2).extracting(
 				Stakeholder::getRole,
 				Stakeholder::getFirstName,
 				Stakeholder::getLastName,
@@ -102,13 +101,12 @@ class TwentyFiveAtWorkProviderTest {
 				Stakeholder::getZipCode,
 				Stakeholder::getCity,
 				Stakeholder::getParameters).containsExactlyInAnyOrder(
-					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null, emptyList()),
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, null, null, null, List.of(new Parameter()
 						.key("administrationName")
 						.values(List.of("KSK AVD Digitalisering IT stab")))),
 					tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, "Avkroken 1", "99999", "Fjärran", emptyList()));
 		} else {
-			assertThat(errand.getStakeholders()).hasSize(3).extracting(
+			assertThat(errand.getStakeholders()).hasSize(2).extracting(
 				Stakeholder::getRole,
 				Stakeholder::getFirstName,
 				Stakeholder::getLastName,
@@ -120,7 +118,6 @@ class TwentyFiveAtWorkProviderTest {
 				Stakeholder::getZipCode,
 				Stakeholder::getCity,
 				Stakeholder::getParameters).containsExactlyInAnyOrder(
-					tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, null, null, null, emptyList()),
 					tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, null, null, null, List.of(new Parameter()
 						.key("administrationName")
 						.values(List.of("KSK AVD Digitalisering IT stab")))),

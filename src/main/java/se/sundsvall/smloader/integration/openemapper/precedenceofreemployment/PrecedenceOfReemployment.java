@@ -10,12 +10,6 @@ record PrecedenceOfReemployment(
 
 	@XPath("/FlowInstance/Header/Status/Name") String status,
 
-	@XPath("/FlowInstance/Header/Poster/Firstname") String posterFirstname,
-
-	@XPath("/FlowInstance/Header/Poster/Lastname") String posterLastname,
-
-	@XPath("/FlowInstance/Header/Poster/Email") String posterEmail,
-
 	@XPath("/FlowInstance/Values/employmentInformation/workPlace") String workplace,
 
 	@XPath("/FlowInstance/Values/employmentInformation/position") String position,
