@@ -17,7 +17,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_POSITIO
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SALARY_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_WORKPLACE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PRECEDENCE_OF_REEMPLOYMENT;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
@@ -72,17 +71,13 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 	}
 
 	private List<Stakeholder> getStakeholders(final PrecedenceOfReemployment precedenceOfReemployment) {
-		return List.of(new Stakeholder().role(ROLE_CONTACT_PERSON)
-			.firstName(precedenceOfReemployment.posterFirstname())
-			.lastName(precedenceOfReemployment.posterLastname())
-			.contactChannels(getContactChannels(precedenceOfReemployment.posterEmail(), null)),
-			new Stakeholder().role(ROLE_APPLICANT)
-				.firstName(precedenceOfReemployment.applicantFirstname())
-				.lastName(precedenceOfReemployment.applicantLastname())
-				.address(precedenceOfReemployment.applicantAddress())
-				.zipCode(precedenceOfReemployment.applicantZipCode())
-				.city(precedenceOfReemployment.applicantPostalAddress())
-				.contactChannels(getContactChannels(precedenceOfReemployment.applicantEmail(), precedenceOfReemployment.applicantPhone())));
+		return List.of(new Stakeholder().role(ROLE_APPLICANT)
+			.firstName(precedenceOfReemployment.applicantFirstname())
+			.lastName(precedenceOfReemployment.applicantLastname())
+			.address(precedenceOfReemployment.applicantAddress())
+			.zipCode(precedenceOfReemployment.applicantZipCode())
+			.city(precedenceOfReemployment.applicantPostalAddress())
+			.contactChannels(getContactChannels(precedenceOfReemployment.applicantEmail(), precedenceOfReemployment.applicantPhone())));
 	}
 
 	private List<ContactChannel> getContactChannels(final String email, final String phone) {
@@ -113,6 +108,6 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 	}
 
 	private String getReporterUserId(final PrecedenceOfReemployment precedenceOfReemployment) {
-		return precedenceOfReemployment.posterFirstname() + " " + precedenceOfReemployment.posterLastname() + "-" + precedenceOfReemployment.posterEmail();
+		return precedenceOfReemployment.applicantFirstname() + " " + precedenceOfReemployment.applicantLastname() + "-" + precedenceOfReemployment.applicantEmail();
 	}
 }

@@ -13,7 +13,6 @@ import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPROVER;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_SUBSTITUTE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
@@ -91,7 +90,7 @@ class SubstituteManagerProviderTest {
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
 
-		assertThat(errand.getStakeholders()).hasSize(5).extracting(
+		assertThat(errand.getStakeholders()).hasSize(4).extracting(
 			Stakeholder::getRole,
 			Stakeholder::getFirstName,
 			Stakeholder::getLastName,
@@ -103,7 +102,6 @@ class SubstituteManagerProviderTest {
 				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, List.of(new Parameter()
 					.key("administrationName")
 					.values(List.of("KSK AVD Digitalisering IT stab")))),
-				tuple(ROLE_CONTACT_PERSON, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, emptyList()),
 				tuple(ROLE_MANAGER, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, List.of(new Parameter()
 					.key("administrationName")
 					.values(List.of("KSK AVD Digitalisering IT stab")))),

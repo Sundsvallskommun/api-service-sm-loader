@@ -51,7 +51,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PE
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_START_TIMES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_CONTACT_PERSON;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_REPORT_SICK;
@@ -114,11 +113,7 @@ class ReportSickProvider implements OpenEMapper {
 	}
 
 	private List<Stakeholder> getStakeholders(final ReportSick reportSick) {
-		return List.of(new Stakeholder()
-			.role(ROLE_CONTACT_PERSON)
-			.firstName(reportSick.posterFirstname())
-			.lastName(reportSick.posterLastname())
-			.contactChannels(getContactChannels(reportSick.posterEmail(), null)),
+		return List.of(
 			new Stakeholder()
 				.role(ROLE_APPLICANT)
 				.firstName(reportSick.applicantFirstname())
