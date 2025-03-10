@@ -5,6 +5,7 @@ import static org.springframework.http.HttpHeaders.LOCATION;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.service.ThrowingFunction.exceptionToNull;
 import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseMapping;
 
 import generated.se.sundsvall.supportmanagement.Errand;
@@ -82,7 +83,7 @@ public class SupportManagementService {
 			// If export fails caseEntity is marked as FAILED and retry will occur next time job is run.
 			// If all is successful caseEntity is marked as CREATED.
 			openEMapper
-				.map(mapper -> mapper.mapToErrand(Base64.getDecoder().decode(caseEntity.getOpenECase())))
+				.map(exceptionToNull(mapper -> mapper.mapToErrand(Base64.getDecoder().decode(caseEntity.getOpenECase()))))
 				.flatMap(errand -> sendToSupportManagement(errand, caseEntity.getCaseMetaData().getNamespace(), caseEntity.getCaseMetaData().getMunicipalityId()))
 				.flatMap(errandId -> saveCaseMapping(errandId, caseEntity))
 				.flatMap(errandId -> exportAttachments(errandId, caseEntity, failedAttachments))

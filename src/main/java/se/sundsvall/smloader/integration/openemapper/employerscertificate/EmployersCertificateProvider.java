@@ -70,26 +70,21 @@ class EmployersCertificateProvider implements OpenEMapper {
 
 	@Override
 	public Errand mapToErrand(final byte[] xml) {
-		try {
-			final var result = extractValue(xml, EmployersCertificate.class);
+		final var result = extractValue(xml, EmployersCertificate.class);
 
-			return new Errand()
-				.status(STATUS_NEW)
-				.title(TITLE_EMPLOYERS_CERTIFICATE)
-				.priority(Priority.fromValue(properties.getPriority()))
-				.stakeholders(getStakeholders(result))
-				.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
-				.labels(properties.getLabels())
-				.channel(EXTERNAL_CHANNEL_E_SERVICE)
-				.businessRelated(false)
-				.parameters(getParameters(result))
-				.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
-					new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
-				.reporterUserId(getReporterUserId(result));
-		} catch (Exception e) {
-			LOGGER.error("Failed to map errand", e);
-			return null;
-		}
+		return new Errand()
+			.status(STATUS_NEW)
+			.title(TITLE_EMPLOYERS_CERTIFICATE)
+			.priority(Priority.fromValue(properties.getPriority()))
+			.stakeholders(getStakeholders(result))
+			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
+			.labels(properties.getLabels())
+			.channel(EXTERNAL_CHANNEL_E_SERVICE)
+			.businessRelated(false)
+			.parameters(getParameters(result))
+			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
+				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
+			.reporterUserId(getReporterUserId(result));
 	}
 
 	private List<Stakeholder> getStakeholders(final EmployersCertificate employersCertificate) {
