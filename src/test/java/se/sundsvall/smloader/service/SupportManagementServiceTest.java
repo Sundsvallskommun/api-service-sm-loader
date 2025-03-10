@@ -353,4 +353,46 @@ class SupportManagementServiceTest {
 		verify(mockMessagingClient).sendEmail(municipalityId, emailRequest);
 		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService, mockMessagingClient, mockMessagingMapper, mockAttachmentService);
 	}
+
+	@Test
+	void exportCasesWhenMapperThrowsException() {
+		// Arrange
+		final var flowInstanceXml = "flowInstanceXml".getBytes();
+		final var familyId = "161";
+		final var flowInstanceId = "123456";
+		final var municipalityId = "municipalityId";
+		final var slackRequest = new SlackRequest().message("Failed to send errand");
+		final var emailRequest = new EmailRequest().message("Failed to send errand");
+		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml)));
+		when(mockCaseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED)).thenReturn(casesToExport);
+		when(mockCaseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING)).thenReturn(casesToExport);
+
+		when(mockMapper.mapToErrand(any())).thenThrow(new RuntimeException("Error"));
+		when(mockEnvironment.getActiveProfiles()).thenReturn(new String[] {
+			"test"
+		});
+
+		when(mockMessagingMapper.toRequest(any())).thenReturn(slackRequest);
+		when(mockMessagingMapper.toEmailRequest(any(), any())).thenReturn(emailRequest);
+
+		// Act
+		supportManagementService.exportCases(municipalityId, consumerMock);
+
+		// Assert and verify
+		verify(mockCaseRepository).findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED);
+		verify(mockCaseRepository).findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING);
+		verify(mockMapper).getSupportedFamilyId();
+		verify(mockMapper).mapToErrand(flowInstanceXml);
+		verify(consumerMock).accept("Failed to export 1 errands!");
+		verify(mockCaseRepository).save(casesToExport.getFirst());
+		verify(mockMessagingMapper).toRequest(
+			matches("SmLoader failed to export cases: \\[123456\\]\\.\\nRequestId: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"));
+		verify(mockMessagingMapper).toEmailRequest(eq("SmLoader - Test"),
+			matches("SmLoader failed to export cases: \\[123456\\]\\.\\nRequestId: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"));
+		verify(mockMessagingClient).sendSlack(municipalityId, slackRequest);
+		verify(mockMessagingClient).sendEmail(municipalityId, emailRequest);
+		verify(mockEnvironment).getActiveProfiles();
+		verifyNoInteractions(mockSupportManagementClient, mockAttachmentService, mockOpenEService, mockCaseMappingRepository);
+		verifyNoMoreInteractions(mockCaseRepository, mockMapper, mockMessagingClient, mockMessagingMapper, mockAttachmentService, mockEnvironment);
+	}
 }

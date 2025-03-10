@@ -155,19 +155,4 @@ class EmployersCertificateProviderTest {
 		verify(properties).getLabels();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
-
-	@Test
-	void mapToErrandWhenException() throws Exception {
-		// Arrange
-		final var stringBytes = readOpenEFile("flow-instance-begar-arbetsgivarintyg-phone.xml");
-		when(properties.getPriority()).thenThrow(new RuntimeException("ERROR"));
-
-		// Act
-		final var errand = provider.mapToErrand(stringBytes);
-
-		// Assert and verify
-		assertThat(errand).isNull();
-		verify(properties).getPriority();
-	}
-
 }
