@@ -41,6 +41,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
@@ -49,6 +51,8 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
 class EmployersCertificateProvider implements OpenEMapper {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(EmployersCertificateProvider.class);
 
 	private final OpenEMapperProperties properties;
 
@@ -66,21 +70,26 @@ class EmployersCertificateProvider implements OpenEMapper {
 
 	@Override
 	public Errand mapToErrand(final byte[] xml) {
-		final var result = extractValue(xml, EmployersCertificate.class);
+		try {
+			final var result = extractValue(xml, EmployersCertificate.class);
 
-		return new Errand()
-			.status(STATUS_NEW)
-			.title(TITLE_EMPLOYERS_CERTIFICATE)
-			.priority(Priority.fromValue(properties.getPriority()))
-			.stakeholders(getStakeholders(result))
-			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
-			.labels(properties.getLabels())
-			.channel(EXTERNAL_CHANNEL_E_SERVICE)
-			.businessRelated(false)
-			.parameters(getParameters(result))
-			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
-				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
-			.reporterUserId(getReporterUserId(result));
+			return new Errand()
+				.status(STATUS_NEW)
+				.title(TITLE_EMPLOYERS_CERTIFICATE)
+				.priority(Priority.fromValue(properties.getPriority()))
+				.stakeholders(getStakeholders(result))
+				.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
+				.labels(properties.getLabels())
+				.channel(EXTERNAL_CHANNEL_E_SERVICE)
+				.businessRelated(false)
+				.parameters(getParameters(result))
+				.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
+					new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
+				.reporterUserId(getReporterUserId(result));
+		} catch (Exception e) {
+			LOGGER.error("Failed to map errand", e);
+			return null;
+		}
 	}
 
 	private List<Stakeholder> getStakeholders(final EmployersCertificate employersCertificate) {
