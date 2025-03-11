@@ -166,6 +166,10 @@ public final class ErrandConstants {
 	public static final String DISPLAY_SICK_NOTE_START_DATES = "Sjukskrivnings startdatum";
 	public static final String KEY_SICK_NOTE_END_DATES = "sickNoteEndDates";
 	public static final String DISPLAY_SICK_NOTE_END_DATES = "Sjukskrivnings slutdatum";
+	public static final String KEY_TIME_CARE = "timeCare";
+	public static final String DISPLAY_TIME_CARE = "Använder verksamheten TimeCare?";
+	public static final String KEY_CURRENT_SCHEDULE = "currentSchedule";
+	public static final String DISPLAY_CURRENT_SCHEDULE = "Finns pågående schemaperiod?";
 	public static final String EXTERNAL_ID_TYPE_PRIVATE = "PRIVATE";
 	public static final String TITLE_EMPLOYERS_CERTIFICATE = "Arbetsgivarintyg";
 	public static final String TITLE_PERMISSION_ORDER = "Behörighetsorder";

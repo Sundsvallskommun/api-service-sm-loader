@@ -125,6 +125,16 @@
 			<Datum_fran><![CDATA[2024-07-01]]></Datum_fran>
 			<Datum_till><![CDATA[2024-07-31]]></Datum_till>
 		</sickNotePeriodRow1>
+		<timeCareRow1>
+			<QueryID>20083</QueryID>
+			<Name><![CDATA[Använder verksamheten TimeCare för planering av schema?]]></Name>
+			<Value>Ja</Value>
+		</timeCareRow1>
+		<currentScheduleRow1>
+			<QueryID>20085</QueryID>
+			<Name><![CDATA[Finns pågående schemaperiod?]]></Name>
+			<Value>Ja</Value>
+		</currentScheduleRow1>
 		<sickNotePercentRow2>
 			<QueryID>16960</QueryID>
 			<Name><![CDATA[Omfattning på sjukfrånvaro enligt läkarintyg]]></Name>
@@ -147,6 +157,16 @@
 			<Datum_fran><![CDATA[2024-07-01]]></Datum_fran>
 			<Datum_till><![CDATA[2024-07-31]]></Datum_till>
 		</sickNotePeriodRow3>
+		<timeCareRow3>
+			<QueryID>20083</QueryID>
+			<Name><![CDATA[Använder verksamheten TimeCare för planering av schema?]]></Name>
+			<Value>Nej</Value>
+		</timeCareRow3>
+		<currentScheduleRow3>
+			<QueryID>20085</QueryID>
+			<Name><![CDATA[Finns pågående schemaperiod?]]></Name>
+			<Value>Nej</Value>
+		</currentScheduleRow3>
 		<parttimeScheduleRow3>
 			<QueryID>16972</QueryID>
 			<Name><![CDATA[Bifoga schema för deltidsarbete]]></Name>
