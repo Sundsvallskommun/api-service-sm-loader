@@ -8,7 +8,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_MAN
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_POSITION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SALARY_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_WORKPLACE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_LAST_DAY_OF_POSITION;
@@ -62,7 +62,7 @@ class PrecedenceOfReemploymentMapper implements OpenEMapper {
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
 			.labels(List.of(properties.getCategory(), properties.getType()))
-			.channel(INTERNAL_CHANNEL_E_SERVICE)
+			.channel(EXTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(result))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
