@@ -14,6 +14,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ABS
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ABSENT_START_TIME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ABSENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATIVE_UNIT;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_CURRENT_SCHEDULE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_EMPLOYEE_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_EMPLOYMENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_HAVE_SICK_NOTE;
@@ -23,6 +24,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SIC
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_DATES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_END_TIMES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_START_TIMES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_TIME_CARE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.GROUP_SICK_NOTE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.GROUP_SICK_PERIOD;
@@ -39,6 +41,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ABSENT_
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CURRENT_SCHEDULE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYEE_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYMENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
@@ -49,6 +52,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NO
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_DATES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_END_TIMES;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_START_TIMES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TIME_CARE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
@@ -79,6 +83,7 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 @Component
 class ReportSickProvider implements OpenEMapper {
 
+	private static final String VALUE_PATH = "/Value";
 	private final OpenEMapperProperties properties;
 
 	private final PartyClient partyClient;
@@ -220,19 +225,29 @@ class ReportSickProvider implements OpenEMapper {
 
 		final var sickNoteEndDateRows = new ArrayList<String>();
 
+		final var timeCareRows = new ArrayList<String>();
+
+		final var currentScheduleRows = new ArrayList<String>();
+
 		for (int i = 1; i <= countOfSickLeavePeriods; i++) {
-			final var pathPercent = "/FlowInstance/Values/sickNotePercentRow" + i + "/Value";
+			final var pathPercent = "/FlowInstance/Values/sickNotePercentRow" + i + VALUE_PATH;
 			final var pathStartDate = "/FlowInstance/Values/sickNotePeriodRow" + i + "/Datum_fran";
 			final var pathEndDate = "/FlowInstance/Values/sickNotePeriodRow" + i + "/Datum_till";
+			final var pathTimeCare = "/FlowInstance/Values/timeCareRow" + i + VALUE_PATH;
+			final var pathCurrentSchedule = "/FlowInstance/Values/currentScheduleRow" + i + VALUE_PATH;
 
 			sickNotePercentRows.add(evaluateXPath(xml, pathPercent).text());
 			sickNoteStartDateRows.add(evaluateXPath(xml, pathStartDate).text());
 			sickNoteEndDateRows.add(evaluateXPath(xml, pathEndDate).text());
+			timeCareRows.add(evaluateXPath(xml, pathTimeCare).text());
+			currentScheduleRows.add(evaluateXPath(xml, pathCurrentSchedule).text());
 		}
 
 		parameters.add(new Parameter().key(KEY_SICK_NOTE_PERCENTAGES).values(sickNotePercentRows).displayName(DISPLAY_SICK_NOTE_PERCENTAGES).group(GROUP_SICK_NOTE));
 		parameters.add(new Parameter().key(KEY_SICK_NOTE_START_DATES).values(sickNoteStartDateRows).displayName(DISPLAY_SICK_NOTE_START_DATES).group(GROUP_SICK_NOTE));
 		parameters.add(new Parameter().key(KEY_SICK_NOTE_END_DATES).values(sickNoteEndDateRows).displayName(DISPLAY_SICK_NOTE_END_DATES).group(GROUP_SICK_NOTE));
+		parameters.add(new Parameter().key(KEY_TIME_CARE).values(timeCareRows).displayName(DISPLAY_TIME_CARE).group(GROUP_SICK_NOTE));
+		parameters.add(new Parameter().key(KEY_CURRENT_SCHEDULE).values(currentScheduleRows).displayName(DISPLAY_CURRENT_SCHEDULE).group(GROUP_SICK_NOTE));
 		return parameters;
 	}
 
