@@ -34,7 +34,7 @@ import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
 
 @ExtendWith(MockitoExtension.class)
-class PrecedenceOfReemploymentMapperTest {
+class PrecedenceOfReemploymentProviderTest {
 
 	@Mock
 	private OpenEMapperProperties propertiesMock;
@@ -43,7 +43,7 @@ class PrecedenceOfReemploymentMapperTest {
 	private PartyClient partyClientMock;
 
 	@InjectMocks
-	private PrecedenceOfReemploymentMapper mapper;
+	private PrecedenceOfReemploymentProvider mapper;
 
 	@Test
 	void getSupportedFamilyId() {

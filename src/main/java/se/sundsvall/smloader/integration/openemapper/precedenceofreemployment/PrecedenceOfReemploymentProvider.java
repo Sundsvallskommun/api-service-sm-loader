@@ -43,13 +43,13 @@ import se.sundsvall.smloader.integration.party.PartyClient;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
-class PrecedenceOfReemploymentMapper implements OpenEMapper {
+class PrecedenceOfReemploymentProvider implements OpenEMapper {
 
 	private final OpenEMapperProperties properties;
 
 	private final PartyClient partyClient;
 
-	public PrecedenceOfReemploymentMapper(final @Qualifier("precedenceofreemployment") OpenEMapperProperties properties, final PartyClient partyClient) {
+	public PrecedenceOfReemploymentProvider(final @Qualifier("precedenceofreemployment") OpenEMapperProperties properties, final PartyClient partyClient) {
 		this.properties = properties;
 		this.partyClient = partyClient;
 	}
