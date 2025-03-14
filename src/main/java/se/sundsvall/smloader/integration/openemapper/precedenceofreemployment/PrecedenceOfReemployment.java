@@ -24,6 +24,8 @@ record PrecedenceOfReemployment(
 
 	@XPath("/FlowInstance/Values/applicant/Efternamn") String applicantLastname,
 
+	@XPath("/FlowInstance/Values/applicant/Personnummer") String applicantLegalId,
+
 	@XPath("/FlowInstance/Values/applicant/Adress") String applicantAddress,
 
 	@XPath("/FlowInstance/Values/applicant/Postnummer") String applicantZipCode,
@@ -32,4 +34,5 @@ record PrecedenceOfReemployment(
 
 	@XPath("/FlowInstance/Values/applicant/E-post__privat_") String applicantEmail,
 
-	@XPath("/FlowInstance/Values/applicant/Telefonnummer__privat_") String applicantPhone) {}
+	@XPath("/FlowInstance/Values/applicant/Telefonnummer__privat_") String applicantPhone) {
+}
