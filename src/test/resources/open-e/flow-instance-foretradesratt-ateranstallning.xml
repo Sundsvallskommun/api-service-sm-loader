@@ -44,7 +44,7 @@
 		<position>
 			<QueryID>18147</QueryID>
 			<Name><![CDATA[Sök din befattning]]></Name>
-			<Value>T - Tidsbegr anställning          </Value>
+			<Value>T - Tidsbegr anställning</Value>
 		</position>
 		<lastDayOfPosition>
 			<QueryID>18148</QueryID>
@@ -56,6 +56,7 @@
 			<Name><![CDATA[Kontaktuppgifter]]></Name>
 			<Fornamn><![CDATA[Kalle]]></Fornamn>
 			<Efternamn><![CDATA[Anka]]></Efternamn>
+			<Personnummer><![CDATA[123456789012]]></Personnummer>
 			<Adress><![CDATA[Storgatan 1]]></Adress>
 			<Postnummer><![CDATA[11122]]></Postnummer>
 			<Postadress><![CDATA[Ankeborg]]></Postadress>
