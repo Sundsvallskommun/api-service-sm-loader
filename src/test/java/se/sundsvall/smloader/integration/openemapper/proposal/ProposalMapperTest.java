@@ -50,7 +50,6 @@ class ProposalMapperTest {
 		assertThat(errand.getStatus()).isEqualTo("NEW");
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
-		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4234"),
-			new ExternalTag().key("familyId").value("370")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4234")));
 	}
 }
