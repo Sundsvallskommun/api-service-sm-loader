@@ -16,10 +16,6 @@
 						{
 							"value": "4242",
 							"key": "caseId"
-						},
-						{
-							"value": "161",
-							"key": "familyId"
 						}
 					],
 					"channel": "ESERVICE",

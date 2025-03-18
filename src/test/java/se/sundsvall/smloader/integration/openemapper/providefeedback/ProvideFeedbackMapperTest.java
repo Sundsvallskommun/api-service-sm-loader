@@ -47,8 +47,7 @@ class ProvideFeedbackMapperTest {
 		assertThat(errand.getStatus()).isEqualTo("NEW");
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
-		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4164"),
-			new ExternalTag().key("familyId").value("161")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4164")));
 	}
 
 	@Test
@@ -66,7 +65,6 @@ class ProvideFeedbackMapperTest {
 		assertThat(errand.getStatus()).isEqualTo("NEW");
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
-		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4179"),
-			new ExternalTag().key("familyId").value("161")));
+		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4179")));
 	}
 }
