@@ -88,7 +88,7 @@ class AttachmentServiceTest {
 
 		// Assert
 		verify(openEService).getFile(externalCaseId, fileId, queryId, instance);
-		verify(supportManagementClient).getAttachmentHeader(municipalityId, namespace, errandId);
+		verify(supportManagementClient).getAttachments(municipalityId, namespace, errandId);
 		verify(supportManagementClient).createAttachment(eq(municipalityId), eq(namespace), eq(errandId), attachmentMultiPartFileCaptor.capture());
 
 		final var attachmentMultiPartFile = attachmentMultiPartFileCaptor.getValue();
@@ -124,7 +124,7 @@ class AttachmentServiceTest {
 		attachmentService.handleAttachments(xml, caseEntity, errandId);
 
 		// Assert
-		verify(supportManagementClient).getAttachmentHeader(municipalityId, namespace, errandId);
+		verify(supportManagementClient).getAttachments(municipalityId, namespace, errandId);
 		verifyNoMoreInteractions(openEService, supportManagementClient);
 	}
 
@@ -168,7 +168,7 @@ class AttachmentServiceTest {
 		// Assert
 		assertThat(result).containsExactly(fileId);
 		verify(openEService).getFile(externalCaseId, fileId, queryId, instance);
-		verify(supportManagementClient).getAttachmentHeader(municipalityId, namespace, errandId);
+		verify(supportManagementClient).getAttachments(municipalityId, namespace, errandId);
 		verifyNoMoreInteractions(supportManagementClient);
 	}
 
@@ -222,7 +222,7 @@ class AttachmentServiceTest {
 		// Assert
 		assertThat(result).containsExactly(fileId);
 		verify(openEService).getFile(externalCaseId, fileId, queryId, instance);
-		verify(supportManagementClient).getAttachmentHeader(municipalityId, namespace, errandId);
+		verify(supportManagementClient).getAttachments(municipalityId, namespace, errandId);
 		verify(supportManagementClient).createAttachment(eq(municipalityId), eq(namespace), eq(errandId), attachmentMultiPartFileCaptor.capture());
 	}
 }

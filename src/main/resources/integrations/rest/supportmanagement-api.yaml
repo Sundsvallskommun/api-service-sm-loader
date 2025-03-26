@@ -5,7 +5,7 @@ info:
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
-  version: "9.2"
+  version: "10.1"
 tags:
   - name: Errand attachments
     description: Errand attachments operations
@@ -518,12 +518,6 @@ paths:
                 type: array
                 items:
                   type: string
-        "404":
-          description: Not Found
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
         "400":
           description: Bad request
           content:
@@ -532,6 +526,12 @@ paths:
                 oneOf:
                   - $ref: "#/components/schemas/Problem"
                   - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
         "500":
           description: Internal Server error
           content:
@@ -578,12 +578,6 @@ paths:
       responses:
         "204":
           description: No content
-        "404":
-          description: Not Found
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
         "400":
           description: Bad request
           content:
@@ -592,6 +586,12 @@ paths:
                 oneOf:
                   - $ref: "#/components/schemas/Problem"
                   - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
         "500":
           description: Internal Server error
           content:
@@ -640,12 +640,6 @@ paths:
           description: Created
           content:
             application/json: {}
-        "404":
-          description: Not Found
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
         "400":
           description: Bad request
           content:
@@ -654,6 +648,12 @@ paths:
                 oneOf:
                   - $ref: "#/components/schemas/Problem"
                   - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
         "500":
           description: Internal Server error
           content:
@@ -692,12 +692,6 @@ paths:
       responses:
         "204":
           description: No content
-        "404":
-          description: Not Found
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
         "400":
           description: Bad request
           content:
@@ -706,6 +700,12 @@ paths:
                 oneOf:
                   - $ref: "#/components/schemas/Problem"
                   - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
         "500":
           description: Internal Server error
           content:
@@ -2015,7 +2015,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ErrandAttachmentHeader"
+                  $ref: "#/components/schemas/ErrandAttachment"
         "400":
           description: Bad Request
           content:
@@ -4243,14 +4243,14 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
-  /{municipalityId}/{namespace}/errands/{errandId}/communication/{communicationId}/attachments/{attachmentId}/streamed:
+  /{municipalityId}/{namespace}/errands/{errandId}/communication/{communicationId}/attachments/{attachmentId}:
     get:
       tags:
         - Errand communication
       summary: Get a streamed communication attachment.
       description: Fetches the communication attachment that matches the provided
         id in a streamed manner
-      operationId: getMessageAttachmentStreamed
+      operationId: getMessageAttachment
       parameters:
         - name: namespace
           in: path
@@ -4303,6 +4303,58 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{namespace}/errands/{errandId}/communication/external:
+    get:
+      tags:
+        - Errand communication
+      description: Get all external communications for an errand.
+      operationId: getExternalCommunications
+      parameters:
+        - name: namespace
+          in: path
+          description: Namespace
+          required: true
+          schema:
+            pattern: "[\\w|\\-]+"
+            type: string
+          example: MY_NAMESPACE
+        - name: municipalityId
+          in: path
+          description: Municipality ID
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: errandId
+          in: path
+          description: Errand ID
+          required: true
+          schema:
+            type: string
+          example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Communication"
         "400":
           description: Bad request
           content:
@@ -4438,59 +4490,6 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
-  /{municipalityId}/{namespace}/errands/{errandId}/attachments/{attachmentId}/streamed:
-    get:
-      tags:
-        - Errand attachments
-      summary: Get a streamed attachment.
-      description: Fetches the attachment that matches the provided id in a streamed
-        manner
-      operationId: getMessageAttachmentStreamed_1
-      parameters:
-        - name: namespace
-          in: path
-          description: Namespace
-          required: true
-          schema:
-            pattern: "[\\w|\\-]+"
-            type: string
-          example: MY_NAMESPACE
-        - name: municipalityId
-          in: path
-          description: Municipality ID
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: errandId
-          in: path
-          description: Errand ID
-          required: true
-          schema:
-            type: string
-          example: b82bd8ac-1507-4d9a-958d-369261eecc15
-        - name: attachmentId
-          in: path
-          description: Errand attachment ID
-          required: true
-          schema:
-            type: string
-          example: 5f79a808-0ef3-4985-99b9-b12f23e202a7
-      responses:
-        "200":
-          description: Successful Operation
-        "404":
-          description: Not Found
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
-        "507":
-          description: Insufficient Storage
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
   /namespace-configs:
     get:
       tags:
@@ -4560,12 +4559,12 @@ components:
           type: object
           additionalProperties:
             type: object
+        status:
+          $ref: "#/components/schemas/StatusType"
         title:
           type: string
         detail:
           type: string
-        status:
-          $ref: "#/components/schemas/StatusType"
     StatusType:
       type: object
       properties:
@@ -4695,12 +4694,12 @@ components:
           type: object
           additionalProperties:
             type: object
+        status:
+          $ref: "#/components/schemas/StatusType"
         title:
           type: string
         detail:
           type: string
-        status:
-          $ref: "#/components/schemas/StatusType"
         suppressed:
           type: array
           items:
@@ -5179,6 +5178,12 @@ components:
             type: string
             description: List of labels for the errand
             example: "[\"label1\",\"label2\"]"
+        activeNotifications:
+          type: array
+          description: List of active notifications for the errand
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/Notification"
         created:
           type: string
           description: Timestamp when errand was created
@@ -5213,6 +5218,87 @@ components:
           description: Value for external tag
           example: 8849-2848
       description: External tag model
+    Notification:
+      required:
+        - description
+        - ownerId
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the notification
+          example: 123e4567-e89b-12d3-a456-426614174000
+        created:
+          type: string
+          description: Timestamp when the notification was created
+          format: date-time
+          readOnly: true
+          example: 2000-10-31T01:30:00+02:00
+        modified:
+          type: string
+          description: Timestamp when the notification was last modified
+          format: date-time
+          readOnly: true
+          example: 2000-10-31T01:30:00+02:00
+        ownerFullName:
+          type: string
+          description: Name of the owner of the notification
+          readOnly: true
+          example: Test Testorsson
+        ownerId:
+          type: string
+          description: Owner id of the notification
+          example: AD01
+        createdBy:
+          type: string
+          description: User who created the notification
+          readOnly: true
+          example: TestUser
+        createdByFullName:
+          type: string
+          description: Full name of the user who created the notification
+          readOnly: true
+          example: Test Testorsson
+        type:
+          type: string
+          description: Type of the notification
+          example: CREATE
+        description:
+          type: string
+          description: Description of the notification
+          example: Some description of the notification
+        content:
+          type: string
+          description: Content of the notification
+          example: Some content of the notification
+        expires:
+          type: string
+          description: Timestamp when the notification expires
+          format: date-time
+          example: 2000-10-31T01:30:00+02:00
+        globalAcknowledged:
+          type: boolean
+          description: Acknowledged status of the notification (global level). I.e.
+            this notification is acknowledged by anyone.
+          example: true
+        acknowledged:
+          type: boolean
+          description: Acknowledged status of the notification (owner level). I.e.
+            this notification is acknowledged by the owner of this notification.
+          example: true
+        errandId:
+          type: string
+          description: Errand id of the notification
+          readOnly: true
+          example: f0882f1d-06bc-47fd-b017-1d8307f5ce95
+        errandNumber:
+          type: string
+          description: Errand number of the notification
+          readOnly: true
+          example: PRH-2022-000001
+      description: List of active notifications for the errand
+      readOnly: true
     Parameter:
       required:
         - key
@@ -5312,85 +5398,6 @@ components:
           format: date-time
           example: 2000-10-31T01:30:00+02:00
       description: Suspension information
-    Notification:
-      required:
-        - description
-        - ownerId
-        - type
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the notification
-          example: 123e4567-e89b-12d3-a456-426614174000
-        created:
-          type: string
-          description: Timestamp when the notification was created
-          format: date-time
-          readOnly: true
-          example: 2000-10-31T01:30:00+02:00
-        modified:
-          type: string
-          description: Timestamp when the notification was last modified
-          format: date-time
-          readOnly: true
-          example: 2000-10-31T01:30:00+02:00
-        ownerFullName:
-          type: string
-          description: Name of the owner of the notification
-          readOnly: true
-          example: Test Testorsson
-        ownerId:
-          type: string
-          description: Owner id of the notification
-          example: AD01
-        createdBy:
-          type: string
-          description: User who created the notification
-          readOnly: true
-          example: TestUser
-        createdByFullName:
-          type: string
-          description: Full name of the user who created the notification
-          readOnly: true
-          example: Test Testorsson
-        type:
-          type: string
-          description: Type of the notification
-          example: CREATE
-        description:
-          type: string
-          description: Description of the notification
-          example: Some description of the notification
-        content:
-          type: string
-          description: Content of the notification
-          example: Some content of the notification
-        expires:
-          type: string
-          description: Timestamp when the notification expires
-          format: date-time
-          example: 2000-10-31T01:30:00+02:00
-        globalAcknowledged:
-          type: boolean
-          description: Acknowledged status of the notification (global level). I.e.
-            this notification is acknowledged by anyone.
-          example: true
-        acknowledged:
-          type: boolean
-          description: Acknowledged status of the notification (owner level). I.e.
-            this notification is acknowledged by the owner of this notification.
-          example: true
-        errandId:
-          type: string
-          description: Errand id of the notification
-          readOnly: true
-          example: f0882f1d-06bc-47fd-b017-1d8307f5ce95
-        errandNumber:
-          type: string
-          description: Errand number of the notification
-          readOnly: true
-          example: PRH-2022-000001
     CreateErrandNoteRequest:
       required:
         - body
@@ -5436,17 +5443,17 @@ components:
     WebMessageAttachment:
       required:
         - base64EncodedString
-        - name
+        - fileName
       type: object
       properties:
-        name:
+        fileName:
           type: string
-          description: The attachment filename
+          description: The attachment file name
           example: test.txt
         base64EncodedString:
           type: string
           description: "The attachment (file) content as a BASE64-encoded string,\
-            \ max size 10 MB"
+            \ max size 50 MB"
           format: base64
           example: aGVsbG8gd29ybGQK
       description: WebMessageAttachment model
@@ -5455,6 +5462,16 @@ components:
         - message
       type: object
       properties:
+        internal:
+          type: boolean
+          description: Indicates if the message is internal
+          example: false
+        dispatch:
+          type: boolean
+          description: Indicates if the message should be dispatched with messaging
+            or not
+          example: true
+          default: true
         message:
           type: string
           description: Message in plain text
@@ -5489,21 +5506,25 @@ components:
         message:
           type: string
           description: Message
+        internal:
+          type: boolean
+          description: Indicates if the message is internal
+          example: false
       description: SmsRequest model
     EmailAttachment:
       required:
         - base64EncodedString
-        - name
+        - fileName
       type: object
       properties:
-        name:
+        fileName:
           type: string
-          description: The attachment filename
+          description: The attachment file name
           example: test.txt
         base64EncodedString:
           type: string
           description: "The attachment (file) content as a BASE64-encoded string,\
-            \ max size 10 MB"
+            \ max size 50 MB"
           format: base64
           example: aGVsbG8gd29ybGQK
       description: EmailAttachment model
@@ -5541,6 +5562,10 @@ components:
           type: string
           description: Message in plain text
           example: Message in plain text
+        internal:
+          type: boolean
+          description: Indicates if the message is internal
+          example: false
         emailHeaders:
           type: object
           additionalProperties:
@@ -5710,8 +5735,10 @@ components:
         totalPages:
           type: integer
           format: int32
-        pageable:
-          $ref: "#/components/schemas/PageableObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
         size:
           type: integer
           format: int32
@@ -5724,18 +5751,21 @@ components:
           format: int32
         sort:
           $ref: "#/components/schemas/SortObject"
-        first:
-          type: boolean
-        last:
-          type: boolean
         numberOfElements:
           type: integer
           format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
         empty:
           type: boolean
     PageableObject:
       type: object
       properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: "#/components/schemas/SortObject"
         paged:
           type: boolean
         pageNumber:
@@ -5744,11 +5774,6 @@ components:
         pageSize:
           type: integer
           format: int32
-        offset:
-          type: integer
-          format: int64
-        sort:
-          $ref: "#/components/schemas/SortObject"
         unpaged:
           type: boolean
     SortObject:
@@ -5955,8 +5980,10 @@ components:
         totalPages:
           type: integer
           format: int32
-        pageable:
-          $ref: "#/components/schemas/PageableObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
         size:
           type: integer
           format: int32
@@ -5969,13 +5996,11 @@ components:
           format: int32
         sort:
           $ref: "#/components/schemas/SortObject"
-        first:
-          type: boolean
-        last:
-          type: boolean
         numberOfElements:
           type: integer
           format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
         empty:
           type: boolean
     Communication:
@@ -6026,6 +6051,10 @@ components:
           description: The mobile number or email adress the communication was sent
             to
           example: "+46701234567"
+        internal:
+          type: boolean
+          description: Indicates if the message is internal
+          example: false
         viewed:
           type: boolean
           description: Signal if the message has been viewed or not
@@ -6065,20 +6094,20 @@ components:
     CommunicationAttachment:
       type: object
       properties:
-        attachmentID:
+        id:
           type: string
           description: The attachment ID
           example: aGVsbG8gd29ybGQK
-        name:
+        fileName:
           type: string
-          description: The attachment filename
+          description: The attachment file name
           example: test.txt
-        contentType:
+        mimeType:
           type: string
-          description: The attachment content type
+          description: The attachment MIME type
           example: text/plain
       description: List of communicationAttachments on the message
-    ErrandAttachmentHeader:
+    ErrandAttachment:
       required:
         - fileName
       type: object
@@ -6096,5 +6125,5 @@ components:
           type: string
           description: Mime type of the file
           readOnly: true
-      description: ErrandAttachmentHeader model
+      description: ErrandAttachment model
   securitySchemes: {}
