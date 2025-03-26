@@ -2,7 +2,7 @@ package se.sundsvall.smloader.service;
 
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 
-import generated.se.sundsvall.supportmanagement.ErrandAttachmentHeader;
+import generated.se.sundsvall.supportmanagement.ErrandAttachment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -29,7 +29,7 @@ public class AttachmentService {
 	}
 
 	public List<String> handleAttachments(final byte[] xml, final CaseEntity caseEntity, final String errandId) {
-		final var attachmentHeaders = supportManagementClient.getAttachmentHeader(
+		final var attachmentHeaders = supportManagementClient.getAttachments(
 			caseEntity.getCaseMetaData().getMunicipalityId(),
 			caseEntity.getCaseMetaData().getNamespace(),
 			errandId);
@@ -60,7 +60,7 @@ public class AttachmentService {
 			.toList();
 	}
 
-	private boolean attachmentExists(final List<ErrandAttachmentHeader> errandAttachments, final Attachment attachment, final CaseEntity caseEntity, final String errandId, final InputStream inputStream) {
+	private boolean attachmentExists(final List<ErrandAttachment> errandAttachments, final Attachment attachment, final CaseEntity caseEntity, final String errandId, final InputStream inputStream) {
 		return errandAttachments.stream()
 			.filter(errandAttachment -> errandAttachment.getFileName().equals(attachment.getFileName()))
 			.map(errandAttachment -> supportManagementClient.getAttachment(caseEntity.getCaseMetaData().getMunicipalityId(), caseEntity.getCaseMetaData().getNamespace(), errandId, errandAttachment.getId()))

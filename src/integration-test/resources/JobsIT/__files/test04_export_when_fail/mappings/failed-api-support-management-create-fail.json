@@ -48,7 +48,8 @@
 					"reporterUserId": "Kalle2 Anka2-kalle2.anka@sundsvall.se",
 					"parameters": [],
 					"status": "NEW",
-					"labels": []
+					"labels": [],
+					"activeNotifications": []
 				},
 				"ignoreArrayOrder": true
 			}

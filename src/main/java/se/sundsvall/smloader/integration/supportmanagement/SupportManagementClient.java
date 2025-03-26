@@ -6,7 +6,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static se.sundsvall.smloader.integration.supportmanagement.configuration.SupportManagementConfiguration.CLIENT_ID;
 
 import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ErrandAttachmentHeader;
+import generated.se.sundsvall.supportmanagement.ErrandAttachment;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -73,7 +73,7 @@ public interface SupportManagementClient {
 	 * Get attachment on errand
 	 */
 	@GetMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/attachments", produces = APPLICATION_JSON_VALUE)
-	List<ErrandAttachmentHeader> getAttachmentHeader(
+	List<ErrandAttachment> getAttachments(
 		@PathVariable(name = "municipalityId") String municipalityId,
 		@PathVariable(name = "namespace") String namespace,
 		@PathVariable(name = "errandId") String errandId);
