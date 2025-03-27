@@ -155,7 +155,8 @@ public class SupportManagementService {
 				.findFirst()
 				.map(Errand::getId)
 				.or(() -> {
-					final var result = supportManagementClient.createErrand(municipalityId, namespace, errand);
+					// Create errand, activeNotifications is read-only and should not be sent to SupportManagement.
+					final var result = supportManagementClient.createErrand(municipalityId, namespace, errand.activeNotifications(null));
 					final var location = String.valueOf(result.getHeaders().getFirst(LOCATION));
 					return Optional.of(location.substring(location.lastIndexOf("/") + 1));
 				});

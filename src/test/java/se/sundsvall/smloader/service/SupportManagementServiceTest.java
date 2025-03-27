@@ -1,5 +1,6 @@
 package se.sundsvall.smloader.service;
 
+import static java.util.Collections.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.matches;
@@ -20,7 +21,6 @@ import generated.se.sundsvall.supportmanagement.ExternalTag;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.net.URI;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -112,11 +112,12 @@ class SupportManagementServiceTest {
 				.lastName("lastName")
 				.contactChannels(List.of(new ContactChannel()
 					.type("email")
-					.value("a.b@c")))));
+					.value("a.b@c")))))
+			.activeNotifications(emptyList());
 
 		when(mockMapper.mapToErrand(flowInstanceXml.getBytes())).thenReturn(errand);
 		when(mockSupportManagementClient.findErrands(any(), any(), any())).thenReturn(Page.empty());
-		when(mockSupportManagementClient.createErrand(municipalityId, namespace, errand)).thenReturn(ResponseEntity.created(URI.create("http://localhost:8080/errands/errandId")).build());
+		when(mockSupportManagementClient.createErrand(municipalityId, namespace, errand.activeNotifications(null))).thenReturn(ResponseEntity.created(URI.create("http://localhost:8080/errands/errandId")).build());
 		when(mockSupportManagementClient.getErrand(municipalityId, namespace, errandId)).thenReturn(errand.errandNumber(errandNumber).id(errandId));
 		when(mockCaseMappingRepository.existsById(any())).thenReturn(false);
 		when(mockOpenEService.updateOpenECaseStatus(any(), any())).thenReturn(true);
@@ -132,7 +133,7 @@ class SupportManagementServiceTest {
 		verify(mockAttachmentService).handleAttachments(flowInstanceXml.getBytes(), casesToExport.getFirst(), errandId);
 		verify(mockMapper).mapToErrand(flowInstanceXml.getBytes());
 		verify(mockSupportManagementClient).findErrands(municipalityId, namespace, "exists(externalTags.key:'caseId' and externalTags.value:'123456') and exists(externalTags.key:'familyId' and externalTags.value:'161') and channel:'ESERVICE_INTERNAL'");
-		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand);
+		verify(mockSupportManagementClient).createErrand(municipalityId, namespace, errand.activeNotifications(null));
 		verify(mockSupportManagementClient).getErrand(municipalityId, namespace, "errandId");
 		verify(mockCaseMappingRepository).existsById(CaseMappingId.create().withExternalCaseId(caseEntity.getExternalCaseId()).withErrandId("errandId"));
 		verify(mockCaseMappingRepository).save(any());
@@ -244,7 +245,7 @@ class SupportManagementServiceTest {
 		final var municipalityId = "municipalityId";
 		final var casesToExport = List.of(createCaseEntity(flowInstanceId, familyId, Base64.getEncoder().encode(flowInstanceXml)));
 		when(mockCaseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED)).thenReturn(casesToExport);
-		when(mockCaseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING)).thenReturn(Collections.emptyList());
+		when(mockCaseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING)).thenReturn(emptyList());
 
 		final var errand = new Errand()
 			.classification(new Classification()
