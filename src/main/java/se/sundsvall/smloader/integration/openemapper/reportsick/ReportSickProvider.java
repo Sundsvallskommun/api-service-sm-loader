@@ -14,17 +14,11 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ABS
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ABSENT_START_TIME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ABSENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATIVE_UNIT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_CURRENT_SCHEDULE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_EMPLOYEE_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_EMPLOYMENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_HAVE_SICK_NOTE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_NOTE_END_DATES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_NOTE_PERCENTAGES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_NOTE_START_DATES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_DATES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_END_TIMES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIOD_START_TIMES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_TIME_CARE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_NOTES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SICK_PERIODS;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.GROUP_SICK_NOTE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.GROUP_SICK_PERIOD;
@@ -41,18 +35,12 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ABSENT_
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CURRENT_SCHEDULE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYEE_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_EMPLOYMENT_TYPE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_HAVE_SICK_NOTE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_END_DATES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_PERCENTAGES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTE_START_DATES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_DATES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_END_TIMES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIOD_START_TIMES;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TIME_CARE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_NOTES;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SICK_PERIODS;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_EMPLOYEE;
@@ -84,6 +72,8 @@ import se.sundsvall.smloader.service.mapper.OpenEMapper;
 class ReportSickProvider implements OpenEMapper {
 
 	private static final String VALUE_PATH = "/Value";
+	private static final String SICK_NOTE_ROW = "%s|%s|%s|%s|%s";
+	private static final String SICK_PERIOD_ROW = "%s|%s|%s";
 	private final OpenEMapperProperties properties;
 
 	private final PartyClient partyClient;
@@ -164,9 +154,9 @@ class ReportSickProvider implements OpenEMapper {
 		Optional.ofNullable(reportSick.employeeTitle()).ifPresent(employeeTitle -> parameters.add(new Parameter().key(KEY_EMPLOYEE_TITLE).values(List.of(employeeTitle))
 			.displayName(DISPLAY_EMPLOYEE_TITLE)));
 		Optional.ofNullable(reportSick.absentType()).ifPresent(absentType -> parameters.add(new Parameter().key(KEY_ABSENT_TYPE).values(List.of(absentType))
-			.displayName(DISPLAY_ABSENT_TYPE)));
+			.displayName(DISPLAY_ABSENT_TYPE).group(GROUP_SICK_NOTE)));
 		Optional.ofNullable(reportSick.absentFirstDay()).ifPresent(absentFirstDay -> parameters.add(new Parameter().key(KEY_ABSENT_FIRST_DAY).values(List.of(absentFirstDay))
-			.displayName(DISPLAY_ABSENT_FIRST_DAY)));
+			.displayName(DISPLAY_ABSENT_FIRST_DAY).group(GROUP_SICK_NOTE)));
 		Optional.ofNullable(reportSick.absentStartDate()).ifPresent(absentStartDate -> parameters.add(new Parameter().key(KEY_ABSENT_START_DATE).values(List.of(absentStartDate))
 			.displayName(DISPLAY_ABSENT_START_DATE)));
 		Optional.ofNullable(reportSick.absentDescription()).ifPresent(absentDescription -> parameters.add(new Parameter().key(KEY_ABSENT_DESCRIPTION).values(List.of(absentDescription))
@@ -184,24 +174,17 @@ class ReportSickProvider implements OpenEMapper {
 		Optional.ofNullable(reportSick.haveSickNote()).ifPresent(haveSickNote -> parameters.add(new Parameter().key(KEY_HAVE_SICK_NOTE).values(List.of(haveSickNote))
 			.displayName(DISPLAY_HAVE_SICK_NOTE)));
 
-		final var sickPeriodDates = new ArrayList<String>();
-
-		final var sickPeriodStartTimes = new ArrayList<String>();
-
-		final var sickPeriodEndTimes = new ArrayList<String>();
-
 		final var sickPeriods = parsePeriods(xml);
 
-		sickPeriods.forEach(sickPeriod -> {
-			sickPeriodDates.add(sickPeriod.date());
-			sickPeriodStartTimes.add(sickPeriod.startTime());
-			sickPeriodEndTimes.add(sickPeriod.endTime());
-		});
+		final var sickPeriodRows = new ArrayList<String>();
 
-		if (!sickPeriodDates.isEmpty()) {
-			parameters.add(new Parameter().key(KEY_SICK_PERIOD_DATES).values(sickPeriodDates).displayName(DISPLAY_SICK_PERIOD_DATES).group(GROUP_SICK_PERIOD));
-			parameters.add(new Parameter().key(KEY_SICK_PERIOD_START_TIMES).values(sickPeriodStartTimes).displayName(DISPLAY_SICK_PERIOD_START_TIMES).group(GROUP_SICK_PERIOD));
-			parameters.add(new Parameter().key(KEY_SICK_PERIOD_END_TIMES).values(sickPeriodEndTimes).displayName(DISPLAY_SICK_PERIOD_END_TIMES).group(GROUP_SICK_PERIOD));
+		sickPeriods.forEach(sickPeriod -> sickPeriodRows.add(String.format(SICK_PERIOD_ROW,
+			Optional.ofNullable(sickPeriod.date()).orElse(""),
+			Optional.ofNullable(sickPeriod.startTime()).orElse(""),
+			Optional.ofNullable(sickPeriod.endTime()).orElse(""))));
+
+		if (!sickPeriods.isEmpty()) {
+			parameters.add(new Parameter().key(KEY_SICK_PERIODS).values(sickPeriodRows).displayName(DISPLAY_SICK_PERIODS).group(GROUP_SICK_PERIOD));
 		}
 
 		final int countOfSickLeavePeriods = Optional.ofNullable(reportSick.countOfSickLeavePeriods()).orElse(0);
@@ -219,15 +202,7 @@ class ReportSickProvider implements OpenEMapper {
 
 		final var parameters = new ArrayList<Parameter>();
 
-		final var sickNotePercentRows = new ArrayList<String>();
-
-		final var sickNoteStartDateRows = new ArrayList<String>();
-
-		final var sickNoteEndDateRows = new ArrayList<String>();
-
-		final var timeCareRows = new ArrayList<String>();
-
-		final var currentScheduleRows = new ArrayList<String>();
+		final var sickNoteRows = new ArrayList<String>();
 
 		for (int i = 1; i <= countOfSickLeavePeriods; i++) {
 			final var pathPercent = "/FlowInstance/Values/sickNotePercentRow" + i + VALUE_PATH;
@@ -236,18 +211,16 @@ class ReportSickProvider implements OpenEMapper {
 			final var pathTimeCare = "/FlowInstance/Values/timeCareRow" + i + VALUE_PATH;
 			final var pathCurrentSchedule = "/FlowInstance/Values/currentScheduleRow" + i + VALUE_PATH;
 
-			sickNotePercentRows.add(evaluateXPath(xml, pathPercent).text());
-			sickNoteStartDateRows.add(evaluateXPath(xml, pathStartDate).text());
-			sickNoteEndDateRows.add(evaluateXPath(xml, pathEndDate).text());
-			timeCareRows.add(evaluateXPath(xml, pathTimeCare).text());
-			currentScheduleRows.add(evaluateXPath(xml, pathCurrentSchedule).text());
+			sickNoteRows.add(String.format(SICK_NOTE_ROW,
+				evaluateXPath(xml, pathStartDate).text(),
+				evaluateXPath(xml, pathEndDate).text(),
+				evaluateXPath(xml, pathPercent).text(),
+				evaluateXPath(xml, pathTimeCare).text(),
+				evaluateXPath(xml, pathCurrentSchedule).text()));
 		}
 
-		parameters.add(new Parameter().key(KEY_SICK_NOTE_PERCENTAGES).values(sickNotePercentRows).displayName(DISPLAY_SICK_NOTE_PERCENTAGES).group(GROUP_SICK_NOTE));
-		parameters.add(new Parameter().key(KEY_SICK_NOTE_START_DATES).values(sickNoteStartDateRows).displayName(DISPLAY_SICK_NOTE_START_DATES).group(GROUP_SICK_NOTE));
-		parameters.add(new Parameter().key(KEY_SICK_NOTE_END_DATES).values(sickNoteEndDateRows).displayName(DISPLAY_SICK_NOTE_END_DATES).group(GROUP_SICK_NOTE));
-		parameters.add(new Parameter().key(KEY_TIME_CARE).values(timeCareRows).displayName(DISPLAY_TIME_CARE).group(GROUP_SICK_NOTE));
-		parameters.add(new Parameter().key(KEY_CURRENT_SCHEDULE).values(currentScheduleRows).displayName(DISPLAY_CURRENT_SCHEDULE).group(GROUP_SICK_NOTE));
+		parameters.add(new Parameter().key(KEY_SICK_NOTES).values(sickNoteRows).displayName(DISPLAY_SICK_NOTES).group(GROUP_SICK_NOTE));
+
 		return parameters;
 	}
 

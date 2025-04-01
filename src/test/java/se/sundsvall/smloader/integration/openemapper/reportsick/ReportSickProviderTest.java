@@ -80,24 +80,22 @@ class ReportSickProviderTest {
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(16).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName, Parameter::getGroup).containsExactly(
+		assertThat(errand.getParameters()).hasSize(12).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName, Parameter::getGroup).containsExactly(
 			tuple("administrativeUnit", List.of("bou"), "Förvaltning/verksamhet", null),
 			tuple("employmentType", List.of("Månadsavlönad"), "Löneform", null),
 			tuple("employeeTitle", List.of("F040 Förskoleresurs"), "Befattning", null),
-			tuple("absentType", List.of("Ny sjukfrånvaro"), "Ny eller förlängd sjukfrånvaro", null),
-			tuple("absentFirstDay", List.of("2024-07-31"), "Första sjukdagen", null),
+			tuple("absentType", List.of("Ny sjukfrånvaro"), "Ny eller förlängd sjukfrånvaro", GROUP_SICK_NOTE),
+			tuple("absentFirstDay", List.of("2024-07-31"), "Första sjukdagen", GROUP_SICK_NOTE),
 			tuple("absentStartDate", List.of("2024-10-11"), "Datum när sjukfrånvaro startade", null),
 			tuple("absentDescription", List.of("Medarbetaren kom på arbetet och gick hem pga. sjukdom"), "Beskrivning av sjukfrånvaro", null),
 			tuple("absentStartTime", List.of("10:00:00"), "Tidpunkt för sjukfrånvarons start", null),
 			tuple("absentContinuation", List.of("Ja på heltid"), "Förlängning av sjukfrånvaro", null),
 			tuple("absentPeriodStartDate", List.of("2024-10-11"), "Sjukperiodens startdatum", null),
 			tuple("absentPeriodEndDate", List.of("2024-10-18"), "Sjukperiodens slutdatum", null),
-			tuple("sickNotePercentages", List.of("75", "100", "50", "25"), "Sjukskrivningsgrad i procent", GROUP_SICK_NOTE),
-			tuple("sickNoteStartDates", List.of("2024-07-01", "2024-07-01", "2024-07-01", "2024-07-04"), "Sjukskrivnings startdatum", GROUP_SICK_NOTE),
-			tuple("sickNoteEndDates", List.of("2024-07-31", "2024-07-31", "2024-07-31", "2024-07-18"), "Sjukskrivnings slutdatum", GROUP_SICK_NOTE),
-			tuple("timeCare", List.of("Ja", "", "Nej", ""), "Använder verksamheten TimeCare?", GROUP_SICK_NOTE),
-			tuple("currentSchedule", List.of("Ja", "", "Nej", ""), "Finns pågående schemaperiod?", GROUP_SICK_NOTE));
-
+			tuple("sickNotes", List.of("2024-07-01|2024-07-31|75|Ja|Ja",
+				"2024-07-01|2024-07-31|100||",
+				"2024-07-01|2024-07-31|50|Nej|Nej",
+				"2024-07-04|2024-07-18|25||"), "Startdatum|Slutdatum|Sjukskrivningsgrad i procent|Använder TimeCare|Pågående schemaperiod", GROUP_SICK_NOTE));
 		assertThat(errand.getStakeholders()).hasSize(2).extracting(
 			Stakeholder::getRole,
 			Stakeholder::getFirstName,
@@ -153,7 +151,7 @@ class ReportSickProviderTest {
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
 		assertThat(errand.getLabels()).hasSize(1).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
-		assertThat(errand.getParameters()).hasSize(11).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName, Parameter::getGroup).containsExactly(
+		assertThat(errand.getParameters()).hasSize(9).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName, Parameter::getGroup).containsExactly(
 			tuple("administrativeUnit", List.of("ks"), "Förvaltning/verksamhet", null),
 			tuple("employmentType", List.of("Timavlönad"), "Löneform", null),
 			tuple("employeeTitle", List.of("3680 Barnskötare"), "Befattning", null),
@@ -162,9 +160,7 @@ class ReportSickProviderTest {
 			tuple("absentLateStartTime", List.of("14:00:00"), "Tidpunkt för senare start på grund av sjukdom", null),
 			tuple("absentContinuation", List.of("Ja på deltid"), "Förlängning av sjukfrånvaro", null),
 			tuple("haveSickNote", List.of("Nej"), "Har läkarintyg", null),
-			tuple("sickPeriodDates", List.of("2024-10-11", "2024-10-14"), "Sjukperiodens datum", GROUP_SICK_PERIOD),
-			tuple("sickPeriodStartTimes", List.of("14:00", "10:00"), "Sjukperiodens starttider", GROUP_SICK_PERIOD),
-			tuple("sickPeriodEndTimes", List.of("17:00", "14:00"), "Sjukperiodens sluttider", GROUP_SICK_PERIOD));
+			tuple("sickPeriods", List.of("2024-10-11|14:00|17:00", "2024-10-14|10:00|14:00"), "Datum|Starttid|Sluttid", GROUP_SICK_PERIOD));
 
 		assertThat(errand.getStakeholders()).hasSize(2).extracting(
 			Stakeholder::getRole,
