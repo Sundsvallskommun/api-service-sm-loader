@@ -12,7 +12,7 @@ public final class CaseMapper {
 	private CaseMapper() {}
 
 	public static CaseEntity toCaseEntity(final String openECaseId, final CaseMetaDataEntity caseMetaDataEntity, final byte[] xml) {
-		final var xmlContent = Base64.getEncoder().encodeToString(xml);
+		final var xmlContent = xml != null ? Base64.getEncoder().encodeToString(xml) : null;
 
 		return CaseEntity.create()
 			.withCaseMetaData(caseMetaDataEntity)

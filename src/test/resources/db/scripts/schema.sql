@@ -25,6 +25,7 @@
         namespace varchar(255),
         open_e_import_status varchar(255),
         open_e_update_status varchar(255),
+        stats_only bit default 0,
         primary key (family_id)
     ) engine=InnoDB;
 

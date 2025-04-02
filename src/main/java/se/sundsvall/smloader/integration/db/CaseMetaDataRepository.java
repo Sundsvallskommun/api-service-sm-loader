@@ -10,5 +10,8 @@ import se.sundsvall.smloader.integration.db.model.enums.Instance;
 @Transactional
 @CircuitBreaker(name = "CaseMetaDataRepository")
 public interface CaseMetaDataRepository extends JpaRepository<CaseMetaDataEntity, String> {
-	List<CaseMetaDataEntity> findByInstanceAndMunicipalityId(Instance instance, String municipalityId);
+
+	List<CaseMetaDataEntity> findByInstanceAndMunicipalityIdAndStatsOnly(Instance instance, String municipalityId, boolean statsOnly);
+
+	List<CaseMetaDataEntity> findByMunicipalityIdAndStatsOnly(String municipalityId, boolean statsOnly);
 }

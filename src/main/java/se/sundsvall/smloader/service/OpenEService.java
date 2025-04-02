@@ -1,7 +1,6 @@
 package se.sundsvall.smloader.service;
 
 import static java.util.Objects.nonNull;
-import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
@@ -64,6 +63,8 @@ public class OpenEService {
 		}
 
 		Arrays.stream(Instance.values()).forEach(instance -> handleCasesByInstance(instance, fromDate, effectiveToDate, municipalityId, importHealthConsumer));
+
+		fetchAndSaveStatsOnlyCaseIds(fromDate, effectiveToDate, municipalityId, importHealthConsumer);
 	}
 
 	public boolean updateOpenECaseStatus(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity) {
@@ -104,22 +105,10 @@ public class OpenEService {
 
 	private void handleCasesByInstance(final Instance instance, final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, Consumer<String> importHealthConsumer) {
 
-		final var metaDataEntities = caseMetaDataRepository.findByInstanceAndMunicipalityId(instance, municipalityId);
+		final var metaDataEntities = caseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(instance, municipalityId, false);
 
 		final var flowInstanceIds = metaDataEntities.stream()
-			.map(metaData -> {
-				try {
-					if (instance == EXTERNAL) {
-						return openEExternalClient.getErrandIds(metaData.getFamilyId(), metaData.getOpenEImportStatus(), fromDate.toString(), toDate.toString());
-					} else {
-						return openEInternalClient.getErrandIds(metaData.getFamilyId(), metaData.getOpenEImportStatus(), fromDate.toString(), toDate.toString());
-					}
-				} catch (final Exception e) {
-					LOGGER.error("Error while fetching errandIds for familyId: '{}'", metaData.getFamilyId(), e);
-					importHealthConsumer.accept("Error while fetching errands by familyId");
-					return null;
-				}
-			})
+			.map(metaData -> getFlowInstanceIds(metaData, fromDate.toString(), toDate.toString(), instance, importHealthConsumer))
 			.filter(Objects::nonNull)
 			.map(this::getErrandIds)
 			.flatMap(List::stream)
@@ -133,12 +122,45 @@ public class OpenEService {
 			}
 			final var openECase = getOpenECase(instance, flowInstanceId, importHealthConsumer);
 			final var familyId = ofNullable(openECase).map(oepCase -> getFamilyId(openECase)).orElse(null);
-			final var caseMetaData = ofNullable(familyId).map(caseMetaDataRepository::findById).orElse(empty());
+			final var caseMetaData = ofNullable(familyId).flatMap(caseMetaDataRepository::findById);
 
 			if (nonNull(openECase) && caseMetaData.isPresent()) {
 				caseRepository.save(toCaseEntity(flowInstanceId, caseMetaData.get(), openECase));
 			}
 		});
+	}
+
+	private void fetchAndSaveStatsOnlyCaseIds(final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, Consumer<String> importHealthConsumer) {
+
+		final var statsOnlyMetaDataEntities = caseMetaDataRepository.findByMunicipalityIdAndStatsOnly(municipalityId, true);
+
+		statsOnlyMetaDataEntities.forEach(metaData -> getErrandIds(getFlowInstanceIds(metaData, fromDate.toString(), toDate.toString(), metaData.getInstance(), importHealthConsumer)).stream()
+			.filter(Objects::nonNull)
+			.distinct()
+			.forEach(flowInstanceId -> processStatsOnlyCase(flowInstanceId, metaData)));
+	}
+
+	private byte[] getFlowInstanceIds(CaseMetaDataEntity caseMetaDataEntity, final String fromDate, final String toDate, final Instance instance, Consumer<String> importHealthConsumer) {
+		try {
+			if (instance == EXTERNAL) {
+				return openEExternalClient.getErrandIds(caseMetaDataEntity.getFamilyId(), caseMetaDataEntity.getOpenEImportStatus(), fromDate, toDate);
+			} else {
+				return openEInternalClient.getErrandIds(caseMetaDataEntity.getFamilyId(), caseMetaDataEntity.getOpenEImportStatus(), fromDate, toDate);
+			}
+		} catch (final Exception e) {
+			LOGGER.error("Error while fetching errandIds for familyId: '{}'", caseMetaDataEntity.getFamilyId(), e);
+			importHealthConsumer.accept("Error while fetching errands by familyId");
+			return null;
+		}
+	}
+
+	private void processStatsOnlyCase(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity) {
+		if (caseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(flowInstanceId, caseMetaDataEntity.getInstance(), caseMetaDataEntity.getMunicipalityId())) {
+			LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
+			return;
+		}
+
+		caseRepository.save(toCaseEntity(flowInstanceId, caseMetaDataEntity, null));
 	}
 
 	private List<String> getErrandIds(final byte[] xml) {
