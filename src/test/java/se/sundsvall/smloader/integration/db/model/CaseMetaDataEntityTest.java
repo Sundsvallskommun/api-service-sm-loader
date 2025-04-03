@@ -33,6 +33,7 @@ class CaseMetaDataEntityTest {
 		final var openEImportStatus = "openEImportStatus";
 		final var namespace = "namespace";
 		final var municipalityId = "municipalityId";
+		final var statsOnly = true;
 
 		final var entity = CaseMetaDataEntity.create()
 			.withFamilyId(familyId)
@@ -40,15 +41,22 @@ class CaseMetaDataEntityTest {
 			.withOpenEUpdateStatus(openEUpdateStatus)
 			.withOpenEImportStatus(openEImportStatus)
 			.withNamespace(namespace)
-			.withMunicipalityId(municipalityId);
+			.withMunicipalityId(municipalityId)
+			.withStatsOnly(statsOnly);
 
 		Assertions.assertThat(entity).hasNoNullFieldsOrProperties();
-
+		Assertions.assertThat(entity.getFamilyId()).isEqualTo(familyId);
+		Assertions.assertThat(entity.getInstance()).isEqualTo(instance);
+		Assertions.assertThat(entity.getOpenEUpdateStatus()).isEqualTo(openEUpdateStatus);
+		Assertions.assertThat(entity.getOpenEImportStatus()).isEqualTo(openEImportStatus);
+		Assertions.assertThat(entity.getNamespace()).isEqualTo(namespace);
+		Assertions.assertThat(entity.getMunicipalityId()).isEqualTo(municipalityId);
+		Assertions.assertThat(entity.isStatsOnly()).isEqualTo(statsOnly);
 	}
 
 	@Test
 	void testNoDirtOnCreatedBean() {
-		Assertions.assertThat(CaseMetaDataEntity.create()).hasAllNullFieldsOrProperties();
-		Assertions.assertThat(new CaseEntity()).hasAllNullFieldsOrProperties();
+		Assertions.assertThat(CaseMetaDataEntity.create()).hasAllNullFieldsOrPropertiesExcept("statsOnly");
+		Assertions.assertThat(new CaseEntity()).hasAllNullFieldsOrPropertiesExcept("statsOnly");
 	}
 }

@@ -30,6 +30,9 @@ public class CaseMetaDataEntity {
 	@Column(name = "municipality_id")
 	private String municipalityId;
 
+	@Column(name = "stats_only", columnDefinition = "bit default 0")
+	private boolean statsOnly;
+
 	public static CaseMetaDataEntity create() {
 		return new CaseMetaDataEntity();
 	}
@@ -112,6 +115,19 @@ public class CaseMetaDataEntity {
 		return this;
 	}
 
+	public boolean isStatsOnly() {
+		return statsOnly;
+	}
+
+	public void setStatsOnly(boolean statsOnly) {
+		this.statsOnly = statsOnly;
+	}
+
+	public CaseMetaDataEntity withStatsOnly(boolean statsOnly) {
+		this.statsOnly = statsOnly;
+		return this;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -120,18 +136,18 @@ public class CaseMetaDataEntity {
 			return false;
 		CaseMetaDataEntity that = (CaseMetaDataEntity) o;
 		return Objects.equals(familyId, that.familyId) && instance == that.instance && Objects.equals(openEUpdateStatus, that.openEUpdateStatus) && Objects.equals(openEImportStatus, that.openEImportStatus) &&
-			Objects.equals(namespace, that.namespace) && Objects.equals(municipalityId, that.municipalityId);
+			Objects.equals(namespace, that.namespace) && Objects.equals(municipalityId, that.municipalityId) && statsOnly == that.statsOnly;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(familyId, instance, openEUpdateStatus, openEImportStatus, namespace, municipalityId);
+		return Objects.hash(familyId, instance, openEUpdateStatus, openEImportStatus, namespace, municipalityId, statsOnly);
 	}
 
 	@Override
 	public String toString() {
 		return new StringBuilder("CaseMetaDataEntity [familyId=").append(familyId).append(", instance=").append(instance).append(", openEUpdateStatus=").append(openEUpdateStatus).append(", openEImportStatus=").append(openEImportStatus)
-			.append(", namespace=").append(namespace).append(", municipalityId=").append(municipalityId).append("]").toString();
+			.append(", namespace=").append(namespace).append(", municipalityId=").append(municipalityId).append(", statsOnly=").append(statsOnly).append("]").toString();
 	}
 
 }
