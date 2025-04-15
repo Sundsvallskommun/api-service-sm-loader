@@ -9,12 +9,12 @@
 			}
 		},
 		"method": "POST",
-		"urlPath": "/support-management/2281/CONTACTSUNDSVALL/errands/1234/attachments",
+		"urlPath": "/support-management/2281/SALARYANDPENSION/errands/1234/attachments",
 		"multipartPatterns": [
 			{
 				"headers": {
 					"Content-Disposition": {
-						"contains": "name=\"errandAttachment\"; filename=\"fileName1\""
+						"contains": "name=\"errandAttachment\"; filename=\"fileName2\""
 					},
 					"Content-Transfer-Encoding": {
 						"contains": "binary"
@@ -30,7 +30,7 @@
 	},
 	"response": {
 		"headers": {
-			"Location": "http://localhost:1111/support-management/CONTACTSUNDSVALL/2281/errands/1234"
+			"Location": "http://localhost:1111/support-management/SALARYANDPENSION/2281/errands/1234"
 		},
 		"status": 201
 	},

@@ -9,7 +9,7 @@
 			}
 		},
 		"method": "GET",
-		"urlPath": "/support-management/2281/CONTACTSUNDSVALL/errands/1234/attachments"
+		"urlPath": "/support-management/2281/SALARYANDPENSION/errands/1234/attachments"
 	},
 	"response": {
 		"headers": {

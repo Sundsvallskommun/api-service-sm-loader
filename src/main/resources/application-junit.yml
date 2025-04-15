@@ -26,16 +26,26 @@ integration:
   party:
     url: http://party.url
 # OpenE Services
-lamna-synpunkt:
-  family-id: 123
-  priority: MEDIUM
-  category: FEEDBACK_CATEGORY
-  type: FEEDBACK_TYPE
-sundsvallsforslaget:
-  family-id: 456
-  priority: MEDIUM
-  category: PROPOSAL_CATEGORY
-  type: PROPOSAL_TYPE
+
+# Stats-only
+stats-only:
+  services:
+    # Lämna synpunkt
+    123:
+      servicename: Lämna synpunkt
+      priority: MEDIUM
+      category: FEEDBACK_CATEGORY
+      type: FEEDBACK_TYPE
+      labels:
+        - LABEL1
+        - LABEL2
+    456:
+      servicename: Sundsvalls förslaget
+      priority: MEDIUM
+      category: PROPOSAL_CATEGORY
+      type: PROPOSAL_TYPE
+
+# OpenE Services - Other
 ersattare-chef:
   family-id: 789
   priority: MEDIUM

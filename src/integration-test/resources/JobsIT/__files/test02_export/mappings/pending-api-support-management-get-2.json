@@ -9,14 +9,14 @@
 			}
 		},
 		"method": "GET",
-		"urlPath": "/support-management/2281/CONTACTSUNDSVALL/errands/1235/attachments"
+		"urlPath": "/support-management/2281/SALARYANDPENSION/errands/1234"
 	},
 	"response": {
 		"headers": {
 			"Content-Type": "application/json"
 		},
-		"body": "[]",
+		"bodyFileName": "test02_export/mocks/support-management-errand.json",
 		"status": 200
 	},
-	"name": "api-support-management-get"
+	"name": "api-support-management-get-2"
 }

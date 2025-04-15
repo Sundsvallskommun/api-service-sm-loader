@@ -1,6 +1,6 @@
 package se.sundsvall.smloader.integration.openemapper;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,26 +14,15 @@ import se.sundsvall.smloader.Application;
 class OpenEMapperConfigurationTest {
 
 	@Autowired
-	@Qualifier("feedback")
+	@Qualifier("twentyfiveatwork")
 	private OpenEMapperProperties propertiesFeedback;
 
-	@Autowired
-	@Qualifier("proposal")
-	private OpenEMapperProperties propertiesProposal;
-
 	@Test
-	void testFeedbackProperties() {
-		assertThat(propertiesFeedback.getFamilyId()).isEqualTo("123");
+	void testTwentyFiveAtWorkProperties() {
+		assertThat(propertiesFeedback.getFamilyId()).isEqualTo("131");
 		assertThat(propertiesFeedback.getPriority()).isEqualTo("MEDIUM");
-		assertThat(propertiesFeedback.getCategory()).isEqualTo("FEEDBACK_CATEGORY");
-		assertThat(propertiesFeedback.getType()).isEqualTo("FEEDBACK_TYPE");
-	}
-
-	@Test
-	void testProposalProperties() {
-		assertThat(propertiesProposal.getFamilyId()).isEqualTo("456");
-		assertThat(propertiesProposal.getPriority()).isEqualTo("MEDIUM");
-		assertThat(propertiesProposal.getCategory()).isEqualTo("PROPOSAL_CATEGORY");
-		assertThat(propertiesProposal.getType()).isEqualTo("PROPOSAL_TYPE");
+		assertThat(propertiesFeedback.getCategory()).isEqualTo("SALARY");
+		assertThat(propertiesFeedback.getType()).isEqualTo("SALARY.OTHER");
+		assertThat(propertiesFeedback.getLabels()).hasSize(3).containsExactly("SALARY", "SALARY.OTHER", "SALARY.OTHER.TWENTY_FIVE_YEARS_GIFT");
 	}
 }

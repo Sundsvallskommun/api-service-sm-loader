@@ -25,6 +25,7 @@ integration:
     readTimeout: 20
   party:
     url: http://localhost:${wiremock.server.port:}/party
+    token-uri: http://localhost:${wiremock.server.port:}/api-gateway/token
     client-id: the-client-id
     client-secret: the-client-secret
     connectTimeout: 10
@@ -40,16 +41,21 @@ integration:
     token: token
     mailRecipient: mailRecipient
 # OpenE Services
-lamna-synpunkt:
-  family-id: 161
-  priority: LOW
-  category: FEEDBACK_CATEGORY
-  type: FEEDBACK_TYPE
-sundsvallsforslaget:
-  family-id: 370
-  priority: MEDIUM
-  category: PROPOSAL_CATEGORY
-  type: PROPOSAL_TYPE
+# Stats-only
+stats-only:
+  services:
+    # Lämna synpunkt
+    161:
+      servicename: Lämna synpunkt
+      priority: MEDIUM
+      category: FEEDBACK_CATEGORY
+      type: FEEDBACK_TYPE
+    370:
+      servicename: Sundsvalls förslaget
+      priority: MEDIUM
+      category: PROPOSAL_CATEGORY
+      type: PROPOSAL_TYPE
+# OpenE Services - Other
 ersattare-chef:
   family-id: 789
   priority: MEDIUM

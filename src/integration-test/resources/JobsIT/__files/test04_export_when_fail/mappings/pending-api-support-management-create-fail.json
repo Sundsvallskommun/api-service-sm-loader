@@ -12,42 +12,23 @@
 		"bodyPatterns": [
 			{
 				"equalToJson": {
+					"title": "Lämna synpunkt",
+					"priority": "MEDIUM",
+					"stakeholders": [],
 					"externalTags": [
 						{
-							"value": "4241",
-							"key": "caseId"
+							"key": "caseId",
+							"value": "4241"
 						}
 					],
-					"channel": "ESERVICE",
-					"description": "Testar att lämna synpunkt",
-					"stakeholders": [
-						{
-							"firstName": "Kalle",
-							"lastName": "Anka",
-							"role": "CONTACT",
-							"parameters": [],
-							"contactChannels": [
-								{
-									"type": "Email",
-									"value": "kalle.anka@sundsvall.se"
-								},
-								{
-									"type": "Phone",
-									"value": "070-1112223"
-								}
-							]
-						}
-					],
-					"businessRelated": false,
-					"title": "Testar",
-					"priority": "LOW",
+					"parameters": [],
 					"classification": {
 						"category": "FEEDBACK_CATEGORY",
 						"type": "FEEDBACK_TYPE"
 					},
-					"reporterUserId": "Kalle Anka-kalle.anka@sundsvall.se",
-					"parameters": [],
 					"status": "NEW",
+					"channel": "ESERVICE",
+					"businessRelated": false,
 					"labels": []
 				},
 				"ignoreArrayOrder": true

@@ -29,6 +29,7 @@ import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMappingId;
 import se.sundsvall.smloader.integration.messaging.MessagingClient;
+import se.sundsvall.smloader.integration.openemapper.statsonly.StatsOnlyMapper;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 import se.sundsvall.smloader.service.mapper.MessagingMapper;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
@@ -50,9 +51,11 @@ public class SupportManagementService {
 	private final MessagingMapper messagingMapper;
 	private final Environment environment;
 	private final AttachmentService attachmentService;
+	private final StatsOnlyMapper statsOnlyMapper;
 
 	public SupportManagementService(final SupportManagementClient supportManagementClient, final CaseRepository caseRepository, final CaseMappingRepository caseMappingRepository, final List<OpenEMapper> openEMappers,
-		final OpenEService openEService, final MessagingClient messagingClient, final MessagingMapper messagingMapper, final Environment environment, final AttachmentService attachmentService) {
+		final OpenEService openEService, final MessagingClient messagingClient, final MessagingMapper messagingMapper, final Environment environment, final AttachmentService attachmentService,
+		final StatsOnlyMapper statsOnlyMapper) {
 		this.supportManagementClient = supportManagementClient;
 		this.caseRepository = caseRepository;
 		this.caseMappingRepository = caseMappingRepository;
@@ -62,18 +65,30 @@ public class SupportManagementService {
 		this.messagingMapper = messagingMapper;
 		this.environment = environment;
 		this.attachmentService = attachmentService;
+		this.statsOnlyMapper = statsOnlyMapper;
 	}
 
 	public void exportCases(final String municipalityId, Consumer<String> exportHealthConsumer) {
 		RequestId.init();
-		final var failedCases = new ArrayList<String>();
 		final var failedAttachments = new HashMap<String, List<String>>();
 
+		// Fetch all cases to export
 		final var casesToExport = caseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING, FAILED);
 		final var onlyFailedCases = caseRepository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(municipalityId, PENDING).isEmpty();
 
-		// Loop over all cases
-		casesToExport.forEach(caseEntity -> {
+		final var statsOnlyCasesToExport = casesToExport.stream()
+			.filter(caseEntity -> caseEntity.getCaseMetaData().isStatsOnly())
+			.toList();
+
+		// Export all stats only cases
+		final var failedCases = new ArrayList<>(exportStatsOnlyCases(statsOnlyCasesToExport, exportHealthConsumer));
+
+		final var nonStatsOnlyCasesToExport = casesToExport.stream()
+			.filter(caseEntity -> !caseEntity.getCaseMetaData().isStatsOnly())
+			.toList();
+
+		// Loop over all non stats only cases
+		nonStatsOnlyCasesToExport.forEach(caseEntity -> {
 			final var openEMapper = Optional.ofNullable(openEMapperMap.get(caseEntity.getCaseMetaData().getFamilyId()));
 			if (openEMapper.isEmpty()) {
 				LOGGER.error("No mapper found for familyId: {}", caseEntity.getCaseMetaData().getFamilyId());
@@ -98,6 +113,26 @@ public class SupportManagementService {
 		if (!onlyFailedCases) {
 			reportFailedCases(municipalityId, failedCases, failedAttachments);
 		}
+	}
+
+	private List<String> exportStatsOnlyCases(final List<CaseEntity> statsOnlyCasesToExport, Consumer<String> exportHealthConsumer) {
+		final var failedCases = new ArrayList<String>();
+
+		// Loop over all cases
+		statsOnlyCasesToExport.forEach(caseEntity ->
+
+		statsOnlyMapper.mapToErrand(Base64.getDecoder().decode(caseEntity.getOpenECase()),
+			caseEntity.getCaseMetaData().getFamilyId(),
+			caseEntity.getCaseMetaData().getInstance())
+			.flatMap(errand -> sendToSupportManagement(errand, caseEntity.getCaseMetaData().getNamespace(), caseEntity.getCaseMetaData().getMunicipalityId()))
+			.flatMap(errandId -> saveCaseMapping(errandId, caseEntity))
+			.flatMap(errandId -> updateOpenEStatus(errandId, caseEntity))
+			.flatMap(errandId -> confirmDelivery(errandId, caseEntity))
+			.ifPresentOrElse(
+				errandId -> caseRepository.save(caseEntity.withDeliveryStatus(CREATED)),
+				saveFailed(caseEntity, failedCases, exportHealthConsumer)));
+
+		return failedCases;
 	}
 
 	private Runnable saveFailed(CaseEntity caseEntity, List<String> failedCases, Consumer<String> exportHealthConsumer) {
@@ -185,9 +220,7 @@ public class SupportManagementService {
 			final var subject = List.of(environment.getActiveProfiles()).contains(PRODUCTION) ? PROD_SUBJECT : TEST_SUBJECT;
 			StringBuilder attachmentMessage = new StringBuilder(".\n");
 			if (!failedAttachments.isEmpty()) {
-				failedAttachments.forEach((caseId, attachments) -> {
-					attachmentMessage.append(String.format(String.format("For case %s the attachments %s were not exported.%n", caseId, attachments)));
-				});
+				failedAttachments.forEach((caseId, attachments) -> attachmentMessage.append(String.format(String.format("For case %s the attachments %s were not exported.%n", caseId, attachments))));
 			}
 			var message = MESSAGE
 				.concat(failedCases.toString())

@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-423.xsd">
 	<Header>
 		<Flow>
-			<FamilyID>174</FamilyID>
+			<FamilyID>121</FamilyID>
 			<Version>3</Version>
 			<FlowID>423</FlowID>
 			<Name><![CDATA[Kontakt med SC Lön och Pension - TEST DRAKEN]]></Name>

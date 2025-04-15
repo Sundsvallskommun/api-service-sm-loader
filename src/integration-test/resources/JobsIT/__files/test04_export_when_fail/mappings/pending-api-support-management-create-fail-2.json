@@ -67,10 +67,7 @@
 		"urlPath": "/support-management/2281/SALARYANDPENSION/errands"
 	},
 	"response": {
-		"headers": {
-			"Location": "http://localhost:1111/support-management/SALARYANDPENSION/2281/errands/1234"
-		},
-		"status": 201
+		"status": 400
 	},
 	"name": "api-support-management-create"
 }
