@@ -18,7 +18,7 @@
 					"externalTags": [
 						{
 							"key": "caseId",
-							"value": "4242"
+							"value": "4241"
 						}
 					],
 					"parameters": [],
@@ -38,7 +38,7 @@
 	},
 	"response": {
 		"headers": {
-			"Location": "http://localhost:1111/support-management/CONTACTSUNDSVALL/2281/errands/1235"
+			"Location": "http://localhost:1111/support-management/CONTACTSUNDSVALL/2281/errands/1234"
 		},
 		"status": 201
 	},

@@ -4,6 +4,7 @@ import java.util.List;
 
 public class OpenEMapperProperties {
 	private String familyId;
+	private String serviceName;
 	private String category;
 	private String type;
 	private String priority;
@@ -15,6 +16,14 @@ public class OpenEMapperProperties {
 
 	public void setFamilyId(final String familyId) {
 		this.familyId = familyId;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(final String serviceName) {
+		this.serviceName = serviceName;
 	}
 
 	public String getCategory() {

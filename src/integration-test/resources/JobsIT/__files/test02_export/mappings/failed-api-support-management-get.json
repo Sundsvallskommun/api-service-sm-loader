@@ -15,7 +15,7 @@
 		"headers": {
 			"Content-Type": "application/json"
 		},
-		"bodyFileName": "test02_export/mocks/support-management-errand2.json",
+		"bodyFileName": "test02_export/mocks/support-management-errand-2.json",
 		"status": 200
 	},
 	"name": "api-support-management-get"

@@ -1,5 +1,12 @@
 package se.sundsvall.smloader.apptest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
@@ -8,13 +15,6 @@ import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
 import se.sundsvall.smloader.Application;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
 
 /**
  * JobsIT tests.
@@ -69,7 +69,7 @@ class JobsIT extends AbstractAppTest {
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse()
 			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, PENDING, FAILED).isEmpty())
-			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, CREATED).size() == 3);
+			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, CREATED).size() == 4);
 	}
 
 	@Test
@@ -104,7 +104,7 @@ class JobsIT extends AbstractAppTest {
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse()
 			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, PENDING).isEmpty())
-			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, FAILED).size() == 2);
+			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, FAILED).size() == 3);
 	}
 
 	@Test
@@ -121,7 +121,7 @@ class JobsIT extends AbstractAppTest {
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse()
 			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, PENDING, FAILED).isEmpty())
-			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, CREATED).size() == 3);
+			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, CREATED).size() == 4);
 	}
 
 	@Test
@@ -138,6 +138,6 @@ class JobsIT extends AbstractAppTest {
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse()
 			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, PENDING, FAILED).isEmpty())
-			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, CREATED).size() == 3);
+			.andVerifyThat(() -> repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, CREATED).size() == 4);
 	}
 }

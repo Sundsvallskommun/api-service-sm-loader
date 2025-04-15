@@ -6,13 +6,13 @@
 			}
 		},
 		"method": "GET",
-		"urlPath": "/open-e-internal/api/instanceapi/getinstances/family/174/Inskickat"
+		"urlPath": "/open-e-internal/api/instanceapi/getinstances/family/121/Prelimin%C3%A4r"
 	},
 	"response": {
 		"headers": {
 			"Content-Type": "text/xml;charset=ISO-8859-1"
 		},
-		"bodyFileName": "test01_import/mocks/api-open-e-instanses-174.xml",
+		"bodyFileName": "test01_import/mocks/api-open-e-instanses-121.xml",
 		"status": 200
 	},
 	"name": "api-open-e-getinstances"

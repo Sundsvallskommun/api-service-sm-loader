@@ -6,14 +6,14 @@
 			}
 		},
 		"method": "GET",
-		"urlPath": "/open-e-external/api/fileuploadqueryapi/getfile/4242/queryId1/fileId2"
+		"urlPath": "/open-e-internal/api/instanceapi/getinstance/111111/xml"
 	},
 	"response": {
 		"headers": {
-			"Content-Type": "application/pdf"
+			"Content-Type": "text/xml;charset=ISO-8859-1"
 		},
-		"bodyFileName": "test06_export_when_attachment_exists/mocks/test2.jpg",
+		"bodyFileName": "test01_import/mocks/flow-instance-kontakt-lon-pension.xml",
 		"status": 200
 	},
-	"name": "api-open-e-get-file"
+	"name": "api-open-e-getinstance"
 }
