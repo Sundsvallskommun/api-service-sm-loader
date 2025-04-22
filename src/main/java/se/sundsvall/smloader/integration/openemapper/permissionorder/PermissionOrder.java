@@ -42,7 +42,7 @@ record PermissionOrder(
 
 	@XPath("/FlowInstance/Values/user/lastname") String userLastname,
 
-	@XPath("/FlowInstance/Values/user/username") String userUsername,
+	@XPath("/FlowInstance/Values/user/username") String userUserId,
 
 	@XPath("/FlowInstance/Values/user/citizenIdentifier") String userLegalId,
 

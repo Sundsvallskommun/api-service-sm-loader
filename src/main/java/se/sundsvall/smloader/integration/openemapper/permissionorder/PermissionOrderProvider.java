@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ACCESS_TEMPLATE_USER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ACCESS_TYPE_HEROMA;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATIVE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATIVE_UNIT_PART_BOU;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATIVE_UNIT_PART_IAF;
@@ -30,11 +31,13 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_OTH
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_STILL_EMPLOYED;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_SYSTEM_ACCESS;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_TYPE_OF_ACCESS;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_UNIT_BOU;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_UNIT_KOF;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_UNIT_VOF;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_UPDATE_DESCRIPTION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_USER_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_USER_TYPE_HEROMA;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
@@ -68,11 +71,13 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_OTHER_U
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_START_DATE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_STILL_EMPLOYED;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_SYSTEM_ACCESS;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TITLE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TYPE_OF_ACCESS;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_UNIT_BOU;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_UNIT_KOF;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_UNIT_VOF;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_UPDATE_DESCRIPTION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_USER_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_USER_TYPE_HEROMA;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
@@ -82,7 +87,7 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PERMISSION_ORDER;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
-import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameterList;
+import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameter;
 
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
@@ -147,14 +152,18 @@ class PermissionOrderProvider implements OpenEMapper {
 				.role(ROLE_APPLICANT)
 				.firstName(permissionOrder.applicantFirstname())
 				.lastName(permissionOrder.applicantLastname())
-				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, permissionOrder.applicantOrganization()))
+				.parameters(List.of(toParameter(KEY_ADMINISTRATION_NAME, permissionOrder.applicantOrganization()).displayName(DISPLAY_ADMINISTRATION_NAME),
+					toParameter(KEY_USER_ID, permissionOrder.applicantUserId()).displayName(DISPLAY_USER_ID),
+					toParameter(KEY_TITLE, permissionOrder.applicantTitle()).displayName(DISPLAY_TITLE)))
 				.contactChannels(getContactChannels(permissionOrder.applicantEmail())),
 			new Stakeholder()
 				.role(ROLE_USER)
 				.firstName(permissionOrder.userFirstname())
 				.lastName(permissionOrder.userLastname())
 				.contactChannels(getContactChannels(permissionOrder.userEmail()))
-				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, permissionOrder.userOrganization()))
+				.parameters(List.of(toParameter(KEY_ADMINISTRATION_NAME, permissionOrder.userOrganization()).displayName(DISPLAY_ADMINISTRATION_NAME),
+					toParameter(KEY_USER_ID, permissionOrder.userUserId()).displayName(DISPLAY_USER_ID),
+					toParameter(KEY_TITLE, permissionOrder.userTitle()).displayName(DISPLAY_TITLE)))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(permissionOrder.userLegalId()))));
 		if (isNotEmpty(permissionOrder.managerFirstname())) {
@@ -163,7 +172,9 @@ class PermissionOrderProvider implements OpenEMapper {
 				.firstName(permissionOrder.managerFirstname())
 				.lastName(permissionOrder.managerLastname())
 				.contactChannels(getContactChannels(permissionOrder.managerEmail()))
-				.parameters(toParameterList(KEY_ADMINISTRATION_NAME, permissionOrder.managerOrganization())));
+				.parameters(List.of(toParameter(KEY_ADMINISTRATION_NAME, permissionOrder.managerOrganization()).displayName(DISPLAY_ADMINISTRATION_NAME),
+					toParameter(KEY_USER_ID, permissionOrder.managerUserId()).displayName(DISPLAY_USER_ID),
+					toParameter(KEY_TITLE, permissionOrder.managerTitle()).displayName(DISPLAY_TITLE))));
 		}
 		return stakeholders;
 	}

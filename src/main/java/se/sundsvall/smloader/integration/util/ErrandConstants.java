@@ -27,6 +27,11 @@ public final class ErrandConstants {
 	public static final String KEY_ADMINISTRATIVE_UNIT = "administrativeUnit";
 	public static final String DISPLAY_ADMINISTRATIVE_UNIT = "Förvaltning/verksamhet";
 	public static final String KEY_ADMINISTRATION_NAME = "administrationName";
+	public static final String DISPLAY_ADMINISTRATION_NAME = "Organisation";
+	public static final String KEY_USER_ID = "userId";
+	public static final String DISPLAY_USER_ID = "Användar-id";
+	public static final String KEY_TITLE = "title";
+	public static final String DISPLAY_TITLE = "Tjänstetitel";
 	// SubstituteManager
 	public static final String KEY_RESPONSIBILITY_NUMBER = "responsibilityNumber";
 	public static final String DISPLAY_RESPONSIBILITY_NUMBER = "Ordinarie chef ansvarsnummer";
