@@ -9,7 +9,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_TITLE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_USER_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_TITLE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_USER_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
@@ -98,13 +103,45 @@ class PermissionOrderProviderTest {
 			Stakeholder::getOrganizationName,
 			Stakeholder::getExternalIdType,
 			Stakeholder::getExternalId,
-			Stakeholder::getParameters).containsExactlyInAnyOrder(
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, List.of(new Parameter()
-					.key("administrationName").values(List.of("KSK AVD Digitalisering IT stab")))),
-				tuple(ROLE_MANAGER, "Jocke", "Anka", List.of(new ContactChannel().type("Email").value("jocke.anka@sundsvall.se")), null, null, null, List.of(new Parameter()
-					.key("administrationName").values(List.of("KSK AVD Digitalisering IT stab")))),
-				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), null, "PRIVATE", partyId, List.of(new Parameter()
-					.key("administrationName").values(List.of("KSK AVD Digitalisering IT stab")))));
+			Stakeholder::getParameters).contains(
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, List.of(
+					new Parameter()
+						.key("administrationName")
+						.values(List.of("KSK AVD Digitalisering IT stab"))
+						.displayName("Organisation"),
+					new Parameter()
+						.key("userId").values(List.of("kal00ank"))
+						.displayName("Användar-id"),
+					new Parameter()
+						.key("title")
+						.values(List.of("It-konsult"))
+						.displayName("Tjänstetitel"))),
+				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), null, "PRIVATE", partyId, List.of(
+					new Parameter()
+						.key("administrationName")
+						.values(List.of("KSK AVD Digitalisering IT stab"))
+						.displayName("Organisation"),
+					new Parameter()
+						.key("userId")
+						.values(List.of("kna11ank"))
+						.displayName("Användar-id"),
+					new Parameter()
+						.key("title")
+						.values(List.of("It-konsult"))
+						.displayName("Tjänstetitel"))),
+				tuple(ROLE_MANAGER, "Jocke", "Anka", List.of(new ContactChannel().type("Email").value("jocke.anka@sundsvall.se")), null, null, null, List.of(
+					new Parameter()
+						.key("administrationName")
+						.values(List.of("KSK AVD Digitalisering IT stab"))
+						.displayName("Organisation"),
+					new Parameter()
+						.key("userId")
+						.values(List.of("joc22ank"))
+						.displayName("Användar-id"),
+					new Parameter()
+						.key("title")
+						.values(List.of("Chef"))
+						.displayName("Tjänstetitel"))));
 
 		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrder(
@@ -184,12 +221,31 @@ class PermissionOrderProviderTest {
 			Stakeholder::getExternalIdType,
 			Stakeholder::getExternalId,
 			Stakeholder::getParameters).containsExactlyInAnyOrder(
-				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, List.of(new Parameter()
-					.key("administrationName")
-					.values(List.of("KSK AVD Digitalisering IT stab")))),
-				tuple(ROLE_USER, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, List.of(new Parameter()
-					.key("administrationName")
-					.values(List.of("KSK AVD Digitalisering IT stab")))));
+				tuple(ROLE_APPLICANT, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, null, null, List.of(
+					new Parameter()
+						.key("administrationName")
+						.values(List.of("KSK AVD Digitalisering IT stab"))
+						.displayName("Organisation"),
+					new Parameter()
+						.key("userId").values(List.of("kal00ank"))
+						.displayName("Användar-id"),
+					new Parameter()
+						.key("title")
+						.values(List.of("It-konsult"))
+						.displayName("Tjänstetitel"))),
+				tuple(ROLE_USER, "Kalle", "Anka", List.of(new ContactChannel().type("Email").value("kalle.anka@sundsvall.se")), null, "PRIVATE", partyId, List.of(
+					new Parameter()
+						.key(KEY_ADMINISTRATION_NAME)
+						.values(List.of("KSK AVD Digitalisering IT stab"))
+						.displayName("Organisation"),
+					new Parameter()
+						.key(KEY_USER_ID)
+						.values(List.of("kal00ank"))
+						.displayName(DISPLAY_USER_ID),
+					new Parameter()
+						.key(KEY_TITLE)
+						.values(List.of("It-konsult"))
+						.displayName(DISPLAY_TITLE))));
 
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6920"),
 			new ExternalTag().key("familyId").value("185")));
