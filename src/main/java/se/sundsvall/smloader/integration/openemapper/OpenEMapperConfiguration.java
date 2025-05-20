@@ -66,4 +66,10 @@ public class OpenEMapperConfiguration {
 	OpenEMapperProperties propertiesPrcedenceOfEmployment() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "orderingrecruitmentsupport")
+	@ConfigurationProperties(prefix = "bestallning-av-rekryteringsstod")
+	OpenEMapperProperties propertiesOrderingRecruitmentSupport() {
+		return new OpenEMapperProperties();
+	}
 }

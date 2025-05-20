@@ -69,12 +69,13 @@ class XPathAnnotationProcessorTest {
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
-
+			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any())).thenCallRealMethod();
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getString(xml, "/some/path")).thenReturn(dummyStringValue);
 
 			assertThat(XPathAnnotationProcessor.getValue(xml, "/some/path", String.class)).isEqualTo(dummyStringValue);
 
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any()));
+			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any()));
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getString(xml, "/some/path"));
 			mockXPathUtil.verifyNoMoreInteractions();
 		}
@@ -86,11 +87,13 @@ class XPathAnnotationProcessorTest {
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
+			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any())).thenCallRealMethod();
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getInteger(xml, "/some/path")).thenReturn(dummyIntegerValue);
 
 			assertThat(XPathAnnotationProcessor.getValue(xml, "/some/path", Integer.class)).isEqualTo(dummyIntegerValue);
 
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any()));
+			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any()));
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getInteger(xml, "/some/path"));
 			mockXPathUtil.verifyNoMoreInteractions();
 		}
@@ -102,11 +105,13 @@ class XPathAnnotationProcessorTest {
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
+			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any())).thenCallRealMethod();
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getBoolean(xml, "/some/path")).thenReturn(dummyBooleanValue);
 
 			assertThat(XPathAnnotationProcessor.getValue(xml, "/some/path", Boolean.class)).isEqualTo(dummyBooleanValue);
 
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any()));
+			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any()));
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getBoolean(xml, "/some/path"));
 			mockXPathUtil.verifyNoMoreInteractions();
 		}
@@ -118,11 +123,13 @@ class XPathAnnotationProcessorTest {
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
+			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any())).thenCallRealMethod();
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getDouble(xml, "/some/path")).thenReturn(dummyDoubleValue);
 
 			assertThat(XPathAnnotationProcessor.getValue(xml, "/some/path", Double.class)).isEqualTo(dummyDoubleValue);
 
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any()));
+			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any()));
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getDouble(xml, "/some/path"));
 			mockXPathUtil.verifyNoMoreInteractions();
 		}
@@ -134,11 +141,13 @@ class XPathAnnotationProcessorTest {
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
+			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any())).thenCallRealMethod();
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getFloat(xml, "/some/path")).thenReturn(dummyFloatValue);
 
 			assertThat(XPathAnnotationProcessor.getValue(xml, "/some/path", Float.class)).isEqualTo(dummyFloatValue);
 
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any()));
+			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any()));
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getFloat(xml, "/some/path"));
 			mockXPathUtil.verifyNoMoreInteractions();
 		}
@@ -150,11 +159,13 @@ class XPathAnnotationProcessorTest {
 
 		try (var mockXPathUtil = mockStatic(XPathAnnotationProcessor.class)) {
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any())).thenCallRealMethod();
+			mockXPathUtil.when(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any())).thenCallRealMethod();
 			mockXPathUtil.when(() -> XPathAnnotationProcessor.extractValue(xml, DishAsRecord.class)).thenReturn(dummyDish);
 
 			assertThat(XPathAnnotationProcessor.getValue(xml, "/some/path", DishAsRecord.class)).isEqualTo(dummyDish);
 
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any()));
+			mockXPathUtil.verify(() -> XPathAnnotationProcessor.getValue(any(), any(String.class), any(), any()));
 			mockXPathUtil.verify(() -> XPathAnnotationProcessor.extractValue(xml, DishAsRecord.class));
 			mockXPathUtil.verifyNoMoreInteractions();
 		}
@@ -222,7 +233,8 @@ class XPathAnnotationProcessorTest {
 
 	}
 
-	record DishAsRecord(@XPath("/menu/dish[2]/name") String name) {}
+	record DishAsRecord(@XPath("/menu/dish[2]/name") String name) {
+	}
 
 	@Nested
 	class ParameterTests {

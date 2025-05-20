@@ -2,12 +2,17 @@ package se.sundsvall.smloader.integration.util.annotation;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isInterface;
+import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;
 import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -35,10 +40,12 @@ public final class XPathAnnotationProcessor {
 				continue;
 			}
 
+			var genericType = Optional.ofNullable(AnnotationUtils.getAnnotation(field, GenericType.class)).map(GenericType::value).orElse(null);
+
 			var type = field.getType();
 			var path = pathAnnotation.value();
 
-			var value = getValue(xml, path, type);
+			var value = getValue(xml, path, type, genericType);
 
 			parameters[i] = new Parameter(field, type, value);
 		}
@@ -47,14 +54,21 @@ public final class XPathAnnotationProcessor {
 			if (targetClass.isRecord()) {
 				var parameterTypes = new Class[parameters.length];
 				var parameterValues = new Object[parameters.length];
+				var allNull = true;
 				for (var i = 0; i < parameters.length; i++) {
 					parameterTypes[i] = parameters[i].type;
 					parameterValues[i] = parameters[i].value;
+					if (parameters[i].value != null) {
+						allNull = false;
+					}
 				}
-
-				var constructor = targetClass.getDeclaredConstructor(parameterTypes);
-				constructor.setAccessible(true);
-				return constructor.newInstance(parameterValues);
+				if (allNull) {
+					return null;
+				} else {
+					var constructor = targetClass.getDeclaredConstructor(parameterTypes);
+					constructor.setAccessible(true);
+					return constructor.newInstance(parameterValues);
+				}
 			} else {
 				var constructor = targetClass.getDeclaredConstructor();
 				constructor.setAccessible(true);
@@ -75,6 +89,10 @@ public final class XPathAnnotationProcessor {
 	}
 
 	public static <T> T getValue(final byte[] xml, final String path, final Class<T> type) {
+		return getValue(xml, path, type, null);
+	}
+
+	public static <T, G> T getValue(final byte[] xml, final String path, final Class<T> type, final Class<G> genericType) {
 		Object value;
 
 		value = switch (type.getSimpleName()) {
@@ -83,10 +101,22 @@ public final class XPathAnnotationProcessor {
 			case "Boolean" -> getBoolean(xml, path);
 			case "Double" -> getDouble(xml, path);
 			case "Float" -> getFloat(xml, path);
+			case "List" -> getList(xml, path, genericType);
 			default -> extractValue(xml, type);
 		};
 
 		return type.cast(value);
+	}
+
+	public static <G> List<G> getList(final byte[] xml, final String path, final Class<G> type) {
+		if (isNull(type)) {
+			throw new XPathException("Cannot parse path '%s' as list without declaring type with @GenericType".formatted(path));
+		}
+
+		return evaluateXPath(xml, path).stream()
+			.map(element -> extractValue(element.outerHtml().getBytes(StandardCharsets.ISO_8859_1), type))
+			.filter(Objects::nonNull)
+			.collect(Collectors.toList());
 	}
 
 	public static String getString(final byte[] xml, final String xPath) {
