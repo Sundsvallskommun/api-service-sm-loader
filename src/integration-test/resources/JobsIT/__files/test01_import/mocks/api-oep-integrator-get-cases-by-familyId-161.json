@@ -1,0 +1,12 @@
+[
+	{
+		"flowInstanceId": "123456",
+		"created": "2023-05-31T10:03:00",
+		"statusUpdated": "2025-03-06T09:10:00"
+	},
+	{
+		"flowInstanceId": "234567",
+		"created": "2023-05-31T09:48:00",
+		"statusUpdated": "2025-02-18T19:45:00"
+	}
+]

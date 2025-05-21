@@ -68,7 +68,7 @@ public class SupportManagementService {
 		this.statsOnlyMapper = statsOnlyMapper;
 	}
 
-	public void exportCases(final String municipalityId, Consumer<String> exportHealthConsumer) {
+	public void exportCases(final String municipalityId, final Consumer<String> exportHealthConsumer) {
 		RequestId.init();
 		final var failedAttachments = new HashMap<String, List<String>>();
 
@@ -115,7 +115,7 @@ public class SupportManagementService {
 		}
 	}
 
-	private List<String> exportStatsOnlyCases(final List<CaseEntity> statsOnlyCasesToExport, Consumer<String> exportHealthConsumer) {
+	private List<String> exportStatsOnlyCases(final List<CaseEntity> statsOnlyCasesToExport, final Consumer<String> exportHealthConsumer) {
 		final var failedCases = new ArrayList<String>();
 
 		// Loop over all cases
@@ -135,7 +135,7 @@ public class SupportManagementService {
 		return failedCases;
 	}
 
-	private Runnable saveFailed(CaseEntity caseEntity, List<String> failedCases, Consumer<String> exportHealthConsumer) {
+	private Runnable saveFailed(final CaseEntity caseEntity, final List<String> failedCases, final Consumer<String> exportHealthConsumer) {
 		return () -> {
 			caseRepository.save(caseEntity.withDeliveryStatus(FAILED));
 			failedCases.add(caseEntity.getExternalCaseId());
@@ -143,7 +143,7 @@ public class SupportManagementService {
 		};
 	}
 
-	private Optional<String> updateOpenEStatus(String errandId, CaseEntity caseEntity) {
+	private Optional<String> updateOpenEStatus(final String errandId, final CaseEntity caseEntity) {
 		if (openEService.updateOpenECaseStatus(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData())) {
 			return Optional.of(errandId);
 		} else {
@@ -151,16 +151,16 @@ public class SupportManagementService {
 		}
 	}
 
-	private Optional<String> confirmDelivery(String errandId, CaseEntity caseEntity) {
+	private Optional<String> confirmDelivery(final String errandId, final CaseEntity caseEntity) {
 		final var confirmSuccessful = getErrandFromSupportManagement(errandId, caseEntity.getCaseMetaData().getNamespace(), caseEntity.getCaseMetaData().getMunicipalityId())
 			.map(Errand::getErrandNumber)
-			.map(errandNr -> openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData().getInstance(), errandNr))
+			.map(errandNr -> openEService.confirmDelivery(caseEntity.getExternalCaseId(), caseEntity.getCaseMetaData(), errandNr))
 			.orElse(false);
 
 		return confirmSuccessful ? Optional.of(errandId) : Optional.empty();
 	}
 
-	private Optional<String> exportAttachments(String errandId, CaseEntity caseEntity, HashMap<String, List<String>> failedAttachments) {
+	private Optional<String> exportAttachments(final String errandId, final CaseEntity caseEntity, final HashMap<String, List<String>> failedAttachments) {
 		final var faultyAttachments = attachmentService.handleAttachments(Base64.getDecoder().decode(caseEntity.getOpenECase()), caseEntity, errandId);
 		if (!faultyAttachments.isEmpty()) {
 			failedAttachments.put(errandId, faultyAttachments);
@@ -169,7 +169,7 @@ public class SupportManagementService {
 		return Optional.of(errandId);
 	}
 
-	private Optional<String> saveCaseMapping(String errandId, CaseEntity caseEntity) {
+	private Optional<String> saveCaseMapping(final String errandId, final CaseEntity caseEntity) {
 		// Case can already be saved if case creation was successful but attachment export failed.
 		if (!caseMappingRepository.existsById(CaseMappingId.create().withErrandId(errandId).withExternalCaseId(caseEntity.getExternalCaseId()))) {
 			caseMappingRepository.save(toCaseMapping(errandId, caseEntity));
@@ -201,7 +201,7 @@ public class SupportManagementService {
 		}
 	}
 
-	private String createFilterForTag(ExternalTag tag) {
+	private String createFilterForTag(final ExternalTag tag) {
 		return String.format("exists(externalTags.key:'%s' and externalTags.value:'%s')", tag.getKey(), tag.getValue());
 	}
 
@@ -218,11 +218,11 @@ public class SupportManagementService {
 		if (!failedCases.isEmpty()) {
 			LOGGER.error("Failed to export cases: {}", failedCases);
 			final var subject = List.of(environment.getActiveProfiles()).contains(PRODUCTION) ? PROD_SUBJECT : TEST_SUBJECT;
-			StringBuilder attachmentMessage = new StringBuilder(".\n");
+			final StringBuilder attachmentMessage = new StringBuilder(".\n");
 			if (!failedAttachments.isEmpty()) {
 				failedAttachments.forEach((caseId, attachments) -> attachmentMessage.append(String.format(String.format("For case %s the attachments %s were not exported.%n", caseId, attachments))));
 			}
-			var message = MESSAGE
+			final var message = MESSAGE
 				.concat(failedCases.toString())
 				.concat(attachmentMessage.toString())
 				.concat(String.format("RequestId: %s", RequestId.get()));

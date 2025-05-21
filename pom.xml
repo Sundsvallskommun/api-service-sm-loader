@@ -102,7 +102,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>src/main/resources/integrations/rest/supportmanagement-api.yaml</inputSpec>
+							<inputSpec>src/main/resources/integrations/supportmanagement-api.yaml</inputSpec>
 							<output>${generated-sources-path}</output>
 							<generatorName>spring</generatorName>
 							<generateApis>false</generateApis>
@@ -127,7 +127,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>src/main/resources/integrations/rest/party-api.yaml</inputSpec>
+							<inputSpec>src/main/resources/integrations/party-api.yaml</inputSpec>
 							<output>${generated-sources-path}</output>
 							<generatorName>spring</generatorName>
 							<generateApis>false</generateApis>
@@ -147,12 +147,37 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>oep-integrator-api</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>src/main/resources/integrations/oep-integrator-api.yaml</inputSpec>
+							<output>${generated-sources-path}</output>
+							<generatorName>spring</generatorName>
+							<generateApis>false</generateApis>
+							<generateSupportingFiles>false</generateSupportingFiles>
+							<configOptions>
+								<useSpringBoot3>true</useSpringBoot3>
+								<sourceFolder>models</sourceFolder>
+								<dateLibrary>java8-localdatetime</dateLibrary>
+								<apiPackage>generated</apiPackage>
+								<modelPackage>generated.se.sundsvall.oepintegrator</modelPackage>
+								<openApiNullable>false</openApiNullable>
+								<generatePom>false</generatePom>
+								<useBeanValidation>true</useBeanValidation>
+								<useSwaggerAnnotations>true</useSwaggerAnnotations>
+								<interfaceOnly>true</interfaceOnly>
+							</configOptions>
+						</configuration>
+					</execution>
+					<execution>
 						<id>messaging-api</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>src/main/resources/integrations/rest/messaging-api.yaml</inputSpec>
+							<inputSpec>src/main/resources/integrations/messaging-api.yaml</inputSpec>
 							<output>${generated-sources-path}</output>
 							<generatorName>spring</generatorName>
 							<generateApis>false</generateApis>
@@ -170,41 +195,6 @@
 								<interfaceOnly>true</interfaceOnly>
 							</configOptions>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- Generate java from wsdl -->
-			<plugin>
-				<groupId>org.jvnet.jaxb</groupId>
-				<artifactId>jaxb-maven-plugin</artifactId>
-				<version>${jaxb-plugins.version}</version>
-				<configuration>
-					<bindingDirectory>${project.basedir}/src/main/resources/integrations/soap/xjb</bindingDirectory>
-					<extension>true</extension>
-					<args>
-						<arg>-wsdl</arg>
-						<arg>-Xfluent-api</arg>
-					</args>
-					<plugins>
-						<plugin>
-							<groupId>org.jvnet.jaxb</groupId>
-							<artifactId>jaxb-plugins</artifactId>
-							<version>${jaxb-plugins.version}</version>
-						</plugin>
-					</plugins>
-					<generatePackage>generated.se.sundsvall.callback</generatePackage>
-					<schemaIncludes>
-						<include>**/*.wsdl</include>
-					</schemaIncludes>
-					<generateDirectory>${generated-sources-path}/${generated-sources-java-path}</generateDirectory>
-					<schemaDirectory>${project.basedir}/src/main/resources/integrations/soap</schemaDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<id>generate-sources</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>

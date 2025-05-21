@@ -36,7 +36,8 @@ public class AttachmentService {
 
 		return getFileIds(xml).stream()
 			.map(attachment -> {
-				try (final var fileStream = openEService.getFile(caseEntity.getExternalCaseId(), attachment.getFileId(), attachment.getQueryId(), caseEntity.getCaseMetaData().getInstance()).body().asInputStream()) {
+				try (final var fileStream = openEService.getFile(caseEntity.getExternalCaseId(), attachment.getFileId(), attachment.getQueryId(), caseEntity.getCaseMetaData().getInstance(), caseEntity.getCaseMetaData().getMunicipalityId()).body()
+					.asInputStream()) {
 					if (fileStream == null) {
 						log.info("Failed to fetch file for case: " + caseEntity.getExternalCaseId() + " with file id: " + attachment.getFileId());
 						return attachment.getFileId();
@@ -69,7 +70,7 @@ public class AttachmentService {
 			.anyMatch(inputStreamResource -> {
 				try {
 					return IOUtils.contentEquals(inputStream, inputStreamResource.getInputStream());
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					log.severe("Error comparing attachments with filename: " + attachment.getFileName());
 					throw new RuntimeException(e);
 				}

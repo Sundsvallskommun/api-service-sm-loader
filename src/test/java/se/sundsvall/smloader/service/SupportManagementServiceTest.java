@@ -145,7 +145,7 @@ class SupportManagementServiceTest {
 		verify(mockCaseMappingRepository).save(any());
 		verify(mockCaseRepository).save(any());
 		verify(mockOpenEService).updateOpenECaseStatus(flowInstanceId, CaseMetaDataEntity.create().withFamilyId(familyId).withInstance(EXTERNAL).withNamespace(namespace).withMunicipalityId(municipalityId));
-		verify(mockOpenEService).confirmDelivery(flowInstanceId, EXTERNAL, errandNumber);
+		verify(mockOpenEService).confirmDelivery(flowInstanceId, caseEntity.getCaseMetaData(), errandNumber);
 		verifyNoInteractions(consumerMock);
 		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService, mockMessagingClient, mockMessagingMapper);
 	}
@@ -200,7 +200,7 @@ class SupportManagementServiceTest {
 			.withNamespace(namespace)
 			.withMunicipalityId(municipalityId)
 			.withStatsOnly(true));
-		verify(mockOpenEService).confirmDelivery(flowInstanceId, EXTERNAL, errandNumber);
+		verify(mockOpenEService).confirmDelivery(flowInstanceId, caseEntity.getCaseMetaData(), errandNumber);
 		verifyNoInteractions(consumerMock);
 		verifyNoMoreInteractions(mockCaseMappingRepository, mockCaseRepository, mockSupportManagementClient, mockMapper, mockOpenEService, mockMessagingClient, mockMessagingMapper);
 	}
