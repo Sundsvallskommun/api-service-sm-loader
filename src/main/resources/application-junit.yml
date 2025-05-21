@@ -18,6 +18,8 @@ integration:
       url: http://oep-internal-soap.url
   support-management:
     url: http://support-management.url
+  oep-integrator:
+    url: http://oep-integrator.url
   messaging:
     url: http://messaging.url
     channel: channel
@@ -123,11 +125,16 @@ spring:
     oauth2:
       client:
         provider:
+          oep-integrator:
+            token-uri: http://token.url
           support-management:
             token-uri: http://token.url
           party:
             token-uri: http://token.url
         registration:
+          oep-integrator:
+            client-id: the-client-id
+            client-secret: the-client-secret
           support-management:
             client-id: the-client-id
             client-secret: the-client-secret

@@ -1,0 +1,13 @@
+{
+	"flowInstanceId": "111111",
+	"familyId": "121",
+	"version": 4,
+	"flowId": "2411",
+	"title": "Kontakt med SC Lön och Pension - TEST DRAKEN",
+	"status": {
+		"id": 17453,
+		"name": "Preliminär"
+	},
+	"created": "2024-12-05T21:41:45",
+	"payload": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>\n<FlowInstance xmlns=\"http://www.oeplatform.org/version/2.0/schemas/flowinstance\"\n\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n\txsi:schemaLocation=\"http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-423.xsd\">\n\t<Header>\n\t\t<Flow>\n\t\t\t<FamilyID>121</FamilyID>\n\t\t\t<Version>3</Version>\n\t\t\t<FlowID>423</FlowID>\n\t\t\t<Name><![CDATA[Kontakt med SC Lön och Pension - TEST DRAKEN]]></Name>\n\t\t</Flow>\n\t\t<FlowInstanceID>111111</FlowInstanceID>\n\t\t<Status>\n\t\t\t<ID>3558</ID>\n\t\t\t<Name><![CDATA[Inskickat]]></Name>\n\t\t</Status>\n\t\t<Poster>\n\t\t\t<Firstname><![CDATA[Kalle]]></Firstname>\n\t\t\t<Lastname><![CDATA[Anka]]></Lastname>\n\t\t\t<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>\n\t\t\t<ID>25953</ID>\n\t\t</Poster>\n\t\t<Owner>\n\t\t\t<Firstname><![CDATA[Kalle]]></Firstname>\n\t\t\t<Lastname><![CDATA[Anka]]></Lastname>\n\t\t\t<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>\n\t\t\t<ID>25953</ID>\n\t\t</Owner>\n\t\t<Posted>2024-09-10T16:31:02</Posted>\n\t\t<Editor>\n\t\t\t<Firstname><![CDATA[Kalle]]></Firstname>\n\t\t\t<Lastname><![CDATA[Anka]]></Lastname>\n\t\t\t<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>\n\t\t\t<ID>25953</ID>\n\t\t</Editor>\n\t\t<Updated>2024-09-11T12:44:14</Updated>\n\t\t<FirstSubmitted>2024-09-11T12:44:14</FirstSubmitted>\n\t\t<LastSubmitted>2024-09-11T12:44:14</LastSubmitted>\n\t</Header>\n\t<Values>\n\t\t<contact>\n\t\t\t<QueryID>13596</QueryID>\n\t\t\t<Name><![CDATA[Mina uppgifter]]></Name>\n\t\t\t<firstname><![CDATA[Kalle]]></firstname>\n\t\t\t<lastname><![CDATA[Anka]]></lastname>\n\t\t\t<citizenIdentifier><![CDATA[191010101010]]></citizenIdentifier>\n\t\t\t<title><![CDATA[It-konsult]]></title>\n\t\t\t<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>\n\t\t</contact>\n\t\t<subject>\n\t\t\t<QueryID>13599</QueryID>\n\t\t\t<Name><![CDATA[Vad gäller ärendet?]]></Name>\n\t\t\t<TextAlternative><![CDATA[Testar]]></TextAlternative>\n\t\t</subject>\n\t\t<caseDescription>\n\t\t\t<QueryID>13600</QueryID>\n\t\t\t<Name><![CDATA[Beskriv ditt ärende]]></Name>\n\t\t\t<Value><![CDATA[Jag testar att skapa ett ärende.]]></Value>\n\t\t</caseDescription>\n\t</Values>\n</FlowInstance>"
+}

@@ -1,17 +1,19 @@
 package se.sundsvall.smloader.service;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
-import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseEntity;
 
 import feign.Response;
-import generated.se.sundsvall.callback.ConfirmDelivery;
-import generated.se.sundsvall.callback.ExternalID;
-import generated.se.sundsvall.callback.SetStatus;
+import generated.se.sundsvall.oepintegrator.CaseEnvelope;
+import generated.se.sundsvall.oepintegrator.CaseStatusChangeRequest;
+import generated.se.sundsvall.oepintegrator.ConfirmDeliveryRequest;
+import generated.se.sundsvall.oepintegrator.InstanceType;
+import generated.se.sundsvall.oepintegrator.ModelCase;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -25,34 +27,25 @@ import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.Instance;
-import se.sundsvall.smloader.integration.openeexternal.OpenEExternalClient;
-import se.sundsvall.smloader.integration.openeexternalsoap.OpenEExternalSoapClient;
-import se.sundsvall.smloader.integration.openeinternal.OpenEInternalClient;
-import se.sundsvall.smloader.integration.openeinternalsoap.OpenEInternalSoapClient;
+import se.sundsvall.smloader.integration.oepintegrator.OepIntegratorClient;
 
 @Service
 public class OpenEService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpenEService.class);
 
-	private final OpenEExternalClient openEExternalClient;
-	private final OpenEInternalClient openEInternalClient;
-	private final OpenEExternalSoapClient openEExternalSoapClient;
-	private final OpenEInternalSoapClient openEInternalSoapClient;
+	private final OepIntegratorClient oepIntegratorClient;
 	private final CaseRepository caseRepository;
 	private final CaseMetaDataRepository caseMetaDataRepository;
 
-	public OpenEService(final OpenEExternalClient openEExternalClient, final OpenEInternalClient openEInternalClient, final OpenEExternalSoapClient openEExternalSoapClient, final OpenEInternalSoapClient openEInternalSoapClient,
+	public OpenEService(final OepIntegratorClient oepIntegratorClient,
 		final CaseRepository caseRepository, final CaseMetaDataRepository caseMetaDataRepository) {
-		this.openEExternalClient = openEExternalClient;
-		this.openEInternalClient = openEInternalClient;
-		this.openEExternalSoapClient = openEExternalSoapClient;
-		this.openEInternalSoapClient = openEInternalSoapClient;
+		this.oepIntegratorClient = oepIntegratorClient;
 		this.caseRepository = caseRepository;
 		this.caseMetaDataRepository = caseMetaDataRepository;
 	}
 
-	public void fetchAndSaveNewOpenECases(final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, Consumer<String> importHealthConsumer) {
+	public void fetchAndSaveNewOpenECases(final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, final Consumer<String> importHealthConsumer) {
 		RequestId.init();
 		final var effectiveToDate = nonNull(toDate) ? toDate : LocalDateTime.now();
 
@@ -68,13 +61,15 @@ public class OpenEService {
 	}
 
 	public boolean updateOpenECaseStatus(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity) {
+
 		try {
 			if (!isEmpty(caseMetaDataEntity.getOpenEUpdateStatus())) {
-				final var setStatus = new SetStatus().withFlowInstanceID(Integer.parseInt(flowInstanceId)).withStatusAlias(caseMetaDataEntity.getOpenEUpdateStatus());
+				final var setStatus = new CaseStatusChangeRequest().name(caseMetaDataEntity.getOpenEUpdateStatus());
+
 				if (EXTERNAL.equals(caseMetaDataEntity.getInstance())) {
-					openEExternalSoapClient.setStatus(setStatus);
+					oepIntegratorClient.setStatus(caseMetaDataEntity.getMunicipalityId(), InstanceType.EXTERNAL, flowInstanceId, setStatus);
 				} else {
-					openEInternalSoapClient.setStatus(setStatus);
+					oepIntegratorClient.setStatus(caseMetaDataEntity.getMunicipalityId(), InstanceType.INTERNAL, flowInstanceId, setStatus);
 				}
 			}
 			return true;
@@ -84,17 +79,17 @@ public class OpenEService {
 		}
 	}
 
-	public boolean confirmDelivery(final String flowInstanceId, final Instance instance, final String errandId) {
+	public boolean confirmDelivery(final String flowInstanceId, final CaseMetaDataEntity caseMetaDataEntity, final String errandId) {
 		try {
-			final var confirmDelivery = new ConfirmDelivery().withFlowInstanceID(Integer.parseInt(flowInstanceId))
-				.withDelivered(true)
-				.withExternalID(new ExternalID()
-					.withSystem(SYSTEM_SUPPORT_MANAGEMENT)
-					.withID(errandId));
-			if (EXTERNAL.equals(instance)) {
-				openEExternalSoapClient.confirmDelivery(confirmDelivery);
+			final var confirmDelivery = new ConfirmDeliveryRequest()
+				.caseId(errandId)
+				.delivered(true)
+				.system(SYSTEM_SUPPORT_MANAGEMENT);
+
+			if (EXTERNAL.equals(caseMetaDataEntity.getInstance())) {
+				oepIntegratorClient.confirmDelivery(caseMetaDataEntity.getMunicipalityId(), InstanceType.EXTERNAL, flowInstanceId, confirmDelivery);
 			} else {
-				openEInternalSoapClient.confirmDelivery(confirmDelivery);
+				oepIntegratorClient.confirmDelivery(caseMetaDataEntity.getMunicipalityId(), InstanceType.INTERNAL, flowInstanceId, confirmDelivery);
 			}
 			return true;
 		} catch (final Exception e) {
@@ -103,14 +98,13 @@ public class OpenEService {
 		}
 	}
 
-	private void handleCasesByInstance(final Instance instance, final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, Consumer<String> importHealthConsumer) {
+	private void handleCasesByInstance(final Instance instance, final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, final Consumer<String> importHealthConsumer) {
 
 		final var metaDataEntities = caseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(instance, municipalityId, false);
 
 		final var flowInstanceIds = metaDataEntities.stream()
 			.map(metaData -> getFlowInstanceIds(metaData, fromDate.toString(), toDate.toString(), instance, importHealthConsumer))
 			.filter(Objects::nonNull)
-			.map(this::getErrandIds)
 			.flatMap(List::stream)
 			.distinct()
 			.toList();
@@ -120,37 +114,46 @@ public class OpenEService {
 				LOGGER.info("Case with id: '{}' already exists in database. Nothing will be saved.", flowInstanceId);
 				return;
 			}
-			final var openECase = getOpenECase(instance, flowInstanceId, importHealthConsumer);
-			final var familyId = ofNullable(openECase).map(oepCase -> getFamilyId(openECase)).orElse(null);
+			final var openECase = getOpenECase(instance, flowInstanceId, importHealthConsumer, municipalityId);
+
+			final var familyId = ofNullable(openECase).map(oepCase -> openECase.getFamilyId()).orElse(null);
 			final var caseMetaData = ofNullable(familyId).flatMap(caseMetaDataRepository::findById);
 
 			if (nonNull(openECase) && caseMetaData.isPresent()) {
-				caseRepository.save(toCaseEntity(flowInstanceId, caseMetaData.get(), openECase));
+				caseRepository.save(toCaseEntity(flowInstanceId, caseMetaData.get(), openECase.getPayload()));
+			} else {
+				LOGGER.info("Case with id: '{}' not found in OpenE. Nothing will be saved.", flowInstanceId);
 			}
 		});
 	}
 
-	private void fetchAndSaveStatsOnlyCaseIds(final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, Consumer<String> importHealthConsumer) {
+	private void fetchAndSaveStatsOnlyCaseIds(final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, final Consumer<String> importHealthConsumer) {
 
 		final var statsOnlyMetaDataEntities = caseMetaDataRepository.findByMunicipalityIdAndStatsOnly(municipalityId, true);
 
-		statsOnlyMetaDataEntities.forEach(metaData -> getErrandIds(getFlowInstanceIds(metaData, fromDate.toString(), toDate.toString(), metaData.getInstance(), importHealthConsumer)).stream()
+		statsOnlyMetaDataEntities.forEach(metaData -> getFlowInstanceIds(metaData, fromDate.toString(), toDate.toString(), metaData.getInstance(), importHealthConsumer).stream()
 			.filter(Objects::nonNull)
 			.distinct()
 			.forEach(flowInstanceId -> processStatsOnlyCase(flowInstanceId, metaData)));
 	}
 
-	private byte[] getFlowInstanceIds(CaseMetaDataEntity caseMetaDataEntity, final String fromDate, final String toDate, final Instance instance, Consumer<String> importHealthConsumer) {
+	private List<String> getFlowInstanceIds(final CaseMetaDataEntity caseMetaDataEntity, final String fromDate, final String toDate, final Instance instance, final Consumer<String> importHealthConsumer) {
 		try {
 			if (instance == EXTERNAL) {
-				return openEExternalClient.getErrandIds(caseMetaDataEntity.getFamilyId(), caseMetaDataEntity.getOpenEImportStatus(), fromDate, toDate);
+				return oepIntegratorClient.getCases(caseMetaDataEntity.getMunicipalityId(), InstanceType.EXTERNAL, Integer.parseInt(caseMetaDataEntity.getFamilyId()), fromDate, toDate, caseMetaDataEntity.getOpenEImportStatus())
+					.stream()
+					.map(CaseEnvelope::getFlowInstanceId)
+					.toList();
 			} else {
-				return openEInternalClient.getErrandIds(caseMetaDataEntity.getFamilyId(), caseMetaDataEntity.getOpenEImportStatus(), fromDate, toDate);
+				return oepIntegratorClient.getCases(caseMetaDataEntity.getMunicipalityId(), InstanceType.INTERNAL, Integer.parseInt(caseMetaDataEntity.getFamilyId()), fromDate, toDate, caseMetaDataEntity.getOpenEImportStatus())
+					.stream()
+					.map(CaseEnvelope::getFlowInstanceId)
+					.toList();
 			}
 		} catch (final Exception e) {
 			LOGGER.error("Error while fetching errandIds for familyId: '{}'", caseMetaDataEntity.getFamilyId(), e);
-			importHealthConsumer.accept("Error while fetching errands by familyId");
-			return null;
+			importHealthConsumer.accept("Error while fetching errands by familyId " + caseMetaDataEntity.getFamilyId());
+			return emptyList();
 		}
 	}
 
@@ -163,30 +166,23 @@ public class OpenEService {
 		caseRepository.save(toCaseEntity(flowInstanceId, caseMetaDataEntity, null));
 	}
 
-	private List<String> getErrandIds(final byte[] xml) {
-		final var result = evaluateXPath(xml, "/FlowInstances/FlowInstance/flowInstanceID");
+	Response getFile(final String flowInstanceId, final String fileId, final String queryId, final Instance instance, final String municipalityId) {
 
-		return result.eachText().stream()
-			.map(String::trim)
-			.toList();
+		if (instance == EXTERNAL) {
+			return oepIntegratorClient.getAttachment(municipalityId, InstanceType.EXTERNAL, flowInstanceId, queryId, fileId);
+
+		} else {
+			return oepIntegratorClient.getAttachment(municipalityId, InstanceType.INTERNAL, flowInstanceId, queryId, fileId);
+		}
 	}
 
-	private String getFamilyId(final byte[] xml) {
-		final var result = evaluateXPath(xml, "/FlowInstance/Header/Flow/FamilyID");
-
-		return result.eachText().stream()
-			.map(String::trim)
-			.findFirst()
-			.orElse(null);
-	}
-
-	Response getFile(final String flowInstanceId, final String fileId, final String queryId, final Instance instance) {
-		return instance == EXTERNAL ? openEExternalClient.getFile(flowInstanceId, queryId, fileId) : openEInternalClient.getFile(flowInstanceId, queryId, fileId);
-	}
-
-	private byte[] getOpenECase(final Instance instance, final String flowInstanceId, Consumer<String> importHealthConsumer) {
+	private ModelCase getOpenECase(final Instance instance, final String flowInstanceId, final Consumer<String> importHealthConsumer, final String municipalityId) {
 		try {
-			return instance == EXTERNAL ? openEExternalClient.getErrand(flowInstanceId) : openEInternalClient.getErrand(flowInstanceId);
+			if (instance == EXTERNAL) {
+				return oepIntegratorClient.getCase(municipalityId, InstanceType.EXTERNAL, flowInstanceId);
+			} else {
+				return oepIntegratorClient.getCase(municipalityId, InstanceType.INTERNAL, flowInstanceId);
+			}
 		} catch (final Exception e) {
 			LOGGER.error("Error while fetching errand for flowInstanceId: '{}'", flowInstanceId, e);
 			importHealthConsumer.accept("Error while fetching errand by flowInstanceId");

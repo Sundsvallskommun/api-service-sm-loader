@@ -16,6 +16,13 @@ integration:
       username: username
       password: password
       url: http://localhost:${wiremock.server.port:}/open-e-internal-soap
+  oep-integrator:
+    url: http://localhost:${wiremock.server.port:}/oep-integrator
+    token-uri: http://localhost:${wiremock.server.port:}/api-gateway/token
+    client-id: the-client-id
+    client-secret: the-client-secret
+    connectTimeout: 10
+    readTimeout: 20
   support-management:
     url: http://localhost:${wiremock.server.port:}/support-management
     token-uri: http://localhost:${wiremock.server.port:}/api-gateway/token
