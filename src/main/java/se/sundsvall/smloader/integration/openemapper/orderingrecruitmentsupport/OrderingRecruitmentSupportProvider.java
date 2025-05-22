@@ -200,7 +200,7 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 		return List.of(classification.getCategory(), classification.getType());
 	}
 
-	private List<Parameter> getParameters(byte[] xml, OrderingRecruitmentSupport order) {
+	private List<Parameter> getParameters(OrderingRecruitmentSupport order) {
 		return Stream.of(
 			singleParameter(order.municipalityOrCompany(), KEY_MUNICIPALITY_OR_COMPANY, DISPLAY_MUNICIPALITY_OR_COMPANY),
 			singleParameter(order.department(), KEY_DEPARTMENT, DISPLAY_DEPARTMENT),
