@@ -108,6 +108,11 @@ foretradesratt-ateranstallning:
   priority: MEDIUM
   category: OTHER_COMPANIES
   type: OTHER_COMPANIES.PRECEDENCE
+bestallning-av-rekryteringsstod:
+  family-id: 224
+  priority: MEDIUM
+  category: UNCATEGORIZED
+  type: UNCATEGORIZED.UNCATEGORIZED
 
 spring:
   datasource:

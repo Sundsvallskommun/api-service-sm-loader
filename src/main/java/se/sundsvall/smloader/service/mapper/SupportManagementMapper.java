@@ -13,13 +13,13 @@ public final class SupportManagementMapper {
 
 	public static List<Parameter> toParameterList(String parameterName, String value) {
 		final var parameterList = new ArrayList<Parameter>();
-		ofNullable(toParameter(parameterName, value)).ifPresent(parameterList::add);
+		ofNullable(toParameter(parameterName, value, null)).ifPresent(parameterList::add);
 		return parameterList;
 	}
 
-	public static Parameter toParameter(String parameterName, String value) {
+	public static Parameter toParameter(String parameterName, String value, String displayName) {
 		return ofNullable(value)
-			.map(v -> new Parameter().key(parameterName).values(asList(v)))
+			.map(v -> new Parameter().key(parameterName).values(asList(v)).displayName(displayName))
 			.orElse(null);
 	}
 }

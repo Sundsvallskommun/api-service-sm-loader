@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-551.xsd">
+	<Header>
+		<Flow>
+			<FamilyID>224</FamilyID>
+			<Version>4</Version>
+			<FlowID>551</FlowID>
+			<Name>
+				<![CDATA[Beställning av rekryteringsstöd - TEST]]>
+			</Name>
+		</Flow>
+		<FlowInstanceID>7287</FlowInstanceID>
+		<Status>
+			<ID>4588</ID>
+			<Name>
+				<![CDATA[Preliminär]]>
+			</Name>
+		</Status>
+		<Poster>
+			<Firstname>
+				<![CDATA[James]]>
+			</Firstname>
+			<Lastname>
+				<![CDATA[Bond]]>
+			</Lastname>
+			<Email>
+				<![CDATA[james.bond@007.se]]>
+			</Email>
+			<ID>17772</ID>
+		</Poster>
+		<Owner>
+			<Firstname>
+				<![CDATA[James]]>
+			</Firstname>
+			<Lastname>
+				<![CDATA[Bond]]>
+			</Lastname>
+			<Email>
+				<![CDATA[james.bond@007.se]]>
+			</Email>
+			<ID>17772</ID>
+		</Owner>
+		<Posted>2025-04-15T13:03:21</Posted>
+		<FirstSubmitted>2025-04-15T13:03:21</FirstSubmitted>
+		<LastSubmitted>2025-04-15T13:03:21</LastSubmitted>
+	</Header>
+	<Values>
+		<applicant>
+			<QueryID>20513</QueryID>
+			<Name>
+				<![CDATA[Mina uppgifter]]>
+			</Name>
+			<firstname>
+				<![CDATA[James]]>
+			</firstname>
+			<lastname>
+				<![CDATA[Bond]]>
+			</lastname>
+			<username>
+				<![CDATA[007]]>
+			</username>
+			<email>
+				<![CDATA[james.bond@mi6.se]]>
+			</email>
+			<phone>
+				<![CDATA[060-007007]]>
+			</phone>
+			<title>
+				<![CDATA[Spion]]>
+			</title>
+			<organization>
+				<![CDATA[MI6]]>
+			</organization>
+		</applicant>
+		<recrutingManager>
+			<QueryID>20514</QueryID>
+			<Name>
+				<![CDATA[Rekryterande chef eller rekryterande chef om annan än beställaren]]>
+			</Name>
+			<firstname>
+				<![CDATA[M]]>
+			</firstname>
+			<lastname>
+				<![CDATA[Unknown]]>
+			</lastname>
+			<email>
+				<![CDATA[m.unknown@mi6.se]]>
+			</email>
+			<phone>
+				<![CDATA[060-000000]]>
+			</phone>
+			<title>
+				<![CDATA[Chief of Secret Intelligence Service]]>
+			</title>
+		</recrutingManager>
+		<municipalityOrCompany>
+			<QueryID>20515</QueryID>
+			<Name>
+				<![CDATA[Gäller det en kommunal förvaltning eller bolag och förbund?]]>
+			</Name>
+			<Value>Kommunal förvaltning</Value>
+		</municipalityOrCompany>
+		<department>
+			<QueryID>20516</QueryID>
+			<Name>
+				<![CDATA[Välj förvaltning]]>
+			</Name>
+			<Value>Kommunstyrelsekontoret</Value>
+		</department>
+		<referenceNumber>
+			<QueryID>20518</QueryID>
+			<Name>
+				<![CDATA[Ange referensnummer på den som är mottagare av fakturan]]>
+			</Name>
+			<Value>007007007 - Bond James</Value>
+		</referenceNumber>
+		<securityClassification>
+			<QueryID>20520</QueryID>
+			<Name>
+				<![CDATA[Behöver denna tjänst säkerhetsklassas?]]>
+			</Name>
+			<Value>Ja</Value>
+		</securityClassification>
+		<checkPriority>
+			<QueryID>20521</QueryID>
+			<Name>
+				<![CDATA[Kontroll av företräde/omplacering]]>
+			</Name>
+			<Value>Jag intygar att jag tillsammans med HR-partner har kontrollerat så att ingen medarbetare är i omplaceringsutredning eller har företrädesrätt till återanställning. </Value>
+		</checkPriority>
+		<orderDetails>
+			<QueryID>20525</QueryID>
+			<Name>
+				<![CDATA[Vad vill du beställa?]]>
+			</Name>
+			<Value>Delpaket</Value>
+		</orderDetails>
+		<position>
+			<QueryID>20590</QueryID>
+			<Name>
+				<![CDATA[Vad ska du rekrytera för tjänst?]]>
+			</Name>
+			<Value>Medarbetare</Value>
+		</position>
+		<readyProfile>
+			<QueryID>20526</QueryID>
+			<Name>
+				<![CDATA[Har du redan en färdig kravprofil och annons eller vill du ha stöd i kravprofilsarbete och annonsutformning för att därefter annonsera tjänsten?]]>
+			</Name>
+			<Value>Jag har en färdig annons</Value>
+		</readyProfile>
+		<titleWorkplace>
+			<QueryID>20604</QueryID>
+			<Name>
+				<![CDATA[Tjänstetitel/arbetsplats]]>
+			</Name>
+			<title>
+				<![CDATA[Spion]]>
+			</title>
+			<workplace>
+				<![CDATA[MI6 Headquarters]]>
+			</workplace>
+		</titleWorkplace>
+		<employmentType>
+			<QueryID>20605</QueryID>
+			<Name>
+				<![CDATA[Anställningsform]]>
+			</Name>
+			<Value>Tillsvidareanställning</Value>
+		</employmentType>
+		<startingDate>
+			<QueryID>20606</QueryID>
+			<Name>
+				<![CDATA[Tillträde]]>
+			</Name>
+			<StartDate>2025-04-24</StartDate>
+		</startingDate>
+		<scope>
+			<QueryID>20608</QueryID>
+			<Name>
+				<![CDATA[Omfattning]]>
+			</Name>
+			<percentage>
+				<![CDATA[100]]>
+			</percentage>
+		</scope>
+		<numberOfPositions>
+			<QueryID>20609</QueryID>
+			<Name>
+				<![CDATA[Antal tjänster]]>
+			</Name>
+			<Value>1</Value>
+		</numberOfPositions>
+		<recruitmentAccess>
+			<QueryID>20610</QueryID>
+			<Name>
+				<![CDATA[Vilka ska ha tillgång till rekryteringen i Visma?]]>
+			</Name>
+			<Row>
+				<ID>40</ID>
+				<Column>
+					<ID>463</ID>
+					<Name>
+						<![CDATA[Namn]]>
+					</Name>
+					<Value>
+						<![CDATA[Miss Moneypenny]]>
+					</Value>
+				</Column>
+				<Column1>
+					<ID>464</ID>
+					<Name>
+						<![CDATA[E-post]]>
+					</Name>
+					<Value>
+						<![CDATA[miss.moneypenny@mi6.se]]>
+					</Value>
+				</Column1>
+				<Column2>
+					<ID>465</ID>
+					<Name>
+						<![CDATA[Roll i rekryteringen]]>
+					</Name>
+					<Value>
+						<![CDATA[Sekreterare]]>
+					</Value>
+				</Column2>
+			</Row>
+		</recruitmentAccess>
+		<workplaceInfo>
+			<QueryID>20751</QueryID>
+			<Name>
+				<![CDATA[Om arbetsplatsen]]>
+			</Name>
+			<Value>
+				<![CDATA[Arbete över hela världen]]>
+			</Value>
+		</workplaceInfo>
+		<jobTasks>
+			<QueryID>20752</QueryID>
+			<Name>
+				<![CDATA[Arbetsuppgifter]]>
+			</Name>
+			<Value>
+				<![CDATA[Insamling av information]]>
+			</Value>
+		</jobTasks>
+		<qualifications>
+			<QueryID>20753</QueryID>
+			<Name>
+				<![CDATA[Kvalifikationer]]>
+			</Name>
+			<Value>
+				<![CDATA[Stor och stark]]>
+			</Value>
+		</qualifications>
+		<advertising>
+			<QueryID>20600</QueryID>
+			<Name>
+				<![CDATA[Annonsering]]>
+			</Name>
+			<Value>Intern och extern</Value>
+		</advertising>
+		<advertisement>
+			<QueryID>20754</QueryID>
+			<Name>
+				<![CDATA[Bifoga fil]]>
+			</Name>
+			<File>
+				<ID>187</ID>
+				<Name>
+					<![CDATA[thumbs-up.png]]>
+				</Name>
+				<Size>197233</Size>
+			</File>
+		</advertisement>
+		<advertisementContacts>
+			<QueryID>20616</QueryID>
+			<Name>
+				<![CDATA[Kontaktpersoner i annonsen:]]>
+			</Name>
+			<Row>
+				<ID>41</ID>
+				<Column>
+					<ID>466</ID>
+					<Name>
+						<![CDATA[Namn]]>
+					</Name>
+					<Value>
+						<![CDATA[M]]>
+					</Value>
+				</Column>
+				<Column1>
+					<ID>467</ID>
+					<Name>
+						<![CDATA[Titel]]>
+					</Name>
+					<Value>
+						<![CDATA[Chef]]>
+					</Value>
+				</Column1>
+				<Column2>
+					<ID>481</ID>
+					<Name>
+						<![CDATA[Telefonnummer]]>
+					</Name>
+					<Value>
+						<![CDATA[060-666666]]>
+					</Value>
+				</Column2>
+			</Row>
+		</advertisementContacts>
+		<unionContacts>
+			<QueryID>20617</QueryID>
+			<Name>
+				<![CDATA[Fackliga kontaktpersoner:]]>
+			</Name>
+			<Row>
+				<ID>42</ID>
+				<Column>
+					<ID>469</ID>
+					<Name>
+						<![CDATA[Namn]]>
+					</Name>
+					<Value>
+						<![CDATA[Ulla Ullasson]]>
+					</Value>
+				</Column>
+				<Column1>
+					<ID>470</ID>
+					<Name>
+						<![CDATA[Fackförbund]]>
+					</Name>
+					<Value>
+						<![CDATA[städförbundet]]>
+					</Value>
+				</Column1>
+				<Column2>
+					<ID>484</ID>
+					<Name>
+						<![CDATA[Telefonnummer]]>
+					</Name>
+					<Value>
+						<![CDATA[010-1234567]]>
+					</Value>
+				</Column2>
+			</Row>
+		</unionContacts>
+		<addSelectionQuestions>
+			<QueryID>20618</QueryID>
+			<Name>
+				<![CDATA[Vill du lägga till urvalsfrågor? (timdebitering)]]>
+			</Name>
+			<Value>Ja</Value>
+		</addSelectionQuestions>
+		<question1>
+			<QueryID>20759</QueryID>
+			<Name>
+				<![CDATA[Fråga 1]]>
+			</Name>
+			<Value>
+				<![CDATA[Hur långt är ett snöre?]]>
+			</Value>
+		</question1>
+		<question2>
+			<QueryID>20760</QueryID>
+			<Name>
+				<![CDATA[Fråga 2]]>
+			</Name>
+			<Value>
+				<![CDATA[Vad är klockan?]]>
+			</Value>
+		</question2>
+		<question3>
+			<QueryID>20761</QueryID>
+			<Name>
+				<![CDATA[Fråga 3]]>
+			</Name>
+			<Value>
+				<![CDATA[Finns det tårta?]]>
+			</Value>
+		</question3>
+		<advertisementType>
+			<QueryID>20623</QueryID>
+			<Name>
+				<![CDATA[Annonsering]]>
+			</Name>
+			<Value>Intern och extern</Value>
+		</advertisementType>
+		<advertisementTime>
+			<QueryID>20624</QueryID>
+			<Name>
+				<![CDATA[Annonsering]]>
+			</Name>
+			<Value>2 Veckor</Value>
+		</advertisementTime>
+		<additionalSupport>
+			<QueryID>20765</QueryID>
+			<Name>
+				<![CDATA[Önskar du övrigt stöd i din rekrytering? (max 2 val)]]>
+			</Name>
+			<Value>Utökad annonsering (sociala medier)</Value>
+			<Value>Tester</Value>
+		</additionalSupport>
+		<mediaChoices>
+			<QueryID>20766</QueryID>
+			<Name>
+				<![CDATA[Mediaval]]>
+			</Name>
+			<Value>Målgruppsstyrda annonser (sociala medier)</Value>
+		</mediaChoices>
+		<advertisementPackage>
+			<QueryID>20767</QueryID>
+			<Name>
+				<![CDATA[Annonspaket]]>
+			</Name>
+			<Value>Large</Value>
+		</advertisementPackage>
+		<testType>
+			<QueryID>20768</QueryID>
+			<Name>
+				<![CDATA[Vad vill du beställa för test?]]>
+			</Name>
+			<Value>Personlighetstest</Value>
+		</testType>
+		<inDepthInterview>
+			<QueryID>20769</QueryID>
+			<Name>
+				<![CDATA[Vill du beställa till fördjupad intervju med kandidater?]]>
+			</Name>
+			<Value>Ja</Value>
+		</inDepthInterview>
+		<recruitmentSupport>
+			<QueryID>20770</QueryID>
+			<Name>
+				<![CDATA[Konsultativt rekryteringsstöd per timme]]>
+			</Name>
+			<Value>
+				<![CDATA[Okej]]>
+			</Value>
+		</recruitmentSupport>
+		<additionalInformation>
+			<QueryID>20771</QueryID>
+			<Name>
+				<![CDATA[Övrig information]]>
+			</Name>
+			<Value>
+				<![CDATA[Lycka till!]]>
+			</Value>
+		</additionalInformation>
+	</Values>
+</FlowInstance>
