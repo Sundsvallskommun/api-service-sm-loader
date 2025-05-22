@@ -50,7 +50,6 @@ class OrderingRecruitmentSupportProviderTest {
 		final var priority = "MEDIUM";
 		final var category = "category";
 		final var type = "type";
-		final var labels = List.of("label");
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
