@@ -69,7 +69,7 @@ class StatsOnlyMapperTest {
 		assertThat(errand.get().getStakeholders()).isEmpty();
 		assertThat(errand.get().getExternalTags()).containsExactlyInAnyOrder(
 			new ExternalTag().key("caseId").value("4164"));
-		assertThat(errand.get().getReporterUserId()).isNull();
+		assertThat(errand.get().getReporterUserId()).isEqualTo("unknown");
 
 		verify(properties, times(2)).getServices();
 		verifyNoMoreInteractions(properties);

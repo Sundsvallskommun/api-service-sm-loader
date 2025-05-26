@@ -24,6 +24,7 @@ import se.sundsvall.smloader.integration.openemapper.OpenEStatsOnlyMapperPropert
 public class StatsOnlyMapper {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StatsOnlyMapper.class);
+	private static final String UNKNOWN = "unknown";
 
 	private final OpenEStatsOnlyMapperProperties properties;
 
@@ -50,7 +51,8 @@ public class StatsOnlyMapper {
 				.channel(getChannel(instance))
 				.businessRelated(false)
 				.labels(Optional.ofNullable(serviceProperties.getLabels()).orElse(emptyList()))
-				.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()))));
+				.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId())))
+				.reporterUserId(UNKNOWN));
 		} catch (Exception e) {
 			LOGGER.error("Error mapping to Errand with familyId {}: {}", familyId, e.getMessage(), e);
 			return Optional.empty();
