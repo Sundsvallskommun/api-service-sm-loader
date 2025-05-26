@@ -142,7 +142,7 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 			.labels(mapLabels(getClassification(result)))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
-			.parameters(getParameters(xml, result))
+			.parameters(getParameters(result))
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
 				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(result.applicantUserId());
