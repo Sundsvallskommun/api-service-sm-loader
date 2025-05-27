@@ -1,0 +1,13 @@
+{
+	"request": {
+		"method": "GET",
+		"url": "/oep-integrator/2281/INTERNAL/cases/111111"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"bodyFileName": "test01_import/mocks/api-oep-integrator-get-case.json",
+		"status": 200
+	}
+}
