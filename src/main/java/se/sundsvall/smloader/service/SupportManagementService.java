@@ -42,6 +42,7 @@ public class SupportManagementService {
 	private static final String PROD_SUBJECT = "SmLoader - Production";
 	private static final String TEST_SUBJECT = "SmLoader - Test";
 	private static final String MESSAGE = "SmLoader failed to export cases: ";
+
 	private final SupportManagementClient supportManagementClient;
 	private final CaseRepository caseRepository;
 	private final CaseMappingRepository caseMappingRepository;
@@ -121,7 +122,7 @@ public class SupportManagementService {
 		// Loop over all cases
 		statsOnlyCasesToExport.forEach(caseEntity ->
 
-		statsOnlyMapper.mapToErrand(Base64.getDecoder().decode(caseEntity.getOpenECase()),
+		statsOnlyMapper.mapToErrand(caseEntity,
 			caseEntity.getCaseMetaData().getFamilyId(),
 			caseEntity.getCaseMetaData().getInstance())
 			.flatMap(errand -> sendToSupportManagement(errand, caseEntity.getCaseMetaData().getNamespace(), caseEntity.getCaseMetaData().getMunicipalityId()))
