@@ -7,7 +7,6 @@ import static se.sundsvall.smloader.integration.supportmanagement.configuration.
 
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.ErrandAttachment;
-import generated.se.sundsvall.supportmanagement.Parameter;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,7 +14,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -86,13 +84,5 @@ public interface SupportManagementClient {
 		@PathVariable(name = "namespace") String namespace,
 		@PathVariable(name = "errandId") String errandId,
 		@PathVariable(name = "attachmentId") String attachmentId);
-
-	// Temporary method for migrating errands
-	@PatchMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/parameters", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<List<Parameter>> updateErrandParameters(
-		@PathVariable(name = "municipalityId") String municipalityId,
-		@PathVariable(name = "namespace") String namespace,
-		@PathVariable(name = "errandId") String errandId,
-		@RequestBody List<Parameter> errandParameters);
 
 }

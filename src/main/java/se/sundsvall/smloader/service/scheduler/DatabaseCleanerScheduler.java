@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.scheduling.Dept44Scheduled;
 import se.sundsvall.smloader.service.DatabaseCleanerService;
-import se.sundsvall.smloader.service.MigrationService;
 
 @Service
 public class DatabaseCleanerScheduler {
@@ -23,12 +22,8 @@ public class DatabaseCleanerScheduler {
 
 	private final DatabaseCleanerService databaseCleanerService;
 
-	// Temporary solution to migrate old data
-	private final MigrationService migrationService;
-
-	public DatabaseCleanerScheduler(final DatabaseCleanerService databaseCleanerService, final MigrationService migrationService) {
+	public DatabaseCleanerScheduler(final DatabaseCleanerService databaseCleanerService) {
 		this.databaseCleanerService = databaseCleanerService;
-		this.migrationService = migrationService;
 	}
 
 	@Dept44Scheduled(
@@ -40,8 +35,5 @@ public class DatabaseCleanerScheduler {
 		LOGGER.info(LOG_CLEANING_STARTED);
 		databaseCleanerService.cleanDatabase(OffsetDateTime.now().minusDays(keepDays), MUNICIPALITY_ID);
 		LOGGER.info(LOG_CLEANING_ENDED);
-		LOGGER.info("Beginning migration of old data");
-		migrationService.migrateReportSick("SALARYANDPENSION", MUNICIPALITY_ID);
-		LOGGER.info("Migration of old data has ended");
 	}
 }
