@@ -3,22 +3,23 @@ package se.sundsvall.smloader.service.mapper;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
-import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 
 import java.time.OffsetDateTime;
-import java.util.Base64;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import se.sundsvall.dept44.test.annotation.resource.Load;
+import se.sundsvall.dept44.test.extension.ResourceLoaderExtension;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
 
+@ExtendWith(ResourceLoaderExtension.class)
 class CaseMapperTest {
 
 	@Test
-	void toCaseEntity() throws Exception {
-		final var xml = readOpenEFile("flow-instance-lamna-synpunkt.xml");
+	void toCaseEntity(@Load("open-e/flow-instance-lamna-synpunkt.xml") final String xml) {
 		final var caseMetaDataEntity = CaseMetaDataEntity.create()
 			.withFamilyId("161")
 			.withInstance(EXTERNAL)
@@ -30,7 +31,7 @@ class CaseMapperTest {
 
 		assertThat(caseEntity.getCaseMetaData()).isEqualTo(caseMetaDataEntity);
 		assertThat(caseEntity.getExternalCaseId()).isEqualTo("456");
-		assertThat(caseEntity.getOpenECase()).isEqualTo(Base64.getEncoder().encodeToString(xml));
+		assertThat(caseEntity.getOpenECase()).isEqualTo(xml);
 		assertThat(caseEntity.getDeliveryStatus()).isEqualTo(PENDING);
 	}
 
