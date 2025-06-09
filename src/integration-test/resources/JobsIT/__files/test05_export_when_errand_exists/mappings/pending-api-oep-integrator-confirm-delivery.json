@@ -1,0 +1,12 @@
+{
+	"request": {
+		"method": "POST",
+		"url": "/oep-integrator/2281/EXTERNAL/cases/4241/delivery"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "*/*"
+		},
+		"status": 204
+	}
+}
