@@ -12,14 +12,16 @@ class SupportManagementMapperTest {
 		// Arrange
 		final var parameterName = "paramName";
 		final var parameterValue = "paramValue";
+		final var displayName = "displayName";
 
 		// Act
-		final var result = SupportManagementMapper.toParameter(parameterName, parameterValue);
+		final var result = SupportManagementMapper.toParameter(parameterName, parameterValue, displayName);
 
 		// Assert
 		assertThat(result).isNotNull();
 		assertThat(result.getKey()).isEqualTo(parameterName);
 		assertThat(result.getValues()).containsExactly(parameterValue);
+		assertThat(result.getDisplayName()).isEqualTo(displayName);
 	}
 
 	@Test
@@ -27,10 +29,11 @@ class SupportManagementMapperTest {
 
 		// Arrange
 		final var parameterName = "paramName";
+		final var displayName = "displayName";
 		final String parameterValue = null;
 
 		// Act
-		final var result = SupportManagementMapper.toParameter(parameterName, parameterValue);
+		final var result = SupportManagementMapper.toParameter(parameterName, parameterValue, displayName);
 
 		// Assert
 		assertThat(result).isNull();

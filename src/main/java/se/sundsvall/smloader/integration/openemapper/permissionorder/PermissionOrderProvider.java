@@ -152,18 +152,18 @@ class PermissionOrderProvider implements OpenEMapper {
 				.role(ROLE_APPLICANT)
 				.firstName(permissionOrder.applicantFirstname())
 				.lastName(permissionOrder.applicantLastname())
-				.parameters(List.of(toParameter(KEY_ADMINISTRATION_NAME, permissionOrder.applicantOrganization()).displayName(DISPLAY_ADMINISTRATION_NAME),
-					toParameter(KEY_USER_ID, permissionOrder.applicantUserId()).displayName(DISPLAY_USER_ID),
-					toParameter(KEY_TITLE, permissionOrder.applicantTitle()).displayName(DISPLAY_TITLE)))
+				.parameters(List.of(toParameter(KEY_ADMINISTRATION_NAME, permissionOrder.applicantOrganization(), DISPLAY_ADMINISTRATION_NAME),
+					toParameter(KEY_USER_ID, permissionOrder.applicantUserId(), DISPLAY_USER_ID),
+					toParameter(KEY_TITLE, permissionOrder.applicantTitle(), DISPLAY_TITLE)))
 				.contactChannels(getContactChannels(permissionOrder.applicantEmail())),
 			new Stakeholder()
 				.role(ROLE_USER)
 				.firstName(permissionOrder.userFirstname())
 				.lastName(permissionOrder.userLastname())
 				.contactChannels(getContactChannels(permissionOrder.userEmail()))
-				.parameters(List.of(toParameter(KEY_ADMINISTRATION_NAME, permissionOrder.userOrganization()).displayName(DISPLAY_ADMINISTRATION_NAME),
-					toParameter(KEY_USER_ID, permissionOrder.userUserId()).displayName(DISPLAY_USER_ID),
-					toParameter(KEY_TITLE, permissionOrder.userTitle()).displayName(DISPLAY_TITLE)))
+				.parameters(List.of(toParameter(KEY_ADMINISTRATION_NAME, permissionOrder.userOrganization(), DISPLAY_ADMINISTRATION_NAME),
+					toParameter(KEY_USER_ID, permissionOrder.userUserId(), DISPLAY_USER_ID),
+					toParameter(KEY_TITLE, permissionOrder.userTitle(), DISPLAY_TITLE)))
 				.externalIdType(EXTERNAL_ID_TYPE_PRIVATE)
 				.externalId(getPartyId(permissionOrder.userLegalId()))));
 		if (isNotEmpty(permissionOrder.managerFirstname())) {
@@ -172,9 +172,9 @@ class PermissionOrderProvider implements OpenEMapper {
 				.firstName(permissionOrder.managerFirstname())
 				.lastName(permissionOrder.managerLastname())
 				.contactChannels(getContactChannels(permissionOrder.managerEmail()))
-				.parameters(List.of(toParameter(KEY_ADMINISTRATION_NAME, permissionOrder.managerOrganization()).displayName(DISPLAY_ADMINISTRATION_NAME),
-					toParameter(KEY_USER_ID, permissionOrder.managerUserId()).displayName(DISPLAY_USER_ID),
-					toParameter(KEY_TITLE, permissionOrder.managerTitle()).displayName(DISPLAY_TITLE))));
+				.parameters(List.of(toParameter(KEY_ADMINISTRATION_NAME, permissionOrder.managerOrganization(), DISPLAY_ADMINISTRATION_NAME),
+					toParameter(KEY_USER_ID, permissionOrder.managerUserId(), DISPLAY_USER_ID),
+					toParameter(KEY_TITLE, permissionOrder.managerTitle(), DISPLAY_TITLE))));
 		}
 		return stakeholders;
 	}

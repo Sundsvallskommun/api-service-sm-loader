@@ -84,4 +84,5 @@ public interface SupportManagementClient {
 		@PathVariable(name = "namespace") String namespace,
 		@PathVariable(name = "errandId") String errandId,
 		@PathVariable(name = "attachmentId") String attachmentId);
+
 }

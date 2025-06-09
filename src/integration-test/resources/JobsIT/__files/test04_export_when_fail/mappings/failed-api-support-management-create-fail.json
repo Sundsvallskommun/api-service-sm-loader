@@ -28,6 +28,7 @@
 					},
 					"status": "NEW",
 					"channel": "ESERVICE",
+					"reporterUserId": "unknown",
 					"businessRelated": false,
 					"labels": []
 				},

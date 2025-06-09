@@ -6,7 +6,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CH
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
-import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.Errand;
@@ -17,6 +16,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.enums.Instance;
 import se.sundsvall.smloader.integration.openemapper.OpenEStatsOnlyMapperProperties;
 
@@ -24,6 +24,7 @@ import se.sundsvall.smloader.integration.openemapper.OpenEStatsOnlyMapperPropert
 public class StatsOnlyMapper {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StatsOnlyMapper.class);
+	private static final String UNKNOWN = "unknown";
 
 	private final OpenEStatsOnlyMapperProperties properties;
 
@@ -31,14 +32,12 @@ public class StatsOnlyMapper {
 		this.properties = properties;
 	}
 
-	public Optional<Errand> mapToErrand(final byte[] xml, final String familyId, final Instance instance) {
+	public Optional<Errand> mapToErrand(final CaseEntity caseEntity, final String familyId, final Instance instance) {
 		try {
 			if (isNull(properties) || isNull(properties.getServices().get(familyId))) {
 				LOGGER.error("No stats-only config found for familyId: {}", familyId);
 				return Optional.empty();
 			}
-
-			final var result = extractValue(xml, StatsOnly.class);
 
 			final var serviceProperties = properties.getServices().get(familyId);
 
@@ -50,7 +49,8 @@ public class StatsOnlyMapper {
 				.channel(getChannel(instance))
 				.businessRelated(false)
 				.labels(Optional.ofNullable(serviceProperties.getLabels()).orElse(emptyList()))
-				.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()))));
+				.reporterUserId(UNKNOWN)
+				.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(caseEntity.getExternalCaseId()))));
 		} catch (Exception e) {
 			LOGGER.error("Error mapping to Errand with familyId {}: {}", familyId, e.getMessage(), e);
 			return Optional.empty();
