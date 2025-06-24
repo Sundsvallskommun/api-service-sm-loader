@@ -2,8 +2,9 @@ package se.sundsvall.smloader.integration.openemapper.orderingrecruitmentsupport
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
+import static org.zalando.problem.Status.BAD_REQUEST;
 import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
@@ -26,6 +27,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.zalando.problem.ThrowableProblem;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 
 @ExtendWith(MockitoExtension.class)
@@ -139,7 +141,7 @@ class OrderingRecruitmentSupportProviderTest {
 	@CsvSource(value = {
 		"Chef:COMPLETE_RECRUITMENT.MANAGER",
 		"Medarbetare:COMPLETE_RECRUITMENT.EMPLOYEE",
-		"Volym:COMPLETE_RECRUITMENT.VOLUME",
+		"Volymrekrytering:COMPLETE_RECRUITMENT.VOLUME",
 		"Omtag:COMPLETE_RECRUITMENT.RETAKE"
 	}, delimiter = ':')
 	void mapWithDifferentClassifications(String input, String expected) {
@@ -163,5 +165,30 @@ class OrderingRecruitmentSupportProviderTest {
 
 		assertThat(errand.getClassification().getCategory()).isEqualTo("COMPLETE_RECRUITMENT");
 		assertThat(errand.getClassification().getType()).isEqualTo(expected);
+	}
+
+	@Test
+	void throwExceptionWhenUnsupportedPosition() {
+		when(properties.getPriority()).thenReturn("MEDIUM");
+
+		final var xml = """
+			<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+			<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-551.xsd">
+				<Values>
+					<orderDetails>
+			  			<Value>Fullständig rekryteringsprocess</Value>
+			  		</orderDetails>
+					<position>
+			  			<Value>Unsupported Position</Value>
+			  		</position>
+				</Values>
+			</FlowInstance>
+			""";
+		final var bytes = xml.getBytes(StandardCharsets.ISO_8859_1);
+		final var exception = assertThrows(ThrowableProblem.class, () -> provider.mapToErrand(bytes));
+
+		assertThat(exception.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(exception.getTitle()).isEqualTo(BAD_REQUEST.getReasonPhrase());
+		assertThat(exception.getDetail()).isEqualTo("Unsupported recruitment position: Unsupported Position");
 	}
 }
