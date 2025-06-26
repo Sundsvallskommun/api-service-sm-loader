@@ -162,27 +162,20 @@
 			</workplace>
 		</titleWorkplace>
 		<employmentType>
-			<QueryID>20605</QueryID>
-			<Name>
-				<![CDATA[Anställningsform]]>
-			</Name>
-			<Value>Tillsvidareanställning</Value>
+			<QueryID>20913</QueryID>
+			<Name><![CDATA[Anställningsform]]></Name>
+			<Value>Tidsbegränsad anställning</Value>
 		</employmentType>
-		<startingDate>
-			<QueryID>20606</QueryID>
-			<Name>
-				<![CDATA[Tillträde]]>
-			</Name>
-			<StartDate>2025-04-24</StartDate>
-		</startingDate>
+		<temporaryDate>
+			<QueryID>20915</QueryID>
+			<Name><![CDATA[Tidsbegränsad]]></Name>
+			<StartDate>2025-06-11</StartDate>
+			<EndDate>2025-06-12</EndDate>
+		</temporaryDate>
 		<scope>
-			<QueryID>20608</QueryID>
-			<Name>
-				<![CDATA[Omfattning]]>
-			</Name>
-			<percentage>
-				<![CDATA[100]]>
-			</percentage>
+			<QueryID>20916</QueryID>
+			<Name><![CDATA[Omfattning]]></Name>
+			<percentage><![CDATA[100]]></percentage>
 		</scope>
 		<numberOfPositions>
 			<QueryID>20609</QueryID>
