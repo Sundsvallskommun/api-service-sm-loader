@@ -1,0 +1,14 @@
+{
+	"request": {
+		"method": "GET",
+		"urlPath": "/oep-integrator/2281/INTERNAL/cases/4243/queries/queryId1/files/fileId2"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/pdf"
+		},
+		"bodyFileName": "test02_export/mocks/test.jpg",
+		"status": 200
+	},
+	"name": "api-oep-integrator-get-file"
+}
