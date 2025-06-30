@@ -1,5 +1,6 @@
 package se.sundsvall.smloader.integration.openemapper.orderingrecruitmentsupport;
 
+import static org.zalando.problem.Status.BAD_REQUEST;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADDITIONAL_INFORMATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADDITIONAL_SUPPORT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADD_SELECTION_QUESTIONS;
@@ -98,6 +99,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.zalando.problem.Problem;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperBase;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.util.XPathException;
@@ -190,9 +192,9 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 		return switch (position) {
 			case "Chef" -> TYPE_COMPLETE_RECRUITMENT_MANAGER;
 			case "Medarbetare" -> TYPE_COMPLETE_RECRUITMENT_EMPLOYEE;
-			case "Volym" -> TYPE_COMPLETE_RECRUITMENT_VOLUME;
+			case "Volymrekrytering" -> TYPE_COMPLETE_RECRUITMENT_VOLUME;
 			case "Omtag" -> TYPE_COMPLETE_RECRUITMENT_RETAKE;
-			default -> null;
+			default -> throw Problem.valueOf(BAD_REQUEST, "Unsupported recruitment position: " + position);
 		};
 	}
 
