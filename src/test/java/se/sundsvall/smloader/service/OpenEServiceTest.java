@@ -27,7 +27,9 @@ import generated.se.sundsvall.oepintegrator.ConfirmDeliveryRequest;
 import generated.se.sundsvall.oepintegrator.InstanceType;
 import generated.se.sundsvall.oepintegrator.ModelCase;
 import java.io.ByteArrayInputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -82,7 +84,7 @@ class OpenEServiceTest {
 	private ArgumentCaptor<ConfirmDeliveryRequest> confirmDeliveryCaptor;
 
 	@Test
-	void fetchAndSaveNewOpenECases(@Load("/open-e/flow-instance-lamna-synpunkt.xml") final String xml) throws Exception {
+	void fetchAndSaveNewOpenECases(@Load("/open-e/flow-instance-lamna-synpunkt.xml") final String xml) {
 		// Arrange
 		final var municipalityId = "municipalityId";
 		final var cases = List.of(
@@ -92,8 +94,8 @@ class OpenEServiceTest {
 
 		final var modelcase = new ModelCase().familyId("123").payload(xml);
 
-		final var fromDate = LocalDateTime.now().minusDays(1);
-		final var toDate = LocalDateTime.now();
+		final var fromDate = LocalDate.now().minusDays(1);
+		final var toDate = LocalDate.now();
 		final var status = "status";
 		final var caseMetaDataEntity456 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status);
 		final var caseMetaDataEntity789 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status);
@@ -128,7 +130,7 @@ class OpenEServiceTest {
 			.thenReturn(Optional.of(caseMetaDataEntity789));
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
+		openEService.fetchAndSaveNewOpenECases(LocalDateTime.of(fromDate, LocalTime.now()), LocalDateTime.of(toDate, LocalTime.now()), municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(oepIntegratorClientMock, times(3)).getCases(anyString(), eq(InstanceType.EXTERNAL), anyInt(), anyString(), anyString(), anyString());
@@ -166,8 +168,8 @@ class OpenEServiceTest {
 			new CaseEnvelope().flowInstanceId("123456"),
 			new CaseEnvelope().flowInstanceId("234567"),
 			new CaseEnvelope().flowInstanceId("345678"));
-		final var fromDate = LocalDateTime.now().minusDays(1);
-		final var toDate = LocalDateTime.now();
+		final var fromDate = LocalDate.now().minusDays(1);
+		final var toDate = LocalDate.now();
 		final var status = "status";
 		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("123").withInstance(EXTERNAL)
 			.withOpenEImportStatus(status).withStatsOnly(true);
@@ -187,7 +189,7 @@ class OpenEServiceTest {
 		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(false);
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
+		openEService.fetchAndSaveNewOpenECases(LocalDateTime.of(fromDate, LocalTime.now()), LocalDateTime.of(toDate, LocalTime.now()), municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(oepIntegratorClientMock).getCases(anyString(), eq(InstanceType.EXTERNAL), anyInt(), anyString(), anyString(), anyString());
@@ -217,8 +219,8 @@ class OpenEServiceTest {
 			new CaseEnvelope().flowInstanceId("123456"),
 			new CaseEnvelope().flowInstanceId("234567"),
 			new CaseEnvelope().flowInstanceId("345678"));
-		final var fromDate = LocalDateTime.now().minusDays(1);
-		final var toDate = LocalDateTime.now();
+		final var fromDate = LocalDate.now().minusDays(1);
+		final var toDate = LocalDate.now();
 		final var status = "status";
 		final var municipalityId = "municipalityId";
 
@@ -252,7 +254,7 @@ class OpenEServiceTest {
 			.thenReturn(true);
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
+		openEService.fetchAndSaveNewOpenECases(LocalDateTime.of(fromDate, LocalTime.now()), LocalDateTime.of(toDate, LocalTime.now()), municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(oepIntegratorClientMock, times(3)).getCases(anyString(), eq(InstanceType.EXTERNAL), anyInt(), anyString(), anyString(), anyString());
@@ -279,8 +281,8 @@ class OpenEServiceTest {
 
 		final var modelcase = new ModelCase().familyId("161").payload(xml);
 
-		final var fromDate = LocalDateTime.now().minusDays(1);
-		final var toDate = LocalDateTime.now();
+		final var fromDate = LocalDate.now().minusDays(1);
+		final var toDate = LocalDate.now();
 		final var status = "status";
 		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status);
 		final var caseMetaDataEntity456 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status);
@@ -316,7 +318,7 @@ class OpenEServiceTest {
 			.thenReturn(Optional.of(caseMetaDataEntity789));
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
+		openEService.fetchAndSaveNewOpenECases(LocalDateTime.of(fromDate, LocalTime.now()), LocalDateTime.of(toDate, LocalTime.now()), municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(oepIntegratorClientMock, times(3)).getCases(anyString(), eq(InstanceType.EXTERNAL), anyInt(), anyString(), anyString(), anyString());
@@ -351,8 +353,8 @@ class OpenEServiceTest {
 
 		final var modelCase = new ModelCase().familyId("123").payload("somePayload");
 
-		final var fromDate = LocalDateTime.now().minusDays(1);
-		final var toDate = LocalDateTime.now();
+		final var fromDate = LocalDate.now().minusDays(1);
+		final var toDate = LocalDate.now();
 		final var status = "status";
 		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status);
 
@@ -370,7 +372,7 @@ class OpenEServiceTest {
 		when(caseMetaDataRepositoryMock.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity123));
 
 		// Act
-		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
+		openEService.fetchAndSaveNewOpenECases(LocalDateTime.of(fromDate, LocalTime.now()), LocalDateTime.of(toDate, LocalTime.now()), municipalityId, consumerMock);
 
 		// Assert and verify
 		verify(oepIntegratorClientMock).getCases(any(), any(), anyInt(), anyString(), anyString(), anyString());
@@ -477,14 +479,14 @@ class OpenEServiceTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = {
-		"2024-06-01", "1999-12-31", "2020-02-29"
+		"2024-06-01T01:01", "1999-12-31", "2020-02-29"
 	})
 	void formatLocalDate_happyCases(final String input) {
 		// Act
 		final String result = openEService.formatLocalDate(input);
 
 		// Assert
-		assertThat(result).isEqualTo(input);
+		assertThat(result).isEqualTo(input.split("T")[0]); // Expecting only the date part
 	}
 
 	@ParameterizedTest
@@ -496,13 +498,7 @@ class OpenEServiceTest {
 		// Act
 		final String result = openEService.formatLocalDate(input);
 
-		// Assert
-		// For null input, should return null; for others, returns the input as is (since .formatted() does not parse)
-		if (input == null) {
-			assertThat(result).isNull();
-		} else {
-			assertThat(result).isEqualTo(input);
-		}
+		assertThat(result).isNull();
 	}
 
 }
