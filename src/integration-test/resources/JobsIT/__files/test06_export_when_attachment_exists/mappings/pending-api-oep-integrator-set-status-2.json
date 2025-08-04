@@ -1,0 +1,15 @@
+{
+	"request": {
+		"method": "PUT",
+		"url": "/oep-integrator/2281/INTERNAL/cases/4243/status"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 204,
+		"jsonBody": {
+			"eventId": 16287
+		}
+	}
+}

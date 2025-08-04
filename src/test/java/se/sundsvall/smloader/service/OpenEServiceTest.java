@@ -5,14 +5,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static se.sundsvall.smloader.TestUtil.readOpenEFile;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.INTERNAL;
@@ -20,11 +21,13 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPP
 
 import feign.Request;
 import feign.Response;
-import generated.se.sundsvall.callback.ConfirmDelivery;
-import generated.se.sundsvall.callback.SetStatus;
+import generated.se.sundsvall.oepintegrator.CaseEnvelope;
+import generated.se.sundsvall.oepintegrator.CaseStatusChangeRequest;
+import generated.se.sundsvall.oepintegrator.ConfirmDeliveryRequest;
+import generated.se.sundsvall.oepintegrator.InstanceType;
+import generated.se.sundsvall.oepintegrator.ModelCase;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,36 +41,28 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.dept44.test.annotation.resource.Load;
+import se.sundsvall.dept44.test.extension.ResourceLoaderExtension;
 import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.Instance;
-import se.sundsvall.smloader.integration.openeexternal.OpenEExternalClient;
-import se.sundsvall.smloader.integration.openeexternalsoap.OpenEExternalSoapClient;
-import se.sundsvall.smloader.integration.openeinternal.OpenEInternalClient;
-import se.sundsvall.smloader.integration.openeinternalsoap.OpenEInternalSoapClient;
+import se.sundsvall.smloader.integration.oepintegrator.OepIntegratorClient;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({
+	MockitoExtension.class, ResourceLoaderExtension.class
+})
 class OpenEServiceTest {
 
 	@Mock
-	private OpenEExternalClient mockOpenEExternalClient;
+	private OepIntegratorClient oepIntegratorClientMock;
 
 	@Mock
-	private OpenEInternalClient mockOpenEInternalClient;
+	private CaseRepository caseRepositoryMock;
 
 	@Mock
-	private OpenEExternalSoapClient mockOpenEExternalSoapClient;
-
-	@Mock
-	private OpenEInternalSoapClient mockOpenEInternalSoapClient;
-
-	@Mock
-	private CaseRepository mockCaseRepository;
-
-	@Mock
-	private CaseMetaDataRepository mockCaseMetaDataRepository;
+	private CaseMetaDataRepository caseMetaDataRepositoryMock;
 
 	@Mock
 	private Consumer<String> consumerMock;
@@ -79,54 +74,53 @@ class OpenEServiceTest {
 	private ArgumentCaptor<CaseEntity> caseEntityCaptor;
 
 	@Captor
-	private ArgumentCaptor<SetStatus> setStatusCaptor;
+	private ArgumentCaptor<CaseStatusChangeRequest> setStatusCaptor;
 
 	@Captor
-	private ArgumentCaptor<ConfirmDelivery> confirmDeliveryCaptor;
+	private ArgumentCaptor<ConfirmDeliveryRequest> confirmDeliveryCaptor;
 
 	@Test
-	void fetchAndSaveNewOpenECases() throws Exception {
+	void fetchAndSaveNewOpenECases(@Load("/open-e/flow-instance-lamna-synpunkt.xml") final String xml) throws Exception {
 		// Arrange
 		final var municipalityId = "municipalityId";
-		final var flowInstancesXml = readOpenEFile("flow-instances.xml");
+		final var cases = List.of(
+			new CaseEnvelope().flowInstanceId("123456"),
+			new CaseEnvelope().flowInstanceId("234567"),
+			new CaseEnvelope().flowInstanceId("345678"));
 
-		final var flowInstanceXml = readOpenEFile("flow-instance-lamna-synpunkt.xml");
-
-		final var expectedFlowInstance = Base64.getEncoder().encodeToString(flowInstanceXml);
+		final var modelcase = new ModelCase().familyId("123").payload(xml);
 
 		final var fromDate = LocalDateTime.now().minusDays(1);
 		final var toDate = LocalDateTime.now();
 		final var status = "status";
-		final var caseMetaDataEntity456 = CaseMetaDataEntity.create().withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity789 = CaseMetaDataEntity.create().withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity112 = CaseMetaDataEntity.create().withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity115 = CaseMetaDataEntity.create().withFamilyId("115").withInstance(INTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("123").withInstance(EXTERNAL)
-			.withOpenEImportStatus(status).withStatsOnly(true);
-		final var caseMetaDataEntity101 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("101").withInstance(INTERNAL)
-			.withOpenEImportStatus(status).withStatsOnly(true);
+		final var caseMetaDataEntity456 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity789 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity112 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity115 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("115").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status).withStatsOnly(true);
+		final var caseMetaDataEntity101 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("101").withInstance(INTERNAL).withOpenEImportStatus(status).withStatsOnly(true);
 
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(EXTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity456, caseMetaDataEntity789));
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(INTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity112, caseMetaDataEntity115));
-		when(mockCaseMetaDataRepository.findByMunicipalityIdAndStatsOnly(municipalityId, true)).thenReturn(List.of(caseMetaDataEntity101, caseMetaDataEntity123));
+		when(caseMetaDataRepositoryMock.findByInstanceAndMunicipalityIdAndStatsOnly(EXTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity456, caseMetaDataEntity789));
+		when(caseMetaDataRepositoryMock.findByInstanceAndMunicipalityIdAndStatsOnly(INTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity112, caseMetaDataEntity115));
+		when(caseMetaDataRepositoryMock.findByMunicipalityIdAndStatsOnly(municipalityId, true)).thenReturn(List.of(caseMetaDataEntity101, caseMetaDataEntity123));
 
-		when(mockOpenEExternalClient.getErrandIds("123", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEExternalClient.getErrandIds("456", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEExternalClient.getErrandIds("789", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEInternalClient.getErrandIds("101", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEInternalClient.getErrandIds("112", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEInternalClient.getErrandIds("115", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEInternalClient.getErrand(anyString())).thenReturn(flowInstanceXml);
-		when(mockOpenEExternalClient.getErrand(anyString())).thenReturn(flowInstanceXml);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 123, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 456, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 789, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.INTERNAL, 101, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.INTERNAL, 112, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.INTERNAL, 115, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCase(anyString(), any(), anyString())).thenReturn(modelcase);
+		when(oepIntegratorClientMock.getCase(anyString(), any(), anyString())).thenReturn(modelcase);
 
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(false);
 
-		when(mockCaseMetaDataRepository.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity112))
+		when(caseMetaDataRepositoryMock.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity112))
 			.thenReturn(Optional.of(caseMetaDataEntity115))
 			.thenReturn(Optional.of(caseMetaDataEntity456))
 			.thenReturn(Optional.of(caseMetaDataEntity789));
@@ -135,12 +129,12 @@ class OpenEServiceTest {
 		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
 
 		// Assert and verify
-		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockOpenEInternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
-		verify(mockOpenEExternalClient, times(3)).getErrand(anyString());
-		verify(mockCaseRepository, times(12)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
-		verify(mockCaseRepository, times(12)).save(caseEntityCaptor.capture());
+		verify(oepIntegratorClientMock, times(3)).getCases(anyString(), eq(InstanceType.EXTERNAL), anyInt(), anyString(), anyString(), anyString());
+		verify(oepIntegratorClientMock, times(3)).getCases(anyString(), eq(InstanceType.INTERNAL), anyInt(), anyString(), anyString(), anyString());
+		verify(oepIntegratorClientMock, times(3)).getCase(anyString(), eq(InstanceType.EXTERNAL), anyString());
+		verify(oepIntegratorClientMock, times(3)).getCase(anyString(), eq(InstanceType.INTERNAL), anyString());
+		verify(caseRepositoryMock, times(12)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
+		verify(caseRepositoryMock, times(12)).save(caseEntityCaptor.capture());
 		verifyNoInteractions(consumerMock);
 
 		assertThat(caseEntityCaptor.getAllValues()).hasSize(12)
@@ -153,20 +147,23 @@ class OpenEServiceTest {
 					tuple("123456", caseMetaDataEntity123, PENDING, null),
 					tuple("234567", caseMetaDataEntity123, PENDING, null),
 					tuple("345678", caseMetaDataEntity123, PENDING, null),
-					tuple("123456", caseMetaDataEntity112, PENDING, expectedFlowInstance),
-					tuple("234567", caseMetaDataEntity115, PENDING, expectedFlowInstance),
-					tuple("345678", caseMetaDataEntity456, PENDING, expectedFlowInstance),
-					tuple("123456", caseMetaDataEntity789, PENDING, expectedFlowInstance),
-					tuple("234567", caseMetaDataEntity789, PENDING, expectedFlowInstance),
-					tuple("345678", caseMetaDataEntity789, PENDING, expectedFlowInstance));
+					tuple("123456", caseMetaDataEntity112, PENDING, xml),
+					tuple("234567", caseMetaDataEntity115, PENDING, xml),
+					tuple("345678", caseMetaDataEntity456, PENDING, xml),
+					tuple("123456", caseMetaDataEntity789, PENDING, xml),
+					tuple("234567", caseMetaDataEntity789, PENDING, xml),
+					tuple("345678", caseMetaDataEntity789, PENDING, xml));
 	}
 
 	@Test
-	void fetchAndSaveStatsOnlyCases() throws Exception {
+	void fetchAndSaveStatsOnlyCases() {
 		// Arrange
 		final var municipalityId = "municipalityId";
-		final var flowInstancesXml = readOpenEFile("flow-instances.xml");
 
+		final var cases = List.of(
+			new CaseEnvelope().flowInstanceId("123456"),
+			new CaseEnvelope().flowInstanceId("234567"),
+			new CaseEnvelope().flowInstanceId("345678"));
 		final var fromDate = LocalDateTime.now().minusDays(1);
 		final var toDate = LocalDateTime.now();
 		final var status = "status";
@@ -175,28 +172,28 @@ class OpenEServiceTest {
 		final var caseMetaDataEntity101 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("101").withInstance(INTERNAL)
 			.withOpenEImportStatus(status).withStatsOnly(true);
 
-		when(mockCaseMetaDataRepository.findByMunicipalityIdAndStatsOnly(municipalityId, true)).thenReturn(List.of(caseMetaDataEntity101, caseMetaDataEntity123));
+		when(caseMetaDataRepositoryMock.findByMunicipalityIdAndStatsOnly(municipalityId, true)).thenReturn(List.of(caseMetaDataEntity101, caseMetaDataEntity123));
 
-		when(mockOpenEExternalClient.getErrandIds("123", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEInternalClient.getErrandIds("101", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 123, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.INTERNAL, 101, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
 
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(false);
 
 		// Act
 		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
 
 		// Assert and verify
-		verify(mockOpenEExternalClient).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockOpenEInternalClient).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockOpenEInternalClient, never()).getErrand(anyString());
-		verify(mockOpenEExternalClient, never()).getErrand(anyString());
-		verify(mockCaseRepository, times(6)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
-		verify(mockCaseRepository, times(6)).save(caseEntityCaptor.capture());
+		verify(oepIntegratorClientMock).getCases(anyString(), eq(InstanceType.EXTERNAL), anyInt(), anyString(), anyString(), anyString());
+		verify(oepIntegratorClientMock).getCases(anyString(), eq(InstanceType.INTERNAL), anyInt(), anyString(), anyString(), anyString());
+		verify(oepIntegratorClientMock, never()).getCase(anyString(), any(), anyString());
+		verify(oepIntegratorClientMock, never()).getCase(anyString(), any(), anyString());
+		verify(caseRepositoryMock, times(6)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
+		verify(caseRepositoryMock, times(6)).save(caseEntityCaptor.capture());
 		verifyNoInteractions(consumerMock);
 
 		assertThat(caseEntityCaptor.getAllValues()).hasSize(6)
@@ -212,100 +209,104 @@ class OpenEServiceTest {
 	}
 
 	@Test
-	void fetchAndSaveNewOpenECasesWhenExists() throws Exception {
+	void fetchAndSaveNewOpenECasesWhenExists() {
 		// Arrange
-		final var flowInstancesXml = readOpenEFile("flow-instances.xml");
+		final var cases = List.of(
+			new CaseEnvelope().flowInstanceId("123456"),
+			new CaseEnvelope().flowInstanceId("234567"),
+			new CaseEnvelope().flowInstanceId("345678"));
 		final var fromDate = LocalDateTime.now().minusDays(1);
 		final var toDate = LocalDateTime.now();
 		final var status = "status";
 		final var municipalityId = "municipalityId";
 
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(EXTERNAL, municipalityId, false)).thenReturn(
-			List.of(CaseMetaDataEntity.create().withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status),
-				CaseMetaDataEntity.create().withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status)));
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(INTERNAL, municipalityId, false)).thenReturn(
-			List.of(CaseMetaDataEntity.create().withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status)));
+		when(caseMetaDataRepositoryMock.findByInstanceAndMunicipalityIdAndStatsOnly(EXTERNAL, municipalityId, false)).thenReturn(
+			List.of(CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status),
+				CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status)));
+		when(caseMetaDataRepositoryMock.findByInstanceAndMunicipalityIdAndStatsOnly(INTERNAL, municipalityId, false)).thenReturn(
+			List.of(CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status)));
 
-		when(mockCaseMetaDataRepository.findByMunicipalityIdAndStatsOnly(municipalityId, true)).thenReturn(
+		when(caseMetaDataRepositoryMock.findByMunicipalityIdAndStatsOnly(municipalityId, true)).thenReturn(
 			List.of(CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("123").withInstance(EXTERNAL)
 				.withOpenEImportStatus(status).withStatsOnly(true)));
 
-		when(mockOpenEExternalClient.getErrandIds("123", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEExternalClient.getErrandIds("456", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEExternalClient.getErrandIds("789", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 123, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 456, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 789, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
 
-		when(mockOpenEInternalClient.getErrandIds("112", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.INTERNAL, 112, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
 
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId))
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId))
 			.thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId))
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId))
 			.thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId))
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId))
 			.thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId))
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId))
 			.thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId))
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId))
 			.thenReturn(true);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId))
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId))
 			.thenReturn(true);
 
 		// Act
 		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
 
 		// Assert and verify
-		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockCaseRepository, times(2)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId);
-		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId);
-		verify(mockCaseRepository, times(2)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId);
-		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId);
-		verify(mockCaseRepository, times(2)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId);
-		verify(mockCaseRepository).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId);
-		verify(mockOpenEInternalClient).getErrandIds(anyString(), anyString(), anyString(), anyString());
+		verify(oepIntegratorClientMock, times(3)).getCases(anyString(), eq(InstanceType.EXTERNAL), anyInt(), anyString(), anyString(), anyString());
+		verify(caseRepositoryMock, times(2)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId);
+		verify(caseRepositoryMock).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId);
+		verify(caseRepositoryMock, times(2)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId);
+		verify(caseRepositoryMock).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId);
+		verify(caseRepositoryMock, times(2)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId);
+		verify(caseRepositoryMock).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId);
+		verify(oepIntegratorClientMock).getCases(anyString(), eq(InstanceType.INTERNAL), anyInt(), anyString(), anyString(), anyString());
 		verifyNoInteractions(consumerMock);
 
-		verifyNoMoreInteractions(mockOpenEExternalClient, mockOpenEInternalClient, mockCaseRepository);
+		verifyNoMoreInteractions(oepIntegratorClientMock, caseRepositoryMock);
 	}
 
 	@Test
-	void fetchAndSaveNewOpenECasesWhenExceptionOfOneFamilyId() throws Exception {
+	void fetchAndSaveNewOpenECasesWhenExceptionOfOneFamilyId(@Load("/open-e/flow-instance-lamna-synpunkt.xml") final String xml) {
 		// Arrange
 		final var municipalityId = "municipalityId";
-		final var flowInstancesXml = readOpenEFile("flow-instances.xml");
+		final var cases = List.of(
+			new CaseEnvelope().flowInstanceId("123456"),
+			new CaseEnvelope().flowInstanceId("234567"),
+			new CaseEnvelope().flowInstanceId("345678"));
 
-		final var flowInstanceXml = readOpenEFile("flow-instance-lamna-synpunkt.xml");
-
-		final var expectedFlowInstance = Base64.getEncoder().encodeToString(flowInstanceXml);
+		final var modelcase = new ModelCase().familyId("161").payload(xml);
 
 		final var fromDate = LocalDateTime.now().minusDays(1);
 		final var toDate = LocalDateTime.now();
 		final var status = "status";
-		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity456 = CaseMetaDataEntity.create().withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity789 = CaseMetaDataEntity.create().withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity101 = CaseMetaDataEntity.create().withFamilyId("101").withInstance(INTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity112 = CaseMetaDataEntity.create().withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status);
-		final var caseMetaDataEntity115 = CaseMetaDataEntity.create().withFamilyId("115").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity456 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("456").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity789 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("789").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity101 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("101").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity112 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("112").withInstance(INTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity115 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("115").withInstance(INTERNAL).withOpenEImportStatus(status);
 
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(EXTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity123, caseMetaDataEntity456, caseMetaDataEntity789));
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(INTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity101, caseMetaDataEntity112, caseMetaDataEntity115));
+		when(caseMetaDataRepositoryMock.findByInstanceAndMunicipalityIdAndStatsOnly(EXTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity123, caseMetaDataEntity456, caseMetaDataEntity789));
+		when(caseMetaDataRepositoryMock.findByInstanceAndMunicipalityIdAndStatsOnly(INTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity101, caseMetaDataEntity112, caseMetaDataEntity115));
 
-		when(mockOpenEExternalClient.getErrandIds("123", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEExternalClient.getErrandIds("456", status, fromDate.toString(), toDate.toString())).thenThrow(new RuntimeException("Error"));
-		when(mockOpenEExternalClient.getErrandIds("789", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEExternalClient.getErrand(anyString())).thenReturn(flowInstanceXml);
-		when(mockOpenEInternalClient.getErrandIds("101", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEInternalClient.getErrandIds("112", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEInternalClient.getErrandIds("115", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEInternalClient.getErrand(anyString())).thenReturn(flowInstanceXml);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 123, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 456, fromDate.toString(), toDate.toString(), status)).thenThrow(new RuntimeException("Error"));
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 789, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCase(anyString(), any(), anyString())).thenReturn(modelcase);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.INTERNAL, 101, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.INTERNAL, 112, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.INTERNAL, 115, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCase(anyString(), any(), anyString())).thenReturn(modelcase);
 
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", INTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", INTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", INTERNAL, municipalityId)).thenReturn(false);
 
-		when(mockCaseMetaDataRepository.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity101))
+		when(caseMetaDataRepositoryMock.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity101))
 			.thenReturn(Optional.of(caseMetaDataEntity112))
 			.thenReturn(Optional.of(caseMetaDataEntity115))
 			.thenReturn(Optional.of(caseMetaDataEntity123))
@@ -316,71 +317,73 @@ class OpenEServiceTest {
 		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
 
 		// Assert and verify
-		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
-		verify(mockCaseRepository, times(6)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
-		verify(mockOpenEExternalClient, times(3)).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockOpenEInternalClient, times(3)).getErrand(anyString());
-		verify(mockCaseRepository, times(6)).save(caseEntityCaptor.capture());
-		verify(consumerMock).accept("Error while fetching errands by familyId");
+		verify(oepIntegratorClientMock, times(3)).getCases(anyString(), eq(InstanceType.EXTERNAL), anyInt(), anyString(), anyString(), anyString());
+		verify(oepIntegratorClientMock, times(3)).getCase(anyString(), eq(InstanceType.EXTERNAL), anyString());
+		verify(oepIntegratorClientMock, times(3)).getCases(anyString(), eq(InstanceType.INTERNAL), anyInt(), anyString(), anyString(), anyString());
+		verify(oepIntegratorClientMock, times(3)).getCase(anyString(), eq(InstanceType.INTERNAL), anyString());
+		verify(caseRepositoryMock, times(6)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
+		verify(caseRepositoryMock, times(6)).save(caseEntityCaptor.capture());
+		verify(consumerMock).accept("Error while fetching errands by familyId 456");
 
 		assertThat(caseEntityCaptor.getAllValues()).hasSize(6)
 			.extracting(CaseEntity::getExternalCaseId,
 				CaseEntity::getCaseMetaData,
 				CaseEntity::getDeliveryStatus,
-				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity101, PENDING, expectedFlowInstance),
-					tuple("234567", caseMetaDataEntity112, PENDING, expectedFlowInstance),
-					tuple("345678", caseMetaDataEntity115, PENDING, expectedFlowInstance),
-					tuple("123456", caseMetaDataEntity123, PENDING, expectedFlowInstance),
-					tuple("234567", caseMetaDataEntity456, PENDING, expectedFlowInstance),
-					tuple("345678", caseMetaDataEntity789, PENDING, expectedFlowInstance));
+				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity101, PENDING, modelcase.getPayload()),
+					tuple("234567", caseMetaDataEntity112, PENDING, modelcase.getPayload()),
+					tuple("345678", caseMetaDataEntity115, PENDING, modelcase.getPayload()),
+					tuple("123456", caseMetaDataEntity123, PENDING, modelcase.getPayload()),
+					tuple("234567", caseMetaDataEntity456, PENDING, modelcase.getPayload()),
+					tuple("345678", caseMetaDataEntity789, PENDING, modelcase.getPayload()));
 
 	}
 
 	@Test
-	void fetchAndSaveNewOpenECasesWhenExceptionOfOneErrandId() throws Exception {
+	void fetchAndSaveNewOpenECasesWhenExceptionOfOneErrandId() {
 		// Arrange
 		final var municipalityId = "municipalityId";
-		final var flowInstancesXml = readOpenEFile("flow-instances.xml");
+		final var cases = List.of(
+			new CaseEnvelope().flowInstanceId("123456"),
+			new CaseEnvelope().flowInstanceId("234567"),
+			new CaseEnvelope().flowInstanceId("345678"));
 
-		final var flowInstanceXml = readOpenEFile("flow-instance-lamna-synpunkt.xml");
-
-		final var expectedFlowInstance = Base64.getEncoder().encodeToString(flowInstanceXml);
+		final var modelCase = new ModelCase().familyId("123").payload("somePayload");
 
 		final var fromDate = LocalDateTime.now().minusDays(1);
 		final var toDate = LocalDateTime.now();
 		final var status = "status";
-		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status);
+		final var caseMetaDataEntity123 = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withFamilyId("123").withInstance(EXTERNAL).withOpenEImportStatus(status);
 
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(EXTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity123));
-		when(mockCaseMetaDataRepository.findByInstanceAndMunicipalityIdAndStatsOnly(INTERNAL, municipalityId, false)).thenReturn(emptyList());
+		when(caseMetaDataRepositoryMock.findByInstanceAndMunicipalityIdAndStatsOnly(EXTERNAL, municipalityId, false)).thenReturn(List.of(caseMetaDataEntity123));
+		when(caseMetaDataRepositoryMock.findByInstanceAndMunicipalityIdAndStatsOnly(INTERNAL, municipalityId, false)).thenReturn(emptyList());
 
-		when(mockOpenEExternalClient.getErrandIds("123", status, fromDate.toString(), toDate.toString())).thenReturn(flowInstancesXml);
-		when(mockOpenEExternalClient.getErrand("123456")).thenReturn(flowInstanceXml);
-		when(mockOpenEExternalClient.getErrand("234567")).thenThrow(new RuntimeException("Error"));
-		when(mockOpenEExternalClient.getErrand("345678")).thenReturn(flowInstanceXml);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId)).thenReturn(false);
-		when(mockCaseRepository.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId)).thenReturn(false);
+		when(oepIntegratorClientMock.getCases(municipalityId, InstanceType.EXTERNAL, 123, fromDate.toString(), toDate.toString(), status)).thenReturn(cases);
+		when(oepIntegratorClientMock.getCase(municipalityId, InstanceType.EXTERNAL, "123456")).thenReturn(modelCase);
+		when(oepIntegratorClientMock.getCase(municipalityId, InstanceType.EXTERNAL, "234567")).thenThrow(new RuntimeException("Error"));
+		when(oepIntegratorClientMock.getCase(municipalityId, InstanceType.EXTERNAL, "345678")).thenReturn(modelCase);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("123456", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("234567", EXTERNAL, municipalityId)).thenReturn(false);
+		when(caseRepositoryMock.existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId("345678", EXTERNAL, municipalityId)).thenReturn(false);
 
-		when(mockCaseMetaDataRepository.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity123));
+		when(caseMetaDataRepositoryMock.findById(anyString())).thenReturn(Optional.of(caseMetaDataEntity123));
 
 		// Act
 		openEService.fetchAndSaveNewOpenECases(fromDate, toDate, municipalityId, consumerMock);
 
 		// Assert and verify
-		verify(mockOpenEExternalClient).getErrandIds(anyString(), anyString(), anyString(), anyString());
-		verify(mockCaseRepository, times(3)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
-		verify(mockOpenEExternalClient, times(3)).getErrand(anyString());
-		verify(mockCaseRepository, times(2)).save(caseEntityCaptor.capture());
+		verify(oepIntegratorClientMock).getCases(any(), any(), anyInt(), anyString(), anyString(), anyString());
+		verify(caseRepositoryMock, times(3)).existsByExternalCaseIdAndCaseMetaDataEntityInstanceAndCaseMetaDataEntityMunicipalityId(anyString(), any(Instance.class), anyString());
+		verify(oepIntegratorClientMock, times(3)).getCase(anyString(), any(), anyString());
+
+		verify(caseRepositoryMock, times(2)).save(caseEntityCaptor.capture());
 		verify(consumerMock).accept("Error while fetching errand by flowInstanceId");
 
 		assertThat(caseEntityCaptor.getAllValues()).hasSize(2)
 			.extracting(CaseEntity::getExternalCaseId,
 				CaseEntity::getCaseMetaData,
 				CaseEntity::getDeliveryStatus,
-				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity123, PENDING, expectedFlowInstance),
-					tuple("345678", caseMetaDataEntity123, PENDING, expectedFlowInstance));
+				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity123, PENDING, modelCase.getPayload()),
+					tuple("345678", caseMetaDataEntity123, PENDING, modelCase.getPayload()));
 
 	}
 
@@ -389,20 +392,21 @@ class OpenEServiceTest {
 	void updateOpenECaseStatus(final Instance instance) {
 		// Arrange
 		final var flowInstanceId = "123";
-		final var caseMetaDataEntity = CaseMetaDataEntity.create().withOpenEUpdateStatus("status").withInstance(instance);
+		final var municipalityId = "municipalityId";
+		final var caseMetaDataEntity = CaseMetaDataEntity.create().withMunicipalityId(municipalityId).withOpenEUpdateStatus("status").withInstance(instance);
 
 		// Act
 		openEService.updateOpenECaseStatus(flowInstanceId, caseMetaDataEntity);
 
 		// Assert and verify
 		if (EXTERNAL.equals(instance)) {
-			verify(mockOpenEExternalSoapClient).setStatus(setStatusCaptor.capture());
+			verify(oepIntegratorClientMock).setStatus(eq(municipalityId), eq(InstanceType.EXTERNAL), eq(flowInstanceId), setStatusCaptor.capture());
 		} else {
-			verify(mockOpenEInternalSoapClient).setStatus(setStatusCaptor.capture());
+			verify(oepIntegratorClientMock).setStatus(eq(municipalityId), eq(InstanceType.INTERNAL), eq(flowInstanceId), setStatusCaptor.capture());
 		}
 
-		assertThat(setStatusCaptor.getValue()).extracting(SetStatus::getFlowInstanceID, SetStatus::getStatusAlias).containsExactly(Integer.parseInt(flowInstanceId), "status");
-		verifyNoMoreInteractions(mockOpenEExternalSoapClient, mockOpenEInternalSoapClient);
+		assertThat(setStatusCaptor.getValue()).extracting(CaseStatusChangeRequest::getName).isEqualTo("status");
+		verifyNoMoreInteractions(oepIntegratorClientMock);
 	}
 
 	@ParameterizedTest
@@ -411,23 +415,25 @@ class OpenEServiceTest {
 		// Arrange
 		final var flowInstanceId = "123";
 		final var errandId = "errandId";
+		final var municipalityId = "municipalityId";
+		final var caseMetaDataEntity = CaseMetaDataEntity.create().withInstance(instance).withMunicipalityId(municipalityId);
 
 		// Act
-		openEService.confirmDelivery(flowInstanceId, instance, errandId);
+		openEService.confirmDelivery(flowInstanceId, caseMetaDataEntity, errandId);
 
 		// Assert and verify
 		if (EXTERNAL.equals(instance)) {
-			verify(mockOpenEExternalSoapClient).confirmDelivery(confirmDeliveryCaptor.capture());
+
+			verify(oepIntegratorClientMock).confirmDelivery(eq(municipalityId), eq(InstanceType.EXTERNAL), eq(flowInstanceId), confirmDeliveryCaptor.capture());
 		} else {
-			verify(mockOpenEInternalSoapClient).confirmDelivery(confirmDeliveryCaptor.capture());
+			verify(oepIntegratorClientMock).confirmDelivery(eq(municipalityId), eq(InstanceType.INTERNAL), eq(flowInstanceId), confirmDeliveryCaptor.capture());
 		}
 
-		assertThat(confirmDeliveryCaptor.getValue().getFlowInstanceID()).isEqualTo(Integer.parseInt(flowInstanceId));
-		assertThat(confirmDeliveryCaptor.getValue().isDelivered()).isTrue();
-		assertThat(confirmDeliveryCaptor.getValue().getExternalID().getSystem()).isEqualTo(SYSTEM_SUPPORT_MANAGEMENT);
-		assertThat(confirmDeliveryCaptor.getValue().getExternalID().getID()).isEqualTo(errandId);
+		assertThat(confirmDeliveryCaptor.getValue().getDelivered()).isTrue();
+		assertThat(confirmDeliveryCaptor.getValue().getSystem()).isEqualTo(SYSTEM_SUPPORT_MANAGEMENT);
+		assertThat(confirmDeliveryCaptor.getValue().getCaseId()).isEqualTo(errandId);
 
-		verifyNoMoreInteractions(mockOpenEExternalSoapClient, mockOpenEInternalSoapClient);
+		verifyNoMoreInteractions(oepIntegratorClientMock);
 	}
 
 	@ParameterizedTest
@@ -437,6 +443,7 @@ class OpenEServiceTest {
 		// Arrange
 		final var externalCaseId = "externalCaseId";
 		final var fileId = "fileId";
+		final var municipalityId = "municipalityId";
 		final var queryId = "queryId";
 		final var fileBytes = new byte[] {
 			1, 2, 3
@@ -447,23 +454,23 @@ class OpenEServiceTest {
 			.body(stream, fileBytes.length)
 			.build();
 		if (EXTERNAL.equals(instance)) {
-			when(mockOpenEExternalClient.getFile(externalCaseId, queryId, fileId)).thenReturn(response);
+			when(oepIntegratorClientMock.getAttachment(municipalityId, InstanceType.EXTERNAL, externalCaseId, queryId, fileId)).thenReturn(response);
 		} else {
-			when(mockOpenEInternalClient.getFile(externalCaseId, queryId, fileId)).thenReturn(response);
+			when(oepIntegratorClientMock.getAttachment(municipalityId, InstanceType.INTERNAL, externalCaseId, queryId, fileId)).thenReturn(response);
 		}
 
 		// Act
-		final var result = openEService.getFile(externalCaseId, fileId, queryId, instance);
+		final var result = openEService.getFile(externalCaseId, fileId, queryId, instance, municipalityId);
 
 		// Assert and verify
 		assertThat(result).isEqualTo(response);
 
 		if (EXTERNAL.equals(instance)) {
-			verify(mockOpenEExternalClient).getFile(externalCaseId, queryId, fileId);
+			verify(oepIntegratorClientMock).getAttachment(municipalityId, InstanceType.EXTERNAL, externalCaseId, queryId, fileId);
 		} else {
-			verify(mockOpenEInternalClient).getFile(externalCaseId, queryId, fileId);
+			verify(oepIntegratorClientMock).getAttachment(municipalityId, InstanceType.INTERNAL, externalCaseId, queryId, fileId);
 		}
-		verifyNoMoreInteractions(mockOpenEExternalClient);
+		verifyNoMoreInteractions(oepIntegratorClientMock);
 	}
 
 }

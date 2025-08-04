@@ -80,14 +80,14 @@ class AttachmentServiceTest {
 			.request(Request.create(Request.HttpMethod.GET, "", Map.of(), null, null, null))
 			.body(stream, fileBytes.length)
 			.build();
-		when(openEService.getFile(externalCaseId, fileId, queryId, instance)).thenReturn(response);
+		when(openEService.getFile(externalCaseId, fileId, queryId, instance, municipalityId)).thenReturn(response);
 		when(supportManagementClient.createAttachment(eq(municipalityId), eq(namespace), eq(errandId), any())).thenReturn(ResponseEntity.ok().build());
 
 		// Act
 		attachmentService.handleAttachments(xml, caseEntity, errandId);
 
 		// Assert
-		verify(openEService).getFile(externalCaseId, fileId, queryId, instance);
+		verify(openEService).getFile(externalCaseId, fileId, queryId, instance, municipalityId);
 		verify(supportManagementClient).getAttachments(municipalityId, namespace, errandId);
 		verify(supportManagementClient).createAttachment(eq(municipalityId), eq(namespace), eq(errandId), attachmentMultiPartFileCaptor.capture());
 
@@ -160,14 +160,14 @@ class AttachmentServiceTest {
 				.withNamespace(namespace)
 				.withInstance(instance));
 
-		when(openEService.getFile(externalCaseId, fileId, queryId, instance)).thenReturn(null);
+		when(openEService.getFile(externalCaseId, fileId, queryId, instance, municipalityId)).thenReturn(null);
 
 		// Act
 		final var result = attachmentService.handleAttachments(xml, caseEntity, errandId);
 
 		// Assert
 		assertThat(result).containsExactly(fileId);
-		verify(openEService).getFile(externalCaseId, fileId, queryId, instance);
+		verify(openEService).getFile(externalCaseId, fileId, queryId, instance, municipalityId);
 		verify(supportManagementClient).getAttachments(municipalityId, namespace, errandId);
 		verifyNoMoreInteractions(supportManagementClient);
 	}
@@ -213,7 +213,7 @@ class AttachmentServiceTest {
 			.request(Request.create(Request.HttpMethod.GET, "", Map.of(), null, null, null))
 			.body(stream, fileBytes.length)
 			.build();
-		when(openEService.getFile(externalCaseId, fileId, queryId, instance)).thenReturn(response);
+		when(openEService.getFile(externalCaseId, fileId, queryId, instance, municipalityId)).thenReturn(response);
 		when(supportManagementClient.createAttachment(eq(municipalityId), eq(namespace), eq(errandId), any())).thenReturn(ResponseEntity.badRequest().build());
 
 		// Act
@@ -221,7 +221,7 @@ class AttachmentServiceTest {
 
 		// Assert
 		assertThat(result).containsExactly(fileId);
-		verify(openEService).getFile(externalCaseId, fileId, queryId, instance);
+		verify(openEService).getFile(externalCaseId, fileId, queryId, instance, municipalityId);
 		verify(supportManagementClient).getAttachments(municipalityId, namespace, errandId);
 		verify(supportManagementClient).createAttachment(eq(municipalityId), eq(namespace), eq(errandId), attachmentMultiPartFileCaptor.capture());
 	}
