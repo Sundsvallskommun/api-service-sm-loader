@@ -36,6 +36,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -471,6 +473,36 @@ class OpenEServiceTest {
 			verify(oepIntegratorClientMock).getAttachment(municipalityId, InstanceType.INTERNAL, externalCaseId, queryId, fileId);
 		}
 		verifyNoMoreInteractions(oepIntegratorClientMock);
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"2024-06-01", "1999-12-31", "2020-02-29"
+	})
+	void formatLocalDate_happyCases(final String input) {
+		// Act
+		final String result = openEService.formatLocalDate(input);
+
+		// Assert
+		assertThat(result).isEqualTo(input);
+	}
+
+	@ParameterizedTest
+	@NullAndEmptySource
+	@ValueSource(strings = {
+		"not-a-date", "20240601", "31-12-1999", "2024/06/01"
+	})
+	void formatLocalDate_nonHappyAndEdgeCases(final String input) {
+		// Act
+		final String result = openEService.formatLocalDate(input);
+
+		// Assert
+		// For null input, should return null; for others, returns the input as is (since .formatted() does not parse)
+		if (input == null) {
+			assertThat(result).isNull();
+		} else {
+			assertThat(result).isEqualTo(input);
+		}
 	}
 
 }
