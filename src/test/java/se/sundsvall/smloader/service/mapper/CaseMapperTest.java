@@ -7,6 +7,7 @@ import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PE
 import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 
 import java.time.OffsetDateTime;
+import java.util.Base64;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import se.sundsvall.dept44.test.annotation.resource.Load;
@@ -31,7 +32,7 @@ class CaseMapperTest {
 
 		assertThat(caseEntity.getCaseMetaData()).isEqualTo(caseMetaDataEntity);
 		assertThat(caseEntity.getExternalCaseId()).isEqualTo("456");
-		assertThat(caseEntity.getOpenECase()).isEqualTo(xml);
+		assertThat(caseEntity.getOpenECase()).isEqualTo(Base64.getEncoder().encodeToString(xml.getBytes()));
 		assertThat(caseEntity.getDeliveryStatus()).isEqualTo(PENDING);
 	}
 

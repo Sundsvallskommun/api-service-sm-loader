@@ -30,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -151,12 +152,12 @@ class OpenEServiceTest {
 					tuple("123456", caseMetaDataEntity123, PENDING, null),
 					tuple("234567", caseMetaDataEntity123, PENDING, null),
 					tuple("345678", caseMetaDataEntity123, PENDING, null),
-					tuple("123456", caseMetaDataEntity112, PENDING, xml),
-					tuple("234567", caseMetaDataEntity115, PENDING, xml),
-					tuple("345678", caseMetaDataEntity456, PENDING, xml),
-					tuple("123456", caseMetaDataEntity789, PENDING, xml),
-					tuple("234567", caseMetaDataEntity789, PENDING, xml),
-					tuple("345678", caseMetaDataEntity789, PENDING, xml));
+					tuple("123456", caseMetaDataEntity112, PENDING, Base64.getEncoder().encodeToString(xml.getBytes())),
+					tuple("234567", caseMetaDataEntity115, PENDING, Base64.getEncoder().encodeToString(xml.getBytes())),
+					tuple("345678", caseMetaDataEntity456, PENDING, Base64.getEncoder().encodeToString(xml.getBytes())),
+					tuple("123456", caseMetaDataEntity789, PENDING, Base64.getEncoder().encodeToString(xml.getBytes())),
+					tuple("234567", caseMetaDataEntity789, PENDING, Base64.getEncoder().encodeToString(xml.getBytes())),
+					tuple("345678", caseMetaDataEntity789, PENDING, Base64.getEncoder().encodeToString(xml.getBytes())));
 	}
 
 	@Test
@@ -333,12 +334,12 @@ class OpenEServiceTest {
 			.extracting(CaseEntity::getExternalCaseId,
 				CaseEntity::getCaseMetaData,
 				CaseEntity::getDeliveryStatus,
-				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity101, PENDING, modelcase.getPayload()),
-					tuple("234567", caseMetaDataEntity112, PENDING, modelcase.getPayload()),
-					tuple("345678", caseMetaDataEntity115, PENDING, modelcase.getPayload()),
-					tuple("123456", caseMetaDataEntity123, PENDING, modelcase.getPayload()),
-					tuple("234567", caseMetaDataEntity456, PENDING, modelcase.getPayload()),
-					tuple("345678", caseMetaDataEntity789, PENDING, modelcase.getPayload()));
+				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity101, PENDING, Base64.getEncoder().encodeToString(modelcase.getPayload().getBytes())),
+					tuple("234567", caseMetaDataEntity112, PENDING, Base64.getEncoder().encodeToString(modelcase.getPayload().getBytes())),
+					tuple("345678", caseMetaDataEntity115, PENDING, Base64.getEncoder().encodeToString(modelcase.getPayload().getBytes())),
+					tuple("123456", caseMetaDataEntity123, PENDING, Base64.getEncoder().encodeToString(modelcase.getPayload().getBytes())),
+					tuple("234567", caseMetaDataEntity456, PENDING, Base64.getEncoder().encodeToString(modelcase.getPayload().getBytes())),
+					tuple("345678", caseMetaDataEntity789, PENDING, Base64.getEncoder().encodeToString(modelcase.getPayload().getBytes())));
 
 	}
 
@@ -386,8 +387,8 @@ class OpenEServiceTest {
 			.extracting(CaseEntity::getExternalCaseId,
 				CaseEntity::getCaseMetaData,
 				CaseEntity::getDeliveryStatus,
-				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity123, PENDING, modelCase.getPayload()),
-					tuple("345678", caseMetaDataEntity123, PENDING, modelCase.getPayload()));
+				CaseEntity::getOpenECase).containsExactly(tuple("123456", caseMetaDataEntity123, PENDING, Base64.getEncoder().encodeToString(modelCase.getPayload().getBytes())),
+					tuple("345678", caseMetaDataEntity123, PENDING, Base64.getEncoder().encodeToString(modelCase.getPayload().getBytes())));
 
 	}
 
