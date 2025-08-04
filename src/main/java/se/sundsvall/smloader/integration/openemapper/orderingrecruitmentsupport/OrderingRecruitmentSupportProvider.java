@@ -137,7 +137,7 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 
 		return new Errand()
 			.status(STATUS_NEW)
-			.title(TITLE_ORDERING_RECRUITMENT_SUPPORT)
+			.title(getTitle(result))
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(getClassification(result))
@@ -148,6 +148,11 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
 				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(result.applicantUserId());
+	}
+
+	private String getTitle(final OrderingRecruitmentSupport orderingRecruitmentSupport) {
+		return Optional.ofNullable(orderingRecruitmentSupport.applicantTitle())
+			.orElse(TITLE_ORDERING_RECRUITMENT_SUPPORT);
 	}
 
 	private List<Stakeholder> getStakeholders(final OrderingRecruitmentSupport orderingRecruitmentSupport) {

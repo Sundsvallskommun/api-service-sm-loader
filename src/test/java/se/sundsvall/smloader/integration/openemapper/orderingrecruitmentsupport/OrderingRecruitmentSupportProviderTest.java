@@ -10,7 +10,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CH
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_RECRUITING_MANAGER;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_ORDERING_RECRUITMENT_SUPPORT;
 
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
@@ -66,7 +65,7 @@ class OrderingRecruitmentSupportProviderTest {
 		final var errand = provider.mapToErrand(stringBytes);
 
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
-		assertThat(errand.getTitle()).isEqualTo(TITLE_ORDERING_RECRUITMENT_SUPPORT);
+		assertThat(errand.getTitle()).isEqualTo("Spion");
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category("PARTIAL_PACKAGE").type("PARTIAL_PACKAGE.EMPLOYEE"));
