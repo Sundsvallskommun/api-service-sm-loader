@@ -15,9 +15,11 @@ import generated.se.sundsvall.oepintegrator.ConfirmDeliveryRequest;
 import generated.se.sundsvall.oepintegrator.InstanceType;
 import generated.se.sundsvall.oepintegrator.ModelCase;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,12 +142,14 @@ public class OpenEService {
 	private List<String> getFlowInstanceIds(final CaseMetaDataEntity caseMetaDataEntity, final String fromDate, final String toDate, final Instance instance, final Consumer<String> importHealthConsumer) {
 		try {
 			if (instance == EXTERNAL) {
-				return oepIntegratorClient.getCases(caseMetaDataEntity.getMunicipalityId(), InstanceType.EXTERNAL, Integer.parseInt(caseMetaDataEntity.getFamilyId()), fromDate, toDate, caseMetaDataEntity.getOpenEImportStatus())
+				return oepIntegratorClient.getCases(caseMetaDataEntity.getMunicipalityId(), InstanceType.EXTERNAL, Integer.parseInt(caseMetaDataEntity.getFamilyId()), formatLocalDate(fromDate), formatLocalDate(toDate),
+					caseMetaDataEntity.getOpenEImportStatus())
 					.stream()
 					.map(CaseEnvelope::getFlowInstanceId)
 					.toList();
 			} else {
-				return oepIntegratorClient.getCases(caseMetaDataEntity.getMunicipalityId(), InstanceType.INTERNAL, Integer.parseInt(caseMetaDataEntity.getFamilyId()), fromDate, toDate, caseMetaDataEntity.getOpenEImportStatus())
+				return oepIntegratorClient.getCases(caseMetaDataEntity.getMunicipalityId(), InstanceType.INTERNAL, Integer.parseInt(caseMetaDataEntity.getFamilyId()), formatLocalDate(fromDate), formatLocalDate(toDate),
+					caseMetaDataEntity.getOpenEImportStatus())
 					.stream()
 					.map(CaseEnvelope::getFlowInstanceId)
 					.toList();
@@ -188,5 +192,9 @@ public class OpenEService {
 			importHealthConsumer.accept("Error while fetching errand by flowInstanceId");
 			return null;
 		}
+	}
+
+	String formatLocalDate(final String date) {
+		return Optional.ofNullable(date).map(dateString -> dateString.formatted(DateTimeFormatter.ISO_LOCAL_DATE)).orElse(null);
 	}
 }
