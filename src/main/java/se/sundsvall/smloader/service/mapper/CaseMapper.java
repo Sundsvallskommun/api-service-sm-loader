@@ -1,6 +1,7 @@
 package se.sundsvall.smloader.service.mapper;
 
 import java.time.OffsetDateTime;
+import java.util.Base64;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMappingEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
@@ -15,7 +16,7 @@ public final class CaseMapper {
 		return CaseEntity.create()
 			.withCaseMetaData(caseMetaDataEntity)
 			.withExternalCaseId(openECaseId)
-			.withOpenECase(xml)
+			.withOpenECase(xml != null ? Base64.getEncoder().encodeToString(xml.getBytes()) : null)
 			.withDeliveryStatus(DeliveryStatus.PENDING);
 	}
 
