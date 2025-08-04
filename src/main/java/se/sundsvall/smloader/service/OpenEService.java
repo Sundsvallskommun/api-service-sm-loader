@@ -1,5 +1,6 @@
 package se.sundsvall.smloader.service;
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
@@ -14,12 +15,11 @@ import generated.se.sundsvall.oepintegrator.CaseStatusChangeRequest;
 import generated.se.sundsvall.oepintegrator.ConfirmDeliveryRequest;
 import generated.se.sundsvall.oepintegrator.InstanceType;
 import generated.se.sundsvall.oepintegrator.ModelCase;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -195,6 +195,16 @@ public class OpenEService {
 	}
 
 	String formatLocalDate(final String date) {
-		return Optional.ofNullable(date).map(dateString -> dateString.formatted(DateTimeFormatter.ISO_LOCAL_DATE)).orElse(null);
+		if (date == null)
+			return null;
+		try {
+			return LocalDateTime.parse(date).toLocalDate().format(ISO_LOCAL_DATE);
+		} catch (final Exception e) {
+			try {
+				return LocalDate.parse(date).format(ISO_LOCAL_DATE);
+			} catch (final Exception ignored) {
+				return null;
+			}
+		}
 	}
 }

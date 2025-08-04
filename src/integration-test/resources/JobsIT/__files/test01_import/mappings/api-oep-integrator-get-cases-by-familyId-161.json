@@ -1,7 +1,7 @@
 {
 	"request": {
 		"method": "GET",
-		"url": "/oep-integrator/2281/EXTERNAL/cases/families/161?fromDate=2024-06-30T12%3A00&toDate=2024-07-02T12%3A00&status=Prelimin%C3%A4r"
+		"url": "/oep-integrator/2281/EXTERNAL/cases/families/161?fromDate=2024-06-30&toDate=2024-07-02&status=Prelimin%C3%A4r"
 	},
 	"response": {
 		"headers": {
