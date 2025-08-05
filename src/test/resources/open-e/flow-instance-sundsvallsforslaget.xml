@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1735.xsd">
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1735.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>370</FamilyID>
 			<Version>4</Version>
 			<FlowID>1735</FlowID>
-			<Name><![CDATA[Sundsvallsförslaget-TEST]]></Name>
+			<Name><![CDATA[SundsvallsfÃ¶rslaget-TEST]]></Name>
 		</Flow>
 		<FlowInstanceID>4234</FlowInstanceID>
 		<Status>
 			<ID>10992</ID>
-			<Name><![CDATA[Preliminär]]></Name>
+			<Name><![CDATA[PreliminÃ¤r]]></Name>
 		</Status>
 		<Poster>
 			<Firstname><![CDATA[Kalle]]></Firstname>
@@ -49,8 +49,8 @@
 		</title>
 		<description>
 			<QueryID>62478</QueryID>
-			<Name><![CDATA[Beskrivning av förslaget]]></Name>
-			<Value><![CDATA[Testar att lämna förslag]]></Value>
+			<Name><![CDATA[Beskrivning av fÃ¶rslaget]]></Name>
+			<Value><![CDATA[Testar att lÃ¤mna fÃ¶rslag]]></Value>
 		</description>
 		<document>
 			<QueryID>62479</QueryID>

@@ -27,33 +27,33 @@ public final class XPathAnnotationProcessor {
 		}
 
 		// Get the fields on the target class
-		var fields = targetClass.getDeclaredFields();
+		final var fields = targetClass.getDeclaredFields();
 		// Use arrays to ensure proper parameter ordering for records
-		var parameters = new Parameter[fields.length];
+		final var parameters = new Parameter[fields.length];
 		// Process the fields
 		for (var i = 0; i < fields.length; i++) {
-			var field = fields[i];
+			final var field = fields[i];
 			// Get the path annotation for the field
-			var pathAnnotation = AnnotationUtils.getAnnotation(field, XPath.class);
+			final var pathAnnotation = AnnotationUtils.getAnnotation(field, XPath.class);
 			// We can't do anything with the field if the annotation is missing - bail out
 			if (pathAnnotation == null) {
 				continue;
 			}
 
-			var genericType = Optional.ofNullable(AnnotationUtils.getAnnotation(field, GenericType.class)).map(GenericType::value).orElse(null);
+			final var genericType = Optional.ofNullable(AnnotationUtils.getAnnotation(field, GenericType.class)).map(GenericType::value).orElse(null);
 
-			var type = field.getType();
-			var path = pathAnnotation.value();
+			final var type = field.getType();
+			final var path = pathAnnotation.value();
 
-			var value = getValue(xml, path, type, genericType);
+			final var value = getValue(xml, path, type, genericType);
 
 			parameters[i] = new Parameter(field, type, value);
 		}
 
 		try {
 			if (targetClass.isRecord()) {
-				var parameterTypes = new Class[parameters.length];
-				var parameterValues = new Object[parameters.length];
+				final var parameterTypes = new Class[parameters.length];
+				final var parameterValues = new Object[parameters.length];
 				var allNull = true;
 				for (var i = 0; i < parameters.length; i++) {
 					parameterTypes[i] = parameters[i].type;
@@ -65,16 +65,16 @@ public final class XPathAnnotationProcessor {
 				if (allNull) {
 					return null;
 				} else {
-					var constructor = targetClass.getDeclaredConstructor(parameterTypes);
+					final var constructor = targetClass.getDeclaredConstructor(parameterTypes);
 					constructor.setAccessible(true);
 					return constructor.newInstance(parameterValues);
 				}
 			} else {
-				var constructor = targetClass.getDeclaredConstructor();
+				final var constructor = targetClass.getDeclaredConstructor();
 				constructor.setAccessible(true);
-				var result = constructor.newInstance();
+				final var result = constructor.newInstance();
 
-				for (var parameter : parameters) {
+				for (final var parameter : parameters) {
 					if (parameter != null) {
 						parameter.field.setAccessible(true);
 						parameter.field.set(result, parameter.value);
@@ -83,7 +83,7 @@ public final class XPathAnnotationProcessor {
 
 				return result;
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new XPathException("Unable to extract value", e);
 		}
 	}
@@ -93,7 +93,7 @@ public final class XPathAnnotationProcessor {
 	}
 
 	public static <T, G> T getValue(final byte[] xml, final String path, final Class<T> type, final Class<G> genericType) {
-		Object value;
+		final Object value;
 
 		value = switch (type.getSimpleName()) {
 			case "String" -> getString(xml, path);
@@ -114,7 +114,7 @@ public final class XPathAnnotationProcessor {
 		}
 
 		return evaluateXPath(xml, path).stream()
-			.map(element -> extractValue(element.outerHtml().getBytes(StandardCharsets.ISO_8859_1), type))
+			.map(element -> extractValue(element.outerHtml().getBytes(StandardCharsets.UTF_8), type))
 			.filter(Objects::nonNull)
 			.collect(Collectors.toList());
 	}

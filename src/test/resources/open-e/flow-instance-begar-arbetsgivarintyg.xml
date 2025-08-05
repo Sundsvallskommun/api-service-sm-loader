@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1754.xsd">
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-1754.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>526</FamilyID>
 			<Version>1</Version>
 			<FlowID>1754</FlowID>
-			<Name><![CDATA[Beställning arbetsgivarintyg - TEST DRAKEN]]></Name>
+			<Name><![CDATA[BestÃ¤llning arbetsgivarintyg - TEST DRAKEN]]></Name>
 		</Flow>
 		<FlowInstanceID>4376</FlowInstanceID>
 		<Status>
@@ -41,7 +41,7 @@
 		</applicant>
 		<contactMethod>
 			<QueryID>63315</QueryID>
-			<Name><![CDATA[När ärendet är klart, hur vill du bli aviserad?]]></Name>
+			<Name><![CDATA[NÃ¤r Ã¤rendet Ã¤r klart, hur vill du bli aviserad?]]></Name>
 			<Value>E-post</Value>
 		</contactMethod>
 		<email>
@@ -51,7 +51,7 @@
 		</email>
 		<timePeriod>
 			<QueryID>63318</QueryID>
-			<Name><![CDATA[Intyg för]]></Name>
+			<Name><![CDATA[Intyg fÃ¶r]]></Name>
 			<Value>Viss period</Value>
 		</timePeriod>
 		<periodDates>
@@ -62,7 +62,7 @@
 		</periodDates>
 		<aKassa>
 			<QueryID>63320</QueryID>
-			<Name><![CDATA[Ska du använda ditt intyg till att söka ersättning från a-kassa?]]></Name>
+			<Name><![CDATA[Ska du anvÃ¤nda ditt intyg till att sÃ¶ka ersÃ¤ttning frÃ¥n a-kassa?]]></Name>
 			<Value>Ja</Value>
 		</aKassa>
 		<sendDigital>

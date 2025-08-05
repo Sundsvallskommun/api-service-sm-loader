@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-491.xsd">
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-491.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>185</FamilyID>
 			<Version>3</Version>
 			<FlowID>491</FlowID>
-			<Name><![CDATA[Beställning av ny, ändrad eller avslut av behörighet - TEST DRAKEN]]></Name>
+			<Name><![CDATA[BestÃ¤llning av ny, Ã¤ndrad eller avslut av behÃ¶righet - TEST DRAKEN]]></Name>
 		</Flow>
 		<FlowInstanceID>6920</FlowInstanceID>
 		<Status>
@@ -31,7 +31,7 @@
 	<Values>
 		<applicant>
 			<QueryID>18040</QueryID>
-			<Name><![CDATA[Beställarens uppgifter]]></Name>
+			<Name><![CDATA[BestÃ¤llarens uppgifter]]></Name>
 			<firstname><![CDATA[Kalle]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<username><![CDATA[kal00ank]]></username>
@@ -41,8 +41,8 @@
 		</applicant>
 		<isManager>
 			<QueryID>18041</QueryID>
-			<Name><![CDATA[Är du chef för enheten där beställning ligger?]]></Name>
-			<Value>Ja, jag är chef och har rätt att godkänna beställningen</Value>
+			<Name><![CDATA[Ã„r du chef fÃ¶r enheten dÃ¤r bestÃ¤llning ligger?]]></Name>
+			<Value>Ja, jag Ã¤r chef och har rÃ¤tt att godkÃ¤nna bestÃ¤llningen</Value>
 		</isManager>
 		<user>
 			<QueryID>18043</QueryID>
@@ -57,8 +57,8 @@
 		</user>
 		<notEmploye>
 			<QueryID>18044</QueryID>
-			<Name><![CDATA[Ej anställning]]></Name>
-			<Value>Personen ska inte ha anställning i kommunen utan har annan typ av förordnande</Value>
+			<Name><![CDATA[Ej anstÃ¤llning]]></Name>
+			<Value>Personen ska inte ha anstÃ¤llning i kommunen utan har annan typ av fÃ¶rordnande</Value>
 		</notEmploye>
 		<computerId>
 			<QueryID>18045</QueryID>
@@ -67,35 +67,35 @@
 		</computerId>
 		<administrativeUnit>
 			<QueryID>18046</QueryID>
-			<Name><![CDATA[För vilken/vilka förvaltningar ska behörighet ges?]]></Name>
-			<Value>Barn och utbildningsförvaltningen</Value>
-			<Value>Kultur och fritidsförvaltningen</Value>
-			<Value>Vård och omsorgsförvaltningen</Value>
-			<Value>Individ och arbetsmarknadsförvaltningen</Value>
+			<Name><![CDATA[FÃ¶r vilken/vilka fÃ¶rvaltningar ska behÃ¶righet ges?]]></Name>
+			<Value>Barn och utbildningsfÃ¶rvaltningen</Value>
+			<Value>Kultur och fritidsfÃ¶rvaltningen</Value>
+			<Value>VÃ¥rd och omsorgsfÃ¶rvaltningen</Value>
+			<Value>Individ och arbetsmarknadsfÃ¶rvaltningen</Value>
 			<Value>Kommunstyrelsekontoret</Value>
 			<Value>Stadsbyggnadskontoret</Value>
-			<Value>Lantmäterikontoret</Value>
-			<Value>Miljökontoret</Value>
-			<Value>Överförmyndarkontoret</Value>
+			<Value>LantmÃ¤terikontoret</Value>
+			<Value>MiljÃ¶kontoret</Value>
+			<Value>Ã–verfÃ¶rmyndarkontoret</Value>
 		</administrativeUnit>
 		<administrativeUnitPartBoU>
 			<QueryID>18047</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för BoU)]]></Name>
-			<Value>Förskola/Grundskola/Gymnasium</Value>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r BoU)]]></Name>
+			<Value>FÃ¶rskola/Grundskola/Gymnasium</Value>
 		</administrativeUnitPartBoU>
 		<unitBoU>
 			<QueryID>18048</QueryID>
-			<Name><![CDATA[Vid vilken / vilka enheter ska behörigheten gälla? (gäller för BoU)]]></Name>
+			<Name><![CDATA[Vid vilken / vilka enheter ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r BoU)]]></Name>
 			<Value>Testskola 1</Value>
 		</unitBoU>
 		<administrativeUnitPartKoF>
 			<QueryID>18050</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för KOF)]]></Name>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r KOF)]]></Name>
 			<Value>Specifik enhet</Value>
 		</administrativeUnitPartKoF>
 		<unitKoF>
 			<QueryID>18051</QueryID>
-			<Name><![CDATA[Vid vilken enhet ska behörigheten gälla? (gäller för KOF)]]></Name>
+			<Name><![CDATA[Vid vilken enhet ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r KOF)]]></Name>
 			<Row>
 				<ID>11</ID>
 				<Column>
@@ -107,73 +107,73 @@
 		</unitKoF>
 		<administrativeUnitPartVoF>
 			<QueryID>18052</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för VOF)]]></Name>
-			<Value>Äldreboende eller Hemtjänstgrupp</Value>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r VOF)]]></Name>
+			<Value>Ã„ldreboende eller HemtjÃ¤nstgrupp</Value>
 		</administrativeUnitPartVoF>
 		<unitVoF>
 			<QueryID>18053</QueryID>
-			<Name><![CDATA[Vid vilken / vilka enheter ska behörigheten gälla? (gäller för VOF)]]></Name>
-			<Value>05682 Förskola Copernicus, Bryggaregränd 1</Value>
+			<Name><![CDATA[Vid vilken / vilka enheter ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r VOF)]]></Name>
+			<Value>05682 FÃ¶rskola Copernicus, BryggaregrÃ¤nd 1</Value>
 		</unitVoF>
 		<administrativeUnitPartIaF>
 			<QueryID>18055</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för IAF)]]></Name>
-			<Value>Arbete och försörjning</Value>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r IAF)]]></Name>
+			<Value>Arbete och fÃ¶rsÃ¶rjning</Value>
 			<Value>Barn, unga och familj</Value>
-			<Value>Missbruk och psykisk ohälsa</Value>
+			<Value>Missbruk och psykisk ohÃ¤lsa</Value>
 			<Value>Vuxenutbildningen</Value>
 		</administrativeUnitPartIaF>
 		<administrativeUnitPartKsK>
 			<QueryID>18057</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för KSK)]]></Name>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r KSK)]]></Name>
 			<Value>Drakfastigheter</Value>
 			<Value>Servicecenter</Value>
 			<Value>KSK Avdelningar</Value>
-			<Value>Övrigt</Value>
+			<Value>Ã–vrigt</Value>
 		</administrativeUnitPartKsK>
 		<otherUnitsKsK>
 			<QueryID>18058</QueryID>
-			<Name><![CDATA[Övriga verksamheter (gäller för KSK)]]></Name>
+			<Name><![CDATA[Ã–vriga verksamheter (gÃ¤ller fÃ¶r KSK)]]></Name>
 			<Row>
 				<ID>12</ID>
 				<Column>
 					<ID>240</ID>
-					<Name><![CDATA[Övriga verksamheter]]></Name>
+					<Name><![CDATA[Ã–vriga verksamheter]]></Name>
 					<Value><![CDATA[Test]]></Value>
 				</Column>
 			</Row>
 		</otherUnitsKsK>
 		<administrativeUnitPartSbK>
 			<QueryID>18059</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för SBK)]]></Name>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r SBK)]]></Name>
 			<Value>Byggavdelningen</Value>
 			<Value>Gatuavdelningen</Value>
 			<Value>Markavdelningen</Value>
 		</administrativeUnitPartSbK>
 		<administrativeUnitPartLmK>
 			<QueryID>18061</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för LMK)]]></Name>
-			<Value>Lantmäterikontoret</Value>
-			<Value>Lantmäterimyndigheten</Value>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r LMK)]]></Name>
+			<Value>LantmÃ¤terikontoret</Value>
+			<Value>LantmÃ¤terimyndigheten</Value>
 		</administrativeUnitPartLmK>
 		<administrativeUnitPartMK>
 			<QueryID>18063</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för MK)]]></Name>
-			<Value>Hela förvaltningen</Value>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r MK)]]></Name>
+			<Value>Hela fÃ¶rvaltningen</Value>
 		</administrativeUnitPartMK>
 		<administrativeUnitPartOfK>
 			<QueryID>18065</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för ÖFK)]]></Name>
-			<Value>Övrigt</Value>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r Ã–FK)]]></Name>
+			<Value>Ã–vrigt</Value>
 		</administrativeUnitPartOfK>
 		<otherUnitsOfK>
 			<QueryID>18066</QueryID>
-			<Name><![CDATA[Övriga verksamheter (gäller för ÖFK)]]></Name>
+			<Name><![CDATA[Ã–vriga verksamheter (gÃ¤ller fÃ¶r Ã–FK)]]></Name>
 			<Row>
 				<ID>13</ID>
 				<Column>
 					<ID>244</ID>
-					<Name><![CDATA[Övriga verksamheter]]></Name>
+					<Name><![CDATA[Ã–vriga verksamheter]]></Name>
 					<Value><![CDATA[Test]]></Value>
 				</Column>
 			</Row>
@@ -181,24 +181,24 @@
 				<ID>14</ID>
 				<Column>
 					<ID>244</ID>
-					<Name><![CDATA[Övriga verksamheter]]></Name>
+					<Name><![CDATA[Ã–vriga verksamheter]]></Name>
 					<Value><![CDATA[Test2]]></Value>
 				</Column>
 			</Row>
 		</otherUnitsOfK>
 		<typeOfAccess>
 			<QueryID>18067</QueryID>
-			<Name><![CDATA[Vilken typ av behörighet avser beställningen]]></Name>
+			<Name><![CDATA[Vilken typ av behÃ¶righet avser bestÃ¤llningen]]></Name>
 			<Value>Ny</Value>
 		</typeOfAccess>
 		<systemAccess>
 			<QueryID>18068</QueryID>
-			<Name><![CDATA[Vilken behörighet ska tilldelas?]]></Name>
+			<Name><![CDATA[Vilken behÃ¶righet ska tilldelas?]]></Name>
 			<Value>Heroma</Value>
 		</systemAccess>
 		<userTypeHeroma>
 			<QueryID>18069</QueryID>
-			<Name><![CDATA[Typ av användare (gäller för Heroma)]]></Name>
+			<Name><![CDATA[Typ av anvÃ¤ndare (gÃ¤ller fÃ¶r Heroma)]]></Name>
 			<Value>Medarbetare</Value>
 		</userTypeHeroma>
 		<uppdateDescription>
@@ -213,7 +213,7 @@
 		</stillEmployed>
 		<accessTemplate>
 			<QueryID>18073</QueryID>
-			<Name><![CDATA[Kopiera behörighet från]]></Name>
+			<Name><![CDATA[Kopiera behÃ¶righet frÃ¥n]]></Name>
 			<firstname><![CDATA[Tjatte]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<username><![CDATA[tja00ank]]></username>
@@ -223,12 +223,12 @@
 		</accessTemplate>
 		<fromDate>
 			<QueryID>18075</QueryID>
-			<Name><![CDATA[Startdatum för behörighet]]></Name>
+			<Name><![CDATA[Startdatum fÃ¶r behÃ¶righet]]></Name>
 			<StartDate>2024-10-21</StartDate>
 		</fromDate>
 		<otherInformation>
 			<QueryID>18076</QueryID>
-			<Name><![CDATA[Övriga kommentarer]]></Name>
+			<Name><![CDATA[Ã–vriga kommentarer]]></Name>
 			<Value><![CDATA[Testar]]></Value>
 		</otherInformation>
 	</Values>

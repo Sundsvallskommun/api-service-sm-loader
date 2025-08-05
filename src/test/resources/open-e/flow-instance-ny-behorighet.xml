@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-429.xsd">
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-429.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>185</FamilyID>
 			<Version>2</Version>
 			<FlowID>429</FlowID>
-			<Name><![CDATA[Beställning av ny, ändrad eller avslut av behörighet - TEST DRAKEN]]></Name>
+			<Name><![CDATA[BestÃ¤llning av ny, Ã¤ndrad eller avslut av behÃ¶righet - TEST DRAKEN]]></Name>
 		</Flow>
 		<FlowInstanceID>6850</FlowInstanceID>
 		<Status>
@@ -31,7 +31,7 @@
 	<Values>
 		<applicant>
 			<QueryID>13631</QueryID>
-			<Name><![CDATA[Beställarens uppgifter]]></Name>
+			<Name><![CDATA[BestÃ¤llarens uppgifter]]></Name>
 			<firstname><![CDATA[Kalle]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<username><![CDATA[kal00ank]]></username>
@@ -41,12 +41,12 @@
 		</applicant>
 		<isManager>
 			<QueryID>13632</QueryID>
-			<Name><![CDATA[Är du chef för enheten där beställning ligger?]]></Name>
+			<Name><![CDATA[Ã„r du chef fÃ¶r enheten dÃ¤r bestÃ¤llning ligger?]]></Name>
 			<Value>Nej</Value>
 		</isManager>
 		<manager>
 			<QueryID>13633</QueryID>
-			<Name><![CDATA[Chef för enheten]]></Name>
+			<Name><![CDATA[Chef fÃ¶r enheten]]></Name>
 			<firstname><![CDATA[Jocke]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<username><![CDATA[joc22ank]]></username>
@@ -56,7 +56,7 @@
 		</manager>
 		<user>
 			<QueryID>13634</QueryID>
-			<Name><![CDATA[Vem ska tilldelas behörighet?]]></Name>
+			<Name><![CDATA[Vem ska tilldelas behÃ¶righet?]]></Name>
 			<firstname><![CDATA[Knatte]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<username><![CDATA[kna11ank]]></username>
@@ -67,8 +67,8 @@
 		</user>
 		<notEmploye>
 			<QueryID>13635</QueryID>
-			<Name><![CDATA[Ej anställning]]></Name>
-			<Value>Personen ska inte ha anställning i kommunen utan har annan typ av förordnande</Value>
+			<Name><![CDATA[Ej anstÃ¤llning]]></Name>
+			<Value>Personen ska inte ha anstÃ¤llning i kommunen utan har annan typ av fÃ¶rordnande</Value>
 		</notEmploye>
 		<computerId>
 			<QueryID>13636</QueryID>
@@ -77,22 +77,22 @@
 		</computerId>
 		<administrativeUnit>
 			<QueryID>13637</QueryID>
-			<Name><![CDATA[För vilken/vilka förvaltningar ska behörighet ges?]]></Name>
-			<Value>Överförmyndarkontoret</Value>
+			<Name><![CDATA[FÃ¶r vilken/vilka fÃ¶rvaltningar ska behÃ¶righet ges?]]></Name>
+			<Value>Ã–verfÃ¶rmyndarkontoret</Value>
 		</administrativeUnit>
 		<administrativeUnitPartOfK>
 			<QueryID>13656</QueryID>
-			<Name><![CDATA[Var i förvaltningen ska behörigheten gälla? (gäller för ÖFK)]]></Name>
-			<Value>Hela förvaltningen</Value>
+			<Name><![CDATA[Var i fÃ¶rvaltningen ska behÃ¶righeten gÃ¤lla? (gÃ¤ller fÃ¶r Ã–FK)]]></Name>
+			<Value>Hela fÃ¶rvaltningen</Value>
 		</administrativeUnitPartOfK>
 		<typeOfAccess>
 			<QueryID>13658</QueryID>
-			<Name><![CDATA[Vilken typ av behörighet avser beställningen]]></Name>
+			<Name><![CDATA[Vilken typ av behÃ¶righet avser bestÃ¤llningen]]></Name>
 			<Value>Ny</Value>
 		</typeOfAccess>
 		<systemAccess>
 			<QueryID>13659</QueryID>
-			<Name><![CDATA[Vilken behörighet ska tilldelas?]]></Name>
+			<Name><![CDATA[Vilken behÃ¶righet ska tilldelas?]]></Name>
 			<Value>Heroma</Value>
 			<Value>Adato</Value>
 			<Value>Stella</Value>
@@ -100,12 +100,12 @@
 		</systemAccess>
 		<accessTypeHeroma>
 			<QueryID>19835</QueryID>
-			<Name><![CDATA[Behörigheten avser (gäller för Heroma)]]></Name>
-			<Value>Läsbehörighet / Fullständig behörighet</Value>
-			<Value>Läsbehörighet / Schema resurshantering</Value>
+			<Name><![CDATA[BehÃ¶righeten avser (gÃ¤ller fÃ¶r Heroma)]]></Name>
+			<Value>LÃ¤sbehÃ¶righet / FullstÃ¤ndig behÃ¶righet</Value>
+			<Value>LÃ¤sbehÃ¶righet / Schema resurshantering</Value>
 			<Value>Full uppdatering</Value>
 			<Value>Viss uppdatering</Value>
-			<Value>Kopiera behörighet från annan person (Inget behöver då väljas ovan)</Value>
+			<Value>Kopiera behÃ¶righet frÃ¥n annan person (Inget behÃ¶ver dÃ¥ vÃ¤ljas ovan)</Value>
 		</accessTypeHeroma>
 		<stillEmployed>
 			<QueryID>19837</QueryID>
@@ -124,12 +124,12 @@
 		</accessTemplate>
 		<fromDate>
 			<QueryID>13666</QueryID>
-			<Name><![CDATA[Startdatum för behörighet]]></Name>
+			<Name><![CDATA[Startdatum fÃ¶r behÃ¶righet]]></Name>
 			<StartDate>2024-09-04</StartDate>
 		</fromDate>
 		<otherInformation>
 			<QueryID>13667</QueryID>
-			<Name><![CDATA[Övriga kommentarer]]></Name>
+			<Name><![CDATA[Ã–vriga kommentarer]]></Name>
 			<Value><![CDATA[Testing]]></Value>
 		</otherInformation>
 	</Values>

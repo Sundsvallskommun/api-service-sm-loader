@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-423.xsd">
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-423.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>174</FamilyID>
 			<Version>3</Version>
 			<FlowID>423</FlowID>
-			<Name><![CDATA[Kontakt med SC Lön och Pension - TEST DRAKEN]]></Name>
+			<Name><![CDATA[Kontakt med SC LÃ¶n och Pension - TEST DRAKEN]]></Name>
 		</Flow>
 		<FlowInstanceID>6854</FlowInstanceID>
 		<Status>
@@ -49,13 +49,13 @@
 		</applicant>
 		<subject>
 			<QueryID>13599</QueryID>
-			<Name><![CDATA[Vad gäller ärendet?]]></Name>
+			<Name><![CDATA[Vad gÃ¤ller Ã¤rendet?]]></Name>
 			<Value><![CDATA[Testar]]></Value>
 		</subject>
 		<caseDescription>
 			<QueryID>13600</QueryID>
-			<Name><![CDATA[Beskriv ditt ärende]]></Name>
-			<Value><![CDATA[Jag testar att skapa ett ärende.]]></Value>
+			<Name><![CDATA[Beskriv ditt Ã¤rende]]></Name>
+			<Value><![CDATA[Jag testar att skapa ett Ã¤rende.]]></Value>
 		</caseDescription>
 	</Values>
 </FlowInstance>

@@ -14,11 +14,11 @@ public final class XPathUtil {
 	private XPathUtil() {}
 
 	public static Document parseXmlDocument(final byte[] xml) {
-		return parse(new String(xml, StandardCharsets.ISO_8859_1), xmlParser());
+		return parse(new String(xml, StandardCharsets.UTF_8), xmlParser());
 	}
 
 	public static Elements evaluateXPath(final byte[] xml, final String expression) {
-		var doc = parseXmlDocument(xml);
+		final var doc = parseXmlDocument(xml);
 
 		return Xsoup.compile(expression).evaluate(doc).getElements();
 	}

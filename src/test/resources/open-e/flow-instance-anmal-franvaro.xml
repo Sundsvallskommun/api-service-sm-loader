@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
 <FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
-              xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-472.xsd">
+  xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
+  xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-472.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>195</FamilyID>
 			<Version>1</Version>
 			<FlowID>472</FlowID>
-			<Name><![CDATA[Anmälan om sjukfrånvaro - TEST DRAKEN]]></Name>
+			<Name><![CDATA[AnmÃ¤lan om sjukfrÃ¥nvaro - TEST DRAKEN]]></Name>
 		</Flow>
 		<FlowInstanceID>6846</FlowInstanceID>
 		<Status>
@@ -33,7 +33,7 @@
 	<Values>
 		<applicant>
 			<QueryID>16915</QueryID>
-			<Name><![CDATA[Anmälare]]></Name>
+			<Name><![CDATA[AnmÃ¤lare]]></Name>
 			<firstname><![CDATA[Kalle]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<email><![CDATA[kalle.anka@sundsvall.se]]></email>
@@ -44,17 +44,17 @@
 		</applicant>
 		<administrativeUnit>
 			<QueryID>16917</QueryID>
-			<Name><![CDATA[I vilken förvaltning/verksamhet arbetar medarbetaren?]]></Name>
+			<Name><![CDATA[I vilken fÃ¶rvaltning/verksamhet arbetar medarbetaren?]]></Name>
 			<Value>bou</Value>
 		</administrativeUnit>
 		<employmentType>
 			<QueryID>16918</QueryID>
-			<Name><![CDATA[Gäller det sjukfrånvaro för en]]></Name>
-			<Value>Månadsavlönad</Value>
+			<Name><![CDATA[GÃ¤ller det sjukfrÃ¥nvaro fÃ¶r en]]></Name>
+			<Value>MÃ¥nadsavlÃ¶nad</Value>
 		</employmentType>
 		<employeeData>
 			<QueryID>16919</QueryID>
-			<Name><![CDATA[Vilken anställd gäller det?]]></Name>
+			<Name><![CDATA[Vilken anstÃ¤lld gÃ¤ller det?]]></Name>
 			<firstname><![CDATA[Kalle]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<username><![CDATA[kal11ank]]></username>
@@ -66,22 +66,22 @@
 		<employeeTitle>
 			<QueryID>16930</QueryID>
 			<Name><![CDATA[Medarbetarens befattningar]]></Name>
-			<Value>F040 Förskoleresurs</Value>
+			<Value>F040 FÃ¶rskoleresurs</Value>
 		</employeeTitle>
 		<absentNewOld>
 			<QueryID>16946</QueryID>
-			<Name><![CDATA[Sjukfrånvaro avser]]></Name>
-			<Value>Ny sjukfrånvaro</Value>
+			<Name><![CDATA[SjukfrÃ¥nvaro avser]]></Name>
+			<Value>Ny sjukfrÃ¥nvaro</Value>
 		</absentNewOld>
 		<absentDateFrom>
 			<QueryID>16947</QueryID>
-			<Name><![CDATA[Datum första sjukdag]]></Name>
+			<Name><![CDATA[Datum fÃ¶rsta sjukdag]]></Name>
 			<StartDate>2024-07-31</StartDate>
 		</absentDateFrom>
 		<levelOfAbsence>
 			<QueryID>17986</QueryID>
-			<Name><![CDATA[Gäller det]]></Name>
-			<Value>Frånvaro del av dag?</Value>
+			<Name><![CDATA[GÃ¤ller det]]></Name>
+			<Value>FrÃ¥nvaro del av dag?</Value>
 		</levelOfAbsence>
 		<absentDateStart>
 			<QueryID>17988</QueryID>
@@ -90,8 +90,8 @@
 		</absentDateStart>
 		<absentDateSpecific>
 			<QueryID>17989</QueryID>
-			<Name><![CDATA[Vad gäller för denna sjukperiod?]]></Name>
-			<Value>Medarbetaren kom på arbetet och gick hem pga. sjukdom</Value>
+			<Name><![CDATA[Vad gÃ¤ller fÃ¶r denna sjukperiod?]]></Name>
+			<Value>Medarbetaren kom pÃ¥ arbetet och gick hem pga. sjukdom</Value>
 		</absentDateSpecific>
 		<absentDateLeaveTime>
 			<QueryID>17990</QueryID>
@@ -101,11 +101,11 @@
 		<absentContunuation>
 			<QueryID>17992</QueryID>
 			<Name><![CDATA[Var medarbetaren fortsatt sjuk efter detta pass?]]></Name>
-			<Value>Ja på heltid</Value>
+			<Value>Ja pÃ¥ heltid</Value>
 		</absentContunuation>
 		<absentDatePeriod>
 			<QueryID>17993</QueryID>
-			<Name><![CDATA[Ange datum för sjukfrånvaron]]></Name>
+			<Name><![CDATA[Ange datum fÃ¶r sjukfrÃ¥nvaron]]></Name>
 			<StartDate>2024-10-11</StartDate>
 			<EndDate>2024-10-18</EndDate>
 		</absentDatePeriod>
@@ -116,7 +116,7 @@
 		</sickNotePeriod>
 		<sickNotePercentRow1>
 			<QueryID>16951</QueryID>
-			<Name><![CDATA[Omfattning på sjukfrånvaro enligt läkarintyg]]></Name>
+			<Name><![CDATA[Omfattning pÃ¥ sjukfrÃ¥nvaro enligt lÃ¤karintyg]]></Name>
 			<Value>75</Value>
 		</sickNotePercentRow1>
 		<sickNotePeriodRow1>
@@ -127,17 +127,17 @@
 		</sickNotePeriodRow1>
 		<timeCareRow1>
 			<QueryID>20083</QueryID>
-			<Name><![CDATA[Använder verksamheten TimeCare för planering av schema?]]></Name>
+			<Name><![CDATA[AnvÃ¤nder verksamheten TimeCare fÃ¶r planering av schema?]]></Name>
 			<Value>Ja</Value>
 		</timeCareRow1>
 		<currentScheduleRow1>
 			<QueryID>20085</QueryID>
-			<Name><![CDATA[Finns pågående schemaperiod?]]></Name>
+			<Name><![CDATA[Finns pÃ¥gÃ¥ende schemaperiod?]]></Name>
 			<Value>Ja</Value>
 		</currentScheduleRow1>
 		<sickNotePercentRow2>
 			<QueryID>16960</QueryID>
-			<Name><![CDATA[Omfattning på sjukfrånvaro enligt läkarintyg]]></Name>
+			<Name><![CDATA[Omfattning pÃ¥ sjukfrÃ¥nvaro enligt lÃ¤karintyg]]></Name>
 			<Value>100</Value>
 		</sickNotePercentRow2>
 		<sickNotePeriodRow2>
@@ -148,7 +148,7 @@
 		</sickNotePeriodRow2>
 		<sickNotePercentRow3>
 			<QueryID>16969</QueryID>
-			<Name><![CDATA[Omfattning på sjukfrånvaro enligt läkarintyg]]></Name>
+			<Name><![CDATA[Omfattning pÃ¥ sjukfrÃ¥nvaro enligt lÃ¤karintyg]]></Name>
 			<Value>50</Value>
 		</sickNotePercentRow3>
 		<sickNotePeriodRow3>
@@ -159,27 +159,27 @@
 		</sickNotePeriodRow3>
 		<timeCareRow3>
 			<QueryID>20083</QueryID>
-			<Name><![CDATA[Använder verksamheten TimeCare för planering av schema?]]></Name>
+			<Name><![CDATA[AnvÃ¤nder verksamheten TimeCare fÃ¶r planering av schema?]]></Name>
 			<Value>Nej</Value>
 		</timeCareRow3>
 		<currentScheduleRow3>
 			<QueryID>20085</QueryID>
-			<Name><![CDATA[Finns pågående schemaperiod?]]></Name>
+			<Name><![CDATA[Finns pÃ¥gÃ¥ende schemaperiod?]]></Name>
 			<Value>Nej</Value>
 		</currentScheduleRow3>
 		<parttimeScheduleRow3>
 			<QueryID>16972</QueryID>
-			<Name><![CDATA[Bifoga schema för deltidsarbete]]></Name>
+			<Name><![CDATA[Bifoga schema fÃ¶r deltidsarbete]]></Name>
 			<File>
 				<ID>44</ID>
 				<Name><![CDATA[Testfil.docx]]></Name>
 				<Size>299842</Size>
-				<EncodedData>ldjkAFLÖFDKHfdH</EncodedData>
+				<EncodedData>ldjkAFLÃ–FDKHfdH</EncodedData>
 			</File>
 		</parttimeScheduleRow3>
 		<sickNotePercentRow4>
 			<QueryID>16978</QueryID>
-			<Name><![CDATA[Omfattning på sjukfrånvaro enligt läkarintyg]]></Name>
+			<Name><![CDATA[Omfattning pÃ¥ sjukfrÃ¥nvaro enligt lÃ¤karintyg]]></Name>
 			<Value>25</Value>
 		</sickNotePercentRow4>
 		<sickNotePeriodRow4>
@@ -190,12 +190,12 @@
 		</sickNotePeriodRow4>
 		<scheduleNextPeriodRow4>
 			<QueryID>16983</QueryID>
-			<Name><![CDATA[Bifoga schema till nästa schemaperiod börjar]]></Name>
+			<Name><![CDATA[Bifoga schema till nÃ¤sta schemaperiod bÃ¶rjar]]></Name>
 			<File>
 				<ID>45</ID>
 				<Name><![CDATA[Testfil.docx]]></Name>
 				<Size>299842</Size>
-				<EncodedData>alködjdfajdaflhalö</EncodedData>
+				<EncodedData>alkÃ¶djdfajdaflhalÃ¶</EncodedData>
 			</File>
 		</scheduleNextPeriodRow4>
 	</Values>
