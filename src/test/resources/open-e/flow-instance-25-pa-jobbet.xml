@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
 <FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
-              xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-471.xsd">
+  xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
+  xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-471.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>194</FamilyID>
 			<Version>1</Version>
 			<FlowID>471</FlowID>
-			<Name><![CDATA[25 år på jobbet - Anmälan - TEST DRAKEN]]></Name>
+			<Name><![CDATA[25 Ã¥r pÃ¥ jobbet - AnmÃ¤lan - TEST DRAKEN]]></Name>
 		</Flow>
 		<FlowInstanceID>6857</FlowInstanceID>
 		<Status>
@@ -54,17 +54,17 @@
 		</personalDetails>
 		<startDate>
 			<QueryID>16911</QueryID>
-			<Name><![CDATA[När var din första anställningsdag i Sundsvalls kommun?]]></Name>
+			<Name><![CDATA[NÃ¤r var din fÃ¶rsta anstÃ¤llningsdag i Sundsvalls kommun?]]></Name>
 			<StartDate>2022-11-01</StartDate>
 		</startDate>
 		<changeWork>
 			<QueryID>16912</QueryID>
-			<Name><![CDATA[Har du bytt huvudman till Sundsvalls kommun enligt särskild överenskommelse?]]></Name>
+			<Name><![CDATA[Har du bytt huvudman till Sundsvalls kommun enligt sÃ¤rskild Ã¶verenskommelse?]]></Name>
 			<Value>Ja</Value>
 		</changeWork>
 		<StartDateChangeWork>
 			<QueryID>16913</QueryID>
-			<Name><![CDATA[När var din första anställningsdag hos tidigare huvudman?]]></Name>
+			<Name><![CDATA[NÃ¤r var din fÃ¶rsta anstÃ¤llningsdag hos tidigare huvudman?]]></Name>
 			<StartDate>2021-01-01</StartDate>
 		</StartDateChangeWork>
 	</Values>

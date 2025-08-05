@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-464.xsd">
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-464.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>182</FamilyID>
 			<Version>3</Version>
 			<FlowID>464</FlowID>
-			<Name><![CDATA[Ersättare för ordinarie chef i Lön och arbetstid - TEST DRAKEN]]></Name>
+			<Name><![CDATA[ErsÃ¤ttare fÃ¶r ordinarie chef i LÃ¶n och arbetstid - TEST DRAKEN]]></Name>
 		</Flow>
 		<FlowInstanceID>6849</FlowInstanceID>
 		<Status>
 			<ID>3960</ID>
-			<Name><![CDATA[Väntar på godkännande av chef]]></Name>
+			<Name><![CDATA[VÃ¤ntar pÃ¥ godkÃ¤nnande av chef]]></Name>
 		</Status>
 		<Poster>
 			<Firstname><![CDATA[Kalle]]></Firstname>
@@ -56,12 +56,12 @@
 		</manager2>
 		<responsibilityNumber>
 			<QueryID>16489</QueryID>
-			<Name><![CDATA[Sök fram och välj Ansvarsnummer]]></Name>
+			<Name><![CDATA[SÃ¶k fram och vÃ¤lj Ansvarsnummer]]></Name>
 			<Value>25610000 - AoF Arenor i samverkan</Value>
 		</responsibilityNumber>
 		<substituteManager>
 			<QueryID>16490</QueryID>
-			<Name><![CDATA[Ersättare]]></Name>
+			<Name><![CDATA[ErsÃ¤ttare]]></Name>
 			<firstname><![CDATA[Tjatte]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<username><![CDATA[tja33ank]]></username>
@@ -70,18 +70,18 @@
 		</substituteManager>
 		<date>
 			<QueryID>16491</QueryID>
-			<Name><![CDATA[Attesterar för perioden]]></Name>
+			<Name><![CDATA[Attesterar fÃ¶r perioden]]></Name>
 			<StartDate>2024-08-30</StartDate>
 			<EndDate>2024-09-27</EndDate>
 		</date>
 		<approvingManager>
 			<QueryID>16492</QueryID>
-			<Name><![CDATA[Överordnad chef]]></Name>
+			<Name><![CDATA[Ã–verordnad chef]]></Name>
 			<firstname><![CDATA[Joakim]]></firstname>
 			<lastname><![CDATA[von Anka]]></lastname>
 			<username><![CDATA[joa44ank]]></username>
 			<citizenIdentifier><![CDATA[19001010101010]]></citizenIdentifier>
-			<organization><![CDATA[KSK Avd Kansli och Säkerhet]]></organization>
+			<organization><![CDATA[KSK Avd Kansli och SÃ¤kerhet]]></organization>
 		</approvingManager>
 	</Values>
 </FlowInstance>

@@ -1,6 +1,6 @@
 package se.sundsvall.smloader.integration.db;
 
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
@@ -40,7 +40,7 @@ class CaseRepositoryTest {
 		final var openECase = TestUtil.readOpenEFile("flow-instance-lamna-synpunkt.xml");
 		final var externalCaseId = "externalCaseId";
 
-		final var entity = new CaseEntity().withOpenECase(new String(openECase, ISO_8859_1)).withExternalCaseId(externalCaseId).withDeliveryStatus(DeliveryStatus.PENDING);
+		final var entity = new CaseEntity().withOpenECase(new String(openECase, UTF_8)).withExternalCaseId(externalCaseId).withDeliveryStatus(DeliveryStatus.PENDING);
 
 		// Call
 		final var caseMetaDataEntity = caseMetaDataRepository.findById("161").get();
@@ -52,7 +52,7 @@ class CaseRepositoryTest {
 		assertThat(result.getId()).isNotNull();
 		assertThat(result.getCaseMetaData()).isEqualTo(caseMetaDataEntity);
 		assertThat(result.getExternalCaseId()).isEqualTo(externalCaseId);
-		assertThat(result.getOpenECase()).isEqualTo(new String(openECase, ISO_8859_1));
+		assertThat(result.getOpenECase()).isEqualTo(new String(openECase, UTF_8));
 		assertThat(result.getDeliveryStatus()).isEqualTo(DeliveryStatus.PENDING);
 	}
 }

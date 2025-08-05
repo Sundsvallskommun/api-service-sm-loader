@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-499.xsd">
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-499.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>197</FamilyID>
 			<Version>2</Version>
 			<FlowID>499</FlowID>
-			<Name><![CDATA[Anspråk på företrädesrätt till återanställning vid Sundsvalls kommun - TEST DRAKEN]]></Name>
+			<Name><![CDATA[AnsprÃ¥k pÃ¥ fÃ¶retrÃ¤desrÃ¤tt till Ã¥teranstÃ¤llning vid Sundsvalls kommun - TEST DRAKEN]]></Name>
 		</Flow>
 		<FlowInstanceID>6911</FlowInstanceID>
 		<Status>
 			<ID>4258</ID>
-			<Name><![CDATA[Preliminär]]></Name>
+			<Name><![CDATA[PreliminÃ¤r]]></Name>
 		</Status>
 		<Poster>
 			<Firstname><![CDATA[Kalle]]></Firstname>
@@ -31,24 +31,24 @@
 	<Values>
 		<employmentInformation>
 			<QueryID>52976</QueryID>
-			<Name><![CDATA[Anställningsinformation]]></Name>
+			<Name><![CDATA[AnstÃ¤llningsinformation]]></Name>
 			<workPlace><![CDATA[Testar]]></workPlace>
-			<position><![CDATA[T - Tidsbegr anställning          ]]></position>
+			<position><![CDATA[T - Tidsbegr anstÃ¤llning          ]]></position>
 			<manager><![CDATA[Joakim von Anka]]></manager>
 		</employmentInformation>
 		<workPlace>
 			<QueryID>18146</QueryID>
-			<Name><![CDATA[Ange din anställningsinformation]]></Name>
+			<Name><![CDATA[Ange din anstÃ¤llningsinformation]]></Name>
 			<Ange_arbetsplats><![CDATA[Testar]]></Ange_arbetsplats>
 		</workPlace>
 		<position>
 			<QueryID>18147</QueryID>
-			<Name><![CDATA[Sök din befattning]]></Name>
-			<Value>T - Tidsbegr anställning</Value>
+			<Name><![CDATA[SÃ¶k din befattning]]></Name>
+			<Value>T - Tidsbegr anstÃ¤llning</Value>
 		</position>
 		<lastDayOfPosition>
 			<QueryID>18148</QueryID>
-			<Name><![CDATA[Ange datum för anställningens sista dag]]></Name>
+			<Name><![CDATA[Ange datum fÃ¶r anstÃ¤llningens sista dag]]></Name>
 			<StartDate>2024-10-03</StartDate>
 		</lastDayOfPosition>
 		<applicant>
@@ -65,8 +65,8 @@
 		</applicant>
 		<salaryType>
 			<QueryID>52976</QueryID>
-			<Name><![CDATA[Hade du månadslön eller timlön när du arbetade i Sundsvalls kommun?]]></Name>
-			<Value>Månadslön</Value>
+			<Name><![CDATA[Hade du mÃ¥nadslÃ¶n eller timlÃ¶n nÃ¤r du arbetade i Sundsvalls kommun?]]></Name>
+			<Value>MÃ¥nadslÃ¶n</Value>
 		</salaryType>
 	</Values>
 </FlowInstance>

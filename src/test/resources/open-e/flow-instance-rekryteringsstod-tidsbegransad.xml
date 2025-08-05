@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-551.xsd">
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
+<FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-551.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>224</FamilyID>
 			<Version>4</Version>
 			<FlowID>551</FlowID>
 			<Name>
-				<![CDATA[Beställning av rekryteringsstöd - TEST]]>
+				<![CDATA[BestÃ¤llning av rekryteringsstÃ¶d - TEST]]>
 			</Name>
 		</Flow>
 		<FlowInstanceID>7287</FlowInstanceID>
 		<Status>
 			<ID>4588</ID>
 			<Name>
-				<![CDATA[Preliminär]]>
+				<![CDATA[PreliminÃ¤r]]>
 			</Name>
 		</Status>
 		<Poster>
@@ -75,7 +75,7 @@
 		<recrutingManager>
 			<QueryID>20514</QueryID>
 			<Name>
-				<![CDATA[Rekryterande chef eller rekryterande chef om annan än beställaren]]>
+				<![CDATA[Rekryterande chef eller rekryterande chef om annan Ã¤n bestÃ¤llaren]]>
 			</Name>
 			<firstname>
 				<![CDATA[M]]>
@@ -96,63 +96,63 @@
 		<municipalityOrCompany>
 			<QueryID>20515</QueryID>
 			<Name>
-				<![CDATA[Gäller det en kommunal förvaltning eller bolag och förbund?]]>
+				<![CDATA[GÃ¤ller det en kommunal fÃ¶rvaltning eller bolag och fÃ¶rbund?]]>
 			</Name>
-			<Value>Kommunal förvaltning</Value>
+			<Value>Kommunal fÃ¶rvaltning</Value>
 		</municipalityOrCompany>
 		<department>
 			<QueryID>20516</QueryID>
 			<Name>
-				<![CDATA[Välj förvaltning]]>
+				<![CDATA[VÃ¤lj fÃ¶rvaltning]]>
 			</Name>
 			<Value>Kommunstyrelsekontoret</Value>
 		</department>
 		<referenceNumber>
 			<QueryID>20518</QueryID>
 			<Name>
-				<![CDATA[Ange referensnummer på den som är mottagare av fakturan]]>
+				<![CDATA[Ange referensnummer pÃ¥ den som Ã¤r mottagare av fakturan]]>
 			</Name>
 			<Value>007007007 - Bond James</Value>
 		</referenceNumber>
 		<securityClassification>
 			<QueryID>20520</QueryID>
 			<Name>
-				<![CDATA[Behöver denna tjänst säkerhetsklassas?]]>
+				<![CDATA[BehÃ¶ver denna tjÃ¤nst sÃ¤kerhetsklassas?]]>
 			</Name>
 			<Value>Ja</Value>
 		</securityClassification>
 		<checkPriority>
 			<QueryID>20521</QueryID>
 			<Name>
-				<![CDATA[Kontroll av företräde/omplacering]]>
+				<![CDATA[Kontroll av fÃ¶retrÃ¤de/omplacering]]>
 			</Name>
-			<Value>Jag intygar att jag tillsammans med HR-partner har kontrollerat så att ingen medarbetare är i omplaceringsutredning eller har företrädesrätt till återanställning. </Value>
+			<Value>Jag intygar att jag tillsammans med HR-partner har kontrollerat sÃ¥ att ingen medarbetare Ã¤r i omplaceringsutredning eller har fÃ¶retrÃ¤desrÃ¤tt till Ã¥teranstÃ¤llning.Â </Value>
 		</checkPriority>
 		<orderDetails>
 			<QueryID>20525</QueryID>
 			<Name>
-				<![CDATA[Vad vill du beställa?]]>
+				<![CDATA[Vad vill du bestÃ¤lla?]]>
 			</Name>
 			<Value>Delpaket</Value>
 		</orderDetails>
 		<position>
 			<QueryID>20590</QueryID>
 			<Name>
-				<![CDATA[Vad ska du rekrytera för tjänst?]]>
+				<![CDATA[Vad ska du rekrytera fÃ¶r tjÃ¤nst?]]>
 			</Name>
 			<Value>Medarbetare</Value>
 		</position>
 		<readyProfile>
 			<QueryID>20526</QueryID>
 			<Name>
-				<![CDATA[Har du redan en färdig kravprofil och annons eller vill du ha stöd i kravprofilsarbete och annonsutformning för att därefter annonsera tjänsten?]]>
+				<![CDATA[Har du redan en fÃ¤rdig kravprofil och annons eller vill du ha stÃ¶d i kravprofilsarbete och annonsutformning fÃ¶r att dÃ¤refter annonsera tjÃ¤nsten?]]>
 			</Name>
-			<Value>Jag har en färdig annons</Value>
+			<Value>Jag har en fÃ¤rdig annons</Value>
 		</readyProfile>
 		<titleWorkplace>
 			<QueryID>20604</QueryID>
 			<Name>
-				<![CDATA[Tjänstetitel/arbetsplats]]>
+				<![CDATA[TjÃ¤nstetitel/arbetsplats]]>
 			</Name>
 			<title>
 				<![CDATA[Spion]]>
@@ -163,12 +163,12 @@
 		</titleWorkplace>
 		<employmentType>
 			<QueryID>20913</QueryID>
-			<Name><![CDATA[Anställningsform]]></Name>
-			<Value>Tidsbegränsad anställning</Value>
+			<Name><![CDATA[AnstÃ¤llningsform]]></Name>
+			<Value>TidsbegrÃ¤nsad anstÃ¤llning</Value>
 		</employmentType>
 		<temporaryDate>
 			<QueryID>20915</QueryID>
-			<Name><![CDATA[Tidsbegränsad]]></Name>
+			<Name><![CDATA[TidsbegrÃ¤nsad]]></Name>
 			<StartDate>2025-06-11</StartDate>
 			<EndDate>2025-06-12</EndDate>
 		</temporaryDate>
@@ -179,13 +179,13 @@
 		</scope>
 		<numberOfPositions>
 			<QueryID>20609</QueryID>
-			<Name><![CDATA[Antal tjänster]]></Name>
+			<Name><![CDATA[Antal tjÃ¤nster]]></Name>
 			<Antal_tjanster><![CDATA[1]]></Antal_tjanster>
 		</numberOfPositions>
 		<recruitmentAccess>
 			<QueryID>20610</QueryID>
 			<Name>
-				<![CDATA[Vilka ska ha tillgång till rekryteringen i Visma?]]>
+				<![CDATA[Vilka ska ha tillgÃ¥ng till rekryteringen i Visma?]]>
 			</Name>
 			<Row>
 				<ID>40</ID>
@@ -224,7 +224,7 @@
 				<![CDATA[Om arbetsplatsen]]>
 			</Name>
 			<Value>
-				<![CDATA[Arbete över hela världen]]>
+				<![CDATA[Arbete Ã¶ver hela vÃ¤rlden]]>
 			</Value>
 		</workplaceInfo>
 		<jobTasks>
@@ -320,10 +320,10 @@
 				<Column1>
 					<ID>470</ID>
 					<Name>
-						<![CDATA[Fackförbund]]>
+						<![CDATA[FackfÃ¶rbund]]>
 					</Name>
 					<Value>
-						<![CDATA[städförbundet]]>
+						<![CDATA[stÃ¤dfÃ¶rbundet]]>
 					</Value>
 				</Column1>
 				<Column2>
@@ -340,35 +340,35 @@
 		<addSelectionQuestions>
 			<QueryID>20618</QueryID>
 			<Name>
-				<![CDATA[Vill du lägga till urvalsfrågor? (timdebitering)]]>
+				<![CDATA[Vill du lÃ¤gga till urvalsfrÃ¥gor? (timdebitering)]]>
 			</Name>
 			<Value>Ja</Value>
 		</addSelectionQuestions>
 		<question1>
 			<QueryID>20759</QueryID>
 			<Name>
-				<![CDATA[Fråga 1]]>
+				<![CDATA[FrÃ¥ga 1]]>
 			</Name>
 			<Value>
-				<![CDATA[Hur långt är ett snöre?]]>
+				<![CDATA[Hur lÃ¥ngt Ã¤r ett snÃ¶re?]]>
 			</Value>
 		</question1>
 		<question2>
 			<QueryID>20760</QueryID>
 			<Name>
-				<![CDATA[Fråga 2]]>
+				<![CDATA[FrÃ¥ga 2]]>
 			</Name>
 			<Value>
-				<![CDATA[Vad är klockan?]]>
+				<![CDATA[Vad Ã¤r klockan?]]>
 			</Value>
 		</question2>
 		<question3>
 			<QueryID>20761</QueryID>
 			<Name>
-				<![CDATA[Fråga 3]]>
+				<![CDATA[FrÃ¥ga 3]]>
 			</Name>
 			<Value>
-				<![CDATA[Finns det tårta?]]>
+				<![CDATA[Finns det tÃ¥rta?]]>
 			</Value>
 		</question3>
 		<advertisementType>
@@ -388,9 +388,9 @@
 		<additionalSupport>
 			<QueryID>20765</QueryID>
 			<Name>
-				<![CDATA[Önskar du övrigt stöd i din rekrytering? (max 2 val)]]>
+				<![CDATA[Ã–nskar du Ã¶vrigt stÃ¶d i din rekrytering? (max 2 val)]]>
 			</Name>
-			<Value>Utökad annonsering (sociala medier)</Value>
+			<Value>UtÃ¶kad annonsering (sociala medier)</Value>
 			<Value>Tester</Value>
 		</additionalSupport>
 		<mediaChoices>
@@ -398,7 +398,7 @@
 			<Name>
 				<![CDATA[Mediaval]]>
 			</Name>
-			<Value>Målgruppsstyrda annonser (sociala medier)</Value>
+			<Value>MÃ¥lgruppsstyrda annonser (sociala medier)</Value>
 		</mediaChoices>
 		<advertisementPackage>
 			<QueryID>20767</QueryID>
@@ -410,21 +410,21 @@
 		<testType>
 			<QueryID>20768</QueryID>
 			<Name>
-				<![CDATA[Vad vill du beställa för test?]]>
+				<![CDATA[Vad vill du bestÃ¤lla fÃ¶r test?]]>
 			</Name>
 			<Value>Personlighetstest</Value>
 		</testType>
 		<inDepthInterview>
 			<QueryID>20769</QueryID>
 			<Name>
-				<![CDATA[Vill du beställa till fördjupad intervju med kandidater?]]>
+				<![CDATA[Vill du bestÃ¤lla till fÃ¶rdjupad intervju med kandidater?]]>
 			</Name>
 			<Value>Ja</Value>
 		</inDepthInterview>
 		<recruitmentSupport>
 			<QueryID>20770</QueryID>
 			<Name>
-				<![CDATA[Konsultativt rekryteringsstöd per timme]]>
+				<![CDATA[Konsultativt rekryteringsstÃ¶d per timme]]>
 			</Name>
 			<Value>
 				<![CDATA[Okej]]>
@@ -433,7 +433,7 @@
 		<additionalInformation>
 			<QueryID>20771</QueryID>
 			<Name>
-				<![CDATA[Övrig information]]>
+				<![CDATA[Ã–vrig information]]>
 			</Name>
 			<Value>
 				<![CDATA[Lycka till!]]>

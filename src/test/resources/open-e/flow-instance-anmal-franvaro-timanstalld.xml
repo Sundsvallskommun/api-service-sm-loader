@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
 <FlowInstance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
-              xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-490.xsd">
+  xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance"
+  xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-490.xsd">
 	<Header>
 		<Flow>
 			<FamilyID>195</FamilyID>
 			<Version>2</Version>
 			<FlowID>490</FlowID>
-			<Name><![CDATA[Anmälan om sjukfrånvaro - TEST DRAKEN]]></Name>
+			<Name><![CDATA[AnmÃ¤lan om sjukfrÃ¥nvaro - TEST DRAKEN]]></Name>
 		</Flow>
 		<FlowInstanceID>6910</FlowInstanceID>
 		<Status>
 			<ID>4233</ID>
-			<Name><![CDATA[Preliminär]]></Name>
+			<Name><![CDATA[PreliminÃ¤r]]></Name>
 		</Status>
 		<Poster>
 			<Firstname><![CDATA[Kalle]]></Firstname>
@@ -33,7 +33,7 @@
 	<Values>
 		<applicant>
 			<QueryID>17968</QueryID>
-			<Name><![CDATA[Anmälare]]></Name>
+			<Name><![CDATA[AnmÃ¤lare]]></Name>
 			<firstname><![CDATA[Kalle]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<username><![CDATA[kal00ank]]></username>
@@ -43,17 +43,17 @@
 		</applicant>
 		<administrativeUnit>
 			<QueryID>17970</QueryID>
-			<Name><![CDATA[I vilken förvaltning/verksamhet arbetar medarbetaren?]]></Name>
+			<Name><![CDATA[I vilken fÃ¶rvaltning/verksamhet arbetar medarbetaren?]]></Name>
 			<Value>ks</Value>
 		</administrativeUnit>
 		<employmentType>
 			<QueryID>17971</QueryID>
-			<Name><![CDATA[Gäller det sjukfrånvaro för en]]></Name>
-			<Value>Timavlönad</Value>
+			<Name><![CDATA[GÃ¤ller det sjukfrÃ¥nvaro fÃ¶r en]]></Name>
+			<Value>TimavlÃ¶nad</Value>
 		</employmentType>
 		<employeeData>
 			<QueryID>17974</QueryID>
-			<Name><![CDATA[Vilken anställd gäller det?]]></Name>
+			<Name><![CDATA[Vilken anstÃ¤lld gÃ¤ller det?]]></Name>
 			<firstname><![CDATA[Kalle]]></firstname>
 			<lastname><![CDATA[Anka]]></lastname>
 			<username><![CDATA[kal00ank]]></username>
@@ -64,12 +64,12 @@
 		<employeeTitle>
 			<QueryID>17983</QueryID>
 			<Name><![CDATA[Medarbetarens befattningar]]></Name>
-			<Value>3680 Barnskötare</Value>
+			<Value>3680 BarnskÃ¶tare</Value>
 		</employeeTitle>
 		<levelOfAbsence>
 			<QueryID>17986</QueryID>
-			<Name><![CDATA[Gäller det]]></Name>
-			<Value>Frånvaro del av dag?</Value>
+			<Name><![CDATA[GÃ¤ller det]]></Name>
+			<Value>FrÃ¥nvaro del av dag?</Value>
 		</levelOfAbsence>
 		<absentDateStart>
 			<QueryID>17988</QueryID>
@@ -78,22 +78,22 @@
 		</absentDateStart>
 		<absentDateSpecific>
 			<QueryID>17989</QueryID>
-			<Name><![CDATA[Vad gäller för denna sjukperiod?]]></Name>
-			<Value>Medarbetaren började senare pga. sjukdom</Value>
+			<Name><![CDATA[Vad gÃ¤ller fÃ¶r denna sjukperiod?]]></Name>
+			<Value>Medarbetaren bÃ¶rjade senare pga. sjukdom</Value>
 		</absentDateSpecific>
 		<absentDateLateStart>
 			<QueryID>17991</QueryID>
-			<Name><![CDATA[Vilken tid började medarbetaren arbeta?]]></Name>
+			<Name><![CDATA[Vilken tid bÃ¶rjade medarbetaren arbeta?]]></Name>
 			<StartTime>14:00:00</StartTime>
 		</absentDateLateStart>
 		<absentContunuation>
 			<QueryID>17992</QueryID>
 			<Name><![CDATA[Var medarbetaren fortsatt sjuk efter detta pass?]]></Name>
-			<Value>Ja på deltid</Value>
+			<Value>Ja pÃ¥ deltid</Value>
 		</absentContunuation>
 		<absentDateTable>
 			<QueryID>17994</QueryID>
-			<Name><![CDATA[När var medarbetaren frånvarande?]]></Name>
+			<Name><![CDATA[NÃ¤r var medarbetaren frÃ¥nvarande?]]></Name>
 			<Row>
 				<ID>5</ID>
 				<Column>
@@ -103,7 +103,7 @@
 				</Column>
 				<Column1>
 					<ID>234</ID>
-					<Name><![CDATA[Tid från och med]]></Name>
+					<Name><![CDATA[Tid frÃ¥n och med]]></Name>
 					<Value><![CDATA[14:00]]></Value>
 				</Column1>
 				<Column2>
@@ -121,7 +121,7 @@
 				</Column>
 				<Column1>
 					<ID>234</ID>
-					<Name><![CDATA[Tid från och med]]></Name>
+					<Name><![CDATA[Tid frÃ¥n och med]]></Name>
 					<Value><![CDATA[10:00]]></Value>
 				</Column1>
 				<Column2>
@@ -133,7 +133,7 @@
 		</absentDateTable>
 		<haveSickNote>
 			<QueryID>17995</QueryID>
-			<Name><![CDATA[Har du fått ett läkarintyg från medarbetaren?]]></Name>
+			<Name><![CDATA[Har du fÃ¥tt ett lÃ¤karintyg frÃ¥n medarbetaren?]]></Name>
 			<Value>Nej</Value>
 		</haveSickNote>
 	</Values>

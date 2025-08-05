@@ -50,7 +50,7 @@ class OrderingRecruitmentSupportProviderTest {
 	@ValueSource(strings = {
 		"flow-instance-rekryteringsstod.xml", "flow-instance-rekryteringsstod-tidsbegransad.xml"
 	})
-	void mapToErrand(String fileName) throws Exception {
+	void mapToErrand(final String fileName) throws Exception {
 
 		final var priority = "MEDIUM";
 		final var category = "category";
@@ -185,10 +185,10 @@ class OrderingRecruitmentSupportProviderTest {
 		"Volymrekrytering:COMPLETE_RECRUITMENT.VOLUME",
 		"Omtag:COMPLETE_RECRUITMENT.RETAKE"
 	}, delimiter = ':')
-	void mapWithDifferentClassifications(String input, String expected) {
+	void mapWithDifferentClassifications(final String input, final String expected) {
 		when(properties.getPriority()).thenReturn("MEDIUM");
 
-		var xml = """
+		final var xml = """
 			<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 			<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-551.xsd">
 				<Values>
@@ -202,7 +202,7 @@ class OrderingRecruitmentSupportProviderTest {
 			</FlowInstance>
 			""".formatted(input);
 
-		final var errand = provider.mapToErrand(xml.getBytes(StandardCharsets.ISO_8859_1));
+		final var errand = provider.mapToErrand(xml.getBytes(StandardCharsets.UTF_8));
 
 		assertThat(errand.getClassification().getCategory()).isEqualTo("COMPLETE_RECRUITMENT");
 		assertThat(errand.getClassification().getType()).isEqualTo(expected);
@@ -225,7 +225,7 @@ class OrderingRecruitmentSupportProviderTest {
 				</Values>
 			</FlowInstance>
 			""";
-		final var bytes = xml.getBytes(StandardCharsets.ISO_8859_1);
+		final var bytes = xml.getBytes(StandardCharsets.UTF_8);
 		final var exception = assertThrows(ThrowableProblem.class, () -> provider.mapToErrand(bytes));
 
 		assertThat(exception.getStatus()).isEqualTo(BAD_REQUEST);
