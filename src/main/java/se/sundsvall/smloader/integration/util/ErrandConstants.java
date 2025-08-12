@@ -2,8 +2,6 @@ package se.sundsvall.smloader.integration.util;
 
 public final class ErrandConstants {
 
-	private ErrandConstants() {}
-
 	public static final String MUNICIPALITY_ID = "2281";
 	public static final String ROLE_CONTACT_PERSON = "CONTACT";
 	public static final String ROLE_MANAGER = "MANAGER";
@@ -204,7 +202,7 @@ public final class ErrandConstants {
 	public static final String KEY_QUALIFICATIONS = "qualifications";
 	public static final String DISPLAY_QUALIFICATIONS = "Kvalifikationer";
 	public static final String KEY_RECRUITMENT_ACCESS = "recruitmentAccess";
-	public static final String DISPLAY_RECRUITMENT_ACCESS = "Namn|E-Post|Roll";
+	public static final String DISPLAY_RECRUITMENT_ACCESS = "Namn|E-post|Roll";
 	public static final String KEY_ADVERTISING = "advertising";
 	public static final String DISPLAY_ADVERTISING = "Annonsering";
 	public static final String KEY_ADDITIONAL_INFORMATION = "additionalInformation";
@@ -212,7 +210,7 @@ public final class ErrandConstants {
 	public static final String KEY_RECRUITMENT_SUPPORT = "recruitmentSupport";
 	public static final String DISPLAY_RECRUITMENT_SUPPORT = "Konsultativt rekryteringsstöd per timme";
 	public static final String KEY_ADVERTISEMENT_CONTACTS = "advertisementContacts";
-	public static final String DISPLAY_ADVERTISEMENT_CONTACTS = "Namn|Title|Telefonnummer";
+	public static final String DISPLAY_ADVERTISEMENT_CONTACTS = "Namn|Titel|Telefonnummer";
 	public static final String KEY_UNION_CONTACTS = "unionContacts";
 	public static final String DISPLAY_UNION_CONTACTS = "Namn|Fackförbund|Telefonnummer";
 	public static final String KEY_ADD_SELECTION_QUESTIONS = "addSelectionQuestions";
@@ -237,5 +235,7 @@ public final class ErrandConstants {
 	public static final String DISPLAY_TEST_TYPE = "Beställda tester";
 	public static final String KEY_IN_DEPTH_INTERVIEW = "inDepthInterview";
 	public static final String DISPLAY_IN_DEPTH_INTERVIEW = "Fördjupad intervju med kandidater beställd";
+
+	private ErrandConstants() {}
 
 }

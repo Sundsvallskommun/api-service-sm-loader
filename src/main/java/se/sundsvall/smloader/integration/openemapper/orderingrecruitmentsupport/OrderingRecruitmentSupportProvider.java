@@ -107,7 +107,6 @@ import se.sundsvall.smloader.integration.util.XPathException;
 @Component
 public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 
-	private static final String COMPLETE_RECRUITMENT_PROCESS = "Fullständig rekryteringsprocess";
 	public static final String CATEGORY_COMPLETE_RECRUITMENT = "COMPLETE_RECRUITMENT";
 	public static final String CATEGORY_PARTIAL_PACKAGE = "PARTIAL_PACKAGE";
 	public static final String TYPE_PARTIAL_PACKAGE_EMPLOYEE = "PARTIAL_PACKAGE.EMPLOYEE";
@@ -115,7 +114,7 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 	public static final String TYPE_COMPLETE_RECRUITMENT_EMPLOYEE = "COMPLETE_RECRUITMENT.EMPLOYEE";
 	public static final String TYPE_COMPLETE_RECRUITMENT_VOLUME = "COMPLETE_RECRUITMENT.VOLUME";
 	public static final String TYPE_COMPLETE_RECRUITMENT_RETAKE = "COMPLETE_RECRUITMENT.RETAKE";
-
+	private static final String COMPLETE_RECRUITMENT_PROCESS = "Fullständig rekryteringsprocess";
 	private final OpenEMapperProperties properties;
 
 	public OrderingRecruitmentSupportProvider(final @Qualifier("orderingrecruitmentsupport") OpenEMapperProperties properties) {
@@ -128,7 +127,7 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 	}
 
 	@Override
-	public Errand mapToErrand(byte[] xml) {
+	public Errand mapToErrand(final byte[] xml) {
 		final var result = extractValue(xml, OrderingRecruitmentSupport.class);
 
 		if (result == null) {
@@ -179,13 +178,13 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 					.toList()));
 	}
 
-	private Classification getClassification(OrderingRecruitmentSupport order) {
+	private Classification getClassification(final OrderingRecruitmentSupport order) {
 		return Optional.ofNullable(order.orderDetails())
 			.map(details -> mapClassification(details, order.position()))
 			.orElse(new Classification().category(properties.getCategory()).type(properties.getType()));
 	}
 
-	private Classification mapClassification(String details, String position) {
+	private Classification mapClassification(final String details, final String position) {
 		if (details.equalsIgnoreCase(COMPLETE_RECRUITMENT_PROCESS)) {
 			return new Classification().category(CATEGORY_COMPLETE_RECRUITMENT).type(mapTypeForCompleteProcess(position));
 		} else {
@@ -193,7 +192,7 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 		}
 	}
 
-	private String mapTypeForCompleteProcess(String position) {
+	private String mapTypeForCompleteProcess(final String position) {
 		return switch (position) {
 			case "Chef" -> TYPE_COMPLETE_RECRUITMENT_MANAGER;
 			case "Medarbetare" -> TYPE_COMPLETE_RECRUITMENT_EMPLOYEE;
@@ -203,11 +202,11 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 		};
 	}
 
-	private List<String> mapLabels(Classification classification) {
+	private List<String> mapLabels(final Classification classification) {
 		return List.of(classification.getCategory(), classification.getType());
 	}
 
-	private List<Parameter> getParameters(OrderingRecruitmentSupport order) {
+	private List<Parameter> getParameters(final OrderingRecruitmentSupport order) {
 		return Stream.of(
 			singleParameter(order.municipalityOrCompany(), KEY_MUNICIPALITY_OR_COMPANY, DISPLAY_MUNICIPALITY_OR_COMPANY),
 			singleParameter(order.department(), KEY_DEPARTMENT, DISPLAY_DEPARTMENT),
@@ -223,13 +222,13 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 			singleParameter(order.temporaryEndDate(), KEY_END_DATE, DISPLAY_END_DATE),
 			singleParameter(order.scopePercentage(), KEY_SCOPE, DISPLAY_SCOPE),
 			singleParameter(order.numberOfPositions(), KEY_NUMBER_OF_POSITIONS, DISPLAY_NUMBER_OF_POSITIONS),
-			multiParameter(order.recruitmentAccess(), joinRecruitmentAccess(), KEY_RECRUITMENT_ACCESS, DISPLAY_RECRUITMENT_ACCESS),
+			multiParameter(order.recruitmentAccess(), joinRecruitmentAccess(), KEY_RECRUITMENT_ACCESS, DISPLAY_RECRUITMENT_ACCESS).group(getGroup(order)),
 			singleParameter(order.workplaceInfo(), KEY_WORKPLACE_INFO, DISPLAY_WORKPLACE_INFO),
 			singleParameter(order.jobTasks(), KEY_JOB_TASK, DISPLAY_JOB_TASK),
 			singleParameter(order.qualifications(), KEY_QUALIFICATIONS, DISPLAY_QUALIFICATIONS),
 			singleParameter(order.advertising(), KEY_ADVERTISING, DISPLAY_ADVERTISING),
-			multiParameter(order.advertisementContacts(), joinAdvertisementContact(), KEY_ADVERTISEMENT_CONTACTS, DISPLAY_ADVERTISEMENT_CONTACTS),
-			multiParameter(order.unionContacts(), joinUnionContact(), KEY_UNION_CONTACTS, DISPLAY_UNION_CONTACTS),
+			multiParameter(order.advertisementContacts(), joinAdvertisementContact(), KEY_ADVERTISEMENT_CONTACTS, DISPLAY_ADVERTISEMENT_CONTACTS).group(getGroupName(order)),
+			multiParameter(order.unionContacts(), joinUnionContact(), KEY_UNION_CONTACTS, DISPLAY_UNION_CONTACTS).group(getString(order)),
 			singleParameter(order.addSelectionQuestions(), KEY_ADD_SELECTION_QUESTIONS, DISPLAY_ADD_SELECTION_QUESTIONS),
 			singleParameter(order.question1(), KEY_QUESTION1, DISPLAY_QUESTION1),
 			singleParameter(order.question2(), KEY_QUESTION2, DISPLAY_QUESTION2),
@@ -246,6 +245,27 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 			.filter(Objects::nonNull)
 			.toList();
 
+	}
+
+	private String getString(final OrderingRecruitmentSupport order) {
+		if (order.unionContacts() == null || order.unionContacts().isEmpty()) {
+			return null;
+		}
+		return order.unionContactsName();
+	}
+
+	private String getGroupName(final OrderingRecruitmentSupport order) {
+		if (order.advertisementContacts() == null || order.advertisementContacts().isEmpty()) {
+			return null;
+		}
+		return order.advertisementContactsName();
+	}
+
+	private String getGroup(final OrderingRecruitmentSupport order) {
+		if (order.recruitmentAccess() == null || order.recruitmentAccess().isEmpty()) {
+			return null;
+		}
+		return order.recruitmentAccessName();
 	}
 
 	private Function<RecruitmentAccess, String> joinRecruitmentAccess() {
