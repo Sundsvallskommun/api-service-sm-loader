@@ -65,7 +65,7 @@ class OrderingRecruitmentSupportProviderTest {
 		final var errand = provider.mapToErrand(stringBytes);
 
 		assertThat(errand.getStatus()).isEqualTo(STATUS_NEW);
-		assertThat(errand.getTitle()).isEqualTo("Spion");
+		assertThat(errand.getTitle()).isEqualTo("Chef");
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category("PARTIAL_PACKAGE").type("PARTIAL_PACKAGE.EMPLOYEE"));
@@ -80,7 +80,7 @@ class OrderingRecruitmentSupportProviderTest {
 				tuple("orderDetails", List.of("Delpaket"), "Beställning", null),
 				tuple("position", List.of("Medarbetare"), "Tjänst", null),
 				tuple("readyProfile", List.of("Jag har en färdig annons"), "Färdig annons eller stöd i annonsutformning", null),
-				tuple("workplaceTitle", List.of("Spion"), "Tjänstetitel", null),
+				tuple("workplaceTitle", List.of("Chef"), "Tjänstetitel", null),
 				tuple("workplace", List.of("MI6 Headquarters"), "Arbetsplats", null),
 				tuple("employmentType", List.of("Tillsvidareanställning"), "Anställningsform", null),
 				tuple("startDate", List.of("2025-04-24"), "Tillträde", null),
@@ -115,7 +115,7 @@ class OrderingRecruitmentSupportProviderTest {
 				tuple("orderDetails", List.of("Delpaket"), "Beställning", null),
 				tuple("position", List.of("Medarbetare"), "Tjänst", null),
 				tuple("readyProfile", List.of("Jag har en färdig annons"), "Färdig annons eller stöd i annonsutformning", null),
-				tuple("workplaceTitle", List.of("Spion"), "Tjänstetitel", null),
+				tuple("workplaceTitle", List.of("Chef"), "Tjänstetitel", null),
 				tuple("workplace", List.of("MI6 Headquarters"), "Arbetsplats", null),
 				tuple("employmentType", List.of("Tidsbegränsad anställning"), "Anställningsform", null),
 				tuple("startDate", List.of("2025-06-11"), "Tillträde", null),

@@ -150,7 +150,7 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 	}
 
 	private String getTitle(final OrderingRecruitmentSupport orderingRecruitmentSupport) {
-		return Optional.ofNullable(orderingRecruitmentSupport.applicantTitle())
+		return Optional.ofNullable(orderingRecruitmentSupport.workplaceTitle())
 			.orElse(TITLE_ORDERING_RECRUITMENT_SUPPORT);
 	}
 
