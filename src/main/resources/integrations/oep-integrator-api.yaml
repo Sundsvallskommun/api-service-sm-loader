@@ -5,9 +5,9 @@ info:
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
-  version: "1.1"
+  version: "1.5"
 servers:
-  - url: http://localhost:60041
+  - url: http://localhost:53893
     description: Generated server url
 tags:
   - name: Instances
@@ -668,7 +668,7 @@ paths:
           example: INTERNAL
         - name: flowInstanceId
           in: path
-          description: Flow instance id
+          description: MetadataFlow instance id
           required: true
           schema:
             type: string
@@ -1014,6 +1014,13 @@ paths:
           schema:
             type: string
           example: Preliminär
+        - name: includeStatus
+          in: query
+          description: Should response include status
+          required: false
+          schema:
+            type: boolean
+          example: true
       responses:
         "200":
           description: Successful operation
@@ -1145,6 +1152,12 @@ components:
     Problem:
       type: object
       properties:
+        status:
+          $ref: "#/components/schemas/StatusType"
+        title:
+          type: string
+        detail:
+          type: string
         instance:
           type: string
           format: uri
@@ -1155,12 +1168,6 @@ components:
           type: object
           additionalProperties:
             type: object
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          $ref: "#/components/schemas/StatusType"
     StatusType:
       type: object
       properties:
@@ -1246,6 +1253,8 @@ components:
           type: string
         message:
           type: string
+        detail:
+          type: string
         instance:
           type: string
           format: uri
@@ -1253,8 +1262,6 @@ components:
           type: object
           additionalProperties:
             type: object
-        detail:
-          type: string
         suppressed:
           type: array
           items:
@@ -1317,6 +1324,12 @@ components:
                 type: boolean
         message:
           type: string
+        status:
+          $ref: "#/components/schemas/StatusType"
+        title:
+          type: string
+        detail:
+          type: string
         instance:
           type: string
           format: uri
@@ -1327,12 +1340,6 @@ components:
           type: object
           additionalProperties:
             type: object
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          $ref: "#/components/schemas/StatusType"
         suppressed:
           type: array
           items:
@@ -1415,7 +1422,6 @@ components:
     WebmessageRequest:
       required:
         - message
-        - sender
       type: object
       properties:
         sender:
@@ -1431,6 +1437,9 @@ components:
             $ref: "#/components/schemas/ExternalReference"
       description: Webmessage request model
     ConfirmDeliveryRequest:
+      required:
+        - caseId
+        - system
       type: object
       properties:
         caseId:
@@ -1648,6 +1657,22 @@ components:
           type: string
           description: The status name
           example: Inskickat
+        newExternalMessagesDisallowed:
+          type: boolean
+          description: Whether new external messages are disallowed
+        addExternalMessage:
+          type: boolean
+          description: Whether to add external message
+        addInternalMessage:
+          type: boolean
+          description: Whether to add internal message
+        isRestrictedAdminDeletable:
+          type: boolean
+          description: Whether restricted admin can delete
+        status:
+          type: string
+          description: The status
+          example: ARCHIVED
       description: Case status model
     CaseEnvelope:
       type: object
@@ -1664,5 +1689,11 @@ components:
           type: string
           description: The case status change date
           format: date-time
+        displayName:
+          type: string
+          description: The display name for the family the case belongs to
+          example: Kompiskortet
+        status:
+          $ref: "#/components/schemas/CaseStatus"
       description: Case envelope model
   securitySchemes: { }
