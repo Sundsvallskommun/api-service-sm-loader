@@ -77,6 +77,8 @@ class ContactSalaryAndPensionProviderTest {
 		final var labels = List.of(category, type);
 		final var namespace = "namespace";
 		final var familyId = "789";
+		final var labelId_1 = "labelId_1";
+		final var labelId_2 = "labelId_2";
 		final var resourceName = "resourceName";
 		final var classification = "classification";
 		final var displayName = "displayName";
@@ -88,8 +90,9 @@ class ContactSalaryAndPensionProviderTest {
 		when(properties.getFamilyId()).thenReturn(familyId);
 		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
 		when(properties.getLabels()).thenReturn(labels);
-		when(labelsProvider.getLabel(namespace, category)).thenReturn(new Label().resourcePath(category).resourceName(resourceName).classification(classification).displayName(displayName));
-		when(labelsProvider.getLabel(namespace, type)).thenReturn(new Label().resourcePath(type).resourceName(resourceName).classification(classification).displayName(displayName));
+		when(labelsProvider.getLabels(namespace)).thenReturn(List.of(
+			new Label().id(labelId_1).resourcePath(category).resourceName(resourceName).classification(classification).displayName(displayName)
+				.labels(List.of(new Label().id(labelId_2).resourcePath(type).resourceName(resourceName).classification(classification).displayName(displayName)))));
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
 		final var stringBytes = readOpenEFile(testfile);
@@ -124,13 +127,7 @@ class ContactSalaryAndPensionProviderTest {
 			new ExternalTag().key("familyId").value("174")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
-		assertThat(errand.getLabels()).extracting(
-			ErrandLabel::getResourcePath,
-			ErrandLabel::getClassification,
-			ErrandLabel::getResourceName,
-			ErrandLabel::getDisplayName).containsExactlyInAnyOrder(
-				tuple(category, classification, resourceName, displayName),
-				tuple(type, classification, resourceName, displayName));
+		assertThat(errand.getLabels()).extracting(ErrandLabel::getId).containsExactly(labelId_1, labelId_2);
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
@@ -145,10 +142,14 @@ class ContactSalaryAndPensionProviderTest {
 		final var priority = "MEDIUM";
 		final var category = "category";
 		final var type = "type";
+		final var subType = "subType";
 		final var partyId = "partyId";
 		final var labels = List.of(category, type);
 		final var namespace = "namespace";
 		final var familyId = "789";
+		final var labelId_1 = "labelId_1";
+		final var labelId_2 = "labelId_2";
+		final var labelId_3 = "labelId_3";
 		final var resourceName = "resourceName";
 		final var classification = "classification";
 		final var displayName = "displayName";
@@ -160,8 +161,10 @@ class ContactSalaryAndPensionProviderTest {
 		when(properties.getFamilyId()).thenReturn(familyId);
 		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
 		when(properties.getLabels()).thenReturn(labels);
-		when(labelsProvider.getLabel(namespace, category)).thenReturn(new Label().resourcePath(category).resourceName(resourceName).classification(classification).displayName(displayName));
-		when(labelsProvider.getLabel(namespace, type)).thenReturn(new Label().resourcePath(type).resourceName(resourceName).classification(classification).displayName(displayName));
+		when(labelsProvider.getLabels(namespace)).thenReturn(List.of(
+			new Label().id(labelId_1).resourcePath(category).resourceName(resourceName).classification(classification).displayName(displayName)
+				.labels(List.of(new Label().id(labelId_2).resourcePath(type).resourceName(resourceName).classification(classification).displayName(displayName)
+					.labels(List.of(new Label().id(labelId_3).resourcePath(subType).resourceName(resourceName).classification(classification).displayName(displayName)))))));
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
@@ -194,13 +197,7 @@ class ContactSalaryAndPensionProviderTest {
 				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), null, "PRIVATE", partyId, emptyList()),
 				tuple(ROLE_USER, "Tjatte", "Anka", List.of(new ContactChannel().type("Email").value("tjatte.anka@sundsvall.se")), null, "PRIVATE", partyId, emptyList()));
 
-		assertThat(errand.getLabels()).extracting(
-			ErrandLabel::getResourcePath,
-			ErrandLabel::getClassification,
-			ErrandLabel::getResourceName,
-			ErrandLabel::getDisplayName).containsExactlyInAnyOrder(
-				tuple(category, classification, resourceName, displayName),
-				tuple(type, classification, resourceName, displayName));
+		assertThat(errand.getLabels()).extracting(ErrandLabel::getId).containsExactly(labelId_1, labelId_2);
 
 		assertThat(errand.getReporterUserId()).isEqualTo("chefAnvändare");
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6873"),

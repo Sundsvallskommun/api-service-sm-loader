@@ -76,8 +76,13 @@ class SubstituteManagerProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
-		final var label = "label";
-		final var labels = List.of(label);
+		final var labelId_1 = "labelId_1";
+		final var labelId_2 = "labelId_2";
+		final var labelId_3 = "labelId_3";
+		final var label_1 = "label_1";
+		final var label_2 = "label_2";
+		final var label_3 = "label_3";
+		final var labels = List.of(label_1, label_2);
 		final var namespace = "namespace";
 		final var familyId = "789";
 		final var resourceName = "resourceName";
@@ -91,7 +96,11 @@ class SubstituteManagerProviderTest {
 		when(properties.getFamilyId()).thenReturn(familyId);
 		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
 		when(properties.getLabels()).thenReturn(labels);
-		when(labelsProvider.getLabel(namespace, label)).thenReturn(new Label().resourcePath(label).resourceName(resourceName).classification(classification).displayName(displayName));
+		when(labelsProvider.getLabels(namespace)).thenReturn(List.of(
+			new Label().id(labelId_1).resourcePath(label_1).resourceName(resourceName).classification(classification).displayName(displayName)
+				.labels(List.of(new Label().id(labelId_2).resourcePath(label_2).resourceName(resourceName).classification(classification).displayName(displayName)
+					.labels(List.of(new Label().id(labelId_3).resourcePath(label_3).resourceName(resourceName).classification(classification).displayName(displayName)))))));
+
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
@@ -115,10 +124,7 @@ class SubstituteManagerProviderTest {
 			tuple("endDate", List.of("2024-09-27"), "Attesteringsperiods slutdatum"));
 
 		assertThat(errand.getLabels()).extracting(
-			ErrandLabel::getResourcePath,
-			ErrandLabel::getClassification,
-			ErrandLabel::getResourceName,
-			ErrandLabel::getDisplayName).containsExactly(tuple(label, classification, resourceName, displayName));
+			ErrandLabel::getId).containsExactly(labelId_1, labelId_2);
 
 		assertThat(errand.getStakeholders()).hasSize(4).extracting(
 			Stakeholder::getRole,

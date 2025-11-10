@@ -74,4 +74,8 @@ public class LabelsProvider implements ApplicationListener<ApplicationReadyEvent
 			.findFirst()
 			.orElse(null);
 	}
+
+	public List<Label> getLabels(final String namespace) {
+		return cachedLabels.getOrDefault(namespace, emptyList());
+	}
 }

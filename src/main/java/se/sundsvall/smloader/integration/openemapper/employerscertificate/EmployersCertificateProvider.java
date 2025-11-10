@@ -44,7 +44,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
-import se.sundsvall.smloader.integration.openemapper.LabelMapper;
+import se.sundsvall.smloader.integration.openemapper.LabelsMapper;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
 import se.sundsvall.smloader.integration.util.LabelsProvider;
@@ -80,10 +80,7 @@ class EmployersCertificateProvider implements OpenEMapper {
 
 		final var caseMetaDataEntity = caseMetaDataRepository.findByFamilyId(properties.getFamilyId());
 
-		final var errandLabels = properties.getLabels().stream()
-			.map(sourcePath -> labelsProvider.getLabel(caseMetaDataEntity.getNamespace(), sourcePath))
-			.map(LabelMapper::toErrandLabel)
-			.toList();
+		final var errandLabels = LabelsMapper.mapLabels(labelsProvider.getLabels(caseMetaDataEntity.getNamespace()), properties.getLabels());
 
 		return new Errand()
 			.status(STATUS_NEW)
