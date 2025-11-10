@@ -40,7 +40,7 @@ stats-only:
       type: FEEDBACK_TYPE
       labels:
         - LABEL1
-        - LABEL2
+        - LABEL1/LABEL2
     456:
       servicename: Sundsvalls förslaget
       priority: MEDIUM

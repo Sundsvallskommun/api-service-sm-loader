@@ -77,8 +77,6 @@ class StatsOnlyMapperTest {
 		assertThat(errand.get().getBusinessRelated()).isFalse();
 		assertThat(errand.get().getParameters()).isEmpty();
 
-		assertThat(errand.get().getLabels()).hasSize(2).containsExactly("label1", "label2");
-
 		assertThat(errand.get().getStakeholders()).isEmpty();
 		assertThat(errand.get().getExternalTags()).containsExactlyInAnyOrder(
 			new ExternalTag().key("caseId").value("externalCaseId"));

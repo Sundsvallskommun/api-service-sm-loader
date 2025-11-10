@@ -18,7 +18,9 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.ErrandLabel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Label;
 import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
@@ -31,8 +33,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
+import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 @ExtendWith(MockitoExtension.class)
 class ContactSalaryAndPensionProviderTest {
@@ -42,6 +47,12 @@ class ContactSalaryAndPensionProviderTest {
 
 	@Mock
 	private OpenEMapperProperties properties;
+
+	@Mock
+	private LabelsProvider labelsProvider;
+
+	@Mock
+	private CaseMetaDataRepository caseMetaDataRepository;
 
 	@InjectMocks
 	private ContactSalaryAndPensionProvider provider;
@@ -63,10 +74,22 @@ class ContactSalaryAndPensionProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
+		final var labels = List.of(category, type);
+		final var namespace = "namespace";
+		final var familyId = "789";
+		final var resourceName = "resourceName";
+		final var classification = "classification";
+		final var displayName = "displayName";
+		final var caseMetaDataEntity = new CaseMetaDataEntity().withNamespace(namespace).withFamilyId(familyId);
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
+		when(properties.getFamilyId()).thenReturn(familyId);
+		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
+		when(properties.getLabels()).thenReturn(labels);
+		when(labelsProvider.getLabel(namespace, category)).thenReturn(new Label().resourcePath(category).resourceName(resourceName).classification(classification).displayName(displayName));
+		when(labelsProvider.getLabel(namespace, type)).thenReturn(new Label().resourcePath(type).resourceName(resourceName).classification(classification).displayName(displayName));
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
 		final var stringBytes = readOpenEFile(testfile);
@@ -101,12 +124,18 @@ class ContactSalaryAndPensionProviderTest {
 			new ExternalTag().key("familyId").value("174")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
-		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
+		assertThat(errand.getLabels()).extracting(
+			ErrandLabel::getResourcePath,
+			ErrandLabel::getClassification,
+			ErrandLabel::getResourceName,
+			ErrandLabel::getDisplayName).containsExactlyInAnyOrder(
+				tuple(category, classification, resourceName, displayName),
+				tuple(type, classification, resourceName, displayName));
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
-		verify(properties, times(2)).getCategory();
-		verify(properties, times(2)).getType();
+		verify(properties).getCategory();
+		verify(properties).getType();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 
@@ -117,6 +146,22 @@ class ContactSalaryAndPensionProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
+		final var labels = List.of(category, type);
+		final var namespace = "namespace";
+		final var familyId = "789";
+		final var resourceName = "resourceName";
+		final var classification = "classification";
+		final var displayName = "displayName";
+		final var caseMetaDataEntity = new CaseMetaDataEntity().withNamespace(namespace).withFamilyId(familyId);
+
+		when(properties.getPriority()).thenReturn(priority);
+		when(properties.getCategory()).thenReturn(category);
+		when(properties.getType()).thenReturn(type);
+		when(properties.getFamilyId()).thenReturn(familyId);
+		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
+		when(properties.getLabels()).thenReturn(labels);
+		when(labelsProvider.getLabel(namespace, category)).thenReturn(new Label().resourcePath(category).resourceName(resourceName).classification(classification).displayName(displayName));
+		when(labelsProvider.getLabel(namespace, type)).thenReturn(new Label().resourcePath(type).resourceName(resourceName).classification(classification).displayName(displayName));
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
@@ -149,7 +194,13 @@ class ContactSalaryAndPensionProviderTest {
 				tuple(ROLE_USER, "Knatte", "Anka", List.of(new ContactChannel().type("Email").value("knatte.anka@sundsvall.se")), null, "PRIVATE", partyId, emptyList()),
 				tuple(ROLE_USER, "Tjatte", "Anka", List.of(new ContactChannel().type("Email").value("tjatte.anka@sundsvall.se")), null, "PRIVATE", partyId, emptyList()));
 
-		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
+		assertThat(errand.getLabels()).extracting(
+			ErrandLabel::getResourcePath,
+			ErrandLabel::getClassification,
+			ErrandLabel::getResourceName,
+			ErrandLabel::getDisplayName).containsExactlyInAnyOrder(
+				tuple(category, classification, resourceName, displayName),
+				tuple(type, classification, resourceName, displayName));
 
 		assertThat(errand.getReporterUserId()).isEqualTo("chefAnvändare");
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6873"),
@@ -157,8 +208,8 @@ class ContactSalaryAndPensionProviderTest {
 
 		verify(partyClient, times(3)).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
-		verify(properties, times(2)).getCategory();
-		verify(properties, times(2)).getType();
+		verify(properties).getCategory();
+		verify(properties).getType();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 }

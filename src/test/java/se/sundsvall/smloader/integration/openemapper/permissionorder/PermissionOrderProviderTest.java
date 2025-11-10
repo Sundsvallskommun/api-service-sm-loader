@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -23,7 +22,9 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PERMI
 
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.ErrandLabel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Label;
 import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
@@ -34,8 +35,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
+import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 @ExtendWith(MockitoExtension.class)
 class PermissionOrderProviderTest {
@@ -45,6 +49,12 @@ class PermissionOrderProviderTest {
 
 	@Mock
 	private OpenEMapperProperties properties;
+
+	@Mock
+	private LabelsProvider labelsProvider;
+
+	@Mock
+	private CaseMetaDataRepository caseMetaDataRepository;
 
 	@InjectMocks
 	private PermissionOrderProvider provider;
@@ -63,7 +73,22 @@ class PermissionOrderProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
+		final var label = "label";
+		final var labels = List.of(label);
+		final var namespace = "namespace";
+		final var familyId = "789";
+		final var resourceName = "resourceName";
+		final var classification = "classification";
+		final var displayName = "displayName";
+		final var caseMetaDataEntity = new CaseMetaDataEntity().withNamespace(namespace).withFamilyId(familyId);
 
+		when(properties.getPriority()).thenReturn(priority);
+		when(properties.getCategory()).thenReturn(category);
+		when(properties.getType()).thenReturn(type);
+		when(properties.getFamilyId()).thenReturn(familyId);
+		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
+		when(properties.getLabels()).thenReturn(labels);
+		when(labelsProvider.getLabel(namespace, label)).thenReturn(new Label().resourcePath(label).resourceName(resourceName).classification(classification).displayName(displayName));
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
@@ -143,7 +168,12 @@ class PermissionOrderProviderTest {
 						.values(List.of("Chef"))
 						.displayName("Tjänstetitel"))));
 
-		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
+		assertThat(errand.getLabels()).extracting(
+			ErrandLabel::getResourcePath,
+			ErrandLabel::getClassification,
+			ErrandLabel::getResourceName,
+			ErrandLabel::getDisplayName).containsExactly(tuple(label, classification, resourceName, displayName));
+
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrder(
 			new ExternalTag().key("caseId").value("6850"),
 			new ExternalTag().key("familyId").value("185"));
@@ -152,8 +182,8 @@ class PermissionOrderProviderTest {
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
-		verify(properties, times(2)).getCategory();
-		verify(properties, times(2)).getType();
+		verify(properties).getCategory();
+		verify(properties).getType();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 
@@ -164,7 +194,22 @@ class PermissionOrderProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
+		final var label = "label";
+		final var labels = List.of(label);
+		final var namespace = "namespace";
+		final var familyId = "789";
+		final var resourceName = "resourceName";
+		final var classification = "classification";
+		final var displayName = "displayName";
+		final var caseMetaDataEntity = new CaseMetaDataEntity().withNamespace(namespace).withFamilyId(familyId);
 
+		when(properties.getPriority()).thenReturn(priority);
+		when(properties.getCategory()).thenReturn(category);
+		when(properties.getType()).thenReturn(type);
+		when(properties.getFamilyId()).thenReturn(familyId);
+		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
+		when(properties.getLabels()).thenReturn(labels);
+		when(labelsProvider.getLabel(namespace, label)).thenReturn(new Label().resourcePath(label).resourceName(resourceName).classification(classification).displayName(displayName));
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
@@ -247,14 +292,20 @@ class PermissionOrderProviderTest {
 						.values(List.of("It-konsult"))
 						.displayName(DISPLAY_TITLE))));
 
+		assertThat(errand.getLabels()).extracting(
+			ErrandLabel::getResourcePath,
+			ErrandLabel::getClassification,
+			ErrandLabel::getResourceName,
+			ErrandLabel::getDisplayName).containsExactly(tuple(label, classification, resourceName, displayName));
+
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6920"),
 			new ExternalTag().key("familyId").value("185")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
-		verify(properties, times(2)).getCategory();
-		verify(properties, times(2)).getType();
+		verify(properties).getCategory();
+		verify(properties).getType();
 		verifyNoMoreInteractions(partyClient, properties);
 	}
 }

@@ -36,8 +36,11 @@ import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
+import se.sundsvall.smloader.integration.openemapper.LabelMapper;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
@@ -47,9 +50,16 @@ class SubstituteManagerProvider implements OpenEMapper {
 
 	private final PartyClient partyClient;
 
-	public SubstituteManagerProvider(final @Qualifier("substitutemanager") OpenEMapperProperties properties, final PartyClient partyClient) {
+	private final LabelsProvider labelsProvider;
+
+	private final CaseMetaDataRepository caseMetaDataRepository;
+
+	public SubstituteManagerProvider(final @Qualifier("substitutemanager") OpenEMapperProperties properties, final PartyClient partyClient, final LabelsProvider labelsProvider,
+		final CaseMetaDataRepository caseMetaDataRepository) {
 		this.properties = properties;
 		this.partyClient = partyClient;
+		this.labelsProvider = labelsProvider;
+		this.caseMetaDataRepository = caseMetaDataRepository;
 	}
 
 	@Override
@@ -61,13 +71,20 @@ class SubstituteManagerProvider implements OpenEMapper {
 	public Errand mapToErrand(final byte[] xml) {
 		final var result = extractValue(xml, SubstituteManager.class);
 
+		final var caseMetaDataEntity = caseMetaDataRepository.findByFamilyId(properties.getFamilyId());
+
+		final var errandLabels = properties.getLabels().stream()
+			.map(sourcePath -> labelsProvider.getLabel(caseMetaDataEntity.getNamespace(), sourcePath))
+			.map(LabelMapper::toErrandLabel)
+			.toList();
+
 		return new Errand()
 			.status(STATUS_NEW)
 			.title(TITLE_SUBSTITUTE_MANAGER)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
-			.labels(List.of(properties.getCategory(), properties.getType()))
+			.labels(errandLabels)
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_RESPONSIBILITY_NUMBER).addValuesItem(result.responsibilityNumber()).displayName(DISPLAY_RESPONSIBILITY_NUMBER),

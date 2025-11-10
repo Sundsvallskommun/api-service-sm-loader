@@ -31,8 +31,11 @@ import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
+import se.sundsvall.smloader.integration.openemapper.LabelMapper;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
@@ -42,9 +45,16 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 
 	private final PartyClient partyClient;
 
-	public TwentyFiveAtWorkProvider(final @Qualifier("twentyfiveatwork") OpenEMapperProperties properties, final PartyClient partyClient) {
+	private final LabelsProvider labelsProvider;
+
+	private final CaseMetaDataRepository caseMetaDataRepository;
+
+	public TwentyFiveAtWorkProvider(final @Qualifier("twentyfiveatwork") OpenEMapperProperties properties, final PartyClient partyClient, LabelsProvider labelsProvider,
+		CaseMetaDataRepository caseMetaDataRepository) {
 		this.properties = properties;
 		this.partyClient = partyClient;
+		this.labelsProvider = labelsProvider;
+		this.caseMetaDataRepository = caseMetaDataRepository;
 	}
 
 	@Override
@@ -56,13 +66,20 @@ class TwentyFiveAtWorkProvider implements OpenEMapper {
 	public Errand mapToErrand(final byte[] xml) {
 		final var result = extractValue(xml, TwentyFiveAtWork.class);
 
+		final var caseMetaDataEntity = caseMetaDataRepository.findByFamilyId(properties.getFamilyId());
+
+		final var errandLabels = properties.getLabels().stream()
+			.map(sourcePath -> labelsProvider.getLabel(caseMetaDataEntity.getNamespace(), sourcePath))
+			.map(LabelMapper::toErrandLabel)
+			.toList();
+
 		return new Errand()
 			.status(STATUS_NEW)
 			.title(TITLE_TWENTY_FIVE_AT_WORK)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
-			.labels(properties.getLabels())
+			.labels(errandLabels)
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_ORIGINAL_START_DATE).addValuesItem(result.originalStartDate()).displayName(DISPLAY_ORIGINAL_START_DATE),

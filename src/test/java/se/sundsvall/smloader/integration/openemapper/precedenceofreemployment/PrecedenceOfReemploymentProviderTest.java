@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -19,7 +18,9 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_PRECE
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.ErrandLabel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Label;
 import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
@@ -30,8 +31,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
+import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 @ExtendWith(MockitoExtension.class)
 class PrecedenceOfReemploymentProviderTest {
@@ -41,6 +45,12 @@ class PrecedenceOfReemploymentProviderTest {
 
 	@Mock
 	private PartyClient partyClientMock;
+
+	@Mock
+	private LabelsProvider labelsProvider;
+
+	@Mock
+	private CaseMetaDataRepository caseMetaDataRepository;
 
 	@InjectMocks
 	private PrecedenceOfReemploymentProvider mapper;
@@ -59,7 +69,22 @@ class PrecedenceOfReemploymentProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
+		final var label = "label";
+		final var labels = List.of(label);
+		final var namespace = "namespace";
+		final var familyId = "789";
+		final var resourceName = "resourceName";
+		final var classification = "classification";
+		final var displayName = "displayName";
+		final var caseMetaDataEntity = new CaseMetaDataEntity().withNamespace(namespace).withFamilyId(familyId);
 
+		when(propertiesMock.getPriority()).thenReturn(priority);
+		when(propertiesMock.getCategory()).thenReturn(category);
+		when(propertiesMock.getType()).thenReturn(type);
+		when(propertiesMock.getFamilyId()).thenReturn(familyId);
+		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
+		when(propertiesMock.getLabels()).thenReturn(labels);
+		when(labelsProvider.getLabel(namespace, label)).thenReturn(new Label().resourcePath(label).resourceName(resourceName).classification(classification).displayName(displayName));
 		when(propertiesMock.getPriority()).thenReturn(priority);
 		when(propertiesMock.getCategory()).thenReturn(category);
 		when(propertiesMock.getType()).thenReturn(type);
@@ -104,7 +129,12 @@ class PrecedenceOfReemploymentProviderTest {
 					null,
 					emptyList()));
 
-		assertThat(errand.getLabels()).hasSize(2).containsExactlyElementsOf(List.of(category, type));
+		assertThat(errand.getLabels()).extracting(
+			ErrandLabel::getResourcePath,
+			ErrandLabel::getClassification,
+			ErrandLabel::getResourceName,
+			ErrandLabel::getDisplayName).containsExactly(tuple(label, classification, resourceName, displayName));
+
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrder(
 			new ExternalTag().key("caseId").value("6911"),
 			new ExternalTag().key("familyId").value("197"));
@@ -112,8 +142,8 @@ class PrecedenceOfReemploymentProviderTest {
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
 		verify(propertiesMock).getPriority();
-		verify(propertiesMock, times(2)).getCategory();
-		verify(propertiesMock, times(2)).getType();
+		verify(propertiesMock).getCategory();
+		verify(propertiesMock).getType();
 		verify(partyClientMock).getPartyId(MUNICIPALITY_ID, PartyType.PRIVATE, "123456789012");
 		verifyNoMoreInteractions(propertiesMock, partyClientMock);
 	}

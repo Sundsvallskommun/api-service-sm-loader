@@ -15,7 +15,9 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_EMPLO
 
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.ErrandLabel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Label;
 import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
@@ -28,8 +30,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
+import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 @ExtendWith(MockitoExtension.class)
 class EmployersCertificateProviderTest {
@@ -39,6 +44,12 @@ class EmployersCertificateProviderTest {
 
 	@Mock
 	private OpenEMapperProperties properties;
+
+	@Mock
+	private LabelsProvider labelsProvider;
+
+	@Mock
+	private CaseMetaDataRepository caseMetaDataRepository;
 
 	@InjectMocks
 	private EmployersCertificateProvider provider;
@@ -60,8 +71,22 @@ class EmployersCertificateProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
-		final var labels = List.of("label");
+		final var label = "label";
+		final var labels = List.of(label);
+		final var namespace = "namespace";
+		final var familyId = "789";
+		final var resourceName = "resourceName";
+		final var classification = "classification";
+		final var displayName = "displayName";
+		final var caseMetaDataEntity = new CaseMetaDataEntity().withNamespace(namespace).withFamilyId(familyId);
 
+		when(properties.getPriority()).thenReturn(priority);
+		when(properties.getCategory()).thenReturn(category);
+		when(properties.getType()).thenReturn(type);
+		when(properties.getFamilyId()).thenReturn(familyId);
+		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
+		when(properties.getLabels()).thenReturn(labels);
+		when(labelsProvider.getLabel(namespace, label)).thenReturn(new Label().resourcePath(label).resourceName(resourceName).classification(classification).displayName(displayName));
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
@@ -79,7 +104,6 @@ class EmployersCertificateProviderTest {
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(EXTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
-		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(5).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactly(
 			tuple("timePeriod", List.of("Viss period"), "Tidsperiod"),
@@ -102,6 +126,12 @@ class EmployersCertificateProviderTest {
 			new ExternalTag().key("familyId").value("526")));
 		assertThat(errand.getReporterUserId()).isEqualTo("Kalle Anka-kalle.anka@sundsvall.se");
 
+		assertThat(errand.getLabels()).extracting(
+			ErrandLabel::getResourcePath,
+			ErrandLabel::getClassification,
+			ErrandLabel::getResourceName,
+			ErrandLabel::getDisplayName).containsExactly(tuple(label, classification, resourceName, displayName));
+
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();
 		verify(properties).getCategory();
@@ -117,12 +147,25 @@ class EmployersCertificateProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
-		final var labels = List.of("label");
+		final var label = "label";
+		final var labels = List.of(label);
+		final var namespace = "namespace";
+		final var familyId = "789";
+		final var resourceName = "resourceName";
+		final var classification = "classification";
+		final var displayName = "displayName";
+		final var caseMetaDataEntity = new CaseMetaDataEntity().withNamespace(namespace).withFamilyId(familyId);
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
 		when(properties.getType()).thenReturn(type);
+		when(properties.getFamilyId()).thenReturn(familyId);
+		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
 		when(properties.getLabels()).thenReturn(labels);
+		when(labelsProvider.getLabel(namespace, label)).thenReturn(new Label().resourcePath(label).resourceName(resourceName).classification(classification).displayName(displayName));
+		when(properties.getPriority()).thenReturn(priority);
+		when(properties.getCategory()).thenReturn(category);
+		when(properties.getType()).thenReturn(type);
 		when(partyClient.getPartyId(anyString(), any(), anyString())).thenReturn(Optional.of(partyId));
 
 		final var stringBytes = readOpenEFile("flow-instance-begar-arbetsgivarintyg-phone.xml");
@@ -135,7 +178,6 @@ class EmployersCertificateProviderTest {
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(EXTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
-		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(2).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactlyInAnyOrder(
 			tuple("unemploymentFund", List.of("Nej"), "A-kassa"),
@@ -147,6 +189,12 @@ class EmployersCertificateProviderTest {
 
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("4376"),
 			new ExternalTag().key("familyId").value("526")));
+
+		assertThat(errand.getLabels()).extracting(
+			ErrandLabel::getResourcePath,
+			ErrandLabel::getClassification,
+			ErrandLabel::getResourceName,
+			ErrandLabel::getDisplayName).containsExactly(tuple(label, classification, resourceName, displayName));
 
 		verify(partyClient).getPartyId(anyString(), any(), anyString());
 		verify(properties).getPriority();

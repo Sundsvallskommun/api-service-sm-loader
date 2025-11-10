@@ -7,6 +7,7 @@ import static se.sundsvall.smloader.integration.supportmanagement.configuration.
 
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.ErrandAttachment;
+import generated.se.sundsvall.supportmanagement.Labels;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -85,4 +86,8 @@ public interface SupportManagementClient {
 		@PathVariable(name = "errandId") String errandId,
 		@PathVariable(name = "attachmentId") String attachmentId);
 
+	@GetMapping(path = "/{municipalityId}/{namespace}/metadata/labels", produces = APPLICATION_JSON_VALUE)
+	ResponseEntity<Labels> getLabels(
+		@PathVariable(name = "municipalityId") String municipalityId,
+		@PathVariable(name = "namespace") String namespace);
 }
