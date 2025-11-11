@@ -13,7 +13,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
@@ -21,7 +21,7 @@ import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 
 @Service
-public class LabelsProvider implements ApplicationListener<ApplicationReadyEvent> {
+public class LabelsProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LabelsProvider.class);
 	private static final String LABELS_NOT_FOUND = "Labels not found for municipalityId: %s and namespace: %s";
 
@@ -34,8 +34,9 @@ public class LabelsProvider implements ApplicationListener<ApplicationReadyEvent
 		this.supportManagementClient = supportManagementClient;
 	}
 
-	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
+	@EventListener(ApplicationReadyEvent.class)
+	public void onReady() {
+		LOGGER.info("ApplicationReadyEvent received - calling refresh()");
 		refresh();
 	}
 
@@ -65,14 +66,6 @@ public class LabelsProvider implements ApplicationListener<ApplicationReadyEvent
 				LOGGER.error("Failed fetch labels", e);
 			}
 		});
-	}
-
-	public Label getLabel(final String namespace, final String sourcePath) {
-		return cachedLabels.getOrDefault(namespace, emptyList())
-			.stream()
-			.filter(label -> sourcePath.equals(label.getResourcePath()))
-			.findFirst()
-			.orElse(null);
 	}
 
 	public List<Label> getLabels(final String namespace) {

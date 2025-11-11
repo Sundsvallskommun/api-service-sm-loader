@@ -90,7 +90,7 @@ class LabelsProviderTest {
 	}
 
 	@Test
-	void getLabel() {
+	void getLabels() {
 		// Arrange
 		final var municipalityId = "2281";
 		final var classification = "classification";
@@ -108,40 +108,12 @@ class LabelsProviderTest {
 		labelsProvider.refresh();
 
 		// Act
-		final var result = labelsProvider.getLabel(namespace, resourcePath);
+		final var result = labelsProvider.getLabels(namespace);
 
 		// Assert
 		verify(caseMetaDataRepositoryMock).findAll();
 		verify(supportManagementClientMock).getLabels(municipalityId, namespace);
 
-		assertThat(result).isNotNull();
-		assertThat(result.getClassification()).isEqualTo(classification);
-		assertThat(result.getResourceName()).isEqualTo(resourceName);
-		assertThat(result.getResourcePath()).isEqualTo(resourcePath);
-		assertThat(result.getDisplayName()).isEqualTo(displayName);
+		assertThat(result).hasSize(1).containsExactly(label);
 	}
-
-	@Test
-	void getLabelWhenNotFound() {
-		// Arrange
-		final var municipalityId = "2281";
-		final var namespace = "namespace";
-		final var resourcePath = "resourcePath";
-		final var caseMetaDataEntity = CaseMetaDataEntity.create().withInstance(EXTERNAL).withMunicipalityId(municipalityId).withNamespace(namespace);
-
-		when(caseMetaDataRepositoryMock.findAll()).thenReturn(List.of(caseMetaDataEntity));
-		when(supportManagementClientMock.getLabels(municipalityId, namespace)).thenReturn(ResponseEntity.of(Optional.of(new Labels())));
-		// Load labels
-		labelsProvider.refresh();
-
-		// Act
-		final var result = labelsProvider.getLabel(namespace, resourcePath);
-
-		// Assert
-		verify(caseMetaDataRepositoryMock).findAll();
-		verify(supportManagementClientMock).getLabels(municipalityId, namespace);
-
-		assertThat(result).isNull();
-	}
-
 }
