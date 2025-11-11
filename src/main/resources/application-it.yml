@@ -83,6 +83,9 @@ kontakt-lon-pension:
   priority: MEDIUM
   category: SALARY
   type: SALARY.CONTACT_WANTED
+  labels:
+    - SALARY
+    - SALARY/CONTACT_WANTED
 tjugofem-ar-pa-jobbet:
   family-id: 131
   priority: MEDIUM
@@ -141,3 +144,4 @@ config:
     cron:
       caseprocessing: '0 0 */1 * * *'
       dbcleaner: '0 0 0 * * 7'
+      labelsloader: '0 0 2 * * *'

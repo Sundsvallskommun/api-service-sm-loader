@@ -105,3 +105,8 @@ scheduler:
     cron: '${config.scheduler.cron.dbcleaner}'
     shedlock-lock-at-most-for: 'PT2M'
     maximum-execution-time: 'PT4M'
+  labelsloader:
+    name: 'LabelsLoaderJob'
+    cron: '${config.scheduler.cron.labelsloader}'
+    shedlock-lock-at-most-for: 'PT2M'
+    maximum-execution-time: 'PT4M'

@@ -7,9 +7,11 @@ import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CR
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.context.jdbc.Sql;
 import se.sundsvall.dept44.test.AbstractAppTest;
 import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
@@ -67,11 +69,18 @@ class JobsIT extends AbstractAppTest {
 	}
 
 	@Test
-	@Disabled("Temporary disabled test")
+	@Disabled("Temporarily disabled")
 	void test02_export() {
 		// Assert that we have records with status PENDING.
 		assertThat(repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, PENDING)).isNotEmpty();
 		assertThat(repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, CREATED)).size().isEqualTo(1);
+
+		// Call to load labels because db is not loaded when LabelsProvider.refresh is called in the actual application.
+		setupCall()
+			.withServicePath(PATH + "/refreshlabels")
+			.withHttpMethod(POST)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequest();
 
 		// Call
 		setupCall()
@@ -103,11 +112,17 @@ class JobsIT extends AbstractAppTest {
 	}
 
 	@Test
-	@Disabled("Temporary disabled test")
 	void test04_export_when_fail() {
 
 		// Assert that we have records with status PENDING.
 		assertThat(repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, PENDING)).isNotEmpty();
+
+		// Call to load labels because db is not loaded when LabelsProvider.refresh is called in the actual application.
+		setupCall()
+			.withServicePath(PATH + "/refreshlabels")
+			.withHttpMethod(POST)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequest();
 
 		// Call
 		setupCall()
@@ -120,7 +135,7 @@ class JobsIT extends AbstractAppTest {
 	}
 
 	@Test
-	@Disabled("Temporary disabled test")
+	@Disabled("Temporarily disabled")
 	void test05_export_when_errand_exists() {
 
 		// Assert that we have records with status PENDING.
@@ -138,12 +153,18 @@ class JobsIT extends AbstractAppTest {
 	}
 
 	@Test
-	@Disabled("Temporary disabled test")
 	void test06_export_when_attachment_exists() {
 
 		// Assert that we have records with status PENDING.
 		assertThat(repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, PENDING)).isNotEmpty();
 		assertThat(repository.findByCaseMetaDataEntityMunicipalityIdAndDeliveryStatusIn(MUNICIPALITY_ID, CREATED)).size().isEqualTo(1);
+
+		// Call to load labels because db is not loaded when LabelsProvider.refresh is called in the actual application.
+		setupCall()
+			.withServicePath(PATH + "/refreshlabels")
+			.withHttpMethod(POST)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequest();
 
 		// Call
 		setupCall()

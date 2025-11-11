@@ -90,4 +90,20 @@ class JobsResource {
 			.header(CONTENT_TYPE, ALL_VALUE)
 			.build();
 	}
+
+	@PostMapping(path = "/refreshlabels")
+	@Operation(summary = "Triggers new fetch of labels.", description = "Triggers new fetch of labels.", responses = {
+		@ApiResponse(responseCode = "204", description = "Successful operation"),
+		@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = {
+			Problem.class, ConstraintViolationProblem.class
+		}))),
+		@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
+	})
+	ResponseEntity<Void> refreshLabels() {
+
+		asyncExecutorService.refreshLabels();
+		return noContent()
+			.header(CONTENT_TYPE, ALL_VALUE)
+			.build();
+	}
 }

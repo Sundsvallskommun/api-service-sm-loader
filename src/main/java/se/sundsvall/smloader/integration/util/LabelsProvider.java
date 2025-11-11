@@ -57,8 +57,7 @@ public class LabelsProvider {
 					.orElse(null);
 
 				if (Objects.nonNull(labels) && labels.getLabelStructure() != null && !labels.getLabelStructure().isEmpty()) {
-					cachedLabels
-						.put(namespace, labels.getLabelStructure());
+					cachedLabels.put(namespace, labels.getLabelStructure());
 				} else {
 					LOGGER.info(String.format(LABELS_NOT_FOUND, MUNICIPALITY_ID, namespace));
 				}

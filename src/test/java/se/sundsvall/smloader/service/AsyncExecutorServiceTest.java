@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 @ExtendWith(MockitoExtension.class)
 class AsyncExecutorServiceTest {
@@ -26,6 +27,9 @@ class AsyncExecutorServiceTest {
 
 	@Mock
 	private DatabaseCleanerService databaseCleanerServiceMock;
+
+	@Mock
+	private LabelsProvider labelsProviderMock;
 
 	@Mock
 	private Consumer<String> consumerMock;
@@ -68,5 +72,15 @@ class AsyncExecutorServiceTest {
 		verify(databaseCleanerServiceMock).cleanDatabase(any(OffsetDateTime.class), anyString());
 		verifyNoInteractions(openEServiceMock);
 		verifyNoInteractions(supportManagementServiceMock);
+	}
+
+	@Test
+	void refreshLabels() {
+
+		// Call
+		asyncExecutorService.refreshLabels();
+
+		verify(labelsProviderMock).refresh();
+		verifyNoInteractions(openEServiceMock, supportManagementServiceMock, databaseCleanerServiceMock);
 	}
 }
