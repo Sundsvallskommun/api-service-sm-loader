@@ -1,7 +1,5 @@
 package se.sundsvall.smloader.service;
 
-import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import org.slf4j.Logger;
@@ -50,9 +48,7 @@ public class AsyncExecutorService {
 	}
 
 	@Async
-	public void refreshLabels(String municipalityId) {
-		if (MUNICIPALITY_ID.equals(municipalityId)) {
-			labelsProvider.refresh();
-		}
+	public void refreshLabels() {
+		labelsProvider.refresh();
 	}
 }

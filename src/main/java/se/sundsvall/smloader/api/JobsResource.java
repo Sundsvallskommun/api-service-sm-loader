@@ -102,7 +102,7 @@ class JobsResource {
 	ResponseEntity<Void> refreshLabels(
 		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281") @PathVariable("municipalityId") @ValidMunicipalityId final String municipalityId) {
 
-		asyncExecutorService.refreshLabels(municipalityId);
+		asyncExecutorService.refreshLabels();
 		return noContent()
 			.header(CONTENT_TYPE, ALL_VALUE)
 			.build();
