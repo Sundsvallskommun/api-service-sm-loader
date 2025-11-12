@@ -76,11 +76,21 @@ class AsyncExecutorServiceTest {
 
 	@Test
 	void refreshLabels() {
-
+		String municipalityId = "2281";
 		// Call
-		asyncExecutorService.refreshLabels();
+		asyncExecutorService.refreshLabels(municipalityId);
 
 		verify(labelsProviderMock).refresh();
 		verifyNoInteractions(openEServiceMock, supportManagementServiceMock, databaseCleanerServiceMock);
 	}
+
+	@Test
+	void refreshLabelsWithWrongMunicipalityId() {
+		String municipalityId = "wrongId";
+		// Call
+		asyncExecutorService.refreshLabels(municipalityId);
+
+		verifyNoInteractions(labelsProviderMock, openEServiceMock, supportManagementServiceMock, databaseCleanerServiceMock);
+	}
+
 }

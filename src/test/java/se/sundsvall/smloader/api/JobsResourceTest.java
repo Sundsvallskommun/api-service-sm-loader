@@ -87,7 +87,7 @@ class JobsResourceTest {
 			.expectStatus().isNoContent();
 
 		// Verifications
-		verify(asyncExecutorService).refreshLabels();
+		verify(asyncExecutorService).refreshLabels(MUNICIPALITY_ID);
 		verify(asyncExecutorService, never()).importCases(any(LocalDateTime.class), any(LocalDateTime.class), anyString());
 		verify(asyncExecutorService, never()).exportCases(anyString());
 		verify(asyncExecutorService, never()).databaseCleanerExecute(any(LocalDateTime.class), anyString());
