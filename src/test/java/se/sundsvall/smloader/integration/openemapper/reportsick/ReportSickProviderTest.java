@@ -19,7 +19,9 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_REPOR
 
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
+import generated.se.sundsvall.supportmanagement.ErrandLabel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Label;
 import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
@@ -30,8 +32,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
+import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 @ExtendWith(MockitoExtension.class)
 class ReportSickProviderTest {
@@ -41,6 +46,12 @@ class ReportSickProviderTest {
 
 	@Mock
 	private OpenEMapperProperties properties;
+
+	@Mock
+	private LabelsProvider labelsProvider;
+
+	@Mock
+	private CaseMetaDataRepository caseMetaDataRepository;
 
 	@InjectMocks
 	private ReportSickProvider provider;
@@ -59,7 +70,30 @@ class ReportSickProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
-		final var labels = List.of("label");
+		final var labelId_1 = "labelId_1";
+		final var labelId_2 = "labelId_2";
+		final var labelId_3 = "labelId_3";
+		final var label_1 = "label_1";
+		final var label_2 = "label_2";
+		final var label_3 = "label_3";
+		final var labels = List.of(label_1, label_2);
+		final var namespace = "namespace";
+		final var familyId = "789";
+		final var resourceName = "resourceName";
+		final var classification = "classification";
+		final var displayName = "displayName";
+		final var caseMetaDataEntity = new CaseMetaDataEntity().withNamespace(namespace).withFamilyId(familyId);
+
+		when(properties.getPriority()).thenReturn(priority);
+		when(properties.getCategory()).thenReturn(category);
+		when(properties.getType()).thenReturn(type);
+		when(properties.getFamilyId()).thenReturn(familyId);
+		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
+		when(properties.getLabels()).thenReturn(labels);
+		when(labelsProvider.getLabels(namespace)).thenReturn(List.of(
+			new Label().id(labelId_1).resourcePath(label_1).resourceName(resourceName).classification(classification).displayName(displayName)
+				.labels(List.of(new Label().id(labelId_2).resourcePath(label_2).resourceName(resourceName).classification(classification).displayName(displayName)
+					.labels(List.of(new Label().id(labelId_3).resourcePath(label_3).resourceName(resourceName).classification(classification).displayName(displayName)))))));
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
@@ -78,7 +112,6 @@ class ReportSickProviderTest {
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
-		assertThat(errand.getLabels()).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(12).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName, Parameter::getGroup).containsExactly(
 			tuple("administrativeUnit", List.of("bou"), "Förvaltning/verksamhet", null),
@@ -112,6 +145,9 @@ class ReportSickProviderTest {
 					.key("administrationName")
 					.values(List.of("KSK Avd Digital Utveckling")))));
 
+		assertThat(errand.getLabels()).extracting(
+			ErrandLabel::getId).containsExactly(labelId_1, labelId_2);
+
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6846"),
 			new ExternalTag().key("familyId").value("195")));
 		assertThat(errand.getReporterUserId()).isEqualTo("kal00ank");
@@ -130,7 +166,30 @@ class ReportSickProviderTest {
 		final var category = "category";
 		final var type = "type";
 		final var partyId = "partyId";
-		final var labels = List.of("label");
+		final var labelId_1 = "labelId_1";
+		final var labelId_2 = "labelId_2";
+		final var labelId_3 = "labelId_3";
+		final var label_1 = "label_1";
+		final var label_2 = "label_2";
+		final var label_3 = "label_3";
+		final var labels = List.of(label_1, label_2);
+		final var namespace = "namespace";
+		final var familyId = "789";
+		final var resourceName = "resourceName";
+		final var classification = "classification";
+		final var displayName = "displayName";
+		final var caseMetaDataEntity = new CaseMetaDataEntity().withNamespace(namespace).withFamilyId(familyId);
+
+		when(properties.getPriority()).thenReturn(priority);
+		when(properties.getCategory()).thenReturn(category);
+		when(properties.getType()).thenReturn(type);
+		when(properties.getFamilyId()).thenReturn(familyId);
+		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
+		when(properties.getLabels()).thenReturn(labels);
+		when(labelsProvider.getLabels(namespace)).thenReturn(List.of(
+			new Label().id(labelId_1).resourcePath(label_1).resourceName(resourceName).classification(classification).displayName(displayName)
+				.labels(List.of(new Label().id(labelId_2).resourcePath(label_2).resourceName(resourceName).classification(classification).displayName(displayName)
+					.labels(List.of(new Label().id(labelId_3).resourcePath(label_3).resourceName(resourceName).classification(classification).displayName(displayName)))))));
 
 		when(properties.getPriority()).thenReturn(priority);
 		when(properties.getCategory()).thenReturn(category);
@@ -149,7 +208,6 @@ class ReportSickProviderTest {
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category(category).type(type));
-		assertThat(errand.getLabels()).hasSize(1).isEqualTo(labels);
 		assertThat(errand.getBusinessRelated()).isFalse();
 		assertThat(errand.getParameters()).hasSize(9).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName, Parameter::getGroup).containsExactly(
 			tuple("administrativeUnit", List.of("ks"), "Förvaltning/verksamhet", null),
@@ -177,6 +235,9 @@ class ReportSickProviderTest {
 				tuple(ROLE_EMPLOYEE, "Kalle", "Anka", emptyList(), null, "PRIVATE", partyId, List.of(new Parameter()
 					.key("administrationName")
 					.values(List.of("KSK AVD Digitalisering IT stab")))));
+
+		assertThat(errand.getLabels()).extracting(
+			ErrandLabel::getId).containsExactly(labelId_1, labelId_2);
 
 		assertThat(errand.getExternalTags()).containsExactlyInAnyOrderElementsOf(List.of(new ExternalTag().key("caseId").value("6910"),
 			new ExternalTag().key("familyId").value("195")));

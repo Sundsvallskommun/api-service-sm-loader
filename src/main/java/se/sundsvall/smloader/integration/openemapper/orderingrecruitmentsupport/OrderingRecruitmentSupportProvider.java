@@ -140,7 +140,6 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(getClassification(result))
-			.labels(mapLabels(getClassification(result)))
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(result))
@@ -200,10 +199,6 @@ public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {
 			case "Omtag" -> TYPE_COMPLETE_RECRUITMENT_RETAKE;
 			default -> throw Problem.valueOf(BAD_REQUEST, "Unsupported recruitment position: " + position);
 		};
-	}
-
-	private List<String> mapLabels(final Classification classification) {
-		return List.of(classification.getCategory(), classification.getType());
 	}
 
 	private List<Parameter> getParameters(final OrderingRecruitmentSupport order) {

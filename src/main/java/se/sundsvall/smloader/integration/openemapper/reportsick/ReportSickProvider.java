@@ -64,8 +64,11 @@ import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
+import se.sundsvall.smloader.integration.openemapper.LabelsMapper;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
@@ -78,9 +81,16 @@ class ReportSickProvider implements OpenEMapper {
 
 	private final PartyClient partyClient;
 
-	public ReportSickProvider(final @Qualifier("reportsick") OpenEMapperProperties properties, final PartyClient partyClient) {
+	private final LabelsProvider labelsProvider;
+
+	private final CaseMetaDataRepository caseMetaDataRepository;
+
+	public ReportSickProvider(final @Qualifier("reportsick") OpenEMapperProperties properties, final PartyClient partyClient, final LabelsProvider labelsProvider,
+		final CaseMetaDataRepository caseMetaDataRepository) {
 		this.properties = properties;
 		this.partyClient = partyClient;
+		this.labelsProvider = labelsProvider;
+		this.caseMetaDataRepository = caseMetaDataRepository;
 	}
 
 	@Override
@@ -92,13 +102,17 @@ class ReportSickProvider implements OpenEMapper {
 	public Errand mapToErrand(final byte[] xml) {
 		final var result = extractValue(xml, ReportSick.class);
 
+		final var caseMetaDataEntity = caseMetaDataRepository.findByFamilyId(properties.getFamilyId());
+
+		final var errandLabels = LabelsMapper.mapLabels(labelsProvider.getLabels(caseMetaDataEntity.getNamespace()), properties.getLabels());
+
 		return new Errand()
 			.status(STATUS_NEW)
 			.title(TITLE_REPORT_SICK)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
-			.labels(properties.getLabels())
+			.labels(errandLabels)
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(getParameters(xml, result))

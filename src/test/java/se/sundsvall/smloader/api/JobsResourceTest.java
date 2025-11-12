@@ -76,4 +76,20 @@ class JobsResourceTest {
 		verify(asyncExecutorService, never()).importCases(any(LocalDateTime.class), any(LocalDateTime.class), anyString());
 		verify(asyncExecutorService, never()).exportCases(anyString());
 	}
+
+	@Test
+	void refreshLabels() {
+
+		// Call
+		webTestClient.post().uri(uriBuilder -> uriBuilder.path(PATH + "/labels/refresh")
+			.build())
+			.exchange()
+			.expectStatus().isNoContent();
+
+		// Verifications
+		verify(asyncExecutorService).refreshLabels();
+		verify(asyncExecutorService, never()).importCases(any(LocalDateTime.class), any(LocalDateTime.class), anyString());
+		verify(asyncExecutorService, never()).exportCases(anyString());
+		verify(asyncExecutorService, never()).databaseCleanerExecute(any(LocalDateTime.class), anyString());
+	}
 }

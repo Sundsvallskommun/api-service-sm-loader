@@ -23,7 +23,7 @@ class OpenEStatsOnlyMapperConfigurationTest {
 		assertThat(statsOnlyProperties.getServices().get("123").getPriority()).isEqualTo("MEDIUM");
 		assertThat(statsOnlyProperties.getServices().get("123").getCategory()).isEqualTo("FEEDBACK_CATEGORY");
 		assertThat(statsOnlyProperties.getServices().get("123").getType()).isEqualTo("FEEDBACK_TYPE");
-		assertThat(statsOnlyProperties.getServices().get("123").getLabels()).hasSize(2).containsExactly("LABEL1", "LABEL2");
+		assertThat(statsOnlyProperties.getServices().get("123").getLabels()).hasSize(2).containsExactly("LABEL1", "LABEL1/LABEL2");
 		assertThat(statsOnlyProperties.getServices().get("456").getPriority()).isEqualTo("MEDIUM");
 		assertThat(statsOnlyProperties.getServices().get("456").getCategory()).isEqualTo("PROPOSAL_CATEGORY");
 		assertThat(statsOnlyProperties.getServices().get("456").getType()).isEqualTo("PROPOSAL_TYPE");

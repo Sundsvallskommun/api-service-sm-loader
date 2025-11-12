@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 /**
  * Class responsible for async-execution of import/export services.
@@ -20,11 +21,14 @@ public class AsyncExecutorService {
 	private final OpenEService openEService;
 	private final SupportManagementService supportManagementService;
 	private final DatabaseCleanerService databaseCleanerService;
+	private final LabelsProvider labelsProvider;
 
-	public AsyncExecutorService(final OpenEService openEService, final SupportManagementService supportManagementService, final DatabaseCleanerService databaseCleanerService) {
+	public AsyncExecutorService(final OpenEService openEService, final SupportManagementService supportManagementService, final DatabaseCleanerService databaseCleanerService,
+		final LabelsProvider labelsProvider) {
 		this.openEService = openEService;
 		this.supportManagementService = supportManagementService;
 		this.databaseCleanerService = databaseCleanerService;
+		this.labelsProvider = labelsProvider;
 	}
 
 	@Async
@@ -41,5 +45,10 @@ public class AsyncExecutorService {
 	public void databaseCleanerExecute(final LocalDateTime from, final String municipalityId) {
 		final var fromZoned = from.atZone(ZoneId.systemDefault()).toOffsetDateTime();
 		databaseCleanerService.cleanDatabase(fromZoned, municipalityId);
+	}
+
+	@Async
+	public void refreshLabels() {
+		labelsProvider.refresh();
 	}
 }

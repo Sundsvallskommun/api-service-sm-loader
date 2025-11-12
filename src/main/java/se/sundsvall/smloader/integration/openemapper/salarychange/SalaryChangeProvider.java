@@ -30,8 +30,11 @@ import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
+import se.sundsvall.smloader.integration.openemapper.LabelsMapper;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
+import se.sundsvall.smloader.integration.util.LabelsProvider;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
 
 @Component
@@ -40,9 +43,16 @@ class SalaryChangeProvider implements OpenEMapper {
 
 	private final PartyClient partyClient;
 
-	public SalaryChangeProvider(final @Qualifier("salarychange") OpenEMapperProperties properties, final PartyClient partyClient) {
+	private final LabelsProvider labelsProvider;
+
+	private final CaseMetaDataRepository caseMetaDataRepository;
+
+	public SalaryChangeProvider(final @Qualifier("salarychange") OpenEMapperProperties properties, final PartyClient partyClient, final LabelsProvider labelsProvider,
+		final CaseMetaDataRepository caseMetaDataRepository) {
 		this.properties = properties;
 		this.partyClient = partyClient;
+		this.labelsProvider = labelsProvider;
+		this.caseMetaDataRepository = caseMetaDataRepository;
 	}
 
 	@Override
@@ -54,13 +64,17 @@ class SalaryChangeProvider implements OpenEMapper {
 	public Errand mapToErrand(final byte[] xml) {
 		final var result = extractValue(xml, SalaryChange.class);
 
+		final var caseMetaDataEntity = caseMetaDataRepository.findByFamilyId(properties.getFamilyId());
+
+		final var errandLabels = LabelsMapper.mapLabels(labelsProvider.getLabels(caseMetaDataEntity.getNamespace()), properties.getLabels());
+
 		return new Errand()
 			.status(STATUS_NEW)
 			.title(TITLE_SALARY_CHANGE)
 			.priority(Priority.fromValue(properties.getPriority()))
 			.stakeholders(getStakeholders(result))
 			.classification(new Classification().category(properties.getCategory()).type(properties.getType()))
-			.labels(List.of(properties.getCategory(), properties.getType()))
+			.labels(errandLabels)
 			.channel(INTERNAL_CHANNEL_E_SERVICE)
 			.businessRelated(false)
 			.parameters(List.of(new Parameter().key(KEY_AMOUNT).addValuesItem(result.amount()).displayName(DISPLAY_AMOUNT),

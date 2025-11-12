@@ -69,7 +69,7 @@ class OrderingRecruitmentSupportProviderTest {
 		assertThat(errand.getPriority()).isEqualTo(Priority.MEDIUM);
 		assertThat(errand.getChannel()).isEqualTo(INTERNAL_CHANNEL_E_SERVICE);
 		assertThat(errand.getClassification()).isEqualTo(new Classification().category("PARTIAL_PACKAGE").type("PARTIAL_PACKAGE.EMPLOYEE"));
-		assertThat(errand.getLabels()).isEqualTo(List.of("PARTIAL_PACKAGE", "PARTIAL_PACKAGE.EMPLOYEE"));
+		assertThat(errand.getLabels()).isEmpty();
 		assertThat(errand.getBusinessRelated()).isFalse();
 		if (fileName.equals("flow-instance-rekryteringsstod.xml")) {
 			assertThat(errand.getParameters()).hasSize(33).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName, Parameter::getGroup).containsExactly(

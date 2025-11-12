@@ -1,0 +1,424 @@
+{
+	"labelStructure": [
+		{
+			"id": "f45bbf83-180f-49f8-b0ae-600693747921",
+			"classification": "CATEGORY",
+			"displayName": "Lön",
+			"resourcePath": "SALARY",
+			"resourceName": "SALARY",
+			"labels": [
+				{
+					"id": "05f68a17-510c-44b7-8cd1-3928ea61de24",
+					"classification": "TYPE",
+					"displayName": "Okategoriserat",
+					"resourcePath": "SALARY/UNCATEGORIZED",
+					"resourceName": "UNCATEGORIZED",
+					"labels": [
+						{
+							"id": "a35688bf-acce-4f61-8d19-03ecc9a353c7",
+							"classification": "SUBTYPE",
+							"displayName": "Okategoriserat",
+							"resourcePath": "SALARY/UNCATEGORIZED/UNCATEGORIZED",
+							"resourceName": "UNCATEGORIZED",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "147ca3eb-3401-4b41-92f0-919e3bdcb2f8",
+					"classification": "TYPE",
+					"displayName": "Timvikarie",
+					"resourcePath": "SALARY/HOURLY_SUBSTITUTE",
+					"resourceName": "HOURLY_SUBSTITUTE",
+					"labels": [
+						{
+							"id": "104e1b70-6145-41c8-aeb4-084387a9882a",
+							"classification": "SUBTYPE",
+							"displayName": "Ferieungdomar",
+							"resourcePath": "SALARY/HOURLY_SUBSTITUTE/VACATION_YOUTHS",
+							"resourceName": "VACATION_YOUTHS",
+							"labels": []
+						},
+						{
+							"id": "38d5ad16-2249-4600-94ae-90c615f8eff3",
+							"classification": "SUBTYPE",
+							"displayName": "Tjänstgöringsrapport",
+							"resourcePath": "SALARY/HOURLY_SUBSTITUTE/DUTY_REPORT",
+							"resourceName": "DUTY_REPORT",
+							"labels": []
+						},
+						{
+							"id": "4cf10039-f2e7-42d9-867e-3864acb263d5",
+							"classification": "SUBTYPE",
+							"displayName": "Kontaktperson",
+							"resourcePath": "SALARY/HOURLY_SUBSTITUTE/CONTACT_PERSON",
+							"resourceName": "CONTACT_PERSON",
+							"labels": []
+						},
+						{
+							"id": "b3ba4533-cc8a-4436-9b40-c1ca0153543f",
+							"classification": "SUBTYPE",
+							"displayName": "Timanställning",
+							"resourcePath": "SALARY/HOURLY_SUBSTITUTE/HOURLY_EMPLOYED",
+							"resourceName": "HOURLY_EMPLOYED",
+							"labels": []
+						},
+						{
+							"id": "c4b5f732-78dc-4fbd-9ef6-c69db8f8aa4b",
+							"classification": "SUBTYPE",
+							"displayName": "Anhörigvårdare",
+							"resourcePath": "SALARY/HOURLY_SUBSTITUTE/RELATIVE_CAREGIVER",
+							"resourceName": "RELATIVE_CAREGIVER",
+							"labels": []
+						},
+						{
+							"id": "e7bdabea-3686-4b93-ba0f-523379f8e8df",
+							"classification": "SUBTYPE",
+							"displayName": "Ledsagare",
+							"resourcePath": "SALARY/HOURLY_SUBSTITUTE/COMPANION",
+							"resourceName": "COMPANION",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "3262b758-0809-498f-8f59-f2289c9a4f39",
+					"classification": "TYPE",
+					"displayName": "Anställning",
+					"resourcePath": "SALARY/EMPLOYMENT",
+					"resourceName": "EMPLOYMENT",
+					"labels": [
+						{
+							"id": "37ed354b-372a-4159-89e0-00b7ee5c01aa",
+							"classification": "SUBTYPE",
+							"displayName": "Anställning",
+							"resourcePath": "SALARY/EMPLOYMENT/EMPLOYMENT",
+							"resourceName": "EMPLOYMENT",
+							"labels": []
+						},
+						{
+							"id": "4a637e32-e2c6-4b0f-a8be-af53fed093f6",
+							"classification": "SUBTYPE",
+							"displayName": "Nyanställning",
+							"resourcePath": "SALARY/EMPLOYMENT/NEW_EMPLOYMENT",
+							"resourceName": "NEW_EMPLOYMENT",
+							"labels": []
+						},
+						{
+							"id": "935fab3d-d11c-4116-b1ac-babc7f51bb6b",
+							"classification": "SUBTYPE",
+							"displayName": "Verksamhetsförändring",
+							"resourcePath": "SALARY/EMPLOYMENT/ORGANIZATION_TRANSFORMATION",
+							"resourceName": "ORGANIZATION_TRANSFORMATION",
+							"labels": []
+						},
+						{
+							"id": "93736902-44f9-4ed8-8701-160112a75b48",
+							"classification": "SUBTYPE",
+							"displayName": "Avslut",
+							"resourcePath": "SALARY/EMPLOYMENT/TERMINATION_OF_EMPLOYMENT",
+							"resourceName": "TERMINATION_OF_EMPLOYMENT",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "3e200a1b-b3ae-4845-8504-012176624d00",
+					"classification": "TYPE",
+					"displayName": "Extra utbetalning",
+					"resourcePath": "SALARY/EXTRA_DISBURSEMENT",
+					"resourceName": "EXTRA_DISBURSEMENT",
+					"labels": [
+						{
+							"id": "295692d7-74bc-4b89-824f-359282313d98",
+							"classification": "SUBTYPE",
+							"displayName": "Nordea",
+							"resourcePath": "SALARY/EXTRA_DISBURSEMENT/NORDEA",
+							"resourceName": "NORDEA",
+							"labels": []
+						},
+						{
+							"id": "3b4de339-127f-4de8-95c1-3aee618ff18c",
+							"classification": "SUBTYPE",
+							"displayName": "Snabbfax",
+							"resourcePath": "SALARY/EXTRA_DISBURSEMENT/FAX_MACHINE",
+							"resourceName": "FAX_MACHINE",
+							"labels": []
+						},
+						{
+							"id": "831284d7-5e0e-4c2a-8d98-99da5b5d6e8e",
+							"classification": "SUBTYPE",
+							"displayName": "Pengar åter",
+							"resourcePath": "SALARY/EXTRA_DISBURSEMENT/REFUND",
+							"resourceName": "REFUND",
+							"labels": []
+						},
+						{
+							"id": "98ca6b69-c5f9-467b-8028-6749cf5b9898",
+							"classification": "SUBTYPE",
+							"displayName": "Pluto",
+							"resourcePath": "SALARY/EXTRA_DISBURSEMENT/PLUTO",
+							"resourceName": "PLUTO",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "4be954e0-1300-4b06-8781-5b69ae72abc7",
+					"classification": "TYPE",
+					"displayName": "Myndighetspost",
+					"resourcePath": "SALARY/AUTHORITY_LETTER",
+					"resourceName": "AUTHORITY_LETTER",
+					"labels": [
+						{
+							"id": "43feacb8-04b4-4a45-b883-8867875c6b96",
+							"classification": "SUBTYPE",
+							"displayName": "Afa",
+							"resourcePath": "SALARY/AUTHORITY_LETTER/AFA",
+							"resourceName": "AFA",
+							"labels": []
+						},
+						{
+							"id": "596aea55-fe5e-4a48-9c0d-0888129b3371",
+							"classification": "SUBTYPE",
+							"displayName": "Arbetsgivarintyg",
+							"resourcePath": "SALARY/AUTHORITY_LETTER/EMPLOYER_CERTIFICATE",
+							"resourceName": "EMPLOYER_CERTIFICATE",
+							"labels": []
+						},
+						{
+							"id": "b98b0dda-f6c6-450e-91b4-4d9904bdf08e",
+							"classification": "SUBTYPE",
+							"displayName": "Försäkringskassan",
+							"resourcePath": "SALARY/AUTHORITY_LETTER/SSIA",
+							"resourceName": "SSIA",
+							"labels": []
+						},
+						{
+							"id": "c7ba612b-0375-4fe2-883b-ee7fca41f0c1",
+							"classification": "SUBTYPE",
+							"displayName": "Intyg",
+							"resourcePath": "SALARY/AUTHORITY_LETTER/CERTIFICATE",
+							"resourceName": "CERTIFICATE",
+							"labels": []
+						},
+						{
+							"id": "c9623696-2571-4e64-a1ea-88034d4637fb",
+							"classification": "SUBTYPE",
+							"displayName": "Kronofogden",
+							"resourcePath": "SALARY/AUTHORITY_LETTER/CROWN_BAILIFF",
+							"resourceName": "CROWN_BAILIFF",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "6feb99dd-b0f6-417c-af9c-35301b195671",
+					"classification": "TYPE",
+					"displayName": "Schema",
+					"resourcePath": "SALARY/SCHEDULE",
+					"resourceName": "SCHEDULE",
+					"labels": [
+						{
+							"id": "1aa1ee42-8676-4c75-80cd-420503a7f0fe",
+							"classification": "SUBTYPE",
+							"displayName": "Scheman",
+							"resourcePath": "SALARY/SCHEDULE/SCHEDULE",
+							"resourceName": "SCHEDULE",
+							"labels": []
+						},
+						{
+							"id": "47ae0a34-c9a6-49b3-92ae-320ffcc1fff4",
+							"classification": "SUBTYPE",
+							"displayName": "Arbetsförändring",
+							"resourcePath": "SALARY/SCHEDULE/JOB_CHANGE",
+							"resourceName": "JOB_CHANGE",
+							"labels": []
+						},
+						{
+							"id": "965e9c2f-9d1e-4a00-a661-c54a9cfbcd7c",
+							"classification": "SUBTYPE",
+							"displayName": "Beredskap",
+							"resourcePath": "SALARY/SCHEDULE/PRERAREDNESS",
+							"resourceName": "PRERAREDNESS",
+							"labels": []
+						},
+						{
+							"id": "d4af4ac6-4ffd-488a-a7a6-d7d2961a568c",
+							"classification": "SUBTYPE",
+							"displayName": "Förskjuten arbetstid",
+							"resourcePath": "SALARY/SCHEDULE/SHIFTED_WORK_HOURS",
+							"resourceName": "SHIFTED_WORK_HOURS",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "8aac48ac-fed3-49e4-8335-717725b72d74",
+					"classification": "TYPE",
+					"displayName": "Politiker",
+					"resourcePath": "SALARY/POLITICIAN",
+					"resourceName": "POLITICIAN",
+					"labels": [
+						{
+							"id": "706d8a06-d1ad-431f-8f3c-54beba07ac34",
+							"classification": "SUBTYPE",
+							"displayName": "Intyg",
+							"resourcePath": "SALARY/POLITICIAN/CERTIFICATE",
+							"resourceName": "CERTIFICATE",
+							"labels": []
+						},
+						{
+							"id": "8f899f3c-1850-40a4-af05-3377c783d49f",
+							"classification": "SUBTYPE",
+							"displayName": "Närvarolistor",
+							"resourcePath": "SALARY/POLITICIAN/ATTENDANCE_LIST",
+							"resourceName": "ATTENDANCE_LIST",
+							"labels": []
+						},
+						{
+							"id": "ce756bf6-5a15-45ce-8c45-2a0fe802055c",
+							"classification": "SUBTYPE",
+							"displayName": "Beslutsexpediering",
+							"resourcePath": "SALARY/POLITICIAN/DECISION_DISPATCH",
+							"resourceName": "DECISION_DISPATCH",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "8b6e93d6-6cb3-43d9-b9a6-6715e46458e7",
+					"classification": "TYPE",
+					"displayName": "Övrigt",
+					"resourcePath": "SALARY/OTHER",
+					"resourceName": "OTHER",
+					"labels": [
+						{
+							"id": "17e80c99-eea3-4bfb-a5c6-4238f224a0c2",
+							"classification": "SUBTYPE",
+							"displayName": "Listor",
+							"resourcePath": "SALARY/OTHER/LISTS",
+							"resourceName": "LISTS",
+							"labels": []
+						},
+						{
+							"id": "21357248-4270-4ab8-bf07-968a37259130",
+							"classification": "SUBTYPE",
+							"displayName": "Omkontering",
+							"resourcePath": "SALARY/OTHER/RE_ACCOUNTING",
+							"resourceName": "RE_ACCOUNTING",
+							"labels": []
+						},
+						{
+							"id": "6dfe130d-890f-4b34-b829-a00d6361a7b4",
+							"classification": "SUBTYPE",
+							"displayName": "Blandat",
+							"resourcePath": "SALARY/OTHER/MIXED",
+							"resourceName": "MIXED",
+							"labels": []
+						},
+						{
+							"id": "774c53aa-b077-4f3c-98e1-53607a6ca65d",
+							"classification": "SUBTYPE",
+							"displayName": "Lönefrågor",
+							"resourcePath": "SALARY/OTHER/SALARY_QUERY",
+							"resourceName": "SALARY_QUERY",
+							"labels": []
+						},
+						{
+							"id": "9bf735a5-475e-4b96-b637-bbf769b6bac6",
+							"classification": "SUBTYPE",
+							"displayName": "25-årsgåva",
+							"resourcePath": "SALARY/OTHER/TWENTY_FIVE_YEARS_GIFT",
+							"resourceName": "TWENTY_FIVE_YEARS_GIFT",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "97f5ae6a-da13-4270-a51b-ec40f2e4a5ee",
+					"classification": "TYPE",
+					"displayName": "Önskar kontakt",
+					"resourcePath": "SALARY/CONTACT_WANTED",
+					"resourceName": "CONTACT_WANTED",
+					"labels": [
+						{
+							"id": "1b6e6925-42a6-4bea-8d20-ad5921c5fc64",
+							"classification": "SUBTYPE",
+							"displayName": "Testar ändra namn",
+							"resourcePath": "SALARY/CONTACT_WANTED/TEST_LABEL",
+							"resourceName": "TEST_LABEL",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "c37a08de-e07e-4ddb-a658-a6d7259bf088",
+					"classification": "TYPE",
+					"displayName": "Skulder",
+					"resourcePath": "SALARY/DEBTS",
+					"resourceName": "DEBTS",
+					"labels": [
+						{
+							"id": "3ae2a8d0-ec84-40f1-979f-fe125a89842d",
+							"classification": "SUBTYPE",
+							"displayName": "Skulder",
+							"resourcePath": "SALARY/DEBTS/DEBTS",
+							"resourceName": "DEBTS",
+							"labels": []
+						}
+					]
+				},
+				{
+					"id": "e7934973-0d08-4ff6-9849-189d7a02a97a",
+					"classification": "TYPE",
+					"displayName": "Frånvaro",
+					"resourcePath": "SALARY/ABSENCE",
+					"resourceName": "ABSENCE",
+					"labels": [
+						{
+							"id": "15a09e7c-b658-4973-a201-678550c09455",
+							"classification": "SUBTYPE",
+							"displayName": "Tjänstledighet",
+							"resourcePath": "SALARY/ABSENCE/LEAVE_OF_ABSENCE",
+							"resourceName": "LEAVE_OF_ABSENCE",
+							"labels": []
+						},
+						{
+							"id": "322edc8d-8bcd-44c9-8724-b9a5696f61dd",
+							"classification": "SUBTYPE",
+							"displayName": "Vab",
+							"resourcePath": "SALARY/ABSENCE/VAB",
+							"resourceName": "VAB",
+							"labels": []
+						},
+						{
+							"id": "4f13eb9a-2b38-4abe-9403-5e4aae47e7af",
+							"classification": "SUBTYPE",
+							"displayName": "Sjukfrånvaro",
+							"resourcePath": "SALARY/ABSENCE/SICKNESS_ABSENCE",
+							"resourceName": "SICKNESS_ABSENCE",
+							"labels": []
+						},
+						{
+							"id": "56013848-d038-4527-8bb6-b1d9b518e792",
+							"classification": "SUBTYPE",
+							"displayName": "Föräldrarledighet",
+							"resourcePath": "SALARY/ABSENCE/PARENTAL_LEAVE",
+							"resourceName": "PARENTAL_LEAVE",
+							"labels": []
+						},
+						{
+							"id": "cbe8785e-b615-4c57-8891-7863b2365a5a",
+							"classification": "SUBTYPE",
+							"displayName": "Semester",
+							"resourcePath": "SALARY/ABSENCE/VACATION",
+							"resourceName": "VACATION",
+							"labels": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

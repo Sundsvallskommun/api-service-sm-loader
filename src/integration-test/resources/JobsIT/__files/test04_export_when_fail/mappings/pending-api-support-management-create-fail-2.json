@@ -57,8 +57,12 @@
 					"reporterUserId": "kal99ank",
 					"businessRelated": false,
 					"labels": [
-						"SALARY",
-						"SALARY.CONTACT_WANTED"
+						{
+							"id": "f45bbf83-180f-49f8-b0ae-600693747921"
+						},
+						{
+							"id": "97f5ae6a-da13-4270-a51b-ec40f2e4a5ee"
+						}
 					]
 				},
 				"ignoreArrayOrder": true

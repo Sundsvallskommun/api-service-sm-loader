@@ -1,6 +1,5 @@
 package se.sundsvall.smloader.integration.openemapper.statsonly;
 
-import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_CHANNEL_E_SERVICE;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
@@ -48,7 +47,6 @@ public class StatsOnlyMapper {
 				.classification(new Classification().category(serviceProperties.getCategory()).type(serviceProperties.getType()))
 				.channel(getChannel(instance))
 				.businessRelated(false)
-				.labels(Optional.ofNullable(serviceProperties.getLabels()).orElse(emptyList()))
 				.reporterUserId(UNKNOWN)
 				.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(caseEntity.getExternalCaseId()))));
 		} catch (Exception e) {
