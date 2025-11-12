@@ -76,11 +76,11 @@ class AsyncExecutorServiceTest {
 
 	@Test
 	void refreshLabels() {
-
 		// Call
 		asyncExecutorService.refreshLabels();
 
 		verify(labelsProviderMock).refresh();
 		verifyNoInteractions(openEServiceMock, supportManagementServiceMock, databaseCleanerServiceMock);
 	}
+
 }

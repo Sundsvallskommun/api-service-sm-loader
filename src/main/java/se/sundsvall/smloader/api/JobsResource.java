@@ -99,7 +99,8 @@ class JobsResource {
 		}))),
 		@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	})
-	ResponseEntity<Void> refreshLabels() {
+	ResponseEntity<Void> refreshLabels(
+		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281") @PathVariable("municipalityId") @ValidMunicipalityId final String municipalityId) {
 
 		asyncExecutorService.refreshLabels();
 		return noContent()
