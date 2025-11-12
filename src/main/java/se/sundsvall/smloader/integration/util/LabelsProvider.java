@@ -40,7 +40,7 @@ public class LabelsProvider {
 		refresh();
 	}
 
-	public synchronized void refresh() {
+	public void refresh() {
 
 		final var supportedNamespaces = caseMetaDataRepository.findAll()
 			.stream()

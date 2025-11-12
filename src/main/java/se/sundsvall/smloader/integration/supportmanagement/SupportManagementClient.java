@@ -34,8 +34,8 @@ public interface SupportManagementClient {
 	 */
 	@PostMapping(path = "/{municipalityId}/{namespace}/errands", consumes = APPLICATION_JSON_VALUE, produces = ALL_VALUE)
 	ResponseEntity<Void> createErrand(
-		@PathVariable(name = "municipalityId") String municipalityId,
-		@PathVariable(name = "namespace") String namespace,
+		@PathVariable String municipalityId,
+		@PathVariable String namespace,
 		@RequestBody Errand errand);
 
 	/**
@@ -45,18 +45,18 @@ public interface SupportManagementClient {
 	 */
 	@GetMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}", produces = APPLICATION_JSON_VALUE)
 	Errand getErrand(
-		@PathVariable(name = "municipalityId") String municipalityId,
-		@PathVariable(name = "namespace") String namespace,
-		@PathVariable(name = "errandId") String errandId);
+		@PathVariable String municipalityId,
+		@PathVariable String namespace,
+		@PathVariable String errandId);
 
 	/**
 	 * Export file to support management.
 	 */
 	@PostMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/attachments", consumes = MULTIPART_FORM_DATA_VALUE, produces = ALL_VALUE)
 	ResponseEntity<Void> createAttachment(
-		@PathVariable(name = "municipalityId") String municipalityId,
-		@PathVariable(name = "namespace") String namespace,
-		@PathVariable(name = "errandId") String errandId,
+		@PathVariable String municipalityId,
+		@PathVariable String namespace,
+		@PathVariable String errandId,
 		@RequestPart(name = "errandAttachment") MultipartFile file);
 
 	/**
@@ -66,28 +66,28 @@ public interface SupportManagementClient {
 	 */
 	@GetMapping(path = "/{municipalityId}/{namespace}/errands", produces = APPLICATION_JSON_VALUE)
 	Page<Errand> findErrands(
-		@PathVariable(name = "municipalityId") String municipalityId,
-		@PathVariable(name = "namespace") String namespace,
-		@RequestParam(name = "filter") String filter);
+		@PathVariable String municipalityId,
+		@PathVariable String namespace,
+		@RequestParam String filter);
 
 	/**
 	 * Get attachment on errand
 	 */
 	@GetMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/attachments", produces = APPLICATION_JSON_VALUE)
 	List<ErrandAttachment> getAttachments(
-		@PathVariable(name = "municipalityId") String municipalityId,
-		@PathVariable(name = "namespace") String namespace,
-		@PathVariable(name = "errandId") String errandId);
+		@PathVariable String municipalityId,
+		@PathVariable String namespace,
+		@PathVariable String errandId);
 
 	@GetMapping(path = "/{municipalityId}/{namespace}/errands/{errandId}/attachments/{attachmentId}", produces = ALL_VALUE)
 	ResponseEntity<InputStreamResource> getAttachment(
-		@PathVariable(name = "municipalityId") String municipalityId,
-		@PathVariable(name = "namespace") String namespace,
-		@PathVariable(name = "errandId") String errandId,
-		@PathVariable(name = "attachmentId") String attachmentId);
+		@PathVariable String municipalityId,
+		@PathVariable String namespace,
+		@PathVariable String errandId,
+		@PathVariable String attachmentId);
 
 	@GetMapping(path = "/{municipalityId}/{namespace}/metadata/labels", produces = APPLICATION_JSON_VALUE)
 	ResponseEntity<Labels> getLabels(
-		@PathVariable(name = "municipalityId") String municipalityId,
-		@PathVariable(name = "namespace") String namespace);
+		@PathVariable String municipalityId,
+		@PathVariable String namespace);
 }

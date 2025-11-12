@@ -81,7 +81,7 @@ class JobsResourceTest {
 	void refreshLabels() {
 
 		// Call
-		webTestClient.post().uri(uriBuilder -> uriBuilder.path(PATH + "/refreshlabels")
+		webTestClient.post().uri(uriBuilder -> uriBuilder.path(PATH + "/labels/refresh")
 			.build())
 			.exchange()
 			.expectStatus().isNoContent();

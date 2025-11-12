@@ -91,7 +91,7 @@ class JobsResource {
 			.build();
 	}
 
-	@PostMapping(path = "/refreshlabels")
+	@PostMapping(path = "/labels/refresh")
 	@Operation(summary = "Triggers new fetch of labels.", description = "Triggers new fetch of labels.", responses = {
 		@ApiResponse(responseCode = "204", description = "Successful operation"),
 		@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = {

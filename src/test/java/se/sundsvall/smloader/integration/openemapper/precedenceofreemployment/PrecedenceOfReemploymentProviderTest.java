@@ -47,10 +47,10 @@ class PrecedenceOfReemploymentProviderTest {
 	private PartyClient partyClientMock;
 
 	@Mock
-	private LabelsProvider labelsProvider;
+	private LabelsProvider labelsProviderMock;
 
 	@Mock
-	private CaseMetaDataRepository caseMetaDataRepository;
+	private CaseMetaDataRepository caseMetaDataRepositoryMock;
 
 	@InjectMocks
 	private PrecedenceOfReemploymentProvider mapper;
@@ -87,9 +87,9 @@ class PrecedenceOfReemploymentProviderTest {
 		when(propertiesMock.getCategory()).thenReturn(category);
 		when(propertiesMock.getType()).thenReturn(type);
 		when(propertiesMock.getFamilyId()).thenReturn(familyId);
-		when(caseMetaDataRepository.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
+		when(caseMetaDataRepositoryMock.findByFamilyId(familyId)).thenReturn(caseMetaDataEntity);
 		when(propertiesMock.getLabels()).thenReturn(labels);
-		when(labelsProvider.getLabels(namespace)).thenReturn(List.of(
+		when(labelsProviderMock.getLabels(namespace)).thenReturn(List.of(
 			new Label().id(labelId_1).resourcePath(label_1).resourceName(resourceName).classification(classification).displayName(displayName)
 				.labels(List.of(new Label().id(labelId_2).resourcePath(label_2).resourceName(resourceName).classification(classification).displayName(displayName)
 					.labels(List.of(new Label().id(labelId_3).resourcePath(label_3).resourceName(resourceName).classification(classification).displayName(displayName)))))));

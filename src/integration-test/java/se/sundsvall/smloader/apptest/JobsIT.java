@@ -7,11 +7,9 @@ import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CR
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
 import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.context.jdbc.Sql;
 import se.sundsvall.dept44.test.AbstractAppTest;
 import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
@@ -19,7 +17,6 @@ import se.sundsvall.smloader.Application;
 import se.sundsvall.smloader.integration.db.CaseMappingRepository;
 import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.CaseRepository;
-import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 /**
  * JobsIT tests.
@@ -41,9 +38,6 @@ class JobsIT extends AbstractAppTest {
 
 	@Autowired
 	private CaseMetaDataRepository caseMetaDataRepository;
-
-	@Autowired
-	private LabelsProvider labelsProvider;
 
 	@Test
 	void test01_import() {
@@ -77,7 +71,7 @@ class JobsIT extends AbstractAppTest {
 
 		// Call to load labels because db is not loaded when LabelsProvider.refresh is called in the actual application.
 		setupCall()
-			.withServicePath(PATH + "/refreshlabels")
+			.withServicePath(PATH + "/labels/refresh")
 			.withHttpMethod(POST)
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequest();
@@ -119,7 +113,7 @@ class JobsIT extends AbstractAppTest {
 
 		// Call to load labels because db is not loaded when LabelsProvider.refresh is called in the actual application.
 		setupCall()
-			.withServicePath(PATH + "/refreshlabels")
+			.withServicePath(PATH + "/labels/refresh")
 			.withHttpMethod(POST)
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequest();
@@ -161,7 +155,7 @@ class JobsIT extends AbstractAppTest {
 
 		// Call to load labels because db is not loaded when LabelsProvider.refresh is called in the actual application.
 		setupCall()
-			.withServicePath(PATH + "/refreshlabels")
+			.withServicePath(PATH + "/labels/refresh")
 			.withHttpMethod(POST)
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequest();
