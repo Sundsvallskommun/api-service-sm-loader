@@ -153,6 +153,6 @@ config:
     fetch-days: 1
     keep-days: 14
     cron:
-      caseprocessing: '0 0 */1 * * *'
-      dbcleaner: '0 0 0 * * 7'
-      labelsloader: '0 0 2 * * *'
+      caseprocessing: '-'
+      dbcleaner: '-'
+      labelsloader: '-'
