@@ -1,11 +1,5 @@
 package se.sundsvall.smloader.service.mapper;
 
-import static java.time.temporal.ChronoUnit.SECONDS;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
-import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
-
 import java.time.OffsetDateTime;
 import java.util.Base64;
 import org.junit.jupiter.api.Test;
@@ -15,6 +9,12 @@ import se.sundsvall.dept44.test.extension.ResourceLoaderExtension;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 
 @ExtendWith(ResourceLoaderExtension.class)
 class CaseMapperTest {

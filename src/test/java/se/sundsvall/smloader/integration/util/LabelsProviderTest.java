@@ -1,11 +1,5 @@
 package se.sundsvall.smloader.integration.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
-
 import generated.se.sundsvall.supportmanagement.Label;
 import generated.se.sundsvall.supportmanagement.Labels;
 import java.util.List;
@@ -19,6 +13,12 @@ import org.springframework.http.ResponseEntity;
 import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
 
 @ExtendWith(MockitoExtension.class)
 class LabelsProviderTest {

@@ -1,11 +1,11 @@
 package se.sundsvall.smloader.integration.openemapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import generated.se.sundsvall.supportmanagement.ErrandLabel;
 import generated.se.sundsvall.supportmanagement.Label;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class LabelsMapperTest {
 

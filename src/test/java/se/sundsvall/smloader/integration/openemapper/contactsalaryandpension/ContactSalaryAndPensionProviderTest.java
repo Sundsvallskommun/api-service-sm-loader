@@ -1,21 +1,5 @@
 package se.sundsvall.smloader.integration.openemapper.contactsalaryandpension;
 
-import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static se.sundsvall.smloader.TestUtil.readOpenEFile;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
-
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.ErrandLabel;
@@ -38,6 +22,22 @@ import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
 import se.sundsvall.smloader.integration.util.LabelsProvider;
+
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static se.sundsvall.smloader.TestUtil.readOpenEFile;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 
 @ExtendWith(MockitoExtension.class)
 class ContactSalaryAndPensionProviderTest {

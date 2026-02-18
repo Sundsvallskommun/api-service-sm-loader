@@ -1,10 +1,10 @@
 package se.sundsvall.smloader.service;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.util.Objects.requireNonNull;
 
 @FunctionalInterface
 public interface ThrowingFunction<T, R, E extends Exception> {

@@ -1,5 +1,24 @@
 package se.sundsvall.smloader.integration.openemapper.orderingrecruitmentsupport;
 
+import generated.se.sundsvall.supportmanagement.Classification;
+import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Parameter;
+import generated.se.sundsvall.supportmanagement.Priority;
+import generated.se.sundsvall.supportmanagement.Stakeholder;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.zalando.problem.Problem;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperBase;
+import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
+import se.sundsvall.smloader.integration.util.XPathException;
+
 import static org.zalando.problem.Status.BAD_REQUEST;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADDITIONAL_INFORMATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADDITIONAL_SUPPORT;
@@ -84,25 +103,6 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_ORDERING_RECRUITMENT_SUPPORT;
 import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
 import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameter;
-
-import generated.se.sundsvall.supportmanagement.Classification;
-import generated.se.sundsvall.supportmanagement.Errand;
-import generated.se.sundsvall.supportmanagement.ExternalTag;
-import generated.se.sundsvall.supportmanagement.Parameter;
-import generated.se.sundsvall.supportmanagement.Priority;
-import generated.se.sundsvall.supportmanagement.Stakeholder;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Stream;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import org.zalando.problem.Problem;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperBase;
-import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
-import se.sundsvall.smloader.integration.util.XPathException;
 
 @Component
 public class OrderingRecruitmentSupportProvider extends OpenEMapperBase {

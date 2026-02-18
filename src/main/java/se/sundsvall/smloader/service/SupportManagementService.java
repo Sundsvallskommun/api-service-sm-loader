@@ -1,13 +1,5 @@
 package se.sundsvall.smloader.service;
 
-import static java.util.stream.Collectors.toMap;
-import static org.springframework.http.HttpHeaders.LOCATION;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
-import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
-import static se.sundsvall.smloader.service.ThrowingFunction.exceptionToNull;
-import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseMapping;
-
 import generated.se.sundsvall.supportmanagement.Errand;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
 import java.util.ArrayList;
@@ -33,6 +25,14 @@ import se.sundsvall.smloader.integration.openemapper.statsonly.StatsOnlyMapper;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
 import se.sundsvall.smloader.service.mapper.MessagingMapper;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
+
+import static java.util.stream.Collectors.toMap;
+import static org.springframework.http.HttpHeaders.LOCATION;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.CREATED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.FAILED;
+import static se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus.PENDING;
+import static se.sundsvall.smloader.service.ThrowingFunction.exceptionToNull;
+import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseMapping;
 
 @Service
 public class SupportManagementService {

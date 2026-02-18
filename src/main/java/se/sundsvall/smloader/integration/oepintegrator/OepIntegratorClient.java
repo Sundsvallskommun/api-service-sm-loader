@@ -1,9 +1,5 @@
 package se.sundsvall.smloader.integration.oepintegrator;
 
-import static org.springframework.http.MediaType.ALL_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static se.sundsvall.smloader.integration.oepintegrator.configuration.OepIntegratorConfiguration.CLIENT_ID;
-
 import feign.Response;
 import generated.se.sundsvall.oepintegrator.CaseEnvelope;
 import generated.se.sundsvall.oepintegrator.CaseStatusChangeRequest;
@@ -21,6 +17,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import se.sundsvall.smloader.integration.oepintegrator.configuration.OepIntegratorConfiguration;
+
+import static org.springframework.http.MediaType.ALL_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static se.sundsvall.smloader.integration.oepintegrator.configuration.OepIntegratorConfiguration.CLIENT_ID;
 
 @FeignClient(name = CLIENT_ID, url = "${integration.oep-integrator.url}", configuration = OepIntegratorConfiguration.class)
 @CircuitBreaker(name = CLIENT_ID)

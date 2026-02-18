@@ -1,7 +1,5 @@
 package se.sundsvall.smloader.service;
 
-import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
-
 import generated.se.sundsvall.supportmanagement.ErrandAttachment;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +13,8 @@ import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.openemapper.attachment.Attachment;
 import se.sundsvall.smloader.integration.openemapper.attachment.AttachmentMultiPartFile;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
+
+import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
 
 @Service
 public class AttachmentService {

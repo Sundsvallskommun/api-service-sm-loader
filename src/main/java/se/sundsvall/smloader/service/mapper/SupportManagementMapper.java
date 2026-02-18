@@ -1,11 +1,11 @@
 package se.sundsvall.smloader.service.mapper;
 
-import static java.util.Arrays.asList;
-import static java.util.Optional.ofNullable;
-
 import generated.se.sundsvall.supportmanagement.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Optional.ofNullable;
 
 public final class SupportManagementMapper {
 

@@ -1,9 +1,5 @@
 package se.sundsvall.smloader.integration.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import feign.Response;
 import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPException;
@@ -15,6 +11,10 @@ import java.io.InputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.sundsvall.dept44.exception.ClientProblem;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class OpeneErrorDecoderTests {
 	private OpenESoapErrorDecoder errorDecoder;

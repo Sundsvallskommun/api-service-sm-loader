@@ -1,23 +1,5 @@
 package se.sundsvall.smloader.integration.openemapper.contactsalaryandpension;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_CONTACT_SALARY_AND_PENSION;
-import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
-import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
-import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameterList;
-
 import generated.se.sundsvall.party.PartyType;
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
@@ -37,6 +19,24 @@ import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.party.PartyClient;
 import se.sundsvall.smloader.integration.util.LabelsProvider;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.EXTERNAL_ID_TYPE_PRIVATE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_APPLICANT;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_MANAGER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.ROLE_USER;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.STATUS_NEW;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.TITLE_CONTACT_SALARY_AND_PENSION;
+import static se.sundsvall.smloader.integration.util.XPathUtil.evaluateXPath;
+import static se.sundsvall.smloader.integration.util.annotation.XPathAnnotationProcessor.extractValue;
+import static se.sundsvall.smloader.service.mapper.SupportManagementMapper.toParameterList;
 
 @Component
 class ContactSalaryAndPensionProvider implements OpenEMapper {

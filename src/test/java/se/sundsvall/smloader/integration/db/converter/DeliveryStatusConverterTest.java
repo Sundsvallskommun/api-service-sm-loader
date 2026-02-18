@@ -1,12 +1,12 @@
 package se.sundsvall.smloader.integration.db.converter;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class DeliveryStatusConverterTest {
 
