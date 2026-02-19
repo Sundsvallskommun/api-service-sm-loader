@@ -1,8 +1,5 @@
 package se.sundsvall.smloader.integration.util;
 
-import static java.util.Collections.emptyList;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
-
 import generated.se.sundsvall.supportmanagement.Label;
 import generated.se.sundsvall.supportmanagement.Labels;
 import java.util.LinkedHashMap;
@@ -19,6 +16,9 @@ import org.springframework.stereotype.Service;
 import se.sundsvall.smloader.integration.db.CaseMetaDataRepository;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.supportmanagement.SupportManagementClient;
+
+import static java.util.Collections.emptyList;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 
 @Service
 public class LabelsProvider {

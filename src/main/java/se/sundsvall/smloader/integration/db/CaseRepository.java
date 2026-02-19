@@ -1,7 +1,5 @@
 package se.sundsvall.smloader.integration.db;
 
-import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
-
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -11,6 +9,8 @@ import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseId;
 import se.sundsvall.smloader.integration.db.model.enums.DeliveryStatus;
 import se.sundsvall.smloader.integration.db.model.enums.Instance;
+
+import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
 
 @Transactional(isolation = READ_COMMITTED)
 @CircuitBreaker(name = "CaseRepository")

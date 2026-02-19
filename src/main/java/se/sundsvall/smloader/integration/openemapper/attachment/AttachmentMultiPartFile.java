@@ -1,12 +1,12 @@
 package se.sundsvall.smloader.integration.openemapper.attachment;
 
-import static java.util.Objects.requireNonNull;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import org.springframework.web.multipart.MultipartFile;
+
+import static java.util.Objects.requireNonNull;
 
 public class AttachmentMultiPartFile implements MultipartFile {
 

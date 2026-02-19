@@ -1,14 +1,5 @@
 package se.sundsvall.smloader.service;
 
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
-import static java.util.Collections.emptyList;
-import static java.util.Objects.nonNull;
-import static java.util.Optional.ofNullable;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
-import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseEntity;
-
 import feign.Response;
 import generated.se.sundsvall.oepintegrator.CaseEnvelope;
 import generated.se.sundsvall.oepintegrator.CaseStatusChangeRequest;
@@ -30,6 +21,15 @@ import se.sundsvall.smloader.integration.db.CaseRepository;
 import se.sundsvall.smloader.integration.db.model.CaseMetaDataEntity;
 import se.sundsvall.smloader.integration.db.model.enums.Instance;
 import se.sundsvall.smloader.integration.oepintegrator.OepIntegratorClient;
+
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static java.util.Collections.emptyList;
+import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static se.sundsvall.smloader.integration.db.model.enums.Instance.EXTERNAL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.SYSTEM_SUPPORT_MANAGEMENT;
+import static se.sundsvall.smloader.service.mapper.CaseMapper.toCaseEntity;
 
 @Service
 public class OpenEService {

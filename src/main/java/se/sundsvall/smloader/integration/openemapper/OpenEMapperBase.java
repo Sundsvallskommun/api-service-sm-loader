@@ -1,9 +1,5 @@
 package se.sundsvall.smloader.integration.openemapper;
 
-import static java.util.Objects.nonNull;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
-
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Parameter;
 import java.util.ArrayList;
@@ -11,6 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import se.sundsvall.smloader.service.mapper.OpenEMapper;
+
+import static java.util.Objects.nonNull;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_EMAIL;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
 
 public abstract class OpenEMapperBase implements OpenEMapper {
 

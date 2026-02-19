@@ -1,7 +1,5 @@
 package se.sundsvall.smloader.service.scheduler;
 
-import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
-
 import java.time.OffsetDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.scheduling.Dept44Scheduled;
 import se.sundsvall.smloader.service.DatabaseCleanerService;
+
+import static se.sundsvall.smloader.integration.util.ErrandConstants.MUNICIPALITY_ID;
 
 @Service
 public class DatabaseCleanerScheduler {
