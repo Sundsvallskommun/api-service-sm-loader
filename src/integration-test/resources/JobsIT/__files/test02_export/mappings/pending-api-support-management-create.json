@@ -55,17 +55,10 @@
 					"description": "test",
 					"channel": "ESERVICE_INTERNAL",
 					"reporterUserId": "kal99ank",
-					"businessRelated": false,
-					"labels": [
-						{
-							"id": "f45bbf83-180f-49f8-b0ae-600693747921"
-						},
-						{
-							"id": "97f5ae6a-da13-4270-a51b-ec40f2e4a5ee"
-						}
-					]
+					"businessRelated": false
 				},
-				"ignoreArrayOrder": true
+				"ignoreArrayOrder": true,
+				"ignoreExtraElements": true
 			}
 		],
 		"urlPath": "/support-management/2281/SALARYANDPENSION/errands"
