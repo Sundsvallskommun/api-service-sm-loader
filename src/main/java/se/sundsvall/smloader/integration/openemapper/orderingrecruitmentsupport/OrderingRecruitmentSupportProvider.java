@@ -14,12 +14,12 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.zalando.problem.Problem;
+import se.sundsvall.dept44.problem.Problem;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperBase;
 import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.util.XPathException;
 
-import static org.zalando.problem.Status.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADDITIONAL_INFORMATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADDITIONAL_SUPPORT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADD_SELECTION_QUESTIONS;
