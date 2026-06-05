@@ -221,7 +221,7 @@ public class SupportManagementService {
 			final var subject = List.of(environment.getActiveProfiles()).contains(PRODUCTION) ? PROD_SUBJECT : TEST_SUBJECT;
 			final StringBuilder attachmentMessage = new StringBuilder(".\n");
 			if (!failedAttachments.isEmpty()) {
-				failedAttachments.forEach((caseId, attachments) -> attachmentMessage.append(String.format("For case %s the attachments %s were not exported.\n", caseId, attachments)));
+				failedAttachments.forEach((caseId, attachments) -> attachmentMessage.append(String.format("For case %s the attachments %s were not exported.", caseId, attachments)).append("\n"));
 			}
 			final var message = MESSAGE
 				.concat(failedCases.toString())
