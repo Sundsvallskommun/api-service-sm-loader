@@ -1,6 +1,7 @@
 package se.sundsvall.smloader.service.scheduler;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class CaseProcessingScheduler {
 		Consumer<String> exportHealthConsumer = msg -> dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, String.format("Export error: %s", msg));
 
 		LOGGER.info(LOG_IMPORT_STARTED);
-		openEService.fetchAndSaveNewOpenECases(LocalDateTime.now().minusDays(daysToFetch).withHour(0).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now(), MUNICIPALITY_ID, importHealthConsumer);
+		openEService.fetchAndSaveNewOpenECases(LocalDateTime.now(ZoneId.systemDefault()).minusDays(daysToFetch).withHour(0).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now(ZoneId.systemDefault()), MUNICIPALITY_ID, importHealthConsumer);
 		LOGGER.info(LOG_IMPORT_ENDED);
 
 		LOGGER.info(LOG_EXPORT_STARTED);

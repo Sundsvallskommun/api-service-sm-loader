@@ -1,6 +1,7 @@
 package se.sundsvall.smloader.service.scheduler;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class DatabaseCleanerScheduler {
 		maximumExecutionTime = "${scheduler.dbcleaner.maximum-execution-time}")
 	public void execute() {
 		LOGGER.info(LOG_CLEANING_STARTED);
-		databaseCleanerService.cleanDatabase(OffsetDateTime.now().minusDays(keepDays), MUNICIPALITY_ID);
+		databaseCleanerService.cleanDatabase(OffsetDateTime.now(ZoneId.systemDefault()).minusDays(keepDays), MUNICIPALITY_ID);
 		LOGGER.info(LOG_CLEANING_ENDED);
 	}
 }
