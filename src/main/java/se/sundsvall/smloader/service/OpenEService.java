@@ -8,6 +8,7 @@ import generated.se.sundsvall.oepintegrator.InstanceType;
 import generated.se.sundsvall.oepintegrator.ModelCase;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -49,7 +50,7 @@ public class OpenEService {
 
 	public void fetchAndSaveNewOpenECases(final LocalDateTime fromDate, final LocalDateTime toDate, final String municipalityId, final Consumer<String> importHealthConsumer) {
 		RequestId.init();
-		final var effectiveToDate = nonNull(toDate) ? toDate : LocalDateTime.now();
+		final var effectiveToDate = nonNull(toDate) ? toDate : LocalDateTime.now(ZoneId.systemDefault());
 
 		if (fromDate.isAfter(effectiveToDate)) {
 			LOGGER.error("From-date: '{}' is after to-date: '{}'. No cases will be fetched.", fromDate, effectiveToDate);

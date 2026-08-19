@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import org.hibernate.Length;
@@ -49,7 +50,7 @@ public class CaseEntity {
 
 	@PrePersist
 	protected void onPersist() {
-		created = OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS);
+		created = OffsetDateTime.now(ZoneId.systemDefault()).truncatedTo(ChronoUnit.MICROS);
 	}
 
 	public String getId() {

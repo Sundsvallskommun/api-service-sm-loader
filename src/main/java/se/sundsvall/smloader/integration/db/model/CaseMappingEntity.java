@@ -10,6 +10,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import org.hibernate.annotations.TimeZoneStorage;
@@ -48,7 +49,7 @@ public class CaseMappingEntity {
 	@PrePersist
 	@PreUpdate
 	protected void onPersistAndUpdate() {
-		modified = OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS);
+		modified = OffsetDateTime.now(ZoneId.systemDefault()).truncatedTo(ChronoUnit.MICROS);
 	}
 
 	public String getExternalCaseId() {

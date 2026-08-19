@@ -1,6 +1,7 @@
 package se.sundsvall.smloader.service.mapper;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Base64;
 import se.sundsvall.smloader.integration.db.model.CaseEntity;
 import se.sundsvall.smloader.integration.db.model.CaseMappingEntity;
@@ -26,6 +27,6 @@ public final class CaseMapper {
 			.withCaseType(caseEntity.getCaseMetaData().getFamilyId())
 			.withExternalCaseId(caseEntity.getExternalCaseId())
 			.withMunicipalityId(caseEntity.getCaseMetaData().getMunicipalityId())
-			.withModified(OffsetDateTime.now());
+			.withModified(OffsetDateTime.now(ZoneId.systemDefault()));
 	}
 }
