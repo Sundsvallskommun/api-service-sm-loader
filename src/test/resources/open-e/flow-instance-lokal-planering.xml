@@ -1,0 +1,81 @@
+<?xml version="1.0"encoding="UTF_8" standalone="no"?>
+<FlowInstance xmlns="http://www.oeplatform.org/version/2.0/schemas/flowinstance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oeplatform.org/version/2.0/schemas/flowinstance schema-666.xsd">
+<Header>
+<Flow>
+<FamilyID>250</FamilyID>
+<Version>3</Version>
+<FlowID>666</FlowID>
+<Name><![CDATA[Lokaler VoF och IAF beställningar - TEST Draken]]></Name>
+</Flow>
+<FlowInstanceID>7552</FlowInstanceID>
+<Status>
+<ID>5475</ID>
+<Name><![CDATA[Inskickat]]></Name>
+</Status>
+<Poster>
+<Firstname><![CDATA[Kalle]]></Firstname>
+<Lastname><![CDATA[Anka]]></Lastname>
+<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+<ID>25953</ID>
+</Poster>
+<Owner>
+<Firstname><![CDATA[Kalle]]></Firstname>
+<Lastname><![CDATA[Anka]]></Lastname>
+<Email><![CDATA[kalle.anka@sundsvall.se]]></Email>
+<ID>25953</ID>
+</Owner>
+<Posted>2026-09-23T14:07:18</Posted>
+<FirstSubmitted>2026-09-23T14:07:18</FirstSubmitted>
+<LastSubmitted>2026-09-23T14:07:18</LastSubmitted>
+</Header>
+<Values>
+<applicant>
+<QueryID>25915</QueryID>
+<Name><![CDATA[Anmälare]]></Name>
+<userID><![CDATA[25953]]></userID>
+<firstname><![CDATA[Kalle]]></firstname>
+<lastname><![CDATA[Anka]]></lastname>
+<username><![CDATA[kal00ank]]></username>
+<email><![CDATA[kalle.anka@sundsvall.se]]></email>
+<phone><![CDATA[0701234567]]></phone>
+<mobilePhone><![CDATA[0709876543]]></mobilePhone>
+<title><![CDATA[Systemutvecklare]]></title>
+<organization><![CDATA[KSK AVD Digitalisering IT stab]]></organization>
+</applicant>
+<department>
+<QueryID>25916</QueryID>
+<Name><![CDATA[Vilken förvaltning gäller beställningen för?]]></Name>
+<Value>Vård och omsorgsförvaltningen</Value>
+</department>
+<operation>
+<QueryID>25917</QueryID>
+<Name><![CDATA[Vilken verksamhet gäller det?]]></Name>
+<Value>Anhörigcentrum</Value>
+</operation>
+<orderDetails>
+<QueryID>25920</QueryID>
+<Name><![CDATA[Vad gäller beställningen?]]></Name>
+<Value>Utökning av befintlig lokal</Value>
+</orderDetails>
+<workplaceProperty>
+<QueryID>25922</QueryID>
+<Name><![CDATA[Fastighet]]></Name>
+<Value><![CDATA[VoF Test Fastigheten 1]]></Value>
+</workplaceProperty>
+<workplaceWorkplace>
+<QueryID>25923</QueryID>
+<Name><![CDATA[Avdelning]]></Name>
+<Value><![CDATA[Avdelning Ängen]]></Value>
+</workplaceWorkplace>
+<workplaceRoom>
+<QueryID>25924</QueryID>
+<Name><![CDATA[Specifikt rum]]></Name>
+<Value><![CDATA[Lägenhet 4]]></Value>
+</workplaceRoom>
+<operationInformation>
+<QueryID>25925</QueryID>
+<Name><![CDATA[Beskriv behoven eller den åtgärd du vill ha utförd]]></Name>
+<Value><![CDATA[Behov ett och behov två]]></Value>
+</operationInformation>
+</Values>
+</FlowInstance>

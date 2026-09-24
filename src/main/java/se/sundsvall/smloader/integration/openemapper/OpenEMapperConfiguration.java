@@ -72,4 +72,10 @@ public class OpenEMapperConfiguration {
 	OpenEMapperProperties propertiesOrderingRecruitmentSupport() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "facilityorder")
+	@ConfigurationProperties(prefix = "lokal-planering")
+	OpenEMapperProperties propertiesFacilityOrder() {
+		return new OpenEMapperProperties();
+	}
 }

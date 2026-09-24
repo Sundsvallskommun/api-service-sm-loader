@@ -17,6 +17,10 @@ class OpenEMapperConfigurationTest {
 	@Qualifier("twentyfiveatwork")
 	private OpenEMapperProperties propertiesFeedback;
 
+	@Autowired
+	@Qualifier("facilityorder")
+	private OpenEMapperProperties propertiesFacilityOrder;
+
 	@Test
 	void testTwentyFiveAtWorkProperties() {
 		assertThat(propertiesFeedback.getFamilyId()).isEqualTo("131");
@@ -24,5 +28,14 @@ class OpenEMapperConfigurationTest {
 		assertThat(propertiesFeedback.getCategory()).isEqualTo("SALARY");
 		assertThat(propertiesFeedback.getType()).isEqualTo("SALARY.OTHER");
 		assertThat(propertiesFeedback.getLabels()).hasSize(3).containsExactly("SALARY", "SALARY.OTHER", "SALARY.OTHER.TWENTY_FIVE_YEARS_GIFT");
+	}
+
+	@Test
+	void testFacilityOrderProperties() {
+		assertThat(propertiesFacilityOrder.getFamilyId()).isEqualTo("250");
+		assertThat(propertiesFacilityOrder.getPriority()).isEqualTo("MEDIUM");
+		assertThat(propertiesFacilityOrder.getCategory()).isEqualTo("E_POSTARENDE");
+		assertThat(propertiesFacilityOrder.getType()).isEqualTo("E_POSTARENDE.UNCATEGORIZED");
+		assertThat(propertiesFacilityOrder.getLabels()).hasSize(2).containsExactly("E_POSTARENDE", "E_POSTARENDE/UNCATEGORIZED");
 	}
 }
