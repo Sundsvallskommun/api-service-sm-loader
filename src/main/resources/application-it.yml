@@ -123,6 +123,11 @@ bestallning-av-rekryteringsstod:
   priority: MEDIUM
   category: UNCATEGORIZED
   type: UNCATEGORIZED.UNCATEGORIZED
+lokaler-vof-iaf:
+  family-id: 250
+  priority: MEDIUM
+  category: UNCATEGORIZED
+  type: UNCATEGORIZED.UNCATEGORIZED
 
 spring:
   datasource:

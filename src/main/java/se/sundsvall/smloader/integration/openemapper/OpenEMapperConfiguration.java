@@ -72,4 +72,10 @@ public class OpenEMapperConfiguration {
 	OpenEMapperProperties propertiesOrderingRecruitmentSupport() {
 		return new OpenEMapperProperties();
 	}
+
+	@Bean(name = "facilityorder")
+	@ConfigurationProperties(prefix = "lokaler-vof-iaf")
+	OpenEMapperProperties propertiesFacilityOrder() {
+		return new OpenEMapperProperties();
+	}
 }

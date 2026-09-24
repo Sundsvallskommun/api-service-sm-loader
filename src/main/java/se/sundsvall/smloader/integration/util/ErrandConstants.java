@@ -235,6 +235,20 @@ public final class ErrandConstants {
 	public static final String DISPLAY_TEST_TYPE = "Beställda tester";
 	public static final String KEY_IN_DEPTH_INTERVIEW = "inDepthInterview";
 	public static final String DISPLAY_IN_DEPTH_INTERVIEW = "Fördjupad intervju med kandidater beställd";
+	// FacilityOrder
+	public static final String TITLE_FACILITY_ORDER = "Lokalbeställning";
+	public static final String KEY_ADMINISTRATION = "administration";
+	public static final String DISPLAY_ADMINISTRATION = "Förvaltning";
+	public static final String KEY_OPERATION = "operation";
+	public static final String DISPLAY_OPERATION = "Verksamhet";
+	public static final String KEY_PROPERTY = "property";
+	public static final String DISPLAY_PROPERTY = "Fastighet";
+	public static final String KEY_WORKPLACE_UNIT = "workplaceUnit";
+	public static final String DISPLAY_WORKPLACE_UNIT = "Avdelning";
+	public static final String KEY_ROOM = "room";
+	public static final String DISPLAY_ROOM = "Specifikt rum";
+	public static final String KEY_OPERATION_INFORMATION = "operationInformation";
+	public static final String DISPLAY_OPERATION_INFORMATION = "Beskrivning av behov";
 
 	private ErrandConstants() {}
 
