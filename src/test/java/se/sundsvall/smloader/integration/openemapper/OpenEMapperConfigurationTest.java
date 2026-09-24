@@ -34,7 +34,8 @@ class OpenEMapperConfigurationTest {
 	void testFacilityOrderProperties() {
 		assertThat(propertiesFacilityOrder.getFamilyId()).isEqualTo("250");
 		assertThat(propertiesFacilityOrder.getPriority()).isEqualTo("MEDIUM");
-		assertThat(propertiesFacilityOrder.getCategory()).isEqualTo("UNCATEGORIZED");
-		assertThat(propertiesFacilityOrder.getType()).isEqualTo("UNCATEGORIZED.UNCATEGORIZED");
+		assertThat(propertiesFacilityOrder.getCategory()).isEqualTo("E_POSTARENDE");
+		assertThat(propertiesFacilityOrder.getType()).isEqualTo("E_POSTARENDE.UNCATEGORIZED");
+		assertThat(propertiesFacilityOrder.getLabels()).hasSize(2).containsExactly("E_POSTARENDE", "E_POSTARENDE/UNCATEGORIZED");
 	}
 }

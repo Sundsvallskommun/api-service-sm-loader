@@ -78,7 +78,7 @@ class FacilityOrderProviderTest {
 			new Label().id(labelId_1).resourcePath(category).resourceName(resourceName).classification(classification).displayName(displayName)
 				.labels(List.of(new Label().id(labelId_2).resourcePath(type).resourceName(resourceName).classification(classification).displayName(displayName)))));
 
-		final var stringBytes = readOpenEFile("flow-instance-lokaler-vof-iaf.xml");
+		final var stringBytes = readOpenEFile("flow-instance-lokal-planering.xml");
 
 		// Act
 		final var errand = provider.mapToErrand(stringBytes);
@@ -120,9 +120,13 @@ class FacilityOrderProviderTest {
 
 		assertThat(errand.getLabels()).extracting(ErrandLabel::getId).containsExactly(labelId_1, labelId_2);
 
+		verify(properties).getFamilyId();
 		verify(properties).getPriority();
 		verify(properties).getCategory();
 		verify(properties).getType();
-		verifyNoMoreInteractions(properties);
+		verify(properties).getLabels();
+		verify(caseMetaDataRepository).findByFamilyId(familyId);
+		verify(labelsProvider).getLabels(namespace);
+		verifyNoMoreInteractions(properties, labelsProvider, caseMetaDataRepository);
 	}
 }

@@ -74,7 +74,7 @@ public class OpenEMapperConfiguration {
 	}
 
 	@Bean(name = "facilityorder")
-	@ConfigurationProperties(prefix = "lokaler-vof-iaf")
+	@ConfigurationProperties(prefix = "lokal-planering")
 	OpenEMapperProperties propertiesFacilityOrder() {
 		return new OpenEMapperProperties();
 	}

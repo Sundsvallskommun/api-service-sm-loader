@@ -105,11 +105,14 @@ bestallning-av-rekryteringsstod:
   priority: MEDIUM
   category: UNCATEGORIZED
   type: UNCATEGORIZED.UNCATEGORIZED
-lokaler-vof-iaf:
+lokal-planering:
   family-id: 250
   priority: MEDIUM
-  category: UNCATEGORIZED
-  type: UNCATEGORIZED.UNCATEGORIZED
+  category: E_POSTARENDE
+  type: E_POSTARENDE.UNCATEGORIZED
+  labels:
+    - E_POSTARENDE
+    - E_POSTARENDE/UNCATEGORIZED
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
