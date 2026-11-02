@@ -30,6 +30,10 @@
 					"channel": "ESERVICE",
 					"reporterUserId": "unknown",
 					"businessRelated": false,
+					"actions": [],
+					"jsonParameters": [],
+					"measures": [],
+					"phases": [],
 					"labels": []
 				},
 				"ignoreArrayOrder": true
