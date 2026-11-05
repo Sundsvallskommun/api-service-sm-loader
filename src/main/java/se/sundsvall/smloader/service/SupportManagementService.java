@@ -191,8 +191,7 @@ public class SupportManagementService {
 				.findFirst()
 				.map(Errand::getId)
 				.or(() -> {
-					// Create errand, activeNotifications is read-only and should not be sent to SupportManagement.
-					final var result = supportManagementClient.createErrand(municipalityId, namespace, errand.activeNotifications(null));
+					final var result = supportManagementClient.createErrand(municipalityId, namespace, clearReadOnlyLists(errand));
 					final var location = String.valueOf(result.getHeaders().getFirst(LOCATION));
 					return Optional.of(location.substring(location.lastIndexOf("/") + 1));
 				});
@@ -200,6 +199,14 @@ public class SupportManagementService {
 			LOGGER.error("Failed to send errand to SupportManagement", e);
 			return Optional.empty();
 		}
+	}
+
+	/**
+	 * The generated model defaults lists to empty, but SupportManagement requires read-only fields to be null on create.
+	 */
+	private Errand clearReadOnlyLists(final Errand errand) {
+		Optional.ofNullable(errand.getLabels()).ifPresent(labels -> labels.forEach(label -> label.setAttributes(null)));
+		return errand.activeNotifications(null).actions(null).phases(null);
 	}
 
 	private String createFilterForTag(final ExternalTag tag) {
