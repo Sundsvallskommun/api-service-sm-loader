@@ -3,15 +3,19 @@ package se.sundsvall.smloader.integration.openemapper.facilityorder;
 import generated.se.sundsvall.supportmanagement.Classification;
 import generated.se.sundsvall.supportmanagement.ContactChannel;
 import generated.se.sundsvall.supportmanagement.Errand;
+import generated.se.sundsvall.supportmanagement.ErrandLabel;
 import generated.se.sundsvall.supportmanagement.ExternalTag;
+import generated.se.sundsvall.supportmanagement.Label;
 import generated.se.sundsvall.supportmanagement.Parameter;
 import generated.se.sundsvall.supportmanagement.Priority;
 import generated.se.sundsvall.supportmanagement.Stakeholder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -77,7 +81,7 @@ class FacilityOrderProvider extends OpenEMapperBase {
 
 		final var caseMetaDataEntity = caseMetaDataRepository.findByFamilyId(properties.getFamilyId());
 
-		final var errandLabels = LabelsMapper.mapLabels(labelsProvider.getLabels(caseMetaDataEntity.getNamespace()), properties.getLabels());
+		final var errandLabels = getErrandLabels(result, labelsProvider.getLabels(caseMetaDataEntity.getNamespace()));
 
 		return new Errand()
 			.status(STATUS_NEW)
@@ -92,6 +96,34 @@ class FacilityOrderProvider extends OpenEMapperBase {
 			.externalTags(Set.of(new ExternalTag().key(KEY_CASE_ID).value(result.flowInstanceId()),
 				new ExternalTag().key(KEY_FAMILY_ID).value(result.familyId())))
 			.reporterUserId(result.applicantUserId());
+	}
+
+	/**
+	 * Operation and operationSubtype are sent as label resource paths, e.g. "VOF/SUPPORT_AND_CARE/GROUP_HOME". Falls back
+	 * to configured labels if none of them is present.
+	 */
+	private List<ErrandLabel> getErrandLabels(final FacilityOrder facilityOrder, final List<Label> labels) {
+		return Optional.of(
+			Stream.of(facilityOrder.operationSubtype(), facilityOrder.operation())
+				.filter(Objects::nonNull)
+				.map(this::toLabelResources)
+				.flatMap(List::stream)
+				.distinct()
+				.toList())
+			.filter(labelResources -> !labelResources.isEmpty())
+			.map(labelResources -> LabelsMapper.mapLabels(labels, labelResources))
+			.orElseGet(() -> LabelsMapper.mapLabels(labels, properties.getLabels()));
+	}
+
+	/**
+	 * Splits a resource path into itself and all parent paths, e.g. "VOF/SUPPORT_AND_CARE" -> ["VOF",
+	 * "VOF/SUPPORT_AND_CARE"].
+	 */
+	private List<String> toLabelResources(final String resourcePath) {
+		final var parts = resourcePath.split("/");
+		return IntStream.rangeClosed(1, parts.length)
+			.mapToObj(index -> String.join("/", Arrays.copyOf(parts, index)))
+			.toList();
 	}
 
 	private List<Stakeholder> getStakeholders(final FacilityOrder facilityOrder) {

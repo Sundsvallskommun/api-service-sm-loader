@@ -30,6 +30,8 @@ record FacilityOrder(
 
 	@XPath("/FlowInstance/Values/operation/Value") String operation,
 
+	@XPath("/FlowInstance/Values/operationSubtype/Value") String operationSubtype,
+
 	@XPath("/FlowInstance/Values/orderDetails/Value") String orderDetails,
 
 	@XPath("/FlowInstance/Values/workplaceProperty/Value") String property,

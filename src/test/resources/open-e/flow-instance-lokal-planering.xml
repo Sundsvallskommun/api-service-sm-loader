@@ -50,7 +50,7 @@
 <operation>
 <QueryID>25917</QueryID>
 <Name><![CDATA[Vilken verksamhet gäller det?]]></Name>
-<Value>Anhörigcentrum</Value>
+<Value>VOF/CAREGIVER_SUPPORT_CENTER</Value>
 </operation>
 <orderDetails>
 <QueryID>25920</QueryID>
