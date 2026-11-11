@@ -99,15 +99,19 @@ class FacilityOrderProvider extends OpenEMapperBase {
 	}
 
 	/**
-	 * Operation and operationSubtype are sent as label resource paths, e.g. "VOF/SUPPORT_AND_CARE/GROUP_HOME". The most
-	 * specific one that matches any label is used. Falls back to configured labels if none matches.
+	 * Operation and operationSubtype are sent as label resource paths, e.g. "VOF/SUPPORT_AND_CARE/GROUP_HOME". Falls back
+	 * to configured labels if none of them is present.
 	 */
 	private List<ErrandLabel> getErrandLabels(final FacilityOrder facilityOrder, final List<Label> labels) {
-		return Stream.of(facilityOrder.operationSubtype(), facilityOrder.operation())
-			.filter(Objects::nonNull)
-			.map(resourcePath -> LabelsMapper.mapLabels(labels, toLabelResources(resourcePath)))
-			.filter(errandLabels -> !errandLabels.isEmpty())
-			.findFirst()
+		return Optional.of(
+			Stream.of(facilityOrder.operationSubtype(), facilityOrder.operation())
+				.filter(Objects::nonNull)
+				.map(this::toLabelResources)
+				.flatMap(List::stream)
+				.distinct()
+				.toList())
+			.filter(labelResources -> !labelResources.isEmpty())
+			.map(labelResources -> LabelsMapper.mapLabels(labels, labelResources))
 			.orElseGet(() -> LabelsMapper.mapLabels(labels, properties.getLabels()));
 	}
 

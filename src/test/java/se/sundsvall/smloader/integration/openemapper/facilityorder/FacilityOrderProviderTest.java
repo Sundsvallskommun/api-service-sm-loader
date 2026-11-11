@@ -141,8 +141,9 @@ class FacilityOrderProviderTest {
 			Arguments.of("VOF/SUPPORT_AND_CARE", "VOF/SUPPORT_AND_CARE/GROUP_HOME", List.of("VOF", "VOF/SUPPORT_AND_CARE", "VOF/SUPPORT_AND_CARE/GROUP_HOME")),
 			Arguments.of("VOF/SUPPORT_AND_CARE", "VOF/SUPPORT_AND_CARE/SUPPORTED_HOUSING", List.of("VOF", "VOF/SUPPORT_AND_CARE", "VOF/SUPPORT_AND_CARE/SUPPORTED_HOUSING")),
 			Arguments.of("VOF/SUPPORT_AND_CARE", "UNKNOWN", List.of("VOF", "VOF/SUPPORT_AND_CARE")),
-			Arguments.of("UNKNOWN", null, List.of("E_POSTARENDE", "E_POSTARENDE/UNCATEGORIZED")),
-			Arguments.of("UNKNOWN", "UNKNOWN", List.of("E_POSTARENDE", "E_POSTARENDE/UNCATEGORIZED")));
+			Arguments.of("UNKNOWN", null, List.of()),
+			Arguments.of("UNKNOWN", "UNKNOWN", List.of()),
+			Arguments.of(null, null, List.of("E_POSTARENDE", "E_POSTARENDE/UNCATEGORIZED")));
 	}
 
 	@ParameterizedTest
@@ -168,10 +169,11 @@ class FacilityOrderProviderTest {
 	}
 
 	private static byte[] createXml(final String operation, final String operationSubtype) throws Exception {
+		final var operationElement = operation == null ? "" : "<operation><Value>" + operation + "</Value></operation>";
 		final var subtypeElement = operationSubtype == null ? "" : "<operationSubtype><Value>" + operationSubtype + "</Value></operationSubtype>";
+		final var xml = new String(readOpenEFile("flow-instance-lokal-planering.xml"), StandardCharsets.UTF_8);
 
-		return new String(readOpenEFile("flow-instance-lokal-planering.xml"), StandardCharsets.UTF_8)
-			.replace("<Value>VOF/CAREGIVER_SUPPORT_CENTER</Value>\n</operation>", "<Value>" + operation + "</Value>\n</operation>" + subtypeElement)
+		return xml.replace(xml.substring(xml.indexOf("<operation>"), xml.indexOf("</operation>") + "</operation>".length()), operationElement + subtypeElement)
 			.getBytes(StandardCharsets.UTF_8);
 	}
 
