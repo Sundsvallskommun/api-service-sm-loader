@@ -238,7 +238,6 @@ public final class ErrandConstants {
 	// FacilityOrder
 	public static final String TITLE_FACILITY_ORDER = "Lokalbeställning";
 	public static final String KEY_ADMINISTRATION = "department";
-	public static final String DISPLAY_ADMINISTRATION = "Förvaltning";
 	public static final String KEY_OPERATION = "operation";
 	public static final String DISPLAY_DEPARTMENT_LOK = "Verksamhet";
 	public static final String KEY_PROPERTY = "property";
