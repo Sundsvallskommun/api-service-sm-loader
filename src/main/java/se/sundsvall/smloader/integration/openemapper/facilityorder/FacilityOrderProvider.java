@@ -26,9 +26,7 @@ import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATION_NAME;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_OPERATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_OPERATION_INFORMATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ORDER_DETAILS;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_PROPERTY;
@@ -37,11 +35,9 @@ import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_TIT
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_USER_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_WORKPLACE_UNIT;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.INTERNAL_CHANNEL_E_SERVICE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ADMINISTRATION_NAME;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_CASE_ID;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_FAMILY_ID;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_OPERATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_OPERATION_INFORMATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_ORDER_DETAILS;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.KEY_PROPERTY;
@@ -154,8 +150,6 @@ class FacilityOrderProvider extends OpenEMapperBase {
 
 	private List<Parameter> getParameters(final FacilityOrder facilityOrder) {
 		return Stream.of(
-			singleParameter(facilityOrder.administration(), KEY_ADMINISTRATION, DISPLAY_ADMINISTRATION),
-			singleParameter(facilityOrder.operation(), KEY_OPERATION, DISPLAY_OPERATION),
 			singleParameter(facilityOrder.orderDetails(), KEY_ORDER_DETAILS, DISPLAY_ORDER_DETAILS),
 			singleParameter(facilityOrder.property(), KEY_PROPERTY, DISPLAY_PROPERTY),
 			singleParameter(facilityOrder.workplaceUnit(), KEY_WORKPLACE_UNIT, DISPLAY_WORKPLACE_UNIT),

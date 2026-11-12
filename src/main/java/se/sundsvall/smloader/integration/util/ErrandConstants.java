@@ -237,10 +237,6 @@ public final class ErrandConstants {
 	public static final String DISPLAY_IN_DEPTH_INTERVIEW = "Fördjupad intervju med kandidater beställd";
 	// FacilityOrder
 	public static final String TITLE_FACILITY_ORDER = "Lokalbeställning";
-	public static final String KEY_ADMINISTRATION = "department";
-	public static final String DISPLAY_ADMINISTRATION = "Förvaltning";
-	public static final String KEY_OPERATION = "operation";
-	public static final String DISPLAY_OPERATION = "Verksamhet";
 	public static final String KEY_PROPERTY = "property";
 	public static final String DISPLAY_PROPERTY = "Fastighet";
 	public static final String KEY_WORKPLACE_UNIT = "workplaceUnit";
