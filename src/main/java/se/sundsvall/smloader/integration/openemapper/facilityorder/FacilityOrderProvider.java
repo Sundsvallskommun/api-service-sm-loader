@@ -26,9 +26,9 @@ import se.sundsvall.smloader.integration.openemapper.OpenEMapperProperties;
 import se.sundsvall.smloader.integration.util.LabelsProvider;
 
 import static se.sundsvall.smloader.integration.util.ErrandConstants.CONTACT_CHANNEL_TYPE_PHONE;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ADMINISTRATION_NAME;
-import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_OPERATION;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_DEPARTMENT_LOK;
+import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_OPERATION_CATEGORY;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_OPERATION_INFORMATION;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_ORDER_DETAILS;
 import static se.sundsvall.smloader.integration.util.ErrandConstants.DISPLAY_PROPERTY;
@@ -154,8 +154,8 @@ class FacilityOrderProvider extends OpenEMapperBase {
 
 	private List<Parameter> getParameters(final FacilityOrder facilityOrder) {
 		return Stream.of(
-			singleParameter(facilityOrder.administration(), KEY_ADMINISTRATION, DISPLAY_ADMINISTRATION),
-			singleParameter(facilityOrder.operation(), KEY_OPERATION, DISPLAY_OPERATION),
+			singleParameter(facilityOrder.department(), KEY_ADMINISTRATION, DISPLAY_DEPARTMENT_LOK),
+			singleParameter(facilityOrder.operation(), KEY_OPERATION, DISPLAY_OPERATION_CATEGORY),
 			singleParameter(facilityOrder.orderDetails(), KEY_ORDER_DETAILS, DISPLAY_ORDER_DETAILS),
 			singleParameter(facilityOrder.property(), KEY_PROPERTY, DISPLAY_PROPERTY),
 			singleParameter(facilityOrder.workplaceUnit(), KEY_WORKPLACE_UNIT, DISPLAY_WORKPLACE_UNIT),

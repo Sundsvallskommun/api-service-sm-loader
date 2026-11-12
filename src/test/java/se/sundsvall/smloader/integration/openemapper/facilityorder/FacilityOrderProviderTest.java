@@ -96,8 +96,8 @@ class FacilityOrderProviderTest {
 		assertThat(errand.getBusinessRelated()).isFalse();
 
 		assertThat(errand.getParameters()).extracting(Parameter::getKey, Parameter::getValues, Parameter::getDisplayName).containsExactly(
-			tuple("department", List.of("Vård och omsorgsförvaltningen"), "Förvaltning"),
-			tuple("operation", List.of("VOF/CAREGIVER_SUPPORT_CENTER"), "Verksamhet"),
+			tuple("department", List.of("Vård och omsorgsförvaltningen"), "Verksamhet"),
+			tuple("operation", List.of("VOF/CAREGIVER_SUPPORT_CENTER"), "Kategori"),
 			tuple("orderDetails", List.of("Utökning av befintlig lokal"), "Beställning"),
 			tuple("property", List.of("VoF Test Fastigheten 1"), "Fastighet"),
 			tuple("workplaceUnit", List.of("Avdelning Ängen"), "Avdelning"),

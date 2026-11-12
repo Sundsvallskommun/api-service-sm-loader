@@ -26,7 +26,7 @@ record FacilityOrder(
 
 	@XPath("/FlowInstance/Values/applicant/organization") String applicantOrganization,
 
-	@XPath("/FlowInstance/Values/department/Value") String administration,
+	@XPath("/FlowInstance/Values/department/Value") String department,
 
 	@XPath("/FlowInstance/Values/operation/Value") String operation,
 
